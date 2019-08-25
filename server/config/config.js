@@ -27,7 +27,7 @@ const test = {
     host: process.env.TEST_DB_HOST || 'localhost',
     port: parseInt(process.env.TEST_DB_PORT) || 27017,
     name: process.env.TEST_DB_NAME || 'evergreen_test',
-    type: process.env.DEV_DB_TYPE || 'mongodb',
+    dbType: process.env.DEV_DB_TYPE || 'mongodb',
   }
 };
 
