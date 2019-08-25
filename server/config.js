@@ -6,7 +6,7 @@
 
 require('dotenv').config();
 
-const env = process.env.NODE_ENV; // 'dev' or 'test'
+const env = process.env.NODE_ENV || 'dev'; // defaults to dev environment if nothing set
 
 const dev = {
   app: {
