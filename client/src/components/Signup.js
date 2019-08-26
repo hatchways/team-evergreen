@@ -11,9 +11,10 @@ import {
     FormHelperText
 } from '@material-ui/core';
 
+
 class Signup extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             name: "",
             email: "",
@@ -30,9 +31,8 @@ class Signup extends Component {
 
 
     onChange = e => {
-        console.log('e.target.name: ', e.target.name, 'e.target.value: ', e.target.value)
         if (e.target.name === 'userAgreement') {
-            this.setState({ userAgreement: !this.state.userAgreement }, console.log(this.state));
+            this.setState({ userAgreement: e.target.checked });
         } else {
             this.setState({ [e.target.id]: e.target.value });
         }
@@ -42,31 +42,33 @@ class Signup extends Component {
     onSubmit = e => {
         e.preventDefault();
         
-        const { name, email, password, password2 } = this.state;
+        const { name, email, password, password2, userAgreement } = this.state;
     
         if (!name.length) {
-            this.setState({ errors: { name: 'Name is required' }}, () => console.log(this.state));
+            this.setState({ errors: { name: 'Name is required' }});
         }
 
         else if (!email.length) {
-            this.setState({ errors: { email: 'Email is required' }}, () => console.log(this.state));
+            this.setState({ errors: { email: 'Email is required' }});
         }
 
         else if (password.length < 6) {
-            this.setState({ errors: { password: 'Password should be at least 6 characters long' }}, () => console.log(this.state));
+            this.setState({ errors: { password: 'Password should be at least 6 characters long' }});
         }
 
         else if (!password2.length) {
-            this.setState({ errors: { password2: 'Comfirmation password is required' }}, () => console.log(this.state));
+            this.setState({ errors: { password2: 'Comfirmation password is required' }});
         }
 
         else if (password !== password2) {
-            this.setState({ errors: { password2: 'Password does not match' }}, () => console.log(this.state));
+            this.setState({ errors: { password2: 'Password does not match' }});
         }
 
-        else if (password !== password2) {
-            this.setState({ errors: { password2: 'Password does not match' }}, () => console.log(this.state));
+        else if (!userAgreement) {
+            this.setState({ errors: { userAgreement: 'Please agree with terms and conditions' }});
         }
+
+        
 
         else {
             const newUser = {
@@ -81,12 +83,12 @@ class Signup extends Component {
 
 
     registerUser = (userData) => {
-        // axios
-        //     .post('/register', userData)
-        //     .then(response => {
-        //         // redirect user to profile page
-        //     })
-        //     .catch(err => console.log)
+        axios
+            .post('/register', userData)
+            .then(response => {
+                // redirect user to profile page
+            })
+            .catch(err => console.log)
     }
 
 
@@ -103,7 +105,7 @@ class Signup extends Component {
                                 Create an account
                             </Typography>
                             <form noValidate onSubmit={this.onSubmit}>
-                                <Grid container spacing={2}>
+                                <Grid container spacing={1}>
                                     <Grid item xs={12}>
                                         <TextField
                                             onChange={this.onChange}
@@ -113,7 +115,7 @@ class Signup extends Component {
                                             id="name"
                                             label="Your Name"
                                         />
-                                        <FormHelperText id="name">{errors.name}</FormHelperText>
+                                        <FormHelperText error id="name">{errors.name}</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -124,7 +126,7 @@ class Signup extends Component {
                                             label="Email Address"
                                             name="email"
                                         />
-                                        <FormHelperText id="email">{errors.email}</FormHelperText>
+                                        <FormHelperText error id="email">{errors.email}</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -136,7 +138,7 @@ class Signup extends Component {
                                             type="password"
                                             id="password"
                                         />
-                                        <FormHelperText id="password">{errors.password}</FormHelperText>
+                                        <FormHelperText error id="password">{errors.password}</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -148,7 +150,7 @@ class Signup extends Component {
                                             type="password2"
                                             id="password2"
                                         />
-                                        <FormHelperText id="password2">{errors.password2}</FormHelperText>
+                                        <FormHelperText error id="password2">{errors.password2}</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <FormControlLabel
@@ -163,7 +165,7 @@ class Signup extends Component {
                                             }
                                             label="By signing up I agree to terms and conditions"
                                         />
-                                        <FormHelperText id="userAgreement">{errors.userAgreement}</FormHelperText>
+                                        <FormHelperText error id="userAgreement">{errors.userAgreement}</FormHelperText>
                                     </Grid>
                                 </Grid>
                                 <Button
