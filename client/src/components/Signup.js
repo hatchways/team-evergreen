@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import '../App.css';
+
 import { 
     Button,
     TextField,
@@ -98,8 +100,8 @@ class Signup extends Component {
 
         return (
             <Grid container>
-                <Grid item xs={12} md={6}>
-                    <Container component="main" maxWidth="xs">
+                <Grid item xs={12} md={6} className="full-height relative">
+                    <Container maxWidth="xs" className="centered">
                         <div>
                             <Typography component="h1" variant="h5" gutterBottom>
                                 Create an account
@@ -179,7 +181,7 @@ class Signup extends Component {
                     </Container>
 
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} className="with-background">
                 </Grid>
             </Grid>
         );
