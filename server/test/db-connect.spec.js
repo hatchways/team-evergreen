@@ -8,7 +8,6 @@ const expect = require('chai').expect;
 const User = require('../models/User');
 
 
-//save the current value of NODE_ENV so we can set environment back at end of test
 describe('Database connection', function() {
 
   it('Database opens successfully', function(done){
