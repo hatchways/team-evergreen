@@ -6,24 +6,13 @@ const config = require('./config.js');
 const mongoose = require('mongoose');
 
 const dbUrl = `${config.db.dbType}://${config.db.host}:${config.db.port}/${config.db.name}`;
-const dbConnect = () => {
-  return mongoose.connect(dbUrl)
+/* const dbConnect = () => {
+  return mongoose.connect(dbUrl, {useNewUrlParser: true})
 };
+*/
+function dbConnect(){
+  return mongoose.connect(dbUrl, {useNewUrlParser:true});
+}
 
-const user = new mongoose.Schema({
-  firstName: String,
-  lastName:String,
-  eMail:String
-});
+export default dbConnect();
 
-const User = mongoose.model('user', user);
-
-dbConnect()
-  .then( async connection => {
-    const user = await User.create({
-      firstName: 'Fil',
-      lastName: 'Gambatesa',
-      eMail: 'filgdev@gmail.com'
-    })
-  })
-  .catch(error => console.error (error));
