@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { withStyles } from '@material-ui/styles';
-import { authStyles } from '../styles/authStyles';
+import { withStyles } from "@material-ui/styles";
+import { authStyles } from "../styles/authStyles";
 
 import {
     Button,
@@ -12,7 +12,6 @@ import {
     FormHelperText,
     Link
 } from "@material-ui/core";
-
 
 class Login extends Component {
     constructor(props) {
@@ -71,7 +70,7 @@ class Login extends Component {
 
         return (
             <Grid container>
-                <Grid item xs={12} md={6} className={classes.root}>
+                <Grid item xs={12} md={6} className={classes.item}>
                     <Container maxWidth="xs" className={classes.container}>
                         <div>
                             <Typography
@@ -84,6 +83,7 @@ class Login extends Component {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
+                                            className={classes.uppercase}
                                             error={errors.email && !email}
                                             onChange={this.onChange}
                                             variant="outlined"
@@ -97,12 +97,17 @@ class Login extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="email">
-                                            {errors.email && !email ? errors.email : ''}
+                                            {errors.email && !email
+                                                ? errors.email
+                                                : ""}
                                         </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                            error={errors.password && isNotValid}
+                                            className={classes.uppercase}
+                                            error={
+                                                errors.password && isNotValid
+                                            }
                                             onChange={this.onChange}
                                             variant="outlined"
                                             fullWidth
@@ -116,14 +121,14 @@ class Login extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="password">
-                                            {errors.password && isNotValid ? errors.password : ''}
+                                            {errors.password && isNotValid
+                                                ? errors.password
+                                                : ""}
                                         </FormHelperText>
                                     </Grid>
 
-                                    <Grid item xs={12}>
-                                        <Typography
-                                            variant="body2"
-                                            className="with-mb">
+                                    <Grid item xs={12} className={classes.link}>
+                                        <Typography variant="body2">
                                             <Link href="#" color="textPrimary">
                                                 Forgot password?
                                             </Link>
