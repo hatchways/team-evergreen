@@ -1,4 +1,5 @@
 .with-background {
+    background-color: #DDE0E5;
     background-image: url('./images/hero.png');
     background-size: cover;
     background-position: center right;

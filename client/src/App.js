@@ -3,8 +3,8 @@ import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import { theme } from "./themes/theme";
-import Signup from "./components/Signup";
-import Login from "./components/Login";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 import "./App.css";
 

@@ -96,6 +96,7 @@ class Signup extends Component {
                             <Typography
                                 component="h1"
                                 variant="h5"
+                                gutterBottom
                                 className="with-mb">
                                 Create an account
                             </Typography>
