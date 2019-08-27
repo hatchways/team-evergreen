@@ -19,5 +19,8 @@
   "dependencies": {
     "eslint": "^6.2.2",
     "eslint-plugin-react": "^7.14.3"
+  },
+  "devDependencies": {
+    "eslint-plugin-jsx-a11y": "^6.2.3"
   }
 }
