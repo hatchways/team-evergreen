@@ -17,5 +17,20 @@ export const theme = createMuiTheme({
     background: {
       default: "#f6f6f6"
     }
-  }
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        borderRadius: "20px",
+      },
+      sizeLarge: {
+        padding: '8px 44px'
+      }
+    },
+    MuiTypography: {
+      gutterBottom: {
+        marginBottom: '1.75em'
+      }
+    }
+  },
 });

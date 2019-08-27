@@ -86,7 +86,7 @@ class Signup extends Component {
 
     registerUser = (userData) => {
         axios
-            .post('/register', userData)
+            .post('/signup', userData)
             .then(response => {
                 // redirect user to profile page
             })
@@ -149,7 +149,7 @@ class Signup extends Component {
                                             fullWidth
                                             name="password2"
                                             label="Confirm password"
-                                            type="password2"
+                                            type="password"
                                             id="password2"
                                         />
                                         <FormHelperText error id="password2">{errors.password2}</FormHelperText>
@@ -171,6 +171,7 @@ class Signup extends Component {
                                     </Grid>
                                 </Grid>
                                 <Button
+                                    size="large"
                                     type="submit"
                                     variant="contained"
                                     color="primary">
@@ -181,8 +182,7 @@ class Signup extends Component {
                     </Container>
 
                 </Grid>
-                <Grid item xs={12} md={6} className="with-background">
-                </Grid>
+                <Grid item xs={12} md={6} className="with-background"></Grid>
             </Grid>
         );
     }
