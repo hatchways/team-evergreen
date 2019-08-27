@@ -1,6 +1,15 @@
 {
-  "extends": ["eslint:recommended"],
-  "plugins": [],
+  "extends": [
+    "eslint:recommended",
+    "plugin:js-a11y/recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+  ],
+  "rules": {
+    "react/prop-types": 0,
+    "no-console": 1
+  },
+  "plugins": ["react","import","jsx-a11y"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
@@ -12,5 +21,10 @@
     "es6": true,
     "browser": true,
     "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
