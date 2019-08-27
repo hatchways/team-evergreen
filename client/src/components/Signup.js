@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import axios from 'axios';
-import '../App.css';
+import axios from "axios";
 
-import { 
+import {
     Button,
     TextField,
     FormControlLabel,
@@ -11,8 +10,7 @@ import {
     Typography,
     Container,
     FormHelperText
-} from '@material-ui/core';
-
+} from "@material-ui/core";
 
 class Signup extends Component {
     constructor(props) {
@@ -31,71 +29,62 @@ class Signup extends Component {
         // if user is registered, redirect to profile page
     }
 
-
     onChange = e => {
-        if (e.target.name === 'userAgreement') {
+        if (e.target.name === "userAgreement") {
             this.setState({ userAgreement: e.target.checked });
         } else {
             this.setState({ [e.target.id]: e.target.value });
         }
-    }
-
+    };
 
     onSubmit = e => {
         e.preventDefault();
-        
+
         const { name, email, password, password2, userAgreement } = this.state;
-    
+
         if (!name.length) {
-            this.setState({ errors: { name: 'Name is required' }});
-        }
-
-        else if (!email.length) {
-            this.setState({ errors: { email: 'Email is required' }});
-        }
-
-        else if (password.length < 6) {
-            this.setState({ errors: { password: 'Password should be at least 6 characters long' }});
-        }
-
-        else if (!password2.length) {
-            this.setState({ errors: { password2: 'Comfirmation password is required' }});
-        }
-
-        else if (password !== password2) {
-            this.setState({ errors: { password2: 'Password does not match' }});
-        }
-
-        else if (!userAgreement) {
-            this.setState({ errors: { userAgreement: 'Please agree with terms and conditions' }});
-        }
-
-        
-
-        else {
+            this.setState({ errors: { name: "Name is required" } });
+        } else if (!email.length) {
+            this.setState({ errors: { email: "Email is required" } });
+        } else if (password.length < 6) {
+            this.setState({
+                errors: {
+                    password: "Password should be at least 6 characters long"
+                }
+            });
+        } else if (!password2.length) {
+            this.setState({
+                errors: { password2: "Comfirmation password is required" }
+            });
+        } else if (password !== password2) {
+            this.setState({ errors: { password2: "Password does not match" } });
+        } else if (!userAgreement) {
+            this.setState({
+                errors: {
+                    userAgreement: "Please agree with terms and conditions"
+                }
+            });
+        } else {
             const newUser = {
                 name: this.state.name,
                 email: this.state.email,
                 password: this.state.password,
                 password2: this.state.password2
             };
-            this.registerUser(newUser); 
+            this.registerUser(newUser);
         }
     };
 
-
-    registerUser = (userData) => {
+    registerUser = userData => {
         axios
-            .post('/signup', userData)
+            .post("/signup", userData)
             .then(response => {
                 // redirect user to profile page
             })
-            .catch(err => console.log)
-    }
-
+            .catch(err => console.log);
+    };
 
     render() {
-
         const { errors } = this.state;
 
         return (
@@ -103,11 +92,14 @@ class Signup extends Component {
                 <Grid item xs={12} md={6} className="full-height relative">
                     <Container maxWidth="xs" className="centered">
                         <div>
-                            <Typography component="h1" variant="h5" gutterBottom>
+                            <Typography
+                                component="h1"
+                                variant="h5"
+                                gutterBottom>
                                 Create an account
                             </Typography>
                             <form noValidate onSubmit={this.onSubmit}>
-                                <Grid container spacing={1}>
+                                <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
                                             onChange={this.onChange}
@@ -116,8 +108,14 @@ class Signup extends Component {
                                             fullWidth
                                             id="name"
                                             label="Your Name"
+                                            autoComplete
+                                            InputLabelProps={{
+                                                shrink: true
+                                            }}
                                         />
-                                        <FormHelperText error id="name">{errors.name}</FormHelperText>
+                                        <FormHelperText error id="name">
+                                            {errors.name}
+                                        </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -127,8 +125,14 @@ class Signup extends Component {
                                             id="email"
                                             label="Email Address"
                                             name="email"
+                                            autoComplete
+                                            InputLabelProps={{
+                                                shrink: true
+                                            }}
                                         />
-                                        <FormHelperText error id="email">{errors.email}</FormHelperText>
+                                        <FormHelperText error id="email">
+                                            {errors.email}
+                                        </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -139,8 +143,13 @@ class Signup extends Component {
                                             label="Password"
                                             type="password"
                                             id="password"
+                                            InputLabelProps={{
+                                                shrink: true
+                                            }}
                                         />
-                                        <FormHelperText error id="password">{errors.password}</FormHelperText>
+                                        <FormHelperText error id="password">
+                                            {errors.password}
+                                        </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -151,8 +160,13 @@ class Signup extends Component {
                                             label="Confirm password"
                                             type="password"
                                             id="password2"
+                                            InputLabelProps={{
+                                                shrink: true
+                                            }}
                                         />
-                                        <FormHelperText error id="password2">{errors.password2}</FormHelperText>
+                                        <FormHelperText error id="password2">
+                                            {errors.password2}
+                                        </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <FormControlLabel
@@ -161,13 +175,19 @@ class Signup extends Component {
                                                     onChange={this.onChange}
                                                     id="userAgreement"
                                                     name="userAgreement"
-                                                    checked={this.state.userAgreement}
+                                                    checked={
+                                                        this.state.userAgreement
+                                                    }
                                                     color="secondary"
                                                 />
                                             }
                                             label="By signing up I agree to terms and conditions"
                                         />
-                                        <FormHelperText error id="userAgreement">{errors.userAgreement}</FormHelperText>
+                                        <FormHelperText
+                                            error
+                                            id="userAgreement">
+                                            {errors.userAgreement}
+                                        </FormHelperText>
                                     </Grid>
                                 </Grid>
                                 <Button
@@ -180,7 +200,6 @@ class Signup extends Component {
                             </form>
                         </div>
                     </Container>
-
                 </Grid>
                 <Grid item xs={12} md={6} className="with-background"></Grid>
             </Grid>
