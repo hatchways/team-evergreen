@@ -28,18 +28,8 @@ export const theme = createMuiTheme({
             }
         },
         MuiTypography: {
-            gutterBottom: {
-                marginBottom: "1.75em"
-            },
             h5: {
                 fontWeight: 500
-            }
-        },
-        MuiInputLabel: {
-            outlined: {
-                "&.MuiInputLabel-shrink": {
-                    textTransform: "uppercase"
-                }
             }
         }
     }

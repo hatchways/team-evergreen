@@ -27,6 +27,7 @@ class Signup extends Component {
 
     componentDidMount() {
         // if user is registered, redirect to profile page
+        console.log('props: ', this.props)
     }
 
     onChange = e => {
@@ -95,7 +96,7 @@ class Signup extends Component {
                             <Typography
                                 component="h1"
                                 variant="h5"
-                                gutterBottom>
+                                className="with-mb">
                                 Create an account
                             </Typography>
                             <form noValidate onSubmit={this.onSubmit}>
@@ -108,7 +109,7 @@ class Signup extends Component {
                                             fullWidth
                                             id="name"
                                             label="Your Name"
-                                            autoComplete
+                                            autoComplete="true"
                                             InputLabelProps={{
                                                 shrink: true
                                             }}
@@ -125,7 +126,7 @@ class Signup extends Component {
                                             id="email"
                                             label="Email Address"
                                             name="email"
-                                            autoComplete
+                                            autoComplete="true"
                                             InputLabelProps={{
                                                 shrink: true
                                             }}

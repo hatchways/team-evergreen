@@ -72,7 +72,7 @@ class Login extends Component {
                             <Typography
                                 component="h1"
                                 variant="h5"
-                                gutterBottom>
+                                className="with-mb">
                                 Log In
                             </Typography>
                             <form noValidate onSubmit={this.onSubmit}>
@@ -85,7 +85,7 @@ class Login extends Component {
                                             id="email"
                                             label="Email Address"
                                             name="email"
-                                            autoComplete
+                                            autoComplete="true"
                                             InputLabelProps={{
                                                 shrink: true
                                             }}
@@ -115,7 +115,7 @@ class Login extends Component {
                                     <Grid item xs={12}>
                                         <Typography
                                             variant="body2"
-                                            gutterBottom>
+                                            className="with-mb">
                                             <Link href="#" color="textPrimary">
                                                 Forgot password?
                                             </Link>
