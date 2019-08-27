@@ -1,7 +1,7 @@
 {
   "extends": [
     "eslint:recommended",
-    "plugin:js-a11y/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:react/recommended",
     "plugin:import/errors",
     "prettier",

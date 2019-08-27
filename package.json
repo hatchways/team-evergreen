@@ -18,12 +18,14 @@
   "homepage": "https://github.com/hatchways/team-evergreen#readme",
   "dependencies": {
     "eslint": "^6.2.2",
-    "eslint-plugin-react": "^7.14.3",
     "node": "^12.9.0"
   },
   "devDependencies": {
+    "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "prettier": "1.18.2"
   }
 }
