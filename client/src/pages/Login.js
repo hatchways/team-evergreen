@@ -62,7 +62,8 @@ class Login extends Component {
     };
 
     render() {
-        const { errors } = this.state;
+        const { email, password, errors } = this.state;
+        const isNotValid = password.length < 6;
 
         return (
             <Grid container>
@@ -79,6 +80,7 @@ class Login extends Component {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
+                                            error={errors.email && !email}
                                             onChange={this.onChange}
                                             variant="outlined"
                                             fullWidth
@@ -91,11 +93,12 @@ class Login extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="email">
-                                            {errors.email}
+                                            {errors.email && !email ? errors.email : ''}
                                         </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            error={errors.password && isNotValid}
                                             onChange={this.onChange}
                                             variant="outlined"
                                             fullWidth
@@ -108,7 +111,7 @@ class Login extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="password">
-                                            {errors.password}
+                                            {errors.password && isNotValid ? errors.password : ''}
                                         </FormHelperText>
                                     </Grid>
 

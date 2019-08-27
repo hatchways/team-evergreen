@@ -27,7 +27,6 @@ class Signup extends Component {
 
     componentDidMount() {
         // if user is registered, redirect to profile page
-        console.log('props: ', this.props)
     }
 
     onChange = e => {
@@ -86,7 +85,9 @@ class Signup extends Component {
     };
 
     render() {
-        const { errors } = this.state;
+        const { name, email, password, password2, userAgreement, errors } = this.state;
+        const isNotValid = password.length < 6;
+        const isNotAMatch = password !== password2;
 
         return (
             <Grid container>
@@ -104,6 +105,7 @@ class Signup extends Component {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
+                                            error={errors.name && !name}
                                             onChange={this.onChange}
                                             name="name"
                                             variant="outlined"
@@ -116,11 +118,12 @@ class Signup extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="name">
-                                            {errors.name}
+                                            {errors.name && !name ? errors.name : ''}
                                         </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            error={errors.email && !email}
                                             onChange={this.onChange}
                                             variant="outlined"
                                             fullWidth
@@ -133,11 +136,12 @@ class Signup extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="email">
-                                            {errors.email}
+                                            {errors.email && !email ? errors.email : ''}
                                         </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            error={errors.password && isNotValid}
                                             onChange={this.onChange}
                                             variant="outlined"
                                             fullWidth
@@ -150,11 +154,12 @@ class Signup extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="password">
-                                            {errors.password}
+                                            {errors.password && isNotValid ? errors.password : ''}
                                         </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            error={errors.password2 && isNotAMatch}
                                             onChange={this.onChange}
                                             variant="outlined"
                                             fullWidth
@@ -167,7 +172,7 @@ class Signup extends Component {
                                             }}
                                         />
                                         <FormHelperText error id="password2">
-                                            {errors.password2}
+                                            {errors.password2 && isNotAMatch ? errors.password2 : ''}
                                         </FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
@@ -188,7 +193,7 @@ class Signup extends Component {
                                         <FormHelperText
                                             error
                                             id="userAgreement">
-                                            {errors.userAgreement}
+                                            {errors.userAgreement && !userAgreement ? errors.userAgreement : ''}
                                         </FormHelperText>
                                     </Grid>
                                 </Grid>
