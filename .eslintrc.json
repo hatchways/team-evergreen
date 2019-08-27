@@ -7,22 +7,19 @@
     "prettier",
     "prettier/react"
   ],
-  "rules": {
-    "react/prop-types": 0,
-    "no-console": 1
+  "rules": { "react/prop-types": 0, "no-console": 1 },
+  "plugins": ["react", "import", "jsx-a11y"],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
   },
-  "plugins": ["react","import","jsx-a11y"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
     }
-  },
-  "env": {
-    "es6": true,
-    "browser": true,
-    "node": true
   },
   "settings": {
     "react": {
