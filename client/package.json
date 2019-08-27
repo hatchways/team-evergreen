@@ -16,9 +16,6 @@
     "eject": "react-scripts eject",
     "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../server dev\" "
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
