@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { withStyles } from '@material-ui/styles';
+import { authStyles } from '../styles/authStyles';
+
 
 import {
     Button,
@@ -85,20 +88,21 @@ class Signup extends Component {
     };
 
     render() {
+        const { classes } = this.props;
         const { name, email, password, password2, userAgreement, errors } = this.state;
         const isNotValid = password.length < 6;
         const isNotAMatch = password !== password2;
 
         return (
             <Grid container>
-                <Grid item xs={12} md={6} className="full-height relative">
-                    <Container maxWidth="xs" className="centered">
+                <Grid item xs={12} md={6} className={classes.root}>
+                    <Container maxWidth="xs" className={classes.container}>
                         <div>
                             <Typography
                                 component="h1"
                                 variant="h5"
                                 gutterBottom
-                                className="with-mb">
+                                className={classes.heading}>
                                 Create an account
                             </Typography>
                             <form noValidate onSubmit={this.onSubmit}>
@@ -208,10 +212,10 @@ class Signup extends Component {
                         </div>
                     </Container>
                 </Grid>
-                <Grid item xs={12} md={6} className="with-background"></Grid>
+                <Grid item xs={12} md={6} className={classes.hero}></Grid>
             </Grid>
         );
     }
 }
 
-export default Signup;
+export default  withStyles(authStyles)(Signup);

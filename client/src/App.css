@@ -1,17 +1,5 @@
-.with-background {
-    background-color: #DDE0E5;
-    background-image: url('./images/hero.png');
-    background-size: cover;
-    background-position: center right;
-    background-repeat: no-repeat;
-}
-
 .full-height {
     min-height: 100vh;
-}
-
-.with-mb {
-    margin-bottom: 0.75em;
 }
 
 .centered {
@@ -23,8 +11,4 @@
 
 .relative {
     position: relative;
-}
-
-.with-mb {
-    margin-bottom: 1.75em !important;
 }

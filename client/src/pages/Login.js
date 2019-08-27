@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { withStyles } from '@material-ui/styles';
+import { authStyles } from '../styles/authStyles';
 
 import {
     Button,
@@ -10,6 +12,7 @@ import {
     FormHelperText,
     Link
 } from "@material-ui/core";
+
 
 class Login extends Component {
     constructor(props) {
@@ -62,18 +65,19 @@ class Login extends Component {
     };
 
     render() {
+        const { classes } = this.props;
         const { email, password, errors } = this.state;
         const isNotValid = password.length < 6;
 
         return (
             <Grid container>
-                <Grid item xs={12} md={6} className="full-height relative">
-                    <Container maxWidth="xs" className="centered">
+                <Grid item xs={12} md={6} className={classes.root}>
+                    <Container maxWidth="xs" className={classes.container}>
                         <div>
                             <Typography
                                 component="h1"
                                 variant="h5"
-                                className="with-mb">
+                                className={classes.heading}>
                                 Log In
                             </Typography>
                             <form noValidate onSubmit={this.onSubmit}>
@@ -106,6 +110,7 @@ class Login extends Component {
                                             label="Password"
                                             type="password"
                                             id="password"
+                                            autoComplete="true"
                                             InputLabelProps={{
                                                 shrink: true
                                             }}
@@ -136,10 +141,10 @@ class Login extends Component {
                         </div>
                     </Container>
                 </Grid>
-                <Grid item xs={12} md={6} className="with-background"></Grid>
+                <Grid item xs={12} md={6} className={classes.hero}></Grid>
             </Grid>
         );
     }
 }
 
-export default Login;
+export default withStyles(authStyles)(Login);

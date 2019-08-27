@@ -26,11 +26,6 @@ export const theme = createMuiTheme({
             sizeLarge: {
                 padding: "8px 44px"
             }
-        },
-        MuiTypography: {
-            h5: {
-                fontWeight: 500
-            }
         }
     }
 });
