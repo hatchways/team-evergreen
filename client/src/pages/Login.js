@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 
@@ -69,85 +70,94 @@ class Login extends Component {
         const isNotValid = password.length < 6;
 
         return (
-            <Grid container>
-                <Grid item xs={12} md={6} className={classes.item}>
-                    <Container maxWidth="xs" className={classes.container}>
-                        <div>
-                            <Typography
-                                component="h1"
-                                variant="h5"
-                                className={classes.heading}>
-                                Log In
-                            </Typography>
-                            <form noValidate onSubmit={this.onSubmit}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            className={classes.uppercase}
-                                            error={errors.email && !email}
-                                            onChange={this.onChange}
-                                            variant="outlined"
-                                            fullWidth
-                                            id="email"
-                                            label="Email Address"
-                                            name="email"
-                                            autoComplete="true"
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                        />
-                                        <FormHelperText error id="email">
-                                            {errors.email && !email
-                                                ? errors.email
-                                                : ""}
-                                        </FormHelperText>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            className={classes.uppercase}
-                                            error={
-                                                errors.password && isNotValid
-                                            }
-                                            onChange={this.onChange}
-                                            variant="outlined"
-                                            fullWidth
-                                            name="password"
-                                            label="Password"
-                                            type="password"
-                                            id="password"
-                                            autoComplete="true"
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                        />
-                                        <FormHelperText error id="password">
-                                            {errors.password && isNotValid
-                                                ? errors.password
-                                                : ""}
-                                        </FormHelperText>
-                                    </Grid>
+            <>
+                <AuthNavbar target="signup" />
+                <Grid container>
+                    <Grid item xs={12} md={6} className={classes.item}>
+                        <Container maxWidth="xs" className={classes.container}>
+                            <div>
+                                <Typography
+                                    component="h1"
+                                    variant="h5"
+                                    className={classes.heading}>
+                                    Log In
+                                </Typography>
+                                <form noValidate onSubmit={this.onSubmit}>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                className={classes.uppercase}
+                                                error={errors.email && !email}
+                                                onChange={this.onChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                id="email"
+                                                label="Email Address"
+                                                name="email"
+                                                autoComplete="true"
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                            />
+                                            <FormHelperText error id="email">
+                                                {errors.email && !email
+                                                    ? errors.email
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                className={classes.uppercase}
+                                                error={
+                                                    errors.password &&
+                                                    isNotValid
+                                                }
+                                                onChange={this.onChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                name="password"
+                                                label="Password"
+                                                type="password"
+                                                id="password"
+                                                autoComplete="true"
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                            />
+                                            <FormHelperText error id="password">
+                                                {errors.password && isNotValid
+                                                    ? errors.password
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
 
-                                    <Grid item xs={12} className={classes.link}>
-                                        <Typography variant="body2">
-                                            <Link href="#" color="textPrimary">
-                                                Forgot password?
-                                            </Link>
-                                        </Typography>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            className={classes.link}>
+                                            <Typography variant="body2">
+                                                <Link
+                                                    href="#"
+                                                    color="textPrimary">
+                                                    Forgot password?
+                                                </Link>
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                                <Button
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary">
-                                    Login
-                                </Button>
-                            </form>
-                        </div>
-                    </Container>
+                                    <Button
+                                        size="large"
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary">
+                                        Login
+                                    </Button>
+                                </form>
+                            </div>
+                        </Container>
+                    </Grid>
+                    <Grid item xs={12} md={6} className={classes.hero}></Grid>
                 </Grid>
-                <Grid item xs={12} md={6} className={classes.hero}></Grid>
-            </Grid>
+            </>
         );
     }
 }

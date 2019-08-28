@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 
@@ -100,148 +101,161 @@ class Signup extends Component {
         const isNotAMatch = password !== password2;
 
         return (
-            <Grid container>
-                <Grid item xs={12} md={6} className={classes.item}>
-                    <Container maxWidth="xs" className={classes.container}>
-                        <div>
-                            <Typography
-                                component="h1"
-                                variant="h5"
-                                gutterBottom
-                                className={classes.heading}>
-                                Create an account
-                            </Typography>
-                            <form noValidate onSubmit={this.onSubmit}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            className={classes.uppercase}
-                                            error={errors.name && !name}
-                                            onChange={this.onChange}
-                                            name="name"
-                                            variant="outlined"
-                                            fullWidth
-                                            id="name"
-                                            label="Your Name"
-                                            autoComplete="true"
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                        />
-                                        <FormHelperText error id="name">
-                                            {errors.name && !name
-                                                ? errors.name
-                                                : ""}
-                                        </FormHelperText>
+            <>
+                <AuthNavbar target="login" />
+                <Grid container>
+                    <Grid item xs={12} md={6} className={classes.item}>
+                        <Container maxWidth="xs" className={classes.container}>
+                            <div>
+                                <Typography
+                                    component="h1"
+                                    variant="h5"
+                                    gutterBottom
+                                    className={classes.heading}>
+                                    Create an account
+                                </Typography>
+                                <form noValidate onSubmit={this.onSubmit}>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                className={classes.uppercase}
+                                                error={errors.name && !name}
+                                                onChange={this.onChange}
+                                                name="name"
+                                                variant="outlined"
+                                                fullWidth
+                                                id="name"
+                                                label="Your Name"
+                                                autoComplete="true"
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                            />
+                                            <FormHelperText error id="name">
+                                                {errors.name && !name
+                                                    ? errors.name
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                className={classes.uppercase}
+                                                error={errors.email && !email}
+                                                onChange={this.onChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                id="email"
+                                                label="Email Address"
+                                                name="email"
+                                                autoComplete="true"
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                            />
+                                            <FormHelperText error id="email">
+                                                {errors.email && !email
+                                                    ? errors.email
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                className={classes.uppercase}
+                                                error={
+                                                    errors.password &&
+                                                    isNotValid
+                                                }
+                                                onChange={this.onChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                name="password"
+                                                label="Password"
+                                                type="password"
+                                                id="password"
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                            />
+                                            <FormHelperText error id="password">
+                                                {errors.password && isNotValid
+                                                    ? errors.password
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                className={classes.uppercase}
+                                                error={
+                                                    errors.password2 &&
+                                                    isNotAMatch
+                                                }
+                                                onChange={this.onChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                name="password2"
+                                                label="Confirm password"
+                                                type="password"
+                                                id="password2"
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                            />
+                                            <FormHelperText
+                                                error
+                                                id="password2">
+                                                {errors.password2 && isNotAMatch
+                                                    ? errors.password2
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            className={classes.agreement}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        onChange={this.onChange}
+                                                        id="userAgreement"
+                                                        name="userAgreement"
+                                                        checked={
+                                                            this.state
+                                                                .userAgreement
+                                                        }
+                                                        color="secondary"
+                                                    />
+                                                }
+                                                label={
+                                                    <Typography variant="body2">
+                                                        By signing up I agree to
+                                                        terms and conditions
+                                                    </Typography>
+                                                }
+                                            />
+                                            <FormHelperText
+                                                error
+                                                id="userAgreement">
+                                                {errors.userAgreement &&
+                                                !userAgreement
+                                                    ? errors.userAgreement
+                                                    : ""}
+                                            </FormHelperText>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            className={classes.uppercase}
-                                            error={errors.email && !email}
-                                            onChange={this.onChange}
-                                            variant="outlined"
-                                            fullWidth
-                                            id="email"
-                                            label="Email Address"
-                                            name="email"
-                                            autoComplete="true"
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                        />
-                                        <FormHelperText error id="email">
-                                            {errors.email && !email
-                                                ? errors.email
-                                                : ""}
-                                        </FormHelperText>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            className={classes.uppercase}
-                                            error={
-                                                errors.password && isNotValid
-                                            }
-                                            onChange={this.onChange}
-                                            variant="outlined"
-                                            fullWidth
-                                            name="password"
-                                            label="Password"
-                                            type="password"
-                                            id="password"
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                        />
-                                        <FormHelperText error id="password">
-                                            {errors.password && isNotValid
-                                                ? errors.password
-                                                : ""}
-                                        </FormHelperText>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            className={classes.uppercase}
-                                            error={
-                                                errors.password2 && isNotAMatch
-                                            }
-                                            onChange={this.onChange}
-                                            variant="outlined"
-                                            fullWidth
-                                            name="password2"
-                                            label="Confirm password"
-                                            type="password"
-                                            id="password2"
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                        />
-                                        <FormHelperText error id="password2">
-                                            {errors.password2 && isNotAMatch
-                                                ? errors.password2
-                                                : ""}
-                                        </FormHelperText>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        className={classes.agreement}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    onChange={this.onChange}
-                                                    id="userAgreement"
-                                                    name="userAgreement"
-                                                    checked={
-                                                        this.state.userAgreement
-                                                    }
-                                                    color="secondary"
-                                                />
-                                            }
-                                            label="By signing up I agree to terms and conditions"
-                                        />
-                                        <FormHelperText
-                                            error
-                                            id="userAgreement">
-                                            {errors.userAgreement &&
-                                            !userAgreement
-                                                ? errors.userAgreement
-                                                : ""}
-                                        </FormHelperText>
-                                    </Grid>
-                                </Grid>
-                                <Button
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary">
-                                    Create
-                                </Button>
-                            </form>
-                        </div>
-                    </Container>
+                                    <Button
+                                        size="large"
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary">
+                                        Create
+                                    </Button>
+                                </form>
+                            </div>
+                        </Container>
+                    </Grid>
+                    <Grid item xs={12} md={6} className={classes.hero}></Grid>
                 </Grid>
-                <Grid item xs={12} md={6} className={classes.hero}></Grid>
-            </Grid>
+            </>
         );
     }
 }
