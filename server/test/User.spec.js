@@ -9,9 +9,9 @@ const User = require('../models/User');
 describe("User model", function() {
   it('should be valid if all fields provided', function(done) {
     let user = new User({
-                          firstName: "Fil",
-                          lastName: "Gambatesa",
-                          eMail: "filgdev@gmail.com"
+                          name: "Bob User",
+                          email: "bob@bob.com",
+                          password: "123456"
     });
     user.validate(function(err) {
       expect(err).to.be.null;
@@ -21,8 +21,8 @@ describe("User model", function() {
 
   it('should be invalid if e-mail not provided', function(done) {
     let user = new User({
-                          firstName: "Fil",
-                          lastName: "Gambatesa"
+                          name: "Bob User",
+                          password: "123456"
                         });
     user.validate(function(err) {
       expect(err).to.exist;
@@ -30,9 +30,21 @@ describe("User model", function() {
     });
   });
 
-  it ('should be valid if only e-mail is provided', function(done) {
+  it('should be invalid if passord not provided', function(done) {
     let user = new User({
-                          eMail: "filgdev@gmail.com"
+                          name: "Bob User",
+                          email: "123456"
+                        });
+    user.validate(function(err) {
+      expect(err).to.exist;
+      done();
+    });
+  });
+
+  it ('should be valid if only e-mail and password is provided', function(done) {
+    let user = new User({
+                          email: "bob@bob.com",
+                          password: "123456"
                         });
     user.validate(function(err) {
       expect(err).to.be.null;
