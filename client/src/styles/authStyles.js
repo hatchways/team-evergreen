@@ -5,7 +5,7 @@ import hero from "../images/hero.png";
 export const authStyles = {
     heading: {
         marginBottom: "2.35em",
-        fontWeight: "500"
+        fontWeight: "600"
     },
     container: {
         transform: "translate(-50%, -50%)",
