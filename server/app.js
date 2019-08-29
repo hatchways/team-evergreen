@@ -7,12 +7,44 @@ import logger from "morgan";
 import indexRouter from "./routes/index";
 import pingRouter from "./routes/ping";
 
-var app = express();
+// End point api imports
+import mongoose from "mongoose";
+import _ from "./config/db-connect";
+const bodyParser = require("body-parser");
+
+const users = require("./routes/api/users");
+
+const app = express();
+
+//Inserting new code to support back-end api.
+//Leaving the boiler plate code alone for now - may need to refactor
+//Author - Fil - 8/28/2019
+//Inspiration - https://blog.bitsrc.io/build-a-login-auth-app-with-mern-stack-part-1-c405048e3669
+
+// Bodyparser middleware
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+// Connect to database
+const db = mongoose.connection
+.then(() => console.log("MongoDB successfully connected"))
+.catch(err => console.log(err));
+
+//Passport config
+const passport = require("passport");
+require("./config/passport")(passport);
+
+// Routes
+app.use("/api/users", users);
 
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//Passport middleware
+app.use(passport.initialize());
+
 app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);

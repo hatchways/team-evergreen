@@ -1,7 +1,6 @@
 //db-connect.js
 /* Created by Fil on August 25, 2019 */
 
-//TODO (FG) - Change require to import once Babel works?
 const config = require('./config.js');
 const mongoose = require('mongoose');
 
