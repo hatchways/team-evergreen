@@ -34,4 +34,22 @@ app.use(function(err, req, res, next) {
   res.json({ error: err });
 });
 
+//Inserting new code to support back-end api.
+//Leaving the boiler plate code alone for now - may need to refactor
+//Author - Fil - 8/28/2019
+//Inspiration - https://blog.bitsrc.io/build-a-login-auth-app-with-mern-stack-part-1-c405048e3669
+
+const bodyParser = require("body-parser");
+
+// Bodyparser middleware
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+// Connect to database
+import _ from "./config/db-connect";
+import mongoose from "mongoose";
+const db = mongoose.connection
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch(err => console.log(err));
+
 module.exports = app;
