@@ -94,7 +94,11 @@ This will run all the tests currently in the directory.  Segregating these out i
 ### API Endpoints
 
 The api makes two endpoints available for registration and login and will return a status code of 200 if successfull or
-a json file with an error description if not successful.
+a json file with an error description if not successful.  
+
+When logging in successfully the end point will return the jwt token.  This token needs to be stored and then used for all
+future back end requests.  Right now the token only returns the user.id field but we can add more items to the payload
+if we find this is necessary.
 
 The various error messages and validations can be found at:
 
