@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/hatchways/team-evergreen#readme",
   "devDependencies": {
-    "on-change": "^1.6.2",
+    "onchange": "^6.0.0",
     "prettier": "1.18.2"
   }
 }
