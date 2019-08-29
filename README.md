@@ -5,7 +5,7 @@ This readme describes how to:
 1. Start Client Server(#Start Client)
 2. Start Server Server(#Start Server)
 3. Combo Start(#Combo)
-3. Start MongoDB(#Start Mongo)
+4. Start MongoDB(#Start Mongo)
 
 ## Start Client
 
