@@ -4,9 +4,9 @@
    If ports/names different from defaults set appropriate env value in .env file on your machine.
    !!! Make sure you've added .env to your .gitignore file or we will clobber each other's configuration !!! */
 
-require('dotenv').config();
+require("dotenv").config();
 
-const env = process.env.NODE_ENV || 'dev'; // defaults to dev environment if nothing set
+const env = process.env.NODE_ENV || "dev"; // defaults to dev environment if nothing set
 
 const dev = {
   app: {
@@ -14,10 +14,10 @@ const dev = {
     secretOrKey: process.env.PASSWORD_CRYPTO_KEY
   },
   db: {
-    host: process.env.DEV_DB_HOST || 'localhost',
+    host: process.env.DEV_DB_HOST || "localhost",
     port: parseInt(process.env.DEV_DB_PORT) || 27017,
-    name: process.env.DEV_DB_NAME || 'evergreen_dev',
-    dbType: process.env.DEV_DB_TYPE || 'mongodb',
+    name: process.env.DEV_DB_NAME || "evergreen_dev",
+    dbType: process.env.DEV_DB_TYPE || "mongodb"
   }
 };
 const test = {
@@ -26,10 +26,10 @@ const test = {
     secretOrKey: process.env.PASSWORD_CRYPTO_KEY
   },
   db: {
-    host: process.env.TEST_DB_HOST || 'localhost',
+    host: process.env.TEST_DB_HOST || "localhost",
     port: parseInt(process.env.TEST_DB_PORT) || 27017,
-    name: process.env.TEST_DB_NAME || 'evergreen_test',
-    dbType: process.env.DEV_DB_TYPE || 'mongodb',
+    name: process.env.TEST_DB_NAME || "evergreen_test",
+    dbType: process.env.DEV_DB_TYPE || "mongodb"
   }
 };
 

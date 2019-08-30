@@ -22,13 +22,13 @@ const app = express();
 //Inspiration - https://blog.bitsrc.io/build-a-login-auth-app-with-mern-stack-part-1-c405048e3669
 
 // Bodyparser middleware
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Connect to database
 const db = mongoose.connection
-.then(() => console.log("MongoDB successfully connected"))
-.catch(err => console.log(err));
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch(err => console.log(err));
 
 //Passport config
 const passport = require("passport");
