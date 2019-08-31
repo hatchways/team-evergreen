@@ -104,4 +104,27 @@ router.post("/login", (req, res) => {
   });
 });
 
+function createToken () {
+  // Create JWT Payload
+  const payload = {
+    id: user.id,
+    name: user.name
+  };
+
+  // Sign token
+  jwt.sign(
+    payload,
+    keys.app.secretOrKey,
+    {
+      expiresIn: 31556926 // 1 year in seconds
+    },
+    (err, token) => {
+       return {
+              success: true,
+              token: "Bearer " + token
+       };
+    }
+  );
+}
+
 module.exports = router;
