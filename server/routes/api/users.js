@@ -95,23 +95,19 @@ router.post("/login", (req, res) => {
                      });
           }
         );*/
-        const newToken = createToken(user);
-        console.log(newToken);
-        res.json({
-                   success: true,
-                   token: "Bearer " + newToken
-                 });
-        res.json({})
+        createToken(user, res);
+
       } else {
         return res
         .status(400)
         .json({ passwordincorrect: "Password incorrect" });
       }
-    });
+    })
+    .catch ();
   });
 });
 
-function createToken (user) {
+function createToken (user, res) {
   // Create JWT Payload
   const payload = {
     id: user.id,
@@ -119,12 +115,26 @@ function createToken (user) {
   };
 
   // Sign token
-  return jwt.sign(
+  jwt.sign(
     payload,
     keys.app.secretOrKey,
     {
       expiresIn: 31556926 // 1 year in seconds
-    });
+    },
+    (err, token) => {
+      if(!err) {
+        res.json ({
+          status: 200,
+          token: `Bearer ${token}`
+        })
+      } else {
+        res.json ({
+          status: 500,
+          error: "Unable to generate token."
+        })
+      }
+    }
+  );
 }
 
 module.exports = router;
