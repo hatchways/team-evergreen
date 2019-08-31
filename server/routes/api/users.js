@@ -16,7 +16,7 @@ const validateLoginInput = require("../../validation/login");
 const User = require("../../models/User");
 
 // @route POST api/users/register
-// @desc Register user
+// @desc Register user and return jwt token
 // @access Public
 router.post("/register", (req, res) => {
   // Form validation
@@ -42,7 +42,7 @@ router.post("/register", (req, res) => {
           newUser.password = hash;
           newUser
           .save()
-          .then(user => res.json(user))
+          .then(user => createToken(user, res))
           .catch(err => console.log(err));
         });
       });
@@ -75,33 +75,49 @@ router.post("/login", (req, res) => {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // User matched
-        // Create JWT Payload
-        const payload = {
-          id: user.id,
-          name: user.name
-        };
+        // Create JWT token and return via res.json
+        createToken(user, res);
 
-        // Sign token
-        jwt.sign(
-          payload,
-          keys.app.secretOrKey,
-          {
-            expiresIn: 31556926 // 1 year in seconds
-          },
-          (err, token) => {
-            res.json({
-                       success: true,
-                       token: "Bearer " + token
-                     });
-          }
-        );
       } else {
         return res
         .status(400)
         .json({ passwordincorrect: "Password incorrect" });
       }
-    });
+    })
+    .catch ();
   });
 });
+
+// @desc Creates a JWT token and returns via callback function provided
+// @access Private
+function createToken (user, res) {
+  // Create JWT Payload
+  const payload = {
+    id: user.id,
+    name: user.name
+  };
+
+  // Sign token
+  jwt.sign(
+    payload,
+    keys.app.secretOrKey,
+    {
+      expiresIn: 31556926 // 1 year in seconds
+    },
+    (err, token) => {
+      if(!err) {
+        res.json ({
+          status: 200,
+          token: `Bearer ${token}`
+        })
+      } else {
+        res.json ({
+          status: 500,
+          error: "Unable to generate token."
+        })
+      }
+    }
+  );
+}
 
 module.exports = router;
