@@ -104,7 +104,7 @@ router.post("/login", (req, res) => {
   });
 });
 
-function createToken () {
+function createToken (user) {
   // Create JWT Payload
   const payload = {
     id: user.id,
@@ -119,10 +119,7 @@ function createToken () {
       expiresIn: 31556926 // 1 year in seconds
     },
     (err, token) => {
-       return {
-              success: true,
-              token: "Bearer " + token
-       };
+       return { token: "Bearer " + token };
     }
   );
 }
