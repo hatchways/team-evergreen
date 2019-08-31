@@ -106,10 +106,14 @@ The various error messages and validations can be found at:
 - \server\validation\login.js
 
 Registration requires these fields {name, email, password, password2) to exist, not be empty and be the correct
-format for their type; password and password2 need to match.
+format for their type; password and password2 need to match.  Registration will return:
 
-Login requires these fields {email, password} to exist, not be empty, and be the correct format for their type; there has to be a record
-for that email in the user database.  
+1. 400  status error codes if data is not valid - user not registered\not logged ing
+2. 500 status error code if registration succeeded but jwt token could not be created - user registered\not logged in
+3. 200 status - returns jwt - user is registered and logged in
+
+Login requires these fields {email, password} to exist, not be empty, and be the correct format for their type; there 
+has to be a record for that email in the user database.  
 
 The actual routes for the endpoints are:
 
