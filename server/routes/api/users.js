@@ -76,7 +76,7 @@ router.post("/login", (req, res) => {
       if (isMatch) {
         // User matched
         // Create JWT Payload
-        const payload = {
+        /*const payload = {
           id: user.id,
           name: user.name
         };
@@ -94,7 +94,14 @@ router.post("/login", (req, res) => {
                        token: "Bearer " + token
                      });
           }
-        );
+        );*/
+        const newToken = createToken(user);
+        console.log(newToken);
+        res.json({
+                   success: true,
+                   token: "Bearer " + newToken
+                 });
+        res.json({})
       } else {
         return res
         .status(400)
@@ -112,16 +119,12 @@ function createToken (user) {
   };
 
   // Sign token
-  jwt.sign(
+  return jwt.sign(
     payload,
     keys.app.secretOrKey,
     {
       expiresIn: 31556926 // 1 year in seconds
-    },
-    (err, token) => {
-       return { token: "Bearer " + token };
-    }
-  );
+    });
 }
 
 module.exports = router;
