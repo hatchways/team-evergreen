@@ -9,7 +9,7 @@ import pingRouter from "./routes/ping";
 
 // End point api imports
 import mongoose from "mongoose";
-import _ from "./config/db-connect";
+require("./config/db-connect");
 const bodyParser = require("body-parser");
 
 const users = require("./routes/api/users");
