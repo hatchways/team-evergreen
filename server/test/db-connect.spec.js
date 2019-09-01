@@ -1,25 +1,30 @@
 //db-connect.spec.js
 //Created by Fil - August 25, 2019
 
+// Setup testing framework
 import {describe} from 'mocha';
-const mongoose = require('mongoose');
-
 const expect = require('chai').expect;
-const User = require('../models/User');
+
+// Setup database connection
+const mongoose = require('mongoose');
+require('../config/db-connect');
 
 
 describe('Database connection', function() {
+  it('Opens database successfully', function(done){
 
-  it('Database opens successfully', function(done){
-    process.env.NODE_ENV = 'test';
-    const config = require("../config/config");
-    const _ = require('../config/db-connect');
     const db = mongoose.connection;
-    db.on('error', (err) => console.error(err));
-    db.once('open', function () {
-      //we're connected
-      expect(db.name).to.equal(config.db.name);
+    // Wait for the connection to open if not open yet
+    // Else test will error out if timeout exceeded while waiting
+    if (db.readyState === 1) {
+      expect(db.readyState).to.equal(1);
       done();
-    });
+    } else {
+      db.once('open', () => {
+          expect(db.readyState).to.equal(1);
+          done();
+      });
+    }
   });
 });
+
