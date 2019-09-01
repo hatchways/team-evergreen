@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AuthNavbar(props) {
+    console.log(props.target);
     const classes = useStyles();
     const buttonText = props.target === "signup" ? "Sign up" : "Log in";
 

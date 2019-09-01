@@ -3,8 +3,6 @@ import axios from "axios";
 import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
-import jwt_decode from "jwt-decode";
-import setAuthToken from "../utils/setAuthToken";
 
 import {
     Button,
@@ -28,6 +26,10 @@ class Signup extends Component {
             userAgreement: false,
             errors: {}
         };
+    }
+
+    componentDidMount() {
+        // if user is registered, redirect to profile page
     }
 
     onChange = e => {
@@ -78,29 +80,11 @@ class Signup extends Component {
 
     registerUser = userData => {
         axios
-            .post("/api/users/register", userData)
+            .post("/signup", userData)
             .then(response => {
-                // save token to localStorage
-                const { token } = response.data;
-
-                localStorage.setItem("jwtToken", token);
-
-                // Set token to Auth header
-                setAuthToken(token);
-
-                // Decode token to get user data
-                const decoded = jwt_decode(token);
-
-                // Load current user
-                this.props.loadUser(decoded);
-
-                // redirect user to profile page:
-                this.props.history.push("/profile");
+                // redirect user to profile page
             })
-            .catch(err => {
-                console.log(err);
-                this.setState({ errors: err.response.data });
-            });
+            .catch(err => console.log);
     };
 
     render() {
