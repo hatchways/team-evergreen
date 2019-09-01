@@ -49,29 +49,40 @@ describe("Signup data is validated", function() {
     done();
   });
 
-  it("should be invalid if password is more than 6 chars", function(done) {
+  it ('should be invalid if password is less than 6 chars', function(done) {
     let user = {
-      name: "Bob User",
-      email: "bob@bob.com",
-      password: "1234567",
-      password2: "1234567"
-    };
+                name: "Bob User",
+                email: "bob@bob.com",
+                password: "12345",
+                password2: "12345"
+              };
     expect(validateOnRegister(user).isValid).to.be.false;
     done();
   });
 
-  it("should be invalid if password is less than 2 chars", function(done) {
-    let user = {
-      name: "Bob User",
-      email: "bob@bob.com",
-      password: "1",
-      password2: "1"
-    };
-    expect(validateOnRegister(user).isValid).to.be.false;
-    done();
+  it ('should be valid if password is 6 chars', function(done) {
+      let user = {
+                  name: "Bob User",
+                  email: "bob@bob.com",
+                  password: "123456",
+                  password2: "123456"
+                };
+      expect(validateOnRegister(user).isValid).to.be.true;
+      done();
   });
 
-  it("should be invalid if passwords don't match", function(done) {
+    it ('should be valid if password is more than 6 chars', function(done) {
+        let user = {
+            name: "Bob User",
+            email: "bob@bob.com",
+            password: "1234567",
+            password2: "1234567"
+        };
+        expect(validateOnRegister(user).isValid).to.be.true;
+        done();
+    });
+
+  it ('should be invalid if passwords don\'t match', function(done) {
     let user = {
       name: "Bob User",
       email: "bob@bob.com",
