@@ -30,7 +30,7 @@ describe("User model", function() {
     });
   });
 
-  it("should be invalid if passord not provided", function(done) {
+  it("should be invalid if password not provided", function(done) {
     let user = new User({
       name: "Bob User",
       email: "123456"
