@@ -19,3 +19,5 @@ yarn-error.log*
 
 #ignore .env file
 .env
+
+lazy_git
