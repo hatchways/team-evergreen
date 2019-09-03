@@ -12,14 +12,13 @@ const Busboy = require('busboy');
 const fileUpload = require('express-fileupload');
 router.use(fileUpload());
 
+
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 
 // Load User model
 const User = require("../../models/User");
-
-
 const BUCKET_NAME = process.env.bucket;
 const IAM_USER_KEY = process.env.AWSAccessKeyId;
 const IAM_USER_SECRET = process.env.AWSSecretKey;
@@ -80,7 +79,6 @@ router.post("/register", (req, res) => {
   // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
 
-
   // Check validation
   if (!isValid) {
     return res.status(400).json(errors);
@@ -93,7 +91,6 @@ router.post("/register", (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-
       });
       // Hash password before saving in database
       bcrypt.genSalt(10, (err, salt) => {
@@ -135,33 +132,48 @@ router.post("/login", (req, res) => {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // User matched
-        // Create JWT Payload
-        const payload = {
-          id: user.id,
-          name: user.name
-        };
-
-        // Sign token
-        jwt.sign(
-          payload,
-          keys.app.secretOrKey,
-          {
-            expiresIn: 31556926 // 1 year in seconds
-          },
-          (err, token) => {
-            res.json({
-              success: true,
-              token: "Bearer " + token
-            });
-          }
-        );
+        // Create JWT token and return via res.json
+        createToken(user, res);
       } else {
         return res
-          .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
+        .status(400)
+        .json({ password: "Password incorrect" });
       }
-    });
+    })
+    .catch ();
   });
 });
+
+// @desc Creates a JWT token and returns via callback function provided
+// @access Private
+function createToken (user, res) {
+  // Create JWT Payload
+  const payload = {
+    id: user.id,
+    name: user.name
+  };
+
+  // Sign token
+  jwt.sign(
+    payload,
+    keys.app.secretOrKey,
+    {
+      expiresIn: 31556926 // 1 year in seconds
+    },
+    (err, token) => {
+      if(!err) {
+        res.json ({
+          status: 200,
+          token: `Bearer ${token}`
+        })
+      } else {
+        res.json ({
+          status: 500,
+          error: "Unable to generate token."
+        })
+      }
+    }
+  );
+}
 
 module.exports = router;
