@@ -62,11 +62,28 @@ Running it as a service is ideal as MacOS will automatically start the database 
 
 **Linux**
 
-Too many flavours of Linux to list them all, check [here](https://docs.mongodb.com/v3.2/administration/install-on-linux/) for your particular version.
+Too many flavours of Linux to list them all, check [here](https://docs.mongodb.com/v3.2/administration/install-on-linux/) 
+for your particular version.
 
 **Windows**
 
 You can find instructions for installing on Windows [here](https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/)
+
+### Connecting to Database In Code
+
+To connect to the database once MongoDB is up and running add the following to your code (path to config is written
+as relative to \server, modifies as appropriate if your script is in another directory):
+
+```
+require("./config/db-config");
+const db = mongoose.connection;
+```
+
+To test if the database connection is ready check the value of readyState, if === 1 then open, if === 0 then not ready :
+
+```$xslt
+db.readyState === 1 
+```
 
 ##PS
 
