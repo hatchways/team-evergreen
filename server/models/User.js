@@ -1,6 +1,7 @@
 //User.js
 //Created by Fil Gambatesa - August 25, 2019
 
+require('mongoose-type-url');
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -13,7 +14,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+    avatar: String
 });
 
 module.exports = mongoose.model("user", userSchema);
