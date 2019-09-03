@@ -56,32 +56,42 @@ class Login extends Component {
         axios
             .post("/api/users/login", userData)
             .then(response => {
-                const { token } = response.data;
-                // save token to localStorage
-                localStorage.setItem("jwtToken", token);
+                if (response.data.status === 500) {
+                    // if token generation failed:
+                    this.setState({
+                        errors: {
+                            error:
+                                "Something went wrong. Please try again later."
+                        }
+                    });
+                } else {
+                    const { token } = response.data;
+                    // save token to localStorage
+                    localStorage.setItem("jwtToken", token);
 
-                // Set token to Auth header
-                setAuthToken(token);
+                    // Set token to Auth header
+                    setAuthToken(token);
 
-                // Decode token to get user data
-                const decoded = jwt_decode(token);
+                    // Decode token to get user data
+                    const decoded = jwt_decode(token);
 
-                // Load current user
-                this.props.loadUser(decoded);
+                    // Load current user
+                    this.props.loadUser(decoded);
 
-                // redirect user to profile page:
-                this.props.history.push("/profile");
+                    // redirect user to profile page:
+                    this.props.history.push("/profile");
+                }
             })
             .catch(err => {
                 console.log(err);
+                // show errors from the server:
                 this.setState({ errors: err.response.data });
             });
     };
 
     render() {
         const { classes } = this.props;
-        const { email, password, errors } = this.state;
-        const isNotValid = password.length < 6;
+        const { errors } = this.state;
 
         return (
             <>
@@ -93,7 +103,8 @@ class Login extends Component {
                                 <Typography
                                     component="h1"
                                     variant="h5"
-                                    className={classes.heading}>
+                                    className={classes.heading}
+                                >
                                     Log In
                                 </Typography>
                                 <form noValidate onSubmit={this.onSubmit}>
@@ -101,7 +112,9 @@ class Login extends Component {
                                         <Grid item xs={12}>
                                             <TextField
                                                 className={classes.uppercase}
-                                                error={errors.email && !email}
+                                                error={
+                                                    errors.email !== undefined
+                                                }
                                                 onChange={this.onChange}
                                                 variant="outlined"
                                                 fullWidth
@@ -114,17 +127,15 @@ class Login extends Component {
                                                 }}
                                             />
                                             <FormHelperText error id="email">
-                                                {errors.email && !email
-                                                    ? errors.email
-                                                    : ""}
+                                                {errors.email}
                                             </FormHelperText>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 className={classes.uppercase}
                                                 error={
-                                                    errors.password &&
-                                                    isNotValid
+                                                    errors.password !==
+                                                    undefined
                                                 }
                                                 onChange={this.onChange}
                                                 variant="outlined"
@@ -139,32 +150,37 @@ class Login extends Component {
                                                 }}
                                             />
                                             <FormHelperText error id="password">
-                                                {errors.password && isNotValid
-                                                    ? errors.password
-                                                    : ""}
+                                                {errors.password}
                                             </FormHelperText>
                                         </Grid>
 
                                         <Grid
                                             item
                                             xs={12}
-                                            className={classes.link}>
+                                            className={classes.link}
+                                        >
                                             <Typography variant="body2">
                                                 <Link
                                                     href="#"
-                                                    color="textPrimary">
+                                                    color="textPrimary"
+                                                >
                                                     Forgot password?
                                                 </Link>
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                     <Button
+                                        id="submitButton"
                                         size="large"
                                         type="submit"
                                         variant="contained"
-                                        color="primary">
+                                        color="primary"
+                                    >
                                         Login
                                     </Button>
+                                    <FormHelperText error id="submitButton">
+                                        {errors.error}
+                                    </FormHelperText>
                                 </form>
                             </div>
                         </Container>
