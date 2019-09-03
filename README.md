@@ -70,6 +70,30 @@ for your particular version.
 
 You can find instructions for installing on Windows [here](https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/)
 
+### Connecting to Database In Code
+
+To connect to the database once MongoDB is up and running add the following to your code (path to config is written
+as relative to \server, modifies as appropriate if your script is in another directory):
+
+```
+require("./config/db-config");
+const db = mongoose.connection;
+```
+
+To test if the database connection is ready check the value of readyState, if === 1 then open, if === 0 then not ready :
+
+```$xslt
+db.readyState === 1 
+```
+
+## Prettier
+
+Prettier is an opinionated code formatter that enforces common code styling guidelines across the team.  Depending on
+how you configure it you can either run it manually on specific files as you are working, or set it up to watch
+for file changes and run on every change.  Instructions for setting up watches is given below.
+
+You can learn more about Prettier at [Prettier.io](https://prettier.io).
+
 **Run Manually** 
 
 Instructions for running at the command line can be found [here](https://prettier.io/docs/en/cli.html).  There are
@@ -102,31 +126,6 @@ time you restart your laptop.
 There are additional methods to integrate Prettier into your workflow including configuring it as a 
 [pre-commit hook](https://prettier.io/docs/en/precommit.html) that will run before every new commit.  This has not been 
 configured but you may want to look at it.
-
-=======
-### Connecting to Database In Code
-
-To connect to the database once MongoDB is up and running add the following to your code (path to config is written
-as relative to \server, modifies as appropriate if your script is in another directory):
-
-```
-require("./config/db-config");
-const db = mongoose.connection;
-```
-
-To test if the database connection is ready check the value of readyState, if === 1 then open, if === 0 then not ready :
-
-```$xslt
-db.readyState === 1 
-```
-
-## Prettier
-
-Prettier is an opinionated code formatter that enforces common code styling guidelines across the team.  Depending on
-how you configure it you can either run it manually on specific files as you are working, or set it up to watch
-for file changes and run on every change.  Instructions for setting up watches is given below.
-
-You can learn more about Prettier at [Prettier.io](https://prettier.io).
 
 ##PS
 
