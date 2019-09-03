@@ -125,8 +125,7 @@ class Signup extends Component {
                                     component="h1"
                                     variant="h5"
                                     gutterBottom
-                                    className={classes.heading}
-                                >
+                                    className={classes.heading}>
                                     Create an account
                                 </Typography>
                                 <form noValidate onSubmit={this.onSubmit}>
@@ -215,16 +214,14 @@ class Signup extends Component {
                                             />
                                             <FormHelperText
                                                 error
-                                                id="password2"
-                                            >
+                                                id="password2">
                                                 {errors.password2}
                                             </FormHelperText>
                                         </Grid>
                                         <Grid
                                             item
                                             xs={12}
-                                            className={classes.agreement}
-                                        >
+                                            className={classes.agreement}>
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
@@ -247,8 +244,7 @@ class Signup extends Component {
                                             />
                                             <FormHelperText
                                                 error
-                                                id="userAgreement"
-                                            >
+                                                id="userAgreement">
                                                 {errors.userAgreement &&
                                                 !userAgreement
                                                     ? errors.userAgreement
@@ -257,11 +253,11 @@ class Signup extends Component {
                                         </Grid>
                                     </Grid>
                                     <Button
+                                        className={classes.btn}
                                         size="large"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
-                                    >
+                                        color="primary">
                                         Create
                                     </Button>
                                 </form>

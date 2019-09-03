@@ -103,8 +103,7 @@ class Login extends Component {
                                 <Typography
                                     component="h1"
                                     variant="h5"
-                                    className={classes.heading}
-                                >
+                                    className={classes.heading}>
                                     Log In
                                 </Typography>
                                 <form noValidate onSubmit={this.onSubmit}>
@@ -157,25 +156,23 @@ class Login extends Component {
                                         <Grid
                                             item
                                             xs={12}
-                                            className={classes.link}
-                                        >
+                                            className={classes.link}>
                                             <Typography variant="body2">
                                                 <Link
                                                     href="#"
-                                                    color="textPrimary"
-                                                >
+                                                    color="textPrimary">
                                                     Forgot password?
                                                 </Link>
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                     <Button
+                                        className={classes.btn}
                                         id="submitButton"
                                         size="large"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
-                                    >
+                                        color="primary">
                                         Login
                                     </Button>
                                     <FormHelperText error id="submitButton">
