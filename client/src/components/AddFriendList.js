@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import axios from "axios";
+import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import avatar from "../images/icons/user.png";
 import Icon from "@material-ui/core/Icon";
@@ -25,18 +25,16 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 
 const styles = theme => ({
     root: {
-        margin: 0,
-        padding: theme.spacing(2)
+        paddingTop: theme.spacing(4)
     },
     title: {
+        fontWeight: "600",
         textAlign: "center"
-        // paddingBottom: "0"
     },
     subtitle: {
         marginBottom: theme.spacing(2)
     },
     error: {
-        marginTop: "2px",
         marginBottom: theme.spacing(2)
     },
     closeButton: {
@@ -46,9 +44,11 @@ const styles = theme => ({
         color: theme.palette.grey[500]
     },
     action: {
-        justifyContent: "center"
+        justifyContent: "center",
+        paddingBottom: theme.spacing(4)
     },
     item: {
+        paddingLeft: "6px",
         borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
     }
 });
@@ -57,8 +57,8 @@ const styles = theme => ({
 const DialogTitle = withStyles(styles)(props => {
     const { children, classes, onClose } = props;
     return (
-        <MuiDialogTitle disableTypography>
-            <Typography variant="h6">{children}</Typography>
+        <MuiDialogTitle disableTypography className={classes.root}>
+            <Typography variant="h6" className={classes.title}>{children}</Typography>
             {onClose ? (
                 <IconButton
                     aria-label="close"
@@ -72,8 +72,8 @@ const DialogTitle = withStyles(styles)(props => {
 });
 
 class AddFriendsList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             open: false,
             listName: "",
@@ -101,7 +101,7 @@ class AddFriendsList extends Component {
         // axios.
         //   get('/users')
         //   .then(response => {
-        //     this.setState({ users : response});
+        //     this.setState({ users : response.data});
         // })
         // .catch(err => console.log);
     };
@@ -125,18 +125,52 @@ class AddFriendsList extends Component {
         if (!listName) {
             this.setState({ errors: { name: "Please provide list name" } });
         } else if (!friends.length) {
-          this.setState({ errors: { friends: "List cannot be empty" } });
+            this.setState({ errors: { friends: "Please add friends to the list" } });
         } else {
-          // create new list and send it to database
-          const newList = {
-            name: listName,
-            friends
-          }
+            // create new list and send it to database
+
+            /*   User {
+                    id: userId,
+                    name: 'Olga',
+                    email: 'olga@mail.com',
+                    friends: [id1, id2, id3, id4],
+                    lists: [
+                        {
+                            id: listId,
+                            title: 'Fashion',
+                            friends: [id1, id2, id3]
+                        },
+                        {
+                            id: listId,
+                            title: 'Tech',
+                            friends: [id4, id5]
+                        }
+                    ]
+                } 
+          */
+
+            const newList = {
+                id: this.props.userId,
+                title: listName,
+                friends
+            };
+
+            axios
+                .post("/api/users/friend_lists", newList)
+                .then(response => {
+                    this.closeDialog();
+                })
+                .catch(err => console.log);
         }
     };
 
-    addFriend = (name) => {
-        this.setState({ friends: this.state.friends.concat(name) });
+    addFriend = id => {
+        this.setState({ friends: this.state.friends.concat(id) });
+    };
+
+    removeFriend = id => {
+        const friends = this.state.friends.filter(friend => friend.id !== id);
+        this.setState({ friends });
     };
 
     render() {
@@ -147,9 +181,9 @@ class AddFriendsList extends Component {
             <div>
                 <Button
                     variant="outlined"
-                    color="secondary"
+                    color="primary"
                     onClick={this.openDialog}>
-                    Create friends list
+                    Create a friend list
                 </Button>
 
                 <Dialog
@@ -157,9 +191,8 @@ class AddFriendsList extends Component {
                     maxWidth="xs"
                     onClose={this.closeDialog}
                     aria-labelledby="create-friend-list"
-                    open={open}>
+                    open>
                     <DialogTitle
-                        className={classes.title}
                         id="create-friend-list"
                         onClose={this.closeDialog}>
                         Create a friend list
@@ -180,9 +213,7 @@ class AddFriendsList extends Component {
                                     error
                                     id="list-name"
                                     className={classes.error}>
-                                    {errors.name && !listName
-                                        ? errors.name
-                                        : ""}
+                                    {errors.name || errors.friends}
                                 </FormHelperText>
                             </FormControl>
 
@@ -207,8 +238,9 @@ class AddFriendsList extends Component {
                                         <Divider />
                                         <ListItemSecondaryAction>
                                             <Button
-                                                onClick={() => this.addFriend(user.name)}
-                                                edge="end"
+                                                onClick={() =>
+                                                    this.addFriend(user.id)
+                                                }
                                                 variant="contained"
                                                 size="small"
                                                 color="secondary">
