@@ -15,7 +15,7 @@ function Profile(props) {
             <h2>Testing add new friend list feature:</h2>
             <AddFriendsList userId={id} />
         </div>
-    )
+    );
 }
 
 export default Profile;

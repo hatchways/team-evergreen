@@ -80,41 +80,39 @@ class Signup extends Component {
         axios
             .post("/api/users/register", userData)
             .then(response => {
-                // save token to localStorage
-                const { token } = response.data;
+                if (response.data.status === 500) {
+                    // redirect user to login page
+                    // if login failed after registration:
+                    this.props.history.push("/login");
+                } else {
+                    // save token to localStorage
+                    const { token } = response.data;
 
-                localStorage.setItem("jwtToken", token);
+                    localStorage.setItem("jwtToken", token);
 
-                // Set token to Auth header
-                setAuthToken(token);
+                    // Set token to Auth header
+                    setAuthToken(token);
 
-                // Decode token to get user data
-                const decoded = jwt_decode(token);
+                    // Decode token to get user data
+                    const decoded = jwt_decode(token);
 
-                // Load current user
-                this.props.loadUser(decoded);
+                    // Load current user
+                    this.props.loadUser(decoded);
 
-                // redirect user to profile page:
-                this.props.history.push("/profile");
+                    // redirect user to profile page:
+                    this.props.history.push("/profile");
+                }
             })
             .catch(err => {
                 console.log(err);
+                // show error messages returned from server:
                 this.setState({ errors: err.response.data });
             });
     };
 
     render() {
         const { classes } = this.props;
-        const {
-            name,
-            email,
-            password,
-            password2,
-            userAgreement,
-            errors
-        } = this.state;
-        const isNotValid = password.length < 6;
-        const isNotAMatch = password !== password2;
+        const { userAgreement, errors } = this.state;
 
         return (
             <>
@@ -135,7 +133,9 @@ class Signup extends Component {
                                         <Grid item xs={12}>
                                             <TextField
                                                 className={classes.uppercase}
-                                                error={errors.name && !name}
+                                                error={
+                                                    errors.name !== undefined
+                                                }
                                                 onChange={this.onChange}
                                                 name="name"
                                                 variant="outlined"
@@ -148,15 +148,15 @@ class Signup extends Component {
                                                 }}
                                             />
                                             <FormHelperText error id="name">
-                                                {errors.name && !name
-                                                    ? errors.name
-                                                    : ""}
+                                                {errors.name}
                                             </FormHelperText>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 className={classes.uppercase}
-                                                error={errors.email && !email}
+                                                error={
+                                                    errors.email !== undefined
+                                                }
                                                 onChange={this.onChange}
                                                 variant="outlined"
                                                 fullWidth
@@ -169,17 +169,15 @@ class Signup extends Component {
                                                 }}
                                             />
                                             <FormHelperText error id="email">
-                                                {errors.email && !email
-                                                    ? errors.email
-                                                    : ""}
+                                                {errors.email}
                                             </FormHelperText>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 className={classes.uppercase}
                                                 error={
-                                                    errors.password &&
-                                                    isNotValid
+                                                    errors.password !==
+                                                    undefined
                                                 }
                                                 onChange={this.onChange}
                                                 variant="outlined"
@@ -193,17 +191,15 @@ class Signup extends Component {
                                                 }}
                                             />
                                             <FormHelperText error id="password">
-                                                {errors.password && isNotValid
-                                                    ? errors.password
-                                                    : ""}
+                                                {errors.password}
                                             </FormHelperText>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 className={classes.uppercase}
                                                 error={
-                                                    errors.password2 &&
-                                                    isNotAMatch
+                                                    errors.password2 !==
+                                                    undefined
                                                 }
                                                 onChange={this.onChange}
                                                 variant="outlined"
@@ -219,9 +215,7 @@ class Signup extends Component {
                                             <FormHelperText
                                                 error
                                                 id="password2">
-                                                {errors.password2 && isNotAMatch
-                                                    ? errors.password2
-                                                    : ""}
+                                                {errors.password2}
                                             </FormHelperText>
                                         </Grid>
                                         <Grid
@@ -259,6 +253,7 @@ class Signup extends Component {
                                         </Grid>
                                     </Grid>
                                     <Button
+                                        className={classes.btn}
                                         size="large"
                                         type="submit"
                                         variant="contained"
