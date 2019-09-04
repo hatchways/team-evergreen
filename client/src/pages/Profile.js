@@ -52,7 +52,6 @@ const StyledBadge = withStyles(theme => ({
     }
 }))(Badge);
 
-
 class Profile extends Component {
     constructor(props) {
         super(props);

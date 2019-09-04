@@ -35,6 +35,6 @@ export const authStyles = {
         textTransform: "uppercase"
     },
     btn: {
-        marginTop: '8px'
+        marginTop: "8px"
     }
 };
