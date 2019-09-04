@@ -10,7 +10,7 @@ function Profile(props) {
             <p>User name is {name} </p>
             <p>User id is {id} </p>
         </div>
-    )
+    );
 }
 
 export default Profile;
