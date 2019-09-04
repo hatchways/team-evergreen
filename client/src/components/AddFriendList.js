@@ -32,6 +32,7 @@ const styles = theme => ({
         textAlign: "center"
     },
     subtitle: {
+        fontWeight: "600",
         marginBottom: theme.spacing(2)
     },
     error: {
@@ -45,20 +46,29 @@ const styles = theme => ({
     },
     action: {
         justifyContent: "center",
-        paddingBottom: theme.spacing(4)
+        paddingBottom: theme.spacing(4),
+        paddingTop: theme.spacing(2)
     },
     item: {
         paddingLeft: "6px",
         borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
+    },
+    button: {
+        padding: "4px 8px",
+        "&.MuiButton-text": {
+            textTransform: "initial"
+        }
     }
 });
 
-// enhance dialog title area with close button:
+// enhance default dialog title area with close button:
 const DialogTitle = withStyles(styles)(props => {
     const { children, classes, onClose } = props;
     return (
         <MuiDialogTitle disableTypography className={classes.root}>
-            <Typography variant="h6" className={classes.title}>{children}</Typography>
+            <Typography variant="h6" component="h3" className={classes.title}>
+                {children}
+            </Typography>
             {onClose ? (
                 <IconButton
                     aria-label="close"
@@ -125,7 +135,9 @@ class AddFriendsList extends Component {
         if (!listName) {
             this.setState({ errors: { name: "Please provide list name" } });
         } else if (!friends.length) {
-            this.setState({ errors: { friends: "Please add friends to the list" } });
+            this.setState({
+                errors: { friends: "Please add friends to the list" }
+            });
         } else {
             // create new list and send it to database
 
@@ -158,24 +170,30 @@ class AddFriendsList extends Component {
             axios
                 .post("/api/users/friend_lists", newList)
                 .then(response => {
+                    console.log("Response from server: ", response);
                     this.closeDialog();
                 })
                 .catch(err => console.log);
         }
     };
 
-    addFriend = id => {
-        this.setState({ friends: this.state.friends.concat(id) });
-    };
-
-    removeFriend = id => {
-        const friends = this.state.friends.filter(friend => friend.id !== id);
-        this.setState({ friends });
+    handleClick = id => {
+        if (this.state.friends.includes(id)) {
+            // remove friend from friends list:
+            this.setState(prevState => ({
+                friends: prevState.friends.filter(friend => friend !== id)
+            }));
+        } else {
+             // add friend to friends list:
+            this.setState({ friends: this.state.friends.concat(id) });
+        }
     };
 
     render() {
         const { classes } = this.props;
-        const { open, users, errors, listName } = this.state;
+        const { open, users, friends, errors, listName } = this.state;
+        const isNameInvalid = errors.name && !listName;
+        const isListInvalid = errors.friends && !friends.length;
 
         return (
             <div>
@@ -202,6 +220,7 @@ class AddFriendsList extends Component {
                         <DialogContent>
                             <FormControl fullWidth>
                                 <TextField
+                                    value={listName}
                                     error={errors.name && !listName}
                                     onChange={this.onChange}
                                     id="list-name"
@@ -213,42 +232,59 @@ class AddFriendsList extends Component {
                                     error
                                     id="list-name"
                                     className={classes.error}>
-                                    {errors.name || errors.friends}
+                                    {isNameInvalid
+                                        ? errors.name
+                                        : isListInvalid
+                                        ? errors.friends
+                                        : ""}
                                 </FormHelperText>
                             </FormControl>
 
                             <Typography
                                 variant="subtitle1"
+                                component="h4"
                                 className={classes.subtitle}>
                                 Add friends:
                             </Typography>
                             <Divider />
                             <List dense>
-                                {users.map(user => (
-                                    <ListItem
-                                        key={user.id}
-                                        className={classes.item}>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                alt={`Avatar of ${user.name}`}
-                                                src={avatar}
-                                            />
-                                        </ListItemAvatar>
-                                        <ListItemText primary={user.name} />
-                                        <Divider />
-                                        <ListItemSecondaryAction>
-                                            <Button
-                                                onClick={() =>
-                                                    this.addFriend(user.id)
-                                                }
-                                                variant="contained"
-                                                size="small"
-                                                color="secondary">
-                                                Add
-                                            </Button>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                ))}
+                                {users.map(user => {
+                                    const included = friends.includes(user.id);
+                                    return (
+                                        <ListItem
+                                            key={user.id}
+                                            className={classes.item}>
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    alt={`Avatar of ${user.name}`}
+                                                    src={avatar}
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItemText primary={user.name} />
+                                            <Divider />
+                                            <ListItemSecondaryAction>
+                                                <Button
+                                                    className={classes.button}
+                                                    onClick={() =>
+                                                        this.handleClick(
+                                                            user.id
+                                                        )
+                                                    }
+                                                    variant={
+                                                        included
+                                                            ? "text"
+                                                            : "contained"
+                                                    }
+                                                    size="small"
+                                                    color="secondary">
+                                                    {included
+                                                        ? "Remove"
+                                                        : "Add"}
+                                                </Button>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    );
+                                })}
                             </List>
                         </DialogContent>
 
