@@ -1,24 +1,27 @@
 import React, { Component } from "react";
+import axios from "axios";
 import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
+import PollCard from "../components/PollCard";
+import ListCard from "../components/ListCard";
 import {
     CssBaseline,
     Drawer,
     List,
+    ListSubheader,
     ListItem,
     ListItemText,
     ListItemAvatar,
     Avatar,
+    Typography,
     Badge,
     AppBar,
     Toolbar,
-    Typography,
     Divider,
     IconButton,
     Container,
     Grid,
-    Paper,
     Icon
 } from "@material-ui/core";
 
@@ -56,6 +59,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: null,
             lists: null,
             polls: null,
             open: true,
@@ -89,8 +93,25 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        // get users, polls and lists
+        const { id } = this.props.user;
+
+        // fetch user data from database:
+        axios
+            .get(`api/users/${id}`)
+            .then(response => this.setState({ user: response.data }))
+            .catch(err => console.log(err));
+
+        // get users:
+        this.fetchUsers();
     }
+
+    fetchUsers = () => {
+        // fetch all users and populate state
+        axios
+            .get(`api/users/`)
+            .then(response => this.setState({ users: response.data }))
+            .catch(err => console.log(err));
+    };
 
     toggleDrawer = () => {
         this.setState({ open: !this.state.open });
@@ -117,13 +138,7 @@ class Profile extends Component {
                         )
                     }}
                     open={open}>
-                    <div className={classes.toolbar}>
-                        <Typography
-                            variant="subtitle1"
-                            component="h2"
-                            className={classes.subtitle}>
-                            {open ? "Friends" : ""}
-                        </Typography>
+                    <div className={classes.toolbarIcon}>
                         <IconButton
                             edge="start"
                             color="inherit"
@@ -135,10 +150,24 @@ class Profile extends Component {
                         </IconButton>
                     </div>
                     <Divider />
-                    <List dense>
+                    <List
+                        dense
+                        component="nav"
+                        aria-labelledby="friends-list-title"
+                        subheader={
+                            <ListSubheader
+                                className={clsx(
+                                    classes.subtitle,
+                                    !open && classes.collapsed
+                                )}
+                                component="div"
+                                id="friends-list-title">
+                                Friends
+                            </ListSubheader>
+                        }>
                         {users.map(user => {
                             return (
-                                <ListItem key={user.id}>
+                                <ListItem button key={user.id}>
                                     <ListItemAvatar>
                                         <StyledBadge
                                             variant="dot"
@@ -159,12 +188,26 @@ class Profile extends Component {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <Paper></Paper>
+                        <Grid container spacing={6}>
+                            <Grid container spacing={4} item xs={12}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" component="h2">
+                                        Polls
+                                    </Typography>
+                                </Grid>
+                                {[1, 2, 3].map((card, i) => (
+                                    <PollCard key={i} card={card} />
+                                ))}
                             </Grid>
-                            <Grid item xs={12}>
-                                <Paper></Paper>
+                            <Grid container spacing={4} item xs={12}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" component="h2">
+                                        Friend lists
+                                    </Typography>
+                                </Grid>
+                                {[1, 2, 3].map((card, i) => (
+                                    <ListCard key={i} card={card} />
+                                ))}
                             </Grid>
                         </Grid>
                     </Container>

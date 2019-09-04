@@ -4,20 +4,21 @@ export const profileStyles = theme => ({
     root: {
         display: "flex"
     },
-    toolbar: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: '0 15px 0 25px',
-        ...theme.mixins.toolbar
-    },
+
     subtitle: {
-        fontWeight: "600"
+        fontWeight: "600",
+        transition: theme.transitions.create("font-size", {
+            easing: theme.transitions.easing.easeInOut,
+            duration: theme.transitions.duration.enteringScreen
+        })
+    },
+    collapsed: {
+        fontSize: "0.7rem"
     },
     drawerPaper: {
         position: "relative",
         whiteSpace: "nowrap",
-        width: '240px',
+        width: "240px",
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
@@ -34,8 +35,16 @@ export const profileStyles = theme => ({
             width: theme.spacing(9)
         }
     },
+    toolbarIcon: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        padding: "0 8px",
+        ...theme.mixins.toolbar
+    },
     appBarSpacer: theme.mixins.toolbar,
     content: {
+        backgroundColor: theme.palette.gray,
         flexGrow: 1,
         height: "100vh",
         overflow: "auto"
