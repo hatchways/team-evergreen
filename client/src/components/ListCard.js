@@ -44,7 +44,7 @@ function ListCard() {
                 <CardHeader
                     action={
                         <IconButton aria-label="friend list settings">
-                            <Icon>settings_applications</Icon>
+                            <Icon>more_vert</Icon>
                         </IconButton>
                     }
                     className={classes.cardHeader}

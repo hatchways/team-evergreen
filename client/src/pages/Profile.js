@@ -1,60 +1,19 @@
 import React, { Component } from "react";
 import axios from "axios";
-import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
+import FriendsDrawer from "../components/FriendsDrawer";
 import PoolCard from "../components/PoolCard";
 import ListCard from "../components/ListCard";
 import {
     CssBaseline,
-    Drawer,
-    List,
-    ListSubheader,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    Avatar,
     Typography,
-    Badge,
     AppBar,
     Toolbar,
-    Divider,
-    IconButton,
     Button,
     Container,
-    Grid,
-    Icon
+    Grid
 } from "@material-ui/core";
-
-const StyledBadge = withStyles(theme => ({
-    badge: {
-        top: "5px",
-        right: "5px",
-        backgroundColor: "#44b700",
-        boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-        "&::after": {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            borderRadius: "50%",
-            animation: "$ripple 1.2s infinite ease-in-out",
-            border: "1px solid #44b700",
-            content: '""'
-        }
-    },
-    "@keyframes ripple": {
-        "0%": {
-            transform: "scale(.8)",
-            opacity: 1
-        },
-        "100%": {
-            transform: "scale(2.4)",
-            opacity: 0
-        }
-    }
-}))(Badge);
 
 class Profile extends Component {
     constructor(props) {
@@ -63,7 +22,6 @@ class Profile extends Component {
             user: null,
             lists: null,
             pools: null,
-            open: true,
             users: [
                 {
                     name: "Harry Potter",
@@ -114,13 +72,9 @@ class Profile extends Component {
             .catch(err => console.log(err));
     };
 
-    toggleDrawer = () => {
-        this.setState({ open: !this.state.open });
-    };
-
     render() {
         const { classes } = this.props;
-        const { open, users } = this.state;
+        const { users } = this.state;
 
         return (
             <div className={classes.root}>
@@ -129,63 +83,8 @@ class Profile extends Component {
                     <Toolbar className={classes.toolbar}></Toolbar>
                 </AppBar>
 
+                <FriendsDrawer users={users} />
                 <div className={classes.appBarSpacer} />
-                <Drawer
-                    variant="permanent"
-                    classes={{
-                        paper: clsx(
-                            classes.drawerPaper,
-                            !open && classes.drawerPaperClose
-                        )
-                    }}
-                    open={open}>
-                    <div className={classes.toolbarIcon}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.toggleDrawer}>
-                            <Icon>
-                                {open ? "chevron_left" : "chevron_right"}
-                            </Icon>
-                        </IconButton>
-                    </div>
-                    <Divider />
-                    <List
-                        dense
-                        component="nav"
-                        aria-labelledby="friends-list-title"
-                        subheader={
-                            <ListSubheader
-                                className={clsx(
-                                    classes.subtitle,
-                                    !open && classes.collapsed
-                                )}
-                                component="div"
-                                id="friends-list-title">
-                                Friends
-                            </ListSubheader>
-                        }>
-                        {users.map(user => {
-                            return (
-                                <ListItem button key={user.id}>
-                                    <ListItemAvatar>
-                                        <StyledBadge
-                                            variant="dot"
-                                            overlap="circle"
-                                            color="secondary">
-                                            <Avatar
-                                                alt={`Avatar of ${user.name}`}
-                                                src=""
-                                            />
-                                        </StyledBadge>
-                                    </ListItemAvatar>
-                                    <ListItemText primary={user.name} />
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                </Drawer>
 
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
