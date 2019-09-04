@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
+
+// use temp avatar:
 import avatar from "../images/icons/user.png";
 import Icon from "@material-ui/core/Icon";
 import {
@@ -102,14 +104,14 @@ class AddFriendsList extends Component {
                     name: "Hermione Granger",
                     id: 3
                 }
-            ]
+            ] // temporary sample data
         };
     }
 
     componentDidMount = () => {
-        // fetch all users from database
+        // fetch all users from database:
         // axios.
-        //   get('/users')
+        //   get('/api/users/users')
         //   .then(response => {
         //     this.setState({ users : response.data});
         // })
@@ -139,41 +141,22 @@ class AddFriendsList extends Component {
                 errors: { friends: "Please add friends to the list" }
             });
         } else {
-            // create new list and send it to database
-
-            /*   User {
-                    id: userId,
-                    name: 'Olga',
-                    email: 'olga@mail.com',
-                    friends: [id1, id2, id3, id4],
-                    lists: [
-                        {
-                            id: listId,
-                            title: 'Fashion',
-                            friends: [id1, id2, id3]
-                        },
-                        {
-                            id: listId,
-                            title: 'Tech',
-                            friends: [id4, id5]
-                        }
-                    ]
-                } 
-          */
-
+            // create new list and send it to database:
             const newList = {
-                id: this.props.userId,
+                userId: this.props.userId,
                 title: listName,
                 friends
             };
 
             axios
-                .post("/api/users/friend_lists", newList)
+                .post("/api/users/add_friend_list", newList)
                 .then(response => {
-                    console.log("Response from server: ", response);
                     this.closeDialog();
                 })
-                .catch(err => console.log);
+                .catch(err => {
+                    console.log(err);
+                    this.setState({ errors: err.response.data });
+                });
         }
     };
 
@@ -181,10 +164,10 @@ class AddFriendsList extends Component {
         if (this.state.friends.includes(id)) {
             // remove friend from friends list:
             this.setState(prevState => ({
-                friends: prevState.friends.filter(friend => friend !== id)
+                friends: prevState.friends.filter(friendId => friendId !== id)
             }));
         } else {
-             // add friend to friends list:
+            // add friend to friends list:
             this.setState({ friends: this.state.friends.concat(id) });
         }
     };
@@ -209,7 +192,7 @@ class AddFriendsList extends Component {
                     maxWidth="xs"
                     onClose={this.closeDialog}
                     aria-labelledby="create-friend-list"
-                    open>
+                    open={open}>
                     <DialogTitle
                         id="create-friend-list"
                         onClose={this.closeDialog}>
@@ -236,7 +219,7 @@ class AddFriendsList extends Component {
                                         ? errors.name
                                         : isListInvalid
                                         ? errors.friends
-                                        : ""}
+                                        : errors.error}
                                 </FormHelperText>
                             </FormControl>
 

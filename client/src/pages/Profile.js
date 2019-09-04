@@ -12,7 +12,7 @@ function Profile(props) {
             <p>User name is {name} </p>
             <p>User id is {id} </p>
 
-            <h2>Test for add new friends' list:</h2>
+            <h2>Testing add new friend list feature:</h2>
             <AddFriendsList userId={id} />
         </div>
     )
