@@ -94,6 +94,19 @@ for file changes and run on every change.  Instructions for setting up watches i
 
 You can learn more about Prettier at [Prettier.io](https://prettier.io).
 
+**Configuration**
+
+Two settings have been changed from default:
+
+```
+{
+  "tabWidth": 4,
+  "jsxBracketSameLine": true
+}
+```
+
+These options are managed via .prettierrc configuration file stored in the root directory for the project.
+
 **Run Manually** 
 
 Instructions for running at the command line can be found [here](https://prettier.io/docs/en/cli.html).  There are
@@ -133,4 +146,5 @@ If its 2 am and you need a laugh go [here](https://www.youtube.com/watch?v=FxOIe
 
 If its the next day and you are still updating the readme go [here](https://www.youtube.com/watch?v=ajq8eag4Mvc)
 
+Is anybody besides me actually watching these? 
 Feel free to add to this list with your own favourites.  
