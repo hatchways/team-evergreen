@@ -23,8 +23,7 @@ const useStyles = makeStyles(theme => ({
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)"
     },
     cardHeader: {
-        textAlign: "center",
-        fontSize: "1.25rem"
+        textAlign: "center"
     },
     cardMedia: {
         paddingTop: "56.25%" // 16:9
@@ -34,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function PollCard(props) {
+function PoolCard(props) {
     const classes = useStyles();
     const poll = {
         id: 1,
@@ -83,4 +82,4 @@ function PollCard(props) {
     );
 }
 
-export default PollCard;
+export default PoolCard;

@@ -55,7 +55,7 @@ function ListCard() {
                 <CardContent>
                     <List>
                         {[1, 2, 3].map(friend => (
-                            <ListItem>
+                            <ListItem key={friend}>
                                 <ListItemAvatar>
                                     <Avatar>H</Avatar>
                                 </ListItemAvatar>

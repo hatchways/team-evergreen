@@ -3,7 +3,7 @@ import axios from "axios";
 import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import PollCard from "../components/PollCard";
+import PoolCard from "../components/PoolCard";
 import ListCard from "../components/ListCard";
 import {
     CssBaseline,
@@ -20,6 +20,7 @@ import {
     Toolbar,
     Divider,
     IconButton,
+    Button,
     Container,
     Grid,
     Icon
@@ -61,7 +62,7 @@ class Profile extends Component {
         this.state = {
             user: null,
             lists: null,
-            polls: null,
+            pools: null,
             open: true,
             users: [
                 {
@@ -185,25 +186,54 @@ class Profile extends Component {
                         })}
                     </List>
                 </Drawer>
+
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={6}>
                             <Grid container spacing={4} item xs={12}>
-                                <Grid item xs={12}>
-                                    <Typography variant="h5" component="h2">
-                                        Polls
-                                    </Typography>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    container
+                                    justify="space-between">
+                                    <Grid item>
+                                        <Typography variant="h5" component="h2">
+                                            Pools
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="medium">
+                                            Create pool
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                                 {[1, 2, 3].map((card, i) => (
-                                    <PollCard key={i} card={card} />
+                                    <PoolCard key={i} card={card} />
                                 ))}
                             </Grid>
                             <Grid container spacing={4} item xs={12}>
-                                <Grid item xs={12}>
-                                    <Typography variant="h5" component="h2">
-                                        Friend lists
-                                    </Typography>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    container
+                                    justify="space-between">
+                                    <Grid item>
+                                        <Typography variant="h5" component="h2">
+                                            Friend lists
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="medium">
+                                            Create list
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                                 {[1, 2, 3].map((card, i) => (
                                     <ListCard key={i} card={card} />
