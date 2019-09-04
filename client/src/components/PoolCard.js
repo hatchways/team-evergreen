@@ -3,11 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
     Card,
     CardHeader,
-    CardMedia,
+    CardContent,
     CardActions,
     Typography,
     IconButton,
     Grid,
+    GridList,
+    GridListTile,
+    GridListTileBar,
     Icon
 } from "@material-ui/core";
 
@@ -30,53 +33,98 @@ const useStyles = makeStyles(theme => ({
     },
     cardActions: {
         justifyContent: "center"
+    },
+    title: {
+        fontWeight: "600"
+    },
+    root: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+        overflow: "hidden",
+        backgroundColor: theme.palette.background.paper
+    },
+    gridList: {
+        width: "auto",
+        height: 200
+    },
+    icon: {
+        // color: "rgba(255, 255, 255, 0.54)"
     }
 }));
 
 function PoolCard(props) {
     const classes = useStyles();
-    const poll = {
+    const pool = {
         id: 1,
         title: "Which do you like best?",
         options: [
             {
-                url1: "https://source.unsplash.com/random",
+                url: "https://source.unsplash.com/random",
                 votes: 12
             },
             {
-                url2: "https://source.unsplash.com/random",
+                url: "https://source.unsplash.com/random",
                 votes: 2
             }
         ]
     };
 
     return (
-        <Grid item key={poll.id} xs={12} md={6} lg={4}>
+        <Grid item key={pool.id} xs={12} md={6} lg={4}>
             <Card className={classes.card}>
                 <CardHeader
                     className={classes.cardHeader}
-                    title={<Typography variant="h6">{poll.title}</Typography>}
+                    title={
+                        <Typography component="h3" className={classes.title}>
+                            {pool.title}
+                        </Typography>
+                    }
                     subheader={
-                        poll.options[0].votes +
-                        poll.options[1].votes +
-                        " answers"
+                        <Typography variant="body2">
+                            {pool.options[0].votes +
+                                pool.options[1].votes +
+                                " answers"}
+                        </Typography>
                     }
                 />
-                <CardMedia
-                    className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
-                />
-                <CardActions className={classes.cardActions}>
-                    <IconButton size="small">
-                        <Icon>favorite</Icon>
-                        {poll.options[0].votes}
-                    </IconButton>
-                    <IconButton size="small">
-                        <Icon>favorite</Icon>
-                        {poll.options[1].votes}
-                    </IconButton>
-                </CardActions>
+                <CardContent>
+                    <GridList cellHeight={180} className={classes.gridList}>
+                        <GridListTile key={1}>
+                            <img src={pool.options[0].url} alt="First option" />
+                            <GridListTileBar
+                                className={classes.bar}
+                                actionIcon={
+                                    <IconButton
+                                        size="small"
+                                        aria-label=""
+                                        className={classes.icon}>
+                                        <Icon>favorite</Icon>
+                                        {pool.options[0].votes}
+                                    </IconButton>
+                                }
+                            />
+                        </GridListTile>
+                        <GridListTile key={2}>
+                            <img
+                                src={pool.options[1].url}
+                                alt="Second option"
+                            />
+                            <GridListTileBar
+                                className={classes.bar}
+                                actionIcon={
+                                    <IconButton
+                                        size="small"
+                                        aria-label=""
+                                        className={classes.icon}>
+                                        <Icon>favorite</Icon>
+                                        {pool.options[1].votes}
+                                    </IconButton>
+                                }
+                            />
+                        </GridListTile>
+                    </GridList>
+                </CardContent>
             </Card>
         </Grid>
     );

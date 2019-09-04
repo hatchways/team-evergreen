@@ -27,7 +27,9 @@ const useStyles = makeStyles(theme => ({
         flexDirection: "column",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)"
     },
-    cardHeader: {}
+    title: {
+        fontWeight: "600"
+    }
 }));
 
 function ListCard() {
@@ -48,8 +50,16 @@ function ListCard() {
                         </IconButton>
                     }
                     className={classes.cardHeader}
-                    title={<Typography variant="h6">{list.title}</Typography>}
-                    subheader={list.friends.length + " friends"}
+                    title={
+                        <Typography component="h3" className={classes.title}>
+                            {list.title}
+                        </Typography>
+                    }
+                    subheader={
+                        <Typography variant="body2">
+                            {list.friends.length + " friends"}
+                        </Typography>
+                    }
                 />
                 <Divider />
                 <CardContent>

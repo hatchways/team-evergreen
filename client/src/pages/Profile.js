@@ -72,6 +72,14 @@ class Profile extends Component {
             .catch(err => console.log(err));
     };
 
+    createPool = () => {
+        // create new pool
+    };
+
+    createFriendList = () => {
+        // create new list
+    };
+
     render() {
         const { classes } = this.props;
         const { users } = this.state;
@@ -97,12 +105,13 @@ class Profile extends Component {
                                     container
                                     justify="space-between">
                                     <Grid item>
-                                        <Typography variant="h5" component="h2">
+                                        <Typography variant="h6" component="h2">
                                             Pools
                                         </Typography>
                                     </Grid>
                                     <Grid item>
                                         <Button
+                                            onClick={this.createPool}
                                             variant="contained"
                                             color="primary"
                                             size="medium">
@@ -121,12 +130,13 @@ class Profile extends Component {
                                     container
                                     justify="space-between">
                                     <Grid item>
-                                        <Typography variant="h5" component="h2">
+                                        <Typography variant="h6" component="h2">
                                             Friend lists
                                         </Typography>
                                     </Grid>
                                     <Grid item>
                                         <Button
+                                            onClick={this.createFriendList}
                                             variant="contained"
                                             color="primary"
                                             size="medium">
