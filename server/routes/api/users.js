@@ -2,15 +2,24 @@
 //Author - Fil - August 28, 2019
 //Inspiration - https://blog.bitsrc.io/build-a-login-auth-app-with-mern-stack-part-1-c405048e3669
 
+// Core packages to enable routing functionality
 const express = require("express");
 const router = express.Router();
+
+// Loads .env keys depending on environment in use
+const keys = require("../../config/config");
+
+// Used to encrypt/decrypt password and for using jwt token
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const keys = require("../../config/config");
-const AWS = require("aws-sdk");
+
+// Used to load files
 const Busboy = require("busboy");
 const fileUpload = require("express-fileupload");
 router.use(fileUpload());
+
+// Load utility functions
+const uploadToS3 = require("../utils/s3Upload");
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -18,38 +27,6 @@ const validateLoginInput = require("../../validation/login");
 
 // Load User model
 const User = require("../../models/User");
-const BUCKET_NAME = process.env.bucket;
-const IAM_USER_KEY = process.env.AWSAccessKeyId;
-const IAM_USER_SECRET = process.env.AWSSecretKey;
-
-function uploadToS3(file, user, res) {
-    let s3bucket = new AWS.S3({
-        accessKeyId: IAM_USER_KEY,
-        secretAccessKey: IAM_USER_SECRET,
-        Bucket: BUCKET_NAME
-    });
-
-    let params = {
-        Bucket: BUCKET_NAME,
-        Key: file.name,
-        Body: file.data
-    };
-
-    s3bucket.upload(params, (err, data) => {
-        if (err) {
-            console.log("upload failed");
-        }
-        user.avatar = data.Location;
-        user.save((err, user) => {
-            if (err) {
-                console.log("failed to save user");
-                res.writeHead(400);
-                res.end();
-            }
-            res.json({ name: user.name, avatar: user.avatar });
-        });
-    });
-}
 
 router.put("/:user_id", (req, res) => {
     const user_id = req.params.user_id;
@@ -62,7 +39,7 @@ router.put("/:user_id", (req, res) => {
                 if (req.body.name) user.name = req.body.name;
                 var busboy = new Busboy({ headers: req.headers });
                 busboy.on("finish", function() {
-                    uploadToS3(file, user, res);
+                    uploadToS3(file, user, "avatar", res);
                 });
                 req.pipe(busboy);
             }
