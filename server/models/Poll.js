@@ -15,14 +15,12 @@ const pollSchema = new mongoose.Schema({
     },
     options: {
         1: {
-            url: { type: mongoose.SchemaTypes.Url, required: true },
-            votes: Number,
-            required: true
+            url: { type: String, required: true },
+            votes: { type: Number, default: 0 }
         },
         2: {
-            url: { type: mongoose.SchemaTypes.Url, required: true },
-            votes: Number,
-            required: true
+            url: { type: String, required: true },
+            votes: { type: Number, default: 0 }
         }
     },
     expiresOn: Date
