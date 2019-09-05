@@ -15,7 +15,19 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    avatar: String
+    avatar: String,
+    polls: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "poll"
+        }
+    ],
+    lists: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "friendList"
+        }
+    ]
 });
 
 module.exports = mongoose.model("user", userSchema);
