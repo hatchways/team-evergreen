@@ -157,8 +157,6 @@ function createToken(user, res) {
 }
 
 router.post("/add_friend_list", (req, res) => {
-    console.log("req.body: ", req.body);
-
     const { userId, title, friends } = req.body;
     const { errors, isValid } = validateFriendListInput(req.body);
 
@@ -173,15 +171,18 @@ router.post("/add_friend_list", (req, res) => {
                 .status(400)
                 .json({ error: "List with this title already exists" });
         } else {
-            const newList = new List({
+            const newList = new FriendList({
                 userId: userId,
                 title: title,
                 friends: friends
             });
 
+            // save new list and add its id to relevant User
             newList
                 .save()
-                .then(list => res.json(list))
+                .then(list => {
+                    res.json(list);
+                })
                 .catch(err => console.log(err));
         }
     });
