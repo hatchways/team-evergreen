@@ -24,9 +24,11 @@ const uploadToS3 = require("../utils/s3Upload");
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+const validateFriendListInput = require("../../validation/friendList");
 
 // Load User model
 const User = require("../../models/User");
+const FriendList = require("../../models/FriendList");
 
 router.put("/:user_id", (req, res) => {
     const user_id = req.params.user_id;
@@ -153,5 +155,36 @@ function createToken(user, res) {
         }
     );
 }
+
+router.post("/add_friend_list", (req, res) => {
+    console.log("req.body: ", req.body);
+
+    const { userId, title, friends } = req.body;
+    const { errors, isValid } = validateFriendListInput(req.body);
+
+    // validate request info:
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    FriendList.findOne({ title: title }).then(list => {
+        if (list) {
+            return res
+                .status(400)
+                .json({ error: "List with this title already exists" });
+        } else {
+            const newList = new List({
+                userId: userId,
+                title: title,
+                friends: friends
+            });
+
+            newList
+                .save()
+                .then(list => res.json(list))
+                .catch(err => console.log(err));
+        }
+    });
+});
 
 module.exports = router;
