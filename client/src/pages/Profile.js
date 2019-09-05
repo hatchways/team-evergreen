@@ -1,7 +1,6 @@
 import React from "react";
 import AddFriendsList from "../components/AddFriendList";
 
-
 function Profile(props) {
     const { name, id } = props.user;
 
