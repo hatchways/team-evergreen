@@ -31,7 +31,8 @@ export const theme = createMuiTheme({
             },
             containedSecondary: {
                 color: "#fff",
-                boxShadow: "0px 1px 5px 0px rgba(98, 205, 77, 0.2), 0px 2px 2px 0px rgba(98, 205, 77, 0.14), 0px 3px 1px -2px rgba(98, 205, 77, 0.12)"
+                boxShadow:
+                    "0px 1px 5px 0px rgba(98, 205, 77, 0.2), 0px 2px 2px 0px rgba(98, 205, 77, 0.14), 0px 3px 1px -2px rgba(98, 205, 77, 0.12)"
             }
         }
     }
