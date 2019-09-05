@@ -22,7 +22,7 @@ const friendListSchema = new mongoose.Schema(
             }
         ]
     },
-    { timestamps: { createdAt: "created_at" } }
+    { timestamps: true }
 );
 
 module.exports = mongoose.model("friendList", friendListSchema);
