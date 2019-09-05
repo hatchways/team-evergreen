@@ -4,19 +4,25 @@ require("mongoose-type-url");
 const mongoose = require("mongoose");
 
 const pollSchema = new mongoose.Schema({
-    title: String,
-    list: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "friendList" // TODO - rename to actual model once created
+    title: {
+        type: String,
+        required: true
     },
-    poll: {
+    sendToList: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "friendList", // TODO - rename to actual model once created,
+        required: true
+    },
+    options: {
         1: {
             url: { type: mongoose.SchemaTypes.Url, required: true },
-            votes: Number
+            votes: Number,
+            required: true
         },
         2: {
             url: { type: mongoose.SchemaTypes.Url, required: true },
-            votes: Number
+            votes: Number,
+            required: true
         }
     },
     expiresOn: Date
