@@ -4,13 +4,10 @@ import {
     Card,
     CardHeader,
     CardContent,
-    CardActions,
     Typography,
-    IconButton,
     Grid,
     GridList,
     GridListTile,
-    GridListTileBar,
     Icon
 } from "@material-ui/core";
 
@@ -49,13 +46,26 @@ const useStyles = makeStyles(theme => ({
         height: 200
     },
     icon: {
-        // color: "rgba(255, 255, 255, 0.54)"
+        color: theme.palette.common.red,
+        marginRight: "2px"
+    },
+    votes: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: theme.spacing(2)
+    },
+    votesContainer: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around"
     }
 }));
 
-function PoolCard(props) {
+function PollCard(props) {
     const classes = useStyles();
-    const pool = {
+    const poll = {
         id: 1,
         title: "Which do you like best?",
         options: [
@@ -71,19 +81,19 @@ function PoolCard(props) {
     };
 
     return (
-        <Grid item key={pool.id} xs={12} md={6} lg={4}>
+        <Grid item key={poll.id} xs={12} md={6} lg={4}>
             <Card className={classes.card}>
                 <CardHeader
                     className={classes.cardHeader}
                     title={
                         <Typography component="h3" className={classes.title}>
-                            {pool.title}
+                            {poll.title}
                         </Typography>
                     }
                     subheader={
                         <Typography variant="body2">
-                            {pool.options[0].votes +
-                                pool.options[1].votes +
+                            {poll.options[0].votes +
+                                poll.options[1].votes +
                                 " answers"}
                         </Typography>
                     }
@@ -91,43 +101,30 @@ function PoolCard(props) {
                 <CardContent>
                     <GridList cellHeight={180} className={classes.gridList}>
                         <GridListTile key={1}>
-                            <img src={pool.options[0].url} alt="First option" />
-                            <GridListTileBar
-                                className={classes.bar}
-                                actionIcon={
-                                    <IconButton
-                                        size="small"
-                                        aria-label=""
-                                        className={classes.icon}>
-                                        <Icon>favorite</Icon>
-                                        {pool.options[0].votes}
-                                    </IconButton>
-                                }
-                            />
+                            <img src={poll.options[0].url} alt="First option" />
                         </GridListTile>
                         <GridListTile key={2}>
                             <img
-                                src={pool.options[1].url}
+                                src={poll.options[1].url}
                                 alt="Second option"
-                            />
-                            <GridListTileBar
-                                className={classes.bar}
-                                actionIcon={
-                                    <IconButton
-                                        size="small"
-                                        aria-label=""
-                                        className={classes.icon}>
-                                        <Icon>favorite</Icon>
-                                        {pool.options[1].votes}
-                                    </IconButton>
-                                }
                             />
                         </GridListTile>
                     </GridList>
+
+                    <div className={classes.votesContainer}>
+                        <div className={classes.votes}>
+                            <Icon className={classes.icon}>favorite</Icon>
+                            {poll.options[0].votes}
+                        </div>
+                        <div className={classes.votes}>
+                            <Icon className={classes.icon}>favorite</Icon>
+                            {poll.options[1].votes}
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
         </Grid>
     );
 }
 
-export default PoolCard;
+export default PollCard;
