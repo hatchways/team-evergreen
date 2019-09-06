@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     AppBar,
@@ -13,13 +14,30 @@ import {
 } from "@material-ui/core";
 import logo from "../images/icons/logo.png";
 
+const drawerWidth = 240;
+const closedDrawerWidth = 70;
+
 const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1
-    },
-    header: {
+    appBar: {
         padding: `0 ${theme.spacing(2)}px`,
-        borderBottom: `1px solid ${theme.palette.divider}`
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        width: `calc(100% - ${closedDrawerWidth}px)`,
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen
+        })
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen
+        })
+    },
+    homeButtonHidden: {
+        visibility: "hidden"
     },
     link: {
         margin: theme.spacing(1, 1.5),
@@ -47,6 +65,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AppNavbar(props) {
+    const { open } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     function handleClick(event) {
@@ -60,16 +79,23 @@ function AppNavbar(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar color="inherit" elevation={0} className={classes.header}>
+            <AppBar
+                position="absolute"
+                className={clsx(classes.appBar, open && classes.appBarShift)}
+                color="inherit"
+                elevation={0}>
                 <Toolbar className={classes.toolbar}>
-                    <Link href="./">
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="go to home page"
+                        className={clsx(open && classes.homeButtonHidden)}>
                         <img
                             className={classes.logo}
                             alt="App logo"
                             src={logo}
                         />
-                    </Link>
-
+                    </IconButton>
                     <nav>
                         <Link
                             variant="subtitle1"
