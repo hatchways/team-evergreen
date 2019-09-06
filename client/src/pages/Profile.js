@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
+import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
 import AddFriendList from "../components/AddFriendList";
 import PollCard from "../components/PollCard";
@@ -11,8 +12,6 @@ import ListCard from "../components/ListCard";
 import {
     CssBaseline,
     Typography,
-    AppBar,
-    Toolbar,
     Button,
     Container,
     Grid
@@ -25,6 +24,7 @@ class Profile extends Component {
             user: null,
             lists: [],
             polls: [],
+            drawerIsOpen: true,
             users: [
                 {
                     name: "Harry Potter",
@@ -86,18 +86,25 @@ class Profile extends Component {
         this.setState({ lists: this.state.lists.concat(newList) });
     };
 
+    toggleDrawer = () => {
+        this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
+    };
+
     render() {
         const { classes } = this.props;
-        const { users, polls, lists } = this.state;
+        const { users, polls, lists, drawerIsOpen } = this.state;
 
         return (
             <div className={classes.root}>
                 <CssBaseline />
-                <AppBar position="absolute">
-                    <Toolbar className={classes.toolbar}></Toolbar>
-                </AppBar>
 
-                <FriendsDrawer users={users} />
+                <AppNavbar open={drawerIsOpen} />
+
+                <FriendsDrawer
+                    users={users}
+                    open={drawerIsOpen}
+                    toggleDrawer={this.toggleDrawer}
+                />
                 <div className={classes.appBarSpacer} />
 
                 <main className={classes.content}>
@@ -168,7 +175,7 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                {[1, 2, 3].map((card, i) => (
+                                {lists.map((card, i) => (
                                     <ListCard key={i} card={card} />
                                 ))}
                             </Grid>

@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up("sm")]: {
-            width: theme.spacing(9)
+            width: "70px"
         }
     },
     toolbarIcon: {
@@ -86,12 +86,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function FriendsDrawer(props) {
-    const [open, setOpen] = React.useState(true);
+    const { open, toggleDrawer } = props;
     const classes = useStyles();
-
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
 
     return (
         <Drawer
