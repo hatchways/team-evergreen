@@ -19,8 +19,7 @@ const friendListSchema = new mongoose.Schema(
         friends: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "user",
-                required: true
+                ref: "user"
             }
         ]
     },
