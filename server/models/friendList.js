@@ -3,6 +3,8 @@
 
 require("mongoose-type-url");
 const mongoose = require("mongoose");
+// set useFindAndModify to false to avoid deprecation error related to findOneAndUpdate():
+mongoose.set("useFindAndModify", false);
 
 const friendListSchema = new mongoose.Schema(
     {

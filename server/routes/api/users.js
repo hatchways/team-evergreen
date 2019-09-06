@@ -28,7 +28,7 @@ const validateFriendListInput = require("../../validation/friendList");
 
 // Load User model
 const User = require("../../models/User");
-const FriendList = require("../../models/FriendList");
+const FriendList = require("../../models/friendList");
 
 router.put("/:user_id", (req, res) => {
     const user_id = req.params.user_id;
@@ -157,7 +157,6 @@ function createToken(user, res) {
 }
 
 router.post("/add_friend_list", (req, res) => {
-    const { userId, title, friends } = req.body;
     const { errors, isValid } = validateFriendListInput(req.body);
 
     // validate request info:
@@ -165,27 +164,26 @@ router.post("/add_friend_list", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    FriendList.findOne({ title: title }).then(list => {
-        if (list) {
-            return res
-                .status(400)
-                .json({ error: "List with this title already exists" });
-        } else {
-            const newList = new FriendList({
-                userId: userId,
-                title: title,
-                friends: friends
-            });
-
-            // save new list and add its id to relevant User
-            newList
-                .save()
-                .then(list => {
-                    res.json(list);
-                })
-                .catch(err => console.log(err));
+    // crates new list or override existing list with the same name
+    // TODO: avoid list creation with same titles
+    FriendList.findOneAndUpdate(
+        { title: req.body.title },
+        {
+            userId: req.body.userId,
+            title: req.body.title,
+            $push: {
+                friends: {
+                    $each: req.body.friends
+                } // does not work :(
+            }
+        },
+        { upsert: true },
+        (error, list) => {
+            if (error) console.log(error);
+            console.log("data returned: ", list);
+            return res.json(list);
         }
-    });
+    );
 });
 
 module.exports = router;

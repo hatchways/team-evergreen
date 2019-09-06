@@ -7,7 +7,7 @@ const isEmpty = require("is-empty");
     friends: [id1, id2, id3]
 */
 
-module.exports = function validateLoginInput(data) {
+module.exports = function validateFriendListInput(data) {
     let errors = {};
 
     // Convert empty fields to an empty string so we can use validator functions
