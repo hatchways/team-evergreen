@@ -3,7 +3,8 @@ import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import FriendsDrawer from "../components/FriendsDrawer";
-import PoolCard from "../components/PoolCard";
+import AddFriendList from "../components/AddFriendList";
+import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
 import {
     CssBaseline,
@@ -20,8 +21,8 @@ class Profile extends Component {
         super(props);
         this.state = {
             user: null,
-            lists: null,
-            pools: null,
+            lists: [],
+            polls: [],
             users: [
                 {
                     name: "Harry Potter",
@@ -57,7 +58,10 @@ class Profile extends Component {
         // fetch user data from database:
         axios
             .get(`api/users/${id}`)
-            .then(response => this.setState({ user: response.data }))
+            .then(response => {
+                this.setState({ user: response.data });
+                // TODO: populate lists and polls in state
+            })
             .catch(err => console.log(err));
 
         // get users:
@@ -72,17 +76,17 @@ class Profile extends Component {
             .catch(err => console.log(err));
     };
 
-    createPool = () => {
-        // create new pool
+    createPoll = () => {
+        // create new poll
     };
 
-    createFriendList = () => {
-        // create new list
+    addNewList = newList => {
+        this.setState({ lists: this.state.lists.concat(newList) });
     };
 
     render() {
         const { classes } = this.props;
-        const { users } = this.state;
+        const { users, polls, lists } = this.state;
 
         return (
             <div className={classes.root}>
@@ -105,22 +109,34 @@ class Profile extends Component {
                                     container
                                     justify="space-between">
                                     <Grid item>
-                                        <Typography variant="h6" component="h2">
-                                            Pools
-                                        </Typography>
+                                        <div>
+                                            <Typography
+                                                display="inline"
+                                                variant="h6"
+                                                component="h2">
+                                                Polls
+                                            </Typography>
+                                            <Typography
+                                                display="inline"
+                                                variant="subtitle1"
+                                                component="h3">
+                                                ({polls.length})
+                                            </Typography>
+                                        </div>
                                     </Grid>
                                     <Grid item>
                                         <Button
-                                            onClick={this.createPool}
+                                            onClick={this.createPoll}
                                             variant="contained"
                                             color="primary"
                                             size="medium">
-                                            Create pool
+                                            Create poll
                                         </Button>
+                                        {/* <= move this button to poll dialog component */}
                                     </Grid>
                                 </Grid>
                                 {[1, 2, 3].map((card, i) => (
-                                    <PoolCard key={i} card={card} />
+                                    <PollCard key={i} card={card} />
                                 ))}
                             </Grid>
                             <Grid container spacing={4} item xs={12}>
@@ -130,18 +146,24 @@ class Profile extends Component {
                                     container
                                     justify="space-between">
                                     <Grid item>
-                                        <Typography variant="h6" component="h2">
+                                        <Typography
+                                            display="inline"
+                                            variant="h6"
+                                            component="h2">
                                             Friend lists
+                                        </Typography>
+                                        <Typography
+                                            display="inline"
+                                            variant="subtitle1"
+                                            component="h3">
+                                            ({lists.length})
                                         </Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Button
-                                            onClick={this.createFriendList}
-                                            variant="contained"
-                                            color="primary"
-                                            size="medium">
-                                            Create list
-                                        </Button>
+                                        <AddFriendList
+                                            users={users}
+                                            addNewList={this.addNewList}
+                                        />
                                     </Grid>
                                 </Grid>
                                 {[1, 2, 3].map((card, i) => (

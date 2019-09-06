@@ -108,6 +108,10 @@ class AddFriendsList extends Component {
         };
     }
 
+    openDialog = () => {
+        this.setState({ open: true });
+    };
+
     closeDialog = () => {
         this.setState({ open: false });
     };
@@ -168,6 +172,13 @@ class AddFriendsList extends Component {
 
         return (
             <div>
+                <Button
+                    onClick={this.openDialog}
+                    variant="contained"
+                    color="primary"
+                    size="medium">
+                    Create list
+                </Button>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
