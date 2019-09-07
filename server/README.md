@@ -132,3 +132,23 @@ registration.validation.spec.js. These tests check to make sure the validations 
 To test the end points use postman, choose the appropriate data type you want to use (form-data to pass in the url) or
 (x-www-form-urlencoded which allows you to use a table to enter the data for end point you want to test). I've added
 images for what this looks like in postman to the test directory.
+
+## Seeding data
+
+In order to add sample users and friend lists to database:
+
+1. Run `npm install` to install a new package mongo-seeding-cli or install it separately:
+
+```
+npm install -g mongo-seeding-cli
+```
+
+2. Navigate to server/data-import folder
+
+3. Run the following command. The old database will be dropped:
+
+```
+seed --db-uri 'mongodb://127.0.0.1:27017/evergreen_dev' --drop-database
+```
+
+NB! If you skip --drop-database option, users with same emails and names might be added (no validation for that is enforced)
