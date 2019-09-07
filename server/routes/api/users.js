@@ -156,6 +156,9 @@ function createToken(user, res) {
     );
 }
 
+// @route POST api/users/add_friend_list
+// @desc Create a new friends list
+// @access Private
 router.post("/add_friend_list", (req, res) => {
     const { errors, isValid } = validateFriendListInput(req.body);
 
@@ -198,6 +201,27 @@ router.post("/add_friend_list", (req, res) => {
             res.json({
                 status: 500,
                 error: "Unable to create a new list"
+            });
+        });
+});
+
+// @route GET api/users/get_user_data
+// @desc Get all friend lists or polls for a specific user
+// @access Private
+router.get("/get_user_data", (req, res) => {
+    console.log("data from client: ", req.body);
+    const target = req.body.target; // 'lists' or 'polls'
+
+    User.findById(req.body.userId)
+        .populate(target)
+        .then(result => {
+            res.json(result[target]);
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve data"
             });
         });
 });
