@@ -209,7 +209,6 @@ router.post("/add_friend_list", (req, res) => {
 // @desc Get all friend lists or polls for a specific user
 // @access Private
 router.get("/get_user_data", (req, res) => {
-    console.log("data from client: ", req.body);
     const target = req.body.target; // 'lists' or 'polls'
 
     User.findById(req.body.userId)
