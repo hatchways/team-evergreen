@@ -91,25 +91,34 @@ class AddFriendsList extends Component {
             users: [
                 {
                     name: "Harry Potter",
-                    id: 1,
+                    id: "5d71b9bc5578b6031863aaa5",
                     avatar: ""
                 },
                 {
                     name: "Ron Weasley",
-                    id: 2,
+                    id: "5d72f484b3411630f44e6443",
                     avatar: ""
                 },
                 {
                     name: "Hermione Granger",
-                    id: 3,
+                    id: "5d7306da958dfc36caf2006d",
                     avatar: ""
                 }
             ] // temporary sample data, users will be passed from Profile
         };
     }
 
+    openDialog = () => {
+        this.setState({ open: true });
+    };
+
     closeDialog = () => {
+        this.clearDialogData();
         this.setState({ open: false });
+    };
+
+    clearDialogData = () => {
+        this.setState({ listName: "", friends: [], errors: {} });
     };
 
     onChange = e => {
@@ -137,6 +146,12 @@ class AddFriendsList extends Component {
             axios
                 .post("/api/users/add_friend_list", newList)
                 .then(response => {
+                    if (response.data.status === 500) {
+                        this.setState({
+                            errors: { error: response.data.error }
+                        });
+                        return;
+                    }
                     // add new list to Profile and close dialog:
                     this.props.addNewList(response.data);
                     this.closeDialog();
@@ -168,6 +183,13 @@ class AddFriendsList extends Component {
 
         return (
             <div>
+                <Button
+                    onClick={this.openDialog}
+                    variant="contained"
+                    color="primary"
+                    size="medium">
+                    Create list
+                </Button>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
