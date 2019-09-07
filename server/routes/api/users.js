@@ -24,9 +24,11 @@ const uploadToS3 = require("../utils/s3Upload");
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+const validateFriendListInput = require("../../validation/friendList");
 
 // Load User model
 const User = require("../../models/User");
+const FriendList = require("../../models/friendList");
 
 router.put("/:user_id", (req, res) => {
     const user_id = req.params.user_id;
@@ -153,5 +155,74 @@ function createToken(user, res) {
         }
     );
 }
+
+// @route POST api/users/add_friend_list
+// @desc Create a new friends list
+// @access Private
+router.post("/add_friend_list", (req, res) => {
+    const { errors, isValid } = validateFriendListInput(req.body);
+
+    // validate request info:
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const newList = new FriendList({
+        userId: req.body.userId,
+        title: req.body.title,
+        friends: req.body.friends
+    });
+
+    // TODO: allow to store lists with same titles (for different users)
+    // TODO: check that title is unique per single user
+    newList
+        .save()
+        .then(list => {
+            User.findOneAndUpdate(
+                { _id: req.body.userId },
+                {
+                    $push: {
+                        lists: list["_id"]
+                    }
+                }
+            )
+                .then(response => {
+                    res.json(list);
+                })
+                .catch(err => {
+                    console.log("error: ", err);
+                    return res
+                        .status(400)
+                        .json({ error: "Error updating the user list" });
+                });
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to create a new list"
+            });
+        });
+});
+
+// @route GET api/users/get_user_data
+// @desc Get all friend lists or polls for a specific user
+// @access Private
+router.get("/get_user_data", (req, res) => {
+    const target = req.body.target; // 'lists' or 'polls'
+
+    User.findById(req.body.userId)
+        .populate(target)
+        .then(result => {
+            res.json(result[target]);
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve data"
+            });
+        });
+});
 
 module.exports = router;
