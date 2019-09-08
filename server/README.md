@@ -162,7 +162,7 @@ for IAM) and create a new account.
 
 ### Create New Security Group
 
-1. Go to Group folder and click on Crate New Group - call it something relevant - I used evergreen-file-uploader
+1. Go to Group folder and click on Create New Group - call it something relevant - I used evergreen-file-uploader
 2. Attach AmazonS3FullAccess policy
 3. Create Group
 4. From the list of groups click the one you just created
@@ -208,7 +208,8 @@ some reason you lose this file, you can recreate the security credentials throug
 
 Create the following keys in your .env file:
 
-```AWS_ACCESS_KEY_ID=<from your user credentials file>
+```
+AWS_ACCESS_KEY_ID=<from your user credentials file>
 AWS_SECRET_ACCESS_KEY=<from your user credentials file>
 AWS_IMAGES_BUCKET=<bucket name that you chose>
 AWS_REGION=<region that you chose for your S3 service>
@@ -217,11 +218,15 @@ AWS_REGION=<region that you chose for your S3 service>
 A note on the region value, in the S3 console you can see what region you chose but it is given in plain
 english and is not the actual code that you need.  For example my region is displayed as:
 
-```US-East(Ohio)```
+```
+US-East(Ohio)
+```
 
 This is not the value you need for the region field.  The actual value you need is a code that looks like:
 
-```us-east-2```
+```
+us-east-2
+```
 
 You can find the list of codes [here](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region).
 
