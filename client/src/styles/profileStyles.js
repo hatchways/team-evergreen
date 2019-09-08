@@ -15,6 +15,9 @@ export const profileStyles = theme => ({
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4)
     },
+    fixedHeightContainer: {
+        height: "50vh"
+    },
     paper: {
         padding: theme.spacing(2),
         display: "flex",

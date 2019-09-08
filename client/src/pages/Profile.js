@@ -25,32 +25,7 @@ class Profile extends Component {
             lists: [],
             polls: [],
             drawerIsOpen: true,
-            users: [
-                {
-                    name: "Harry Potter",
-                    id: 1
-                },
-                {
-                    name: "Ron Weasley",
-                    id: 2
-                },
-                {
-                    name: "Hermione Granger",
-                    id: 3
-                },
-                {
-                    name: "Severus Snape",
-                    id: 4
-                },
-                {
-                    name: "Albus Dumbledore",
-                    id: 5
-                },
-                {
-                    name: "Professor Lupin",
-                    id: 6
-                }
-            ] // temp fake data
+            users: []
         };
     }
 
@@ -59,27 +34,36 @@ class Profile extends Component {
 
         // fetch user data from database:
         axios
-            .get(`api/users/${id}`)
+            .get(`api/users/user/${id}`)
             .then(response => {
-                this.setState({ user: response.data });
-                // TODO: populate lists and polls in state
+                this.setState({
+                    user: response.data,
+                    lists: response.data.lists,
+                    polls: response.data.polls
+                });
             })
             .catch(err => console.log(err));
 
-        // get users:
+        // get all users:
         this.fetchUsers();
     }
 
     fetchUsers = () => {
         // fetch all users and populate state
         axios
-            .get(`api/users/`)
-            .then(response => this.setState({ users: response.data }))
+            .get("api/users/")
+            .then(response => {
+                // exclude current user from list of all users:
+                const users = response.data.filter(
+                    user => user._id !== this.props.user.id
+                );
+                this.setState({ users });
+            })
             .catch(err => console.log(err));
     };
 
-    createPoll = () => {
-        // create new poll
+    addNewPoll = newPoll => {
+        // add new poll
     };
 
     addNewList = newList => {
@@ -111,7 +95,12 @@ class Profile extends Component {
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={6}>
-                            <Grid container spacing={4} item xs={12}>
+                            <Grid
+                                container
+                                spacing={4}
+                                item
+                                xs={12}
+                                className={classes.fixedHeightContainer}>
                                 <Grid
                                     item
                                     xs={12}
@@ -129,13 +118,12 @@ class Profile extends Component {
                                                 display="inline"
                                                 variant="subtitle1"
                                                 component="h3">
-                                                ({polls.length})
+                                                ({polls ? polls.length : 0})
                                             </Typography>
                                         </div>
                                     </Grid>
                                     <Grid item>
                                         <Button
-                                            onClick={this.createPoll}
                                             variant="contained"
                                             color="primary"
                                             size="medium">
@@ -144,11 +132,17 @@ class Profile extends Component {
                                         {/* <= move this button to poll dialog component */}
                                     </Grid>
                                 </Grid>
-                                {[1, 2, 3].map((card, i) => (
-                                    <PollCard key={i} card={card} />
-                                ))}
+                                {polls &&
+                                    polls.map((card, i) => (
+                                        <PollCard key={i} card={card} />
+                                    ))}
                             </Grid>
-                            <Grid container spacing={4} item xs={12}>
+                            <Grid
+                                container
+                                spacing={4}
+                                item
+                                xs={12}
+                                className={classes.fixedHeightContainer}>
                                 <Grid
                                     item
                                     xs={12}
@@ -165,7 +159,7 @@ class Profile extends Component {
                                             display="inline"
                                             variant="subtitle1"
                                             component="h3">
-                                            ({lists.length})
+                                            ({lists ? lists.length : 0})
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -175,9 +169,10 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                {lists.map((card, i) => (
-                                    <ListCard key={i} card={card} />
-                                ))}
+                                {lists &&
+                                    lists.map((card, i) => (
+                                        <ListCard key={i} card={card} />
+                                    ))}
                             </Grid>
                         </Grid>
                     </Container>
