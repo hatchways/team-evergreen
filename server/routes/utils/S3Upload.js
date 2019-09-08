@@ -14,9 +14,6 @@ const AWS = require("aws-sdk");
 // Miscellaneous Packages
 const uuidv4 = require("uuid/v4");
 
-// Private variables
-let noOfFile = 0;
-
 /**
  *
  * @param req - [files] to upload in an array
