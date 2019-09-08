@@ -28,7 +28,6 @@ export function filesToUpload(req, res) {
 
     const uploadsPromised = [];
     files.forEach(fileName => {
-        console.log(`Uploading ${fileName}`);
         try {
             uploadsPromised.push(promiseToUploadFileToS3(req[fileName]));
         } catch {
@@ -39,12 +38,11 @@ export function filesToUpload(req, res) {
     // execute all the promises - returns error if any fail
     const results = Promise.all(uploadsPromised)
         .then(result => {
-            console.log("Files Successfully Uploaded", result);
             res.send({ status: 200, result });
         })
         .catch(error => {
             console.log("Error uploading to S3", error);
-            res.send({ status: 500, error });
+            res.send({ status: 500, message: error.error.message });
         });
 }
 
@@ -72,10 +70,12 @@ async function promiseToUploadFileToS3(file) {
         ContentType: file.mimetype,
         ACL: "public-read"
     };
+
+    //Executes the upload - returns resolve or reject depending on what happened
     return await new Promise((resolve, reject) => {
         S3.upload(params, function(err, data) {
             if (err) {
-                reject({ error: true, Message: err });
+                reject({ error: err });
             } else {
                 resolve({ url: data.Location });
             }
