@@ -4,6 +4,7 @@ This readme describes how to:
 
 1. [Connect to MongoDB](#MongoDB)
 2. [Use The Registration\Login API](#Authorization API)
+3. [Uploading to S3](#Uploading to S3)
 
 ## MongoDB
 
@@ -124,7 +125,7 @@ http://localhost:3001/api/users/registration
 
 The data needs to be passed as part of the post request.
 
-## Tests
+### Tests
 
 Test scripts fo the endpoint validation files can be found in server\test and are named login.validation.spec.js and
 registration.validation.spec.js. These tests check to make sure the validations are setup correctly.
@@ -132,3 +133,114 @@ registration.validation.spec.js. These tests check to make sure the validations 
 To test the end points use postman, choose the appropriate data type you want to use (form-data to pass in the url) or
 (x-www-form-urlencoded which allows you to use a table to enter the data for end point you want to test). I've added
 images for what this looks like in postman to the test directory.
+
+## Uploading to S3
+
+### Pre-requisites
+In order to use the \server\routes\utils\S3Upload.js file you will need to create a profile with Amazon to
+use the S3 service.  You will need to provide a credit card but the rates are ridiculously low
+and really only kick in for uploads of thousands's if not tens of thousands's of records.  To create an account go to 
+[AWS Amazon Console](https://aws.amazon.com/console/) and register.  Follow their instructions for sign up.
+
+### Create and Configure Bucket
+
+Once registered from within S3 create a bucket to hold your images and configure as follows:
+
+- Properties - none required but feel free to experiment
+- Permissions
+    -  Public Access - Turn on Public Access
+    -  Access Control List - Public Access\Everyone\List Objects - Yes
+- Bucket Policy - Leave Empty
+- CORS Configuration - Leave Default
+- Management - none required
+
+### Create an IAM Account
+
+Navigate to the IAM setup page (you can get there by clicking on the Services Drop Down menu of the S3 Console - search
+for IAM) and create a new account.
+
+### Create New Security Group
+
+1. Go to Group folder and click on Crate New Group - call it something relevant - I used evergreen-file-uploader
+2. Attach AmazonS3FullAccess policy
+3. Create Group
+4. From the list of groups click the one you just created
+5. Select the Permissions tab
+6. Click on the drop down arrow next to Inline Policies and then choose to create one (via link)
+7. Choose Custom Policy
+    - name the policy PutObjectAcl
+    - in the policy text area copy and paste the following policy:
+    - ```
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "s3:PutObject",
+                        "s3:PutObjectAcl"
+                    ],
+                    "Resource": "*"
+                }
+            ]
+        }
+        ```
+
+### Create New User
+
+1. Go to the Users folder and click Add User, follow the prompts.  Use the following values for the various fields:
+    - User Name - something unique that you will recognize(shows up in logs) - I used evergreen-robot
+    - Access Type - Programmatic Access
+2. Select the checkbox next to the group you just created (You should be on Add User to Group Tab)
+3. Click on Next: Tags
+4. Enter a tag if you want to track transactions (I chose Evergreen - this is not necessary)
+5. Click on Next: Review
+6. Make sure you like what you see and click on Create User
+
+#***********  VERY IMPORTANT ************
+Once the user is created you will be provided with the user security credentials.  This is a one time opportunity so 
+download the csv and keep it somewhere secure (not in the project folder or it will\may get uploaded to GitHub).  If for
+some reason you lose this file, you can recreate the security credentials through the IAM portal.  
+#***********  VERY IMPORTANT ************
+
+### Create AWS Environment Variables
+
+Create the following keys in your .env file:
+
+```AWS_ACCESS_KEY_ID=<from your user credentials file>
+AWS_SECRET_ACCESS_KEY=<from your user credentials file>
+AWS_IMAGES_BUCKET=<bucket name that you chose>
+AWS_REGION=<region that you chose for your S3 service>
+```                   
+
+A note on the region value, in the S3 console you can see what region you chose but it is given in plain
+english and is not the actual code that you need.  For example my region is displayed as:
+
+```US-East(Ohio)```
+
+This is not the value you need for the region field.  The actual value you need is a code that looks like:
+
+```us-east-2```
+
+You can find the list of codes [here](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region).
+
+### Testing if this works
+
+You can use the \upload route and postman to test if you are set up correctly.
+
+1. Launch the dev server and mongoDB database
+2. From postman go to the following route:
+        http://localhost:3001/api/images/upload
+3. Choose form-data and add at least one file
+4. Send the request
+
+If it worked properly you should get back a response with the url of the stored file.
+
+### Final Notes
+
+The files are named using a UUID, this is to guarantee filename uniqueness and to hide the details of 
+what's in the actual image.  The images however are not encrypted in any way.
+
+Even though we have set Public access it should not be possible for anyone besides an authorized account for
+you buckets to upload a file.  Everyone however should be able to read it.  To test that this is the
+case click on the url that you got back.  If your image\file opens up you are good to go.
