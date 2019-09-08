@@ -13,6 +13,7 @@ require("./config/db-connect");
 const bodyParser = require("body-parser");
 
 const users = require("./routes/api/users");
+const upload = require("./routes/api/upload");
 
 const app = express();
 
@@ -36,6 +37,7 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/images", upload);
 
 app.use(logger("dev"));
 app.use(json());
