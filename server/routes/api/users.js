@@ -26,9 +26,10 @@ const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const validateFriendListInput = require("../../validation/friendList");
 
-// Load User model
+// Load models
 const User = require("../../models/User");
 const FriendList = require("../../models/friendList");
+const Poll = require("../../models/Poll");
 
 router.put("/:user_id", (req, res) => {
     const user_id = req.params.user_id;
@@ -221,6 +222,46 @@ router.get("/get_user_data", (req, res) => {
             res.json({
                 status: 500,
                 error: "Unable to retrieve data"
+            });
+        });
+});
+
+// @route GET api/users/users
+// @desc Get all users
+// @access Private
+router.get("/", (req, res) => {
+    User.find({})
+        .then(users => {
+            if (!users.length) {
+                return res.status(404).json({ error: "Users were not found" });
+            } else {
+                res.json(users);
+            }
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve data"
+            });
+        });
+});
+
+// @route GET api/users/users
+// @desc Get all information for a single user
+// @access Private
+router.get("/user/:id", (req, res) => {
+    User.findById(req.params.id)
+        .populate("polls")
+        .populate("lists")
+        .then(result => {
+            res.json(result);
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve user data"
             });
         });
 });
