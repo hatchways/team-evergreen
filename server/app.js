@@ -1,3 +1,4 @@
+require("dotenv").config();
 import createError from "http-errors";
 import express, { json, urlencoded } from "express";
 import { join } from "path";
@@ -12,6 +13,7 @@ import mongoose from "mongoose";
 require("./config/db-connect");
 const bodyParser = require("body-parser");
 
+// Load route files
 const users = require("./routes/api/users");
 const upload = require("./routes/api/upload");
 
