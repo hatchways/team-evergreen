@@ -1,19 +1,22 @@
 //upload.js
 
-/*if (!process.env.ENV_LOADED) {require("dotenv").config()}*/
 const express = require("express");
 const router = express.Router();
-const AWS = require("aws-sdk");
-const uuidv4 = require("uuid/v4");
-import { uploadFileToS3 } from "../utils/S3Upload";
+
+import { filesToUpload } from "../utils/S3Upload";
 const fileUpload = require("express-fileupload");
 router.use(fileUpload());
 
+/**
+ * @desc Passes the file data to file upload function
+ */
 router.post("/upload", function(req, res) {
-    const files = req["files"];
-    const file = files["file"];
-
-    uploadFileToS3({ data: file.data, mimetype: file.mimetype }, res);
+    // no files uploaded
+    if (Object.keys(req.files).length === 0) {
+        res.status(400).toJSON({ message: "No files to upload." });
+    } else {
+        filesToUpload(req["files"], res);
+    }
 });
 
 module.exports = router;

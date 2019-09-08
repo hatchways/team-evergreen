@@ -8,16 +8,55 @@ if (!process.env.ENV_LOADED) {
     require("dotenv").config();
 }
 
+// Packages used for uploading to S3
 const AWS = require("aws-sdk");
+
+// Miscellaneous Packages
 const uuidv4 = require("uuid/v4");
+
+// Private variables
+let noOfFile = 0;
+
+/**
+ *
+ * @param req - [files] to upload in an array
+ * @param res - callback - on success: {status: 200,  url: returns file location }
+ *                         on error: { status: 500,  message: error }
+ */
+export function filesToUpload(req, res) {
+    const files = Object.keys(req);
+
+    const uploadsPromised = [];
+    files.forEach(fileName => {
+        console.log(`Uploading ${fileName}`);
+        try {
+            uploadsPromised.push(promiseToUploadFileToS3(req[fileName]));
+        } catch {
+            console.log(error);
+        }
+    });
+
+    // execute all the promises - returns error if any fail
+    const results = Promise.all(uploadsPromised)
+        .then(result => {
+            console.log("Files Successfully Uploaded", result);
+            res.send({ status: 200, result });
+        })
+        .catch(error => {
+            console.log("Error uploading to S3", error);
+            res.send({ status: 500, error });
+        });
+}
+
+// PRIVATE FUNCTIONS
 
 /**
  * @desc Creates a connection to S3 storage and uploads file
- * @param req - {data: - file buffer, mimetype: - type of file being sent}
- * @param res - callback - on success: { url: returns file location }
- *                         on error: { returns error: true, message: error }
+ * @param file -  {data: - file buffer, mimetype: - type of file being sent}
+ * @returns promise
+ * @access private
  */
-export function uploadFileToS3(req, res) {
+async function promiseToUploadFileToS3(file) {
     //
     const S3 = new AWS.S3({
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -29,15 +68,17 @@ export function uploadFileToS3(req, res) {
     const params = {
         Bucket: process.env.AWS_IMAGES_BUCKET,
         Key: uuidv4(),
-        Body: req.data,
-        ContentType: req.mimetype,
+        Body: file.data,
+        ContentType: file.mimetype,
         ACL: "public-read"
     };
-    S3.upload(params, function(err, data) {
-        if (err) {
-            res.status(500).json({ error: true, Message: err });
-        } else {
-            res.status(200).json({ url: data.Location });
-        }
+    return await new Promise((resolve, reject) => {
+        S3.upload(params, function(err, data) {
+            if (err) {
+                reject({ error: true, Message: err });
+            } else {
+                resolve({ url: data.Location });
+            }
+        });
     });
 }
