@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
 import AddFriendList from "../components/AddFriendList";
 import PollCard from "../components/PollCard";
@@ -81,9 +80,6 @@ class Profile extends Component {
         return (
             <div className={classes.root}>
                 <CssBaseline />
-
-                <AppNavbar open={drawerIsOpen} />
-
                 <FriendsDrawer
                     users={users}
                     open={drawerIsOpen}
@@ -97,7 +93,6 @@ class Profile extends Component {
                         <Grid container spacing={6}>
                             <Grid
                                 container
-                                spacing={4}
                                 item
                                 xs={12}
                                 className={classes.fixedHeightContainer}>
@@ -133,10 +128,12 @@ class Profile extends Component {
                                         {/* <= move this button to poll dialog component */}
                                     </Grid>
                                 </Grid>
-                                {polls &&
-                                    polls.map((card, i) => (
-                                        <PollCard key={i} card={card} />
-                                    ))}
+                                <Grid container item spacing={4}>
+                                    {polls &&
+                                        polls.map((card, i) => (
+                                            <PollCard key={i} card={card} />
+                                        ))}
+                                </Grid>
                             </Grid>
                             <Grid
                                 container
