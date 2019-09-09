@@ -13,47 +13,23 @@ const keys = require("../../config/config");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Used to load files
-const Busboy = require("busboy");
-const fileUpload = require("express-fileupload");
-router.use(fileUpload());
-
-// Load utility functions
-const uploadToS3 = require("../utils/s3Upload");
-
-// Load input validation
+// LOAD VALIDATION FUNCTIONS
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const validateFriendListInput = require("../../validation/friendList");
 
-// Load models
+// LOAD DATA MODELS
+
 const User = require("../../models/User");
 const FriendList = require("../../models/friendList");
 const Poll = require("../../models/Poll");
 
-router.put("/:user_id", (req, res) => {
-    const user_id = req.params.user_id;
-    const file = req.files.avatar;
-    User.findById(user_id).then(user => {
-        if (!user) {
-            return res.status(400).json({ email: "User does not exist" });
-        } else {
-            if (file) {
-                if (req.body.name) user.name = req.body.name;
-                var busboy = new Busboy({ headers: req.headers });
-                busboy.on("finish", function() {
-                    uploadToS3(file, user, "avatar", res);
-                });
-                req.pipe(busboy);
-            }
-        }
-    });
-});
-
-// @route POST api/users/register
-// @desc Register user
-// @access Public
-
+// ROUTES
+/**
+ * @route POST api/users/register
+ * @desc Register user
+ * @access Public
+ * */
 router.post("/register", (req, res) => {
     // Form validation
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -86,9 +62,10 @@ router.post("/register", (req, res) => {
     });
 });
 
-// @route POST api/users/login
-// @desc Login user and return JWT token
-// @access Public
+/**
+ * @route POST api/users/login
+ * @desc Login user and return a JWT token
+ */
 router.post("/login", (req, res) => {
     // Form validation
     const { errors, isValid } = validateLoginInput(req.body);
@@ -125,42 +102,13 @@ router.post("/login", (req, res) => {
     });
 });
 
-// @desc Creates a JWT token and returns via callback function provided
-// @access Private
-function createToken(user, res) {
-    // Create JWT Payload
-    const payload = {
-        id: user.id,
-        name: user.name
-    };
-
-    // Sign token
-    jwt.sign(
-        payload,
-        keys.app.secretOrKey,
-        {
-            expiresIn: 31556926 // 1 year in seconds
-        },
-        (err, token) => {
-            if (!err) {
-                res.json({
-                    status: 200,
-                    token: `Bearer ${token}`
-                });
-            } else {
-                res.json({
-                    status: 500,
-                    error: "Unable to generate token."
-                });
-            }
-        }
-    );
-}
-
-// @route POST api/users/add_friend_list
-// @desc Create a new friends list
-// @access Private
+/**
+ * @route POST api/users/add_friend_list
+ * @desc Create a new friends list
+ */
 router.post("/add_friend_list", (req, res) => {
+    console.log("request body: ", req.body);
+
     const { errors, isValid } = validateFriendListInput(req.body);
 
     // validate request info:
@@ -192,9 +140,10 @@ router.post("/add_friend_list", (req, res) => {
                 })
                 .catch(err => {
                     console.log("error: ", err);
-                    return res
-                        .status(400)
-                        .json({ error: "Error updating the user list" });
+                    return res.json({
+                        status: 500,
+                        error: "Error updating the user list"
+                    });
                 });
         })
         .catch(err => {
@@ -206,9 +155,10 @@ router.post("/add_friend_list", (req, res) => {
         });
 });
 
-// @route GET api/users/get_user_data
-// @desc Get all friend lists or polls for a specific user
-// @access Private
+/**
+ * @route GET api/users/get_user_data
+ * @desc Get all friend lists or polls for a specific user
+ */
 router.get("/get_user_data", (req, res) => {
     const target = req.body.target; // 'lists' or 'polls'
 
@@ -265,5 +215,43 @@ router.get("/user/:id", (req, res) => {
             });
         });
 });
+
+// UTILITY FUNCTIONS
+
+/**
+ * @desc Creates a JWT token and returns it via callback provided
+ * @params user - an instance of a users
+ * @params res - call back function
+ * @access Private
+ */
+function createToken(user, res) {
+    // Create JWT Payload
+    const payload = {
+        id: user.id,
+        name: user.name
+    };
+
+    // Sign token
+    jwt.sign(
+        payload,
+        keys.app.secretOrKey,
+        {
+            expiresIn: 31556926 // 1 year in seconds
+        },
+        (err, token) => {
+            if (!err) {
+                res.json({
+                    status: 200,
+                    token: `Bearer ${token}`
+                });
+            } else {
+                res.json({
+                    status: 500,
+                    error: "Unable to generate token."
+                });
+            }
+        }
+    );
+}
 
 module.exports = router;

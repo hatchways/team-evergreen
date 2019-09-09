@@ -87,24 +87,7 @@ class AddFriendsList extends Component {
             open: false,
             listName: "",
             friends: [],
-            errors: {},
-            users: [
-                {
-                    name: "Harry Potter",
-                    id: 1,
-                    avatar: ""
-                },
-                {
-                    name: "Ron Weasley",
-                    id: 2,
-                    avatar: ""
-                },
-                {
-                    name: "Hermione Granger",
-                    id: 3,
-                    avatar: ""
-                }
-            ] // temporary sample data, users will be passed from Profile
+            errors: {}
         };
     }
 
@@ -113,7 +96,12 @@ class AddFriendsList extends Component {
     };
 
     closeDialog = () => {
+        this.clearDialogData();
         this.setState({ open: false });
+    };
+
+    clearDialogData = () => {
+        this.setState({ listName: "", friends: [], errors: {} });
     };
 
     onChange = e => {
@@ -141,6 +129,13 @@ class AddFriendsList extends Component {
             axios
                 .post("/api/users/add_friend_list", newList)
                 .then(response => {
+                    if (response.data.status === 500) {
+                        this.setState({
+                            errors: { error: response.data.error }
+                        });
+                        return;
+                    }
+
                     // add new list to Profile and close dialog:
                     this.props.addNewList(response.data);
                     this.closeDialog();
@@ -166,7 +161,8 @@ class AddFriendsList extends Component {
 
     render() {
         const { classes } = this.props;
-        const { open, users, friends, errors, listName } = this.state;
+        const { users } = this.props;
+        const { open, friends, errors, listName } = this.state;
         const isNameInvalid = errors.name && !listName;
         const isListInvalid = errors.friends && !friends.length;
 
@@ -224,10 +220,10 @@ class AddFriendsList extends Component {
                             <Divider />
                             <List dense>
                                 {users.map(user => {
-                                    const included = friends.includes(user.id);
+                                    const included = friends.includes(user._id);
                                     return (
                                         <ListItem
-                                            key={user.id}
+                                            key={user._id}
                                             className={classes.item}>
                                             <ListItemAvatar>
                                                 <Avatar
@@ -242,7 +238,7 @@ class AddFriendsList extends Component {
                                                     className={classes.button}
                                                     onClick={() =>
                                                         this.handleClick(
-                                                            user.id
+                                                            user._id
                                                         )
                                                     }
                                                     variant={
