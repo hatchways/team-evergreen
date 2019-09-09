@@ -13,15 +13,24 @@ export const profileStyles = theme => ({
     },
     container: {
         paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4)
+        paddingBottom: theme.spacing(6)
     },
     fixedHeightContainer: {
-        height: "50vh"
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
+        minHeight: "50vh",
+        "& > .MuiGrid-item:first-child": {
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(3)
+        }
     },
     paper: {
         padding: theme.spacing(2),
         display: "flex",
         overflow: "auto",
         flexDirection: "column"
+    },
+    title: {
+        marginRight: theme.spacing(1) / 2
     }
 });

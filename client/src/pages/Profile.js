@@ -111,7 +111,8 @@ class Profile extends Component {
                                             <Typography
                                                 display="inline"
                                                 variant="h6"
-                                                component="h2">
+                                                component="h2"
+                                                className={classes.title}>
                                                 Polls
                                             </Typography>
                                             <Typography
@@ -139,7 +140,6 @@ class Profile extends Component {
                             </Grid>
                             <Grid
                                 container
-                                spacing={4}
                                 item
                                 xs={12}
                                 className={classes.fixedHeightContainer}>
@@ -152,7 +152,8 @@ class Profile extends Component {
                                         <Typography
                                             display="inline"
                                             variant="h6"
-                                            component="h2">
+                                            component="h2"
+                                            className={classes.title}>
                                             Friend lists
                                         </Typography>
                                         <Typography
@@ -169,10 +170,12 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                {lists &&
-                                    lists.map((card, i) => (
-                                        <ListCard key={i} card={card} />
-                                    ))}
+                                <Grid container item spacing={4}>
+                                    {lists &&
+                                        lists.map((card, i) => (
+                                            <ListCard key={i} card={card} />
+                                        ))}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Container>
