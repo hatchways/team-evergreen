@@ -126,7 +126,7 @@ function FriendsDrawer(props) {
                 }>
                 {props.users.map(user => {
                     return (
-                        <ListItem button key={user.id}>
+                        <ListItem button key={user._id}>
                             <ListItemAvatar>
                                 <StyledBadge
                                     variant="dot"

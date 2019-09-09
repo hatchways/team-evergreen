@@ -32,16 +32,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function ListCard() {
+function ListCard(props) {
     const classes = useStyles();
-    const list = {
-        id: 1,
-        title: "Fashion",
-        friends: ["id1", "id2", "id3"]
-    };
+    const { _id, title, friends } = props.list;
 
     return (
-        <Grid item key={list.id} xs={12} md={6} lg={4}>
+        <Grid item key={_id} xs={12} md={6} lg={4}>
             <Card className={classes.card}>
                 <CardHeader
                     action={
@@ -52,24 +48,27 @@ function ListCard() {
                     className={classes.cardHeader}
                     title={
                         <Typography component="h3" className={classes.title}>
-                            {list.title}
+                            {title}
                         </Typography>
                     }
                     subheader={
                         <Typography variant="body2">
-                            {list.friends.length + " friends"}
+                            {friends.length + " friends"}
                         </Typography>
                     }
                 />
                 <Divider />
                 <CardContent>
                     <List>
-                        {[1, 2, 3].map(friend => (
+                        {friends.map(friend => (
                             <ListItem key={friend}>
                                 <ListItemAvatar>
-                                    <Avatar>H</Avatar>
+                                    <Avatar
+                                        src={friend.avatar}
+                                        alt={`Avatar of ${friend.name}`}
+                                    />
                                 </ListItemAvatar>
-                                <ListItemText primary="Sample name" />
+                                <ListItemText primary={friend.name} />
                             </ListItem>
                         ))}
                     </List>

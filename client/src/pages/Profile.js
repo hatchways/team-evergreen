@@ -171,8 +171,8 @@ class Profile extends Component {
                                 </Grid>
                                 <Grid container item spacing={4}>
                                     {lists &&
-                                        lists.map((card, i) => (
-                                            <ListCard key={i} card={card} />
+                                        lists.map((list, i) => (
+                                            <ListCard key={i} list={list} />
                                         ))}
                                 </Grid>
                             </Grid>
