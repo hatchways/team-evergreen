@@ -29,6 +29,10 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         fontWeight: "600"
+    },
+    list: {
+        maxHeight: "200px",
+        overflow: "scroll"
     }
 }));
 
@@ -59,9 +63,9 @@ function ListCard(props) {
                 />
                 <Divider />
                 <CardContent>
-                    <List>
+                    <List className={classes.list}>
                         {friends.map(friend => (
-                            <ListItem key={friend}>
+                            <ListItem key={friend._id}>
                                 <ListItemAvatar>
                                     <Avatar
                                         src={friend.avatar}

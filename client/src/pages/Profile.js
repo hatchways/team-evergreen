@@ -66,6 +66,16 @@ class Profile extends Component {
     };
 
     addNewList = newList => {
+        // show friends' names and avatars for the newly created list:
+        newList.friends.forEach((id, i, array) => {
+            const user = this.state.users.find(user => user._id === id);
+
+            array[i] = {
+                _id: id,
+                name: user.name,
+                avatar: user.avatar
+            };
+        });
         this.setState({ lists: this.state.lists.concat(newList) });
     };
 
