@@ -14,6 +14,7 @@ import {
     updateUserWithNewPoll
 } from "../utils/userModelUpdates";
 import { createNewPoll } from "../utils/pollModelUpdates";
+import { validateUploadInput } from "../../validation/upload";
 
 /**
  * @desc Passes the file data to file upload function if there is a file in req
