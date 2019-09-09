@@ -75,6 +75,7 @@ class Profile extends Component {
 
     render() {
         const { classes } = this.props;
+        const { id } = this.props.user;
         const { users, polls, lists, drawerIsOpen } = this.state;
 
         return (
@@ -162,6 +163,7 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddFriendList
+                                            userId={id}
                                             users={users}
                                             addNewList={this.addNewList}
                                         />
