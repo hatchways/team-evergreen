@@ -107,6 +107,8 @@ router.post("/login", (req, res) => {
  * @desc Create a new friends list
  */
 router.post("/add_friend_list", (req, res) => {
+    console.log("request body: ", req.body);
+
     const { errors, isValid } = validateFriendListInput(req.body);
 
     // validate request info:
@@ -138,9 +140,10 @@ router.post("/add_friend_list", (req, res) => {
                 })
                 .catch(err => {
                     console.log("error: ", err);
-                    return res
-                        .status(400)
-                        .json({ error: "Error updating the user list" });
+                    return res.json({
+                        status: 500,
+                        error: "Error updating the user list"
+                    });
                 });
         })
         .catch(err => {
