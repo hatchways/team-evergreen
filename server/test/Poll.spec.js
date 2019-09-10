@@ -12,10 +12,8 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             sendToList: id,
-            options: {
-                1: { url: "www.google.ca" },
-                2: { url: "www.microsoft.com" }
-            },
+            options: ["www.google.ca", "www.microsoft.com"],
+            userId: id,
             expiresOn: new Date()
         });
         poll.validate(function(err) {
@@ -70,9 +68,7 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             sendToList: id,
-            options: {
-                2: { url: "www.microsoft.com" }
-            },
+            options: ["www.microsoft.com"],
             expiresOn: new Date()
         });
         poll.validate(function(err) {
