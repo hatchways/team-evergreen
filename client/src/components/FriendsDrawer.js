@@ -134,7 +134,7 @@ function FriendsDrawer(props) {
                                     color="secondary">
                                     <Avatar
                                         alt={`Avatar of ${user.name}`}
-                                        src=""
+                                        src={user.avatar}
                                     />
                                 </StyledBadge>
                             </ListItemAvatar>
