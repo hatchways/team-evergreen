@@ -203,7 +203,13 @@ router.get("/", (req, res) => {
 router.get("/user/:id", (req, res) => {
     User.findById(req.params.id)
         .populate("polls")
-        .populate("lists")
+        .populate({
+            path: "lists",
+            populate: {
+                path: "friends",
+                select: "name avatar"
+            } // select only name and avatar for each friend
+        })
         .then(result => {
             res.json(result);
         })
