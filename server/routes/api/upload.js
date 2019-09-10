@@ -16,6 +16,11 @@ import {
 import { createNewPoll } from "../utils/pollModelUpdates";
 import { validateUploadInput } from "../../validation/upload";
 
+// Constants Used in This Module
+
+const TARGET_POLLS = "poll_images";
+const TARGET_AVATAR = "avatar_image";
+
 /**
  * @desc Passes the file data to file upload function if there is a file in req
  * @desc This function will always execute if there is at least one file to upload
@@ -24,12 +29,30 @@ import { validateUploadInput } from "../../validation/upload";
  */
 
 router.post("/upload", function(req, res) {
-    const target = req.body.target; //polls_image or avatar_image
     // no files uploaded
     if (req.files === null) {
         res.send({ status: 400, message: "No files to upload." });
     } else {
-        filesToUpload(req["files"], res);
+        filesToUpload(req["files"], response => {
+            if (response.status !== 200) {
+                res.send(response.result);
+            } // There was an error
+
+            if (req.body.target === TARGET_POLLS) {
+                const params = {
+                    userId: req.body.userId,
+                    pollTitle: req.body.pollTitle,
+                    sendToList: req.body.sendToList,
+                    imageUrls: response.result
+                };
+                createNewPoll(params)
+                    .then(response => res.send(response))
+                    .catch(response => res.send(response));
+            }
+
+            if (req.body.target === TARGET_AVATAR) {
+            }
+        });
     }
 });
 

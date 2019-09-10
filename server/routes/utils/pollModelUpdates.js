@@ -5,4 +5,11 @@
  * @purpose - Functions used to update the Poll model
  */
 
-export async function createNewPoll(data, res) {}
+import Poll from "../../models/Poll";
+export async function createNewPoll(data) {
+    try {
+        await console.log(data);
+    } catch {
+        console.log(err);
+    }
+}

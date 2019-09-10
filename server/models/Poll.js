@@ -8,6 +8,11 @@ const pollSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true
+    },
     sendToList: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "friendList", // TODO - rename to actual model once created,

@@ -35,11 +35,11 @@ export function filesToUpload(req, res) {
     // execute all the promises - returns error if any fail
     const results = Promise.all(uploadsPromised)
         .then(result => {
-            res.send({ status: 200, result });
+            res({ status: 200, result });
         })
         .catch(error => {
             console.log("Error uploading to S3", error);
-            res.send({ status: 500, message: error.error.message });
+            res({ status: 500, message: error.error.message });
         });
 }
 
