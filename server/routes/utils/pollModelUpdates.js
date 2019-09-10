@@ -6,23 +6,21 @@
  */
 
 import Poll from "../../models/Poll";
-export async function createNewPoll(data, cb) {
+export async function createNewPoll(data) {
     console.log(data);
-    await new Poll({
-        title: data.pollTitle,
-        userId: data.userId,
-        sendToList: data.sendToList,
-        expiresOn: data.expiresOn,
-        $push: {
-            options: data.imageUrls
-        }
-    })
-        .save()
-        .then(newPoll => {
-            cb({ pollId: newPoll[_id] });
-        })
-        .catch(err => {
-            console.log(err);
-            cb(err);
-        });
+    try {
+        const newPoll = await new Poll({
+            title: data.pollTitle,
+            userId: data.userId,
+            sendToList: data.sendToList,
+            expiresOn: data.expiresOn,
+            $push: {
+                options: data.imageUrls
+            }
+        }).save();
+        return { status: 200, pollId: newPoll._id };
+    } catch (err) {
+        console.log(err);
+        return { status: 500, error: err };
+    }
 }
