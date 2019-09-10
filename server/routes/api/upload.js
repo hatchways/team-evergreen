@@ -43,6 +43,7 @@ router.post("/upload", function(req, res) {
                     userId: req.body.userId,
                     pollTitle: req.body.pollTitle,
                     sendToList: req.body.sendToList,
+                    expiresOn: req.body.expiresOn,
                     imageUrls: response.result
                 };
                 createNewPoll(params)

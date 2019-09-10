@@ -15,19 +15,15 @@ const pollSchema = new mongoose.Schema({
     },
     sendToList: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "friendList", // TODO - rename to actual model once created,
+        ref: "friendList",
         required: true
     },
-    options: {
-        1: {
-            url: { type: String, required: true },
-            votes: { type: Number, default: 0 }
-        },
-        2: {
-            url: { type: String, required: true },
-            votes: { type: Number, default: 0 }
+    options: [
+        {
+            url: { type: String, required: true }
         }
-    },
+    ],
+
     expiresOn: Date
 });
 
