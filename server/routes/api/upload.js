@@ -9,12 +9,8 @@ const fileUpload = require("express-fileupload");
 router.use(fileUpload());
 
 // External Modules
-import {
-    updateUserAvatar,
-    updateUserWithNewPoll
-} from "../utils/userModelUpdates";
 import { createNewPoll } from "../utils/pollModelUpdates";
-import { validateUploadInput } from "../../validation/upload";
+import { updateUserAvatar } from "../utils/userModelUpdates";
 
 // Constants Used in This Module
 
@@ -53,6 +49,13 @@ router.post("/upload", function(req, res) {
             }
 
             if (req.body.target === TARGET_AVATAR) {
+                const params = {
+                    userId: req.body.userId,
+                    imageUrls: response.result
+                };
+                updateUserAvatar(params)
+                    .then(response => res.send(response))
+                    .catch(response => res.send(response));
             }
         });
     }
