@@ -14,9 +14,6 @@ const AWS = require("aws-sdk");
 // Miscellaneous Packages
 const uuidv4 = require("uuid/v4");
 
-// Private variables
-let noOfFile = 0;
-
 /**
  *
  * @param req - [files] to upload in an array
@@ -38,11 +35,11 @@ export function filesToUpload(req, res) {
     // execute all the promises - returns error if any fail
     const results = Promise.all(uploadsPromised)
         .then(result => {
-            res.send({ status: 200, result });
+            res({ status: 200, result });
         })
         .catch(error => {
             console.log("Error uploading to S3", error);
-            res.send({ status: 500, message: error.error.message });
+            res({ status: 500, message: error.error.message });
         });
 }
 
@@ -77,7 +74,7 @@ async function promiseToUploadFileToS3(file) {
             if (err) {
                 reject({ error: err });
             } else {
-                resolve({ url: data.Location });
+                resolve(data.Location);
             }
         });
     });
