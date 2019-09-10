@@ -38,6 +38,7 @@ router.post("/upload", function(req, res) {
                 res.send(response.result);
             } // There was an error
 
+            // save the path to the image
             if (req.body.target === TARGET_POLLS) {
                 const params = {
                     userId: req.body.userId,

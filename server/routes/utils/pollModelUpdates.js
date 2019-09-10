@@ -7,20 +7,18 @@
 
 import Poll from "../../models/Poll";
 export async function createNewPoll(data) {
-    console.log(data);
     try {
         const newPoll = await new Poll({
             title: data.pollTitle,
             userId: data.userId,
             sendToList: data.sendToList,
             expiresOn: data.expiresOn,
-            $push: {
-                options: data.imageUrls
-            }
-        }).save();
+            options: data.imageUrls
+        });
+        await newPoll.save();
         return { status: 200, pollId: newPoll._id };
     } catch (err) {
         console.log(err);
-        return { status: 500, error: err };
+        return { status: 500, message: "Unable to save poll images." };
     }
 }

@@ -74,7 +74,7 @@ async function promiseToUploadFileToS3(file) {
             if (err) {
                 reject({ error: err });
             } else {
-                resolve({ url: data.Location });
+                resolve(data.Location);
             }
         });
     });
