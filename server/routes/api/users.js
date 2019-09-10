@@ -162,8 +162,25 @@ router.post("/add_friend_list", (req, res) => {
 router.get("/get_user_data", (req, res) => {
     const target = req.body.target; // 'lists' or 'polls'
 
+    let populateOptions = {};
+
+    // if lists are requested, friend ids should be populated too:
+    if (target === "lists") {
+        populateOptions = {
+            path: target,
+            populate: {
+                path: "friends",
+                select: "name avatar"
+            } // select only name and avatar for each friend
+        };
+    } else {
+        populateOptions = {
+            path: target
+        };
+    }
+
     User.findById(req.body.userId)
-        .populate(target)
+        .populate(populateOptions)
         .then(result => {
             res.json(result[target]);
         })
@@ -203,7 +220,13 @@ router.get("/", (req, res) => {
 router.get("/user/:id", (req, res) => {
     User.findById(req.params.id)
         .populate("polls")
-        .populate("lists")
+        .populate({
+            path: "lists",
+            populate: {
+                path: "friends",
+                select: "name avatar"
+            } // select only name and avatar for each friend
+        })
         .then(result => {
             res.json(result);
         })
