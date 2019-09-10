@@ -13,7 +13,9 @@ import {
     Typography,
     Button,
     Container,
-    Grid
+    Grid,
+    IconButton,
+    Icon
 } from "@material-ui/core";
 
 class Profile extends Component {
@@ -24,7 +26,11 @@ class Profile extends Component {
             lists: [],
             polls: [],
             drawerIsOpen: true,
-            users: []
+            users: [],
+            listMove: -1,
+            moveListBy: 0,
+            pollMove: -1,
+            movePollBy: 0
         };
     }
 
@@ -76,17 +82,52 @@ class Profile extends Component {
                 avatar: user.avatar
             };
         });
-        this.setState({ lists: this.state.lists.concat(newList) });
+        this.setState({ lists: [newList, ...this.state.lists] });
     };
 
     toggleDrawer = () => {
         this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
     };
 
+    showNextSlide = target => {
+        if (target === "list") {
+            this.setState({
+                listMove: this.state.listMove + 1,
+                moveListBy: this.state.moveListBy + 100
+            });
+        } else {
+            this.setState({
+                pollMove: this.state.listMove + 1,
+                movePollBy: this.state.moveListBy + 100
+            });
+        }
+    };
+
+    showPreviousSlide = target => {
+        if (target === "list") {
+            this.setState({
+                listMove: this.state.listMove - 1,
+                moveListBy: this.state.moveListBy - 100
+            });
+        } else {
+            this.setState({
+                pollMove: this.state.listMove - 1,
+                movePollBy: this.state.moveListBy - 100
+            });
+        }
+    };
+
     render() {
         const { classes } = this.props;
         const { id } = this.props.user;
-        const { users, polls, lists, drawerIsOpen } = this.state;
+        const {
+            users,
+            polls,
+            lists,
+            drawerIsOpen,
+            listMove,
+            moveListBy
+        } = this.state;
 
         return (
             <div className={classes.root}>
@@ -141,8 +182,8 @@ class Profile extends Component {
                                 </Grid>
                                 <Grid container item spacing={4}>
                                     {polls &&
-                                        polls.map((card, i) => (
-                                            <PollCard key={i} card={card} />
+                                        polls.map((poll, i) => (
+                                            <PollCard key={i} poll={poll} />
                                         ))}
                                 </Grid>
                             </Grid>
@@ -179,11 +220,48 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid container item spacing={4}>
+                                <Grid
+                                    container
+                                    item
+                                    spacing={4}
+                                    className={classes.slider}>
                                     {lists &&
                                         lists.map((list, i) => (
-                                            <ListCard key={i} list={list} />
+                                            <ListCard
+                                                key={i}
+                                                list={list}
+                                                moveListBy={moveListBy}
+                                                listMove={listMove}
+                                            />
                                         ))}
+                                    <Grid
+                                        container
+                                        justify="space-between"
+                                        className={classes.sliderControls}
+                                        style={
+                                            lists.length > 3
+                                                ? { visibility: "visible" }
+                                                : { visibility: "hidden" }
+                                        }>
+                                        <IconButton
+                                            onClick={() =>
+                                                this.showPreviousSlide("list")
+                                            }
+                                            className="prev"
+                                            disabled={listMove === -1}>
+                                            <Icon>arrow_back_ios</Icon>
+                                        </IconButton>
+                                        <IconButton
+                                            className="next"
+                                            disabled={
+                                                listMove === lists.length - 2
+                                            }
+                                            onClick={() =>
+                                                this.showNextSlide("list")
+                                            }>
+                                            <Icon>arrow_forward_ios</Icon>
+                                        </IconButton>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>

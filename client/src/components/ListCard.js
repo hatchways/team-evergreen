@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { profileStyles } from "../styles/profileStyles";
 import {
     Card,
     CardHeader,
@@ -16,32 +17,20 @@ import {
     Icon
 } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
-    cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8)
-    },
-    card: {
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)"
-    },
-    title: {
-        fontWeight: "600"
-    },
-    list: {
-        maxHeight: "200px",
-        overflow: "scroll"
-    }
-}));
+const useStyles = makeStyles(profileStyles);
 
 function ListCard(props) {
     const classes = useStyles();
     const { _id, title, friends } = props.list;
 
     return (
-        <Grid item key={_id} xs={12} md={6} lg={4}>
+        <Grid
+            item
+            key={_id}
+            xs={12}
+            md={6}
+            lg={4}
+            style={{ transform: `translateX(-${props.moveListBy}%)` }}>
             <Card className={classes.card}>
                 <CardHeader
                     action={
@@ -51,7 +40,9 @@ function ListCard(props) {
                     }
                     className={classes.cardHeader}
                     title={
-                        <Typography component="h3" className={classes.title}>
+                        <Typography
+                            component="h3"
+                            className={classes.cardTitle}>
                             {title}
                         </Typography>
                     }
