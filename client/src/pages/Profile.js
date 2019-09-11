@@ -5,8 +5,10 @@ import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
+import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
 import AddFriendList from "../components/AddFriendList";
+import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
 import {
@@ -125,6 +127,7 @@ class Profile extends Component {
         const { classes } = this.props;
         const { id } = this.props.user;
         const {
+            user,
             users,
             polls,
             lists,
@@ -138,6 +141,7 @@ class Profile extends Component {
         return (
             <div className={classes.root}>
                 <CssBaseline />
+                <AppNavbar user={user} open={drawerIsOpen} />
                 <FriendsDrawer
                     users={users}
                     open={drawerIsOpen}
@@ -177,13 +181,11 @@ class Profile extends Component {
                                         </div>
                                     </Grid>
                                     <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="medium">
-                                            Create poll
-                                        </Button>
-                                        {/* <= move this button to poll dialog component */}
+                                        <AddPollDialog
+                                            userId={id}
+                                            lists={lists}
+                                            addNewPoll={this.addNewPoll}
+                                        />
                                     </Grid>
                                 </Grid>
                                 <Grid

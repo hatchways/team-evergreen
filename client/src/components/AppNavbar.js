@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import {
+    Button,
     AppBar,
     Toolbar,
     IconButton,
@@ -40,11 +41,13 @@ const useStyles = makeStyles(theme => ({
         visibility: "hidden"
     },
     link: {
-        margin: theme.spacing(1, 1.5),
         textTransform: "capitalize",
         "&:hover": {
             textDecoration: "none"
         }
+    },
+    navItem: {
+        margin: theme.spacing(1, 3)
     },
     toolbar: {
         flexWrap: "wrap",
@@ -65,10 +68,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AppNavbar(props) {
-    const { open } = props;
+    const { open, user } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     function handleClick(event) {
+        console.log("event.currentTarget: ", event.currentTarget);
         setAnchorEl(event.currentTarget);
     }
 
@@ -101,9 +105,16 @@ function AppNavbar(props) {
                             variant="subtitle1"
                             color="textPrimary"
                             href="#"
-                            className={classes.link}>
-                            Opinions
+                            className={clsx(classes.link, classes.navItem)}>
+                            Friends lists
                         </Link>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            className={classes.navItem}>
+                            Create poll
+                        </Button>
                         <IconButton
                             className={classes.iconButton}
                             disableFocusRipple
@@ -113,7 +124,10 @@ function AppNavbar(props) {
                             aria-haspopup="true"
                             onClick={handleClick}
                             color="inherit">
-                            <Avatar alt="User avatar" />
+                            <Avatar
+                                alt={`Avatar of ${user ? user.name : "user"}`}
+                                src={user && user.avatar}
+                            />
                             <Typography variant="subtitle1">
                                 My profile
                             </Typography>
