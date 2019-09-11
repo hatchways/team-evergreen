@@ -13,44 +13,23 @@ const keys = require("../../config/config");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Used to load files
-const Busboy = require("busboy");
-const fileUpload = require("express-fileupload");
-router.use(fileUpload());
-
-// Load utility functions
-const uploadToS3 = require("../utils/s3Upload");
-
-// Load input validation
+// LOAD VALIDATION FUNCTIONS
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+const validateFriendListInput = require("../../validation/friendList");
 
-// Load User model
+// LOAD DATA MODELS
+
 const User = require("../../models/User");
+const FriendList = require("../../models/friendList");
+const Poll = require("../../models/Poll");
 
-router.put("/:user_id", (req, res) => {
-    const user_id = req.params.user_id;
-    const file = req.files.avatar;
-    User.findById(user_id).then(user => {
-        if (!user) {
-            return res.status(400).json({ email: "User does not exist" });
-        } else {
-            if (file) {
-                if (req.body.name) user.name = req.body.name;
-                var busboy = new Busboy({ headers: req.headers });
-                busboy.on("finish", function() {
-                    uploadToS3(file, user, "avatar", res);
-                });
-                req.pipe(busboy);
-            }
-        }
-    });
-});
-
-// @route POST api/users/register
-// @desc Register user
-// @access Public
-
+// ROUTES
+/**
+ * @route POST api/users/register
+ * @desc Register user
+ * @access Public
+ * */
 router.post("/register", (req, res) => {
     // Form validation
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -83,9 +62,10 @@ router.post("/register", (req, res) => {
     });
 });
 
-// @route POST api/users/login
-// @desc Login user and return JWT token
-// @access Public
+/**
+ * @route POST api/users/login
+ * @desc Login user and return a JWT token
+ */
 router.post("/login", (req, res) => {
     // Form validation
     const { errors, isValid } = validateLoginInput(req.body);
@@ -122,8 +102,151 @@ router.post("/login", (req, res) => {
     });
 });
 
-// @desc Creates a JWT token and returns via callback function provided
+/**
+ * @route POST api/users/add_friend_list
+ * @desc Create a new friends list
+ */
+router.post("/add_friend_list", (req, res) => {
+    console.log("request body: ", req.body);
+
+    const { errors, isValid } = validateFriendListInput(req.body);
+
+    // validate request info:
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const newList = new FriendList({
+        userId: req.body.userId,
+        title: req.body.title,
+        friends: req.body.friends
+    });
+
+    // TODO: allow to store lists with same titles (for different users)
+    // TODO: check that title is unique per single user
+    newList
+        .save()
+        .then(list => {
+            User.findOneAndUpdate(
+                { _id: req.body.userId },
+                {
+                    $push: {
+                        lists: list["_id"]
+                    }
+                }
+            )
+                .then(response => {
+                    res.json(list);
+                })
+                .catch(err => {
+                    console.log("error: ", err);
+                    return res.json({
+                        status: 500,
+                        error: "Error updating the user list"
+                    });
+                });
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to create a new list"
+            });
+        });
+});
+
+/**
+ * @route GET api/users/get_user_data
+ * @desc Get all friend lists or polls for a specific user
+ */
+router.get("/get_user_data", (req, res) => {
+    const target = req.body.target; // 'lists' or 'polls'
+
+    let populateOptions = {};
+
+    // if lists are requested, friend ids should be populated too:
+    if (target === "lists") {
+        populateOptions = {
+            path: target,
+            populate: {
+                path: "friends",
+                select: "name avatar"
+            } // select only name and avatar for each friend
+        };
+    } else {
+        populateOptions = {
+            path: target
+        };
+    }
+
+    User.findById(req.body.userId)
+        .populate(populateOptions)
+        .then(result => {
+            res.json(result[target]);
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve data"
+            });
+        });
+});
+
+// @route GET api/users/users
+// @desc Get all users
 // @access Private
+router.get("/", (req, res) => {
+    User.find({})
+        .then(users => {
+            if (!users.length) {
+                return res.status(404).json({ error: "Users were not found" });
+            } else {
+                res.json(users);
+            }
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve data"
+            });
+        });
+});
+
+// @route GET api/users/users
+// @desc Get all information for a single user
+// @access Private
+router.get("/user/:id", (req, res) => {
+    User.findById(req.params.id)
+        .populate("polls")
+        .populate({
+            path: "lists",
+            populate: {
+                path: "friends",
+                select: "name avatar"
+            } // select only name and avatar for each friend
+        })
+        .then(result => {
+            res.json(result);
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.json({
+                status: 500,
+                error: "Unable to retrieve user data"
+            });
+        });
+});
+
+// UTILITY FUNCTIONS
+
+/**
+ * @desc Creates a JWT token and returns it via callback provided
+ * @params user - an instance of a users
+ * @params res - call back function
+ * @access Private
+ */
 function createToken(user, res) {
     // Create JWT Payload
     const payload = {
