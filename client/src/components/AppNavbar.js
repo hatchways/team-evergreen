@@ -102,9 +102,9 @@ function AppNavbar(props) {
                         <Link
                             variant="subtitle1"
                             color="textPrimary"
-                            href="#"
+                            href="/polls"
                             className={clsx(classes.link, classes.navItem)}>
-                            Friends lists
+                            Friends polls
                         </Link>
                         <Button
                             onClick={props.togglePollDialog}
