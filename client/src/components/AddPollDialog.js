@@ -132,7 +132,7 @@ class AddPollDialog extends Component {
                 errors: { pollImages: "Please add both images." }
             });
         } else {
-            // create new list and send it to database:
+            // create new poll and send it to database:
             const newPoll = {
                 userId: this.props.userId,
                 title: pollName,
@@ -166,10 +166,8 @@ class AddPollDialog extends Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { errors, sendToList, title, image1, image2, lists } = this.state; // TODO need to add the
-        // list of
-        // polls
+        const { classes, lists } = this.props;
+        const { errors, sendToList, title, image1, image2 } = this.state;
         const isQuestionInvalid = errors.title && !title;
         const isImage1Invalid = errors.images && !image1.length;
         const isImage2Invalid = errors.images && !image2.length;
@@ -199,6 +197,13 @@ class AddPollDialog extends Component {
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
                             <FormControl fullWidth>
+                                <Typography
+                                    variant="subtitle1"
+                                    component="h4"
+                                    className={classes.subtitle}>
+                                    Question:
+                                </Typography>
+
                                 <TextField
                                     value={title}
                                     error={errors.name && !title}
@@ -261,6 +266,12 @@ class AddPollDialog extends Component {
                                         : errors.error}
                                 </FormHelperText>
 
+                                <Typography
+                                    variant="subtitle1"
+                                    component="h4"
+                                    className={classes.subtitle}>
+                                    Friend list:
+                                </Typography>
                                 <Select
                                     value={sendToList}
                                     onChange={this.onChange}
@@ -278,14 +289,6 @@ class AddPollDialog extends Component {
                                     })}
                                 </Select>
                             </FormControl>
-
-                            <Typography
-                                variant="subtitle1"
-                                component="h4"
-                                className={classes.subtitle}>
-                                Add friends:
-                            </Typography>
-                            <Divider />
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
