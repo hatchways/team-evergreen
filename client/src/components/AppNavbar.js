@@ -69,16 +69,15 @@ const useStyles = makeStyles(theme => ({
 function AppNavbar(props) {
     const { open, user } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
-
-    function handleClick(event) {
-        console.log("event.currentTarget: ", event.currentTarget);
-        setAnchorEl(event.currentTarget);
-    }
-
-    function handleClose() {
-        setAnchorEl(null);
-    }
     const classes = useStyles();
+
+    const handleClick = event => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className={classes.root}>
@@ -108,6 +107,7 @@ function AppNavbar(props) {
                             Friends lists
                         </Link>
                         <Button
+                            onClick={props.togglePollDialog}
                             variant="outlined"
                             color="primary"
                             size="small"

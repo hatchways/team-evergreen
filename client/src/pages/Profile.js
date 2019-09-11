@@ -28,6 +28,7 @@ class Profile extends Component {
             lists: [],
             polls: [],
             drawerIsOpen: true,
+            pollDialogIsOpen: false,
             users: [],
             listMove: 0,
             moveListBy: 0,
@@ -122,6 +123,10 @@ class Profile extends Component {
         }
     };
 
+    togglePollDialog = () => {
+        this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
+    };
+
     render() {
         const { classes } = this.props;
         const { id } = this.props.user;
@@ -131,6 +136,7 @@ class Profile extends Component {
             polls,
             lists,
             drawerIsOpen,
+            pollDialogIsOpen,
             listMove,
             moveListBy,
             pollMove,
@@ -144,6 +150,7 @@ class Profile extends Component {
                     user={user}
                     open={drawerIsOpen}
                     logOut={this.props.logOut}
+                    togglePollDialog={this.togglePollDialog}
                 />
                 <FriendsDrawer
                     users={users}
@@ -188,6 +195,10 @@ class Profile extends Component {
                                             userId={id}
                                             lists={lists}
                                             addNewPoll={this.addNewPoll}
+                                            togglePollDialog={
+                                                this.togglePollDialog
+                                            }
+                                            pollDialogIsOpen={pollDialogIsOpen}
                                         />
                                     </Grid>
                                 </Grid>
