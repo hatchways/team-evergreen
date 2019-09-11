@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
+import sortBy from "../utils/sortBy";
 import FriendsDrawer from "../components/FriendsDrawer";
 import AddFriendList from "../components/AddFriendList";
 import PollCard from "../components/PollCard";
@@ -120,24 +121,6 @@ class Profile extends Component {
         }
     };
 
-    sortBy = (array, sortAsc) => {
-        return array.sort((a, b) => {
-            if (sortAsc === false) {
-                return a.createdAt > b.createdAt
-                    ? 1
-                    : a.createdAt === b.createdAt
-                    ? 0
-                    : -1;
-            } else {
-                return a.createdAt < b.createdAt
-                    ? 1
-                    : a.createdAt === b.createdAt
-                    ? 0
-                    : -1;
-            }
-        });
-    };
-
     render() {
         const { classes } = this.props;
         const { id } = this.props.user;
@@ -247,16 +230,14 @@ class Profile extends Component {
                                     spacing={4}
                                     className={classes.slider}>
                                     {lists &&
-                                        this.sortBy(lists, true).map(
-                                            (list, i) => (
-                                                <ListCard
-                                                    key={i}
-                                                    list={list}
-                                                    moveListBy={moveListBy}
-                                                    listMove={listMove}
-                                                />
-                                            )
-                                        )}
+                                        sortBy(lists, true).map((list, i) => (
+                                            <ListCard
+                                                key={i}
+                                                list={list}
+                                                moveListBy={moveListBy}
+                                                listMove={listMove}
+                                            />
+                                        ))}
                                     <Grid
                                         container
                                         justify="space-between"
