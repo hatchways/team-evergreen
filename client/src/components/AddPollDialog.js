@@ -17,10 +17,13 @@ import {
     ListItemText,
     ListItemAvatar,
     ListItemSecondaryAction,
+    Select,
     Avatar,
     Icon
 } from "@material-ui/core";
+
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { FileDrop } from "./FileDrop";
 
 const styles = theme => ({
     root: {
@@ -106,6 +109,7 @@ class AddPollList extends Component {
 
     clearDialogData = () => {
         this.setState({
+            userId: this.props.userId,
             pollName: "",
             image1: "",
             image2: "",
@@ -126,7 +130,7 @@ class AddPollList extends Component {
 
         if (!pollName) {
             this.setState({
-                errors: { name: "Please provide a question for the poll." }
+                errors: { title: "Please provide a question for the poll." }
             });
         } else if (!sendToList) {
             this.setState({
@@ -149,18 +153,18 @@ class AddPollList extends Component {
             };
 
             axios
-                .post("/api/users/add_friend_list", newList)
+                .post("/api/images/upload", newPoll)
                 .then(response => {
-                    if (response.data.status === 500) {
+                    if (response.data.status !== 200) {
                         this.setState({
                             errors: { error: response.data.error }
                         });
                         return;
                     }
 
-                    // add new list to Profile and close dialog:
-                    this.props.addNewList(response.data);
-                    this.closeDialog();
+                    // add new poll to Profile and close dialog:
+                    // this.props.addNewPoll(response.data);
+                    // this.closeDialog();
                 })
                 .catch(err => {
                     console.log(err);
@@ -169,24 +173,16 @@ class AddPollList extends Component {
         }
     };
 
-    handleClick = id => {
-        if (this.state.friends.includes(id)) {
-            // remove friend from friends list:
-            this.setState(prevState => ({
-                friends: prevState.friends.filter(friendId => friendId !== id)
-            }));
-        } else {
-            // add friend to friends list:
-            this.setState({ friends: this.state.friends.concat(id) });
-        }
-    };
-
     render() {
         const { classes } = this.props;
         const { users } = this.props;
-        const { open, friends, errors, listName } = this.state;
-        const isNameInvalid = errors.name && !listName;
-        const isListInvalid = errors.friends && !friends.length;
+        const { open, errors, sendToList, title, image1, image2, friendLists } = this.state; // TODO need to add the
+        // list of
+        // polls
+        const isQuestionInvalid = errors.title && !title;
+        const isImage1Invalid = errors.images && !image1.length;
+        const isImage2Invalid = errors.images && !image2.length;
+        const isSendToListInvalid = errors.sendToList && !sendToList.length;
 
         return (
             <div>
@@ -195,42 +191,100 @@ class AddPollList extends Component {
                     variant="contained"
                     color="primary"
                     size="medium">
-                    Create list
+                    Create poll
                 </Button>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
                     onClose={this.closeDialog}
-                    aria-labelledby="create-friend-list"
+                    aria-labelledby="create-poll"
                     open={open}>
-                    <DialogTitle
-                        id="create-friend-list"
-                        onClose={this.closeDialog}>
-                        Create a friend list
+                    <DialogTitle id="create-poll" onClose={this.closeDialog}>
+                        Create a poll
                     </DialogTitle>
 
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
                             <FormControl fullWidth>
                                 <TextField
-                                    value={listName}
-                                    error={errors.name && !listName}
+                                    value={title}
+                                    error={errors.name && !title}
                                     onChange={this.onChange}
-                                    id="list-name"
-                                    placeholder="Enter name of list"
+                                    id="poll-question"
+                                    placeholder="Enter question ..."
                                     margin="none"
                                     variant="outlined"
                                 />
                                 <FormHelperText
                                     error
-                                    id="list-name"
+                                    id="poll-question"
                                     className={classes.error}>
-                                    {isNameInvalid
-                                        ? errors.name
+                                    {isQuestionInvalid
+                                        ? errors.title
                                         : isListInvalid
                                         ? errors.friends
                                         : errors.error}
                                 </FormHelperText>
+
+                                <FileDrop
+                                    value={image1}
+                                    error={errors.image1 && !image1}
+                                    onChange={this.onChange}
+                                    id="image1"
+                                    placeholder=""
+                                    margin="none"
+                                    variant="outlined"
+                                />
+
+                                <FormHelperText
+                                    error
+                                    id="image1"
+                                    className={classes.error}>
+                                    {isImage1Invalid
+                                        ? errors.images
+                                        : isSendToListInvalid
+                                        ? errors.sendToList
+                                        : errors.error}
+                                </FormHelperText>
+
+                                <FileDrop
+                                    value={image2}
+                                    error={errors.image2 && !image2}
+                                    onChange={this.onChange} // TODO How do I handle the change events
+                                    id="image2"
+                                    placeholder=""
+                                    margin="none"
+                                    variant="outlined"
+                                />
+
+                                <FormHelperText
+                                    error
+                                    id="image2"
+                                    className={classes.error}>
+                                    {isImage2Invalid
+                                        ? errors.images
+                                        : isListInvalid
+                                        ? errors.friends
+                                        : errors.error}
+                                </FormHelperText>
+
+                                <Select
+                                    value={sendToList}
+                                    onChange={handleChange}
+                                    input={<Input id="select-list" />}
+                                    displayEmpty={true}
+                                    {friendLists.map(list => (
+                                        <MenuItem
+                                            key={_id}
+                                            value={title}
+                                            style={getStyles(
+                                                listName,
+                                                theme
+                                            )}>
+                                            {listName}
+                                        </MenuItem>
+                                    ))}>
+                                </Select>
                             </FormControl>
 
                             <Typography
@@ -240,45 +294,7 @@ class AddPollList extends Component {
                                 Add friends:
                             </Typography>
                             <Divider />
-                            <List dense>
-                                {users.map(user => {
-                                    const included = friends.includes(user._id);
-                                    return (
-                                        <ListItem
-                                            key={user._id}
-                                            className={classes.item}>
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    alt={`Avatar of ${user.name}`}
-                                                    src={user.avatar}
-                                                />
-                                            </ListItemAvatar>
-                                            <ListItemText primary={user.name} />
-                                            <Divider />
-                                            <ListItemSecondaryAction>
-                                                <Button
-                                                    className={classes.button}
-                                                    onClick={() =>
-                                                        this.handleClick(
-                                                            user._id
-                                                        )
-                                                    }
-                                                    variant={
-                                                        included
-                                                            ? "text"
-                                                            : "contained"
-                                                    }
-                                                    size="small"
-                                                    color="secondary">
-                                                    {included
-                                                        ? "Remove"
-                                                        : "Add"}
-                                                </Button>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    );
-                                })}
-                            </List>
+
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
