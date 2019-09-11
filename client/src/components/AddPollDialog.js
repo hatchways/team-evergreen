@@ -24,6 +24,8 @@ import {
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { FileDrop } from "./FileDrop";
+import MenuItem from "@material-ui/core/MenuItem";
+import Input from "@material-ui/core/Input";
 
 const styles = theme => ({
     root: {
@@ -176,13 +178,23 @@ class AddPollList extends Component {
     render() {
         const { classes } = this.props;
         const { users } = this.props;
-        const { open, errors, sendToList, title, image1, image2, friendLists } = this.state; // TODO need to add the
+        const {
+            open,
+            errors,
+            sendToList,
+            title,
+            lists,
+            image1,
+            image2
+        } = this.state; // TODO need to add the
         // list of
         // polls
         const isQuestionInvalid = errors.title && !title;
         const isImage1Invalid = errors.images && !image1.length;
         const isImage2Invalid = errors.images && !image2.length;
         const isSendToListInvalid = errors.sendToList && !sendToList.length;
+
+        const friendLists = ["Fashion", "Food", "Technology"];
 
         return (
             <div>
@@ -270,20 +282,12 @@ class AddPollList extends Component {
 
                                 <Select
                                     value={sendToList}
-                                    onChange={handleChange}
+                                    onChange={onChange}
                                     input={<Input id="select-list" />}
-                                    displayEmpty={true}
-                                    {friendLists.map(list => (
-                                        <MenuItem
-                                            key={_id}
-                                            value={title}
-                                            style={getStyles(
-                                                listName,
-                                                theme
-                                            )}>
-                                            {listName}
-                                        </MenuItem>
-                                    ))}>
+                                    displayEmpty={true}>
+                                    <MenuItem key={"fashion"} value={"fashion"}>
+                                        "fashion"
+                                    </MenuItem>
                                 </Select>
                             </FormControl>
 
@@ -294,7 +298,6 @@ class AddPollList extends Component {
                                 Add friends:
                             </Typography>
                             <Divider />
-
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
