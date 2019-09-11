@@ -41,11 +41,14 @@ class Profile extends Component {
         axios
             .get(`api/users/user/${id}`)
             .then(response => {
-                this.setState({
-                    user: response.data,
-                    lists: response.data.lists,
-                    polls: response.data.polls
-                });
+                this.setState(
+                    {
+                        user: response.data,
+                        lists: response.data.lists,
+                        polls: response.data.polls
+                    },
+                    () => console.log(this.state)
+                );
             })
             .catch(err => console.log(err));
 
@@ -115,6 +118,24 @@ class Profile extends Component {
                 movePollBy: this.state.moveListBy - 100
             });
         }
+    };
+
+    sortBy = (array, sortAsc) => {
+        return array.sort((a, b) => {
+            if (sortAsc === false) {
+                return a.createdAt > b.createdAt
+                    ? 1
+                    : a.createdAt === b.createdAt
+                    ? 0
+                    : -1;
+            } else {
+                return a.createdAt < b.createdAt
+                    ? 1
+                    : a.createdAt === b.createdAt
+                    ? 0
+                    : -1;
+            }
+        });
     };
 
     render() {
@@ -226,14 +247,16 @@ class Profile extends Component {
                                     spacing={4}
                                     className={classes.slider}>
                                     {lists &&
-                                        lists.map((list, i) => (
-                                            <ListCard
-                                                key={i}
-                                                list={list}
-                                                moveListBy={moveListBy}
-                                                listMove={listMove}
-                                            />
-                                        ))}
+                                        this.sortBy(lists, true).map(
+                                            (list, i) => (
+                                                <ListCard
+                                                    key={i}
+                                                    list={list}
+                                                    moveListBy={moveListBy}
+                                                    listMove={listMove}
+                                                />
+                                            )
+                                        )}
                                     <Grid
                                         container
                                         justify="space-between"

@@ -16,9 +16,10 @@ export const profileStyles = theme => ({
         paddingBottom: theme.spacing(6)
     },
     fixedHeightContainer: {
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
+        // marginLeft: theme.spacing(2),
+        // marginRight: theme.spacing(2),
         minHeight: "50vh",
+        border: "2px solid red",
         "& > .MuiGrid-item:first-child": {
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3)
