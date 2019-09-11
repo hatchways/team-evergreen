@@ -16,10 +16,7 @@ export const profileStyles = theme => ({
         paddingBottom: theme.spacing(6)
     },
     fixedHeightContainer: {
-        // marginLeft: theme.spacing(2),
-        // marginRight: theme.spacing(2),
         minHeight: "50vh",
-        border: "2px solid red",
         "& > .MuiGrid-item:first-child": {
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3)
@@ -44,12 +41,41 @@ export const profileStyles = theme => ({
         flexDirection: "column",
         boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)"
     },
-    cardTitle: {
+    pollCardHeader: {
+        textAlign: "center"
+    },
+    listTitle: {
         fontWeight: "600"
+    },
+    cardActions: {
+        justifyContent: "center"
     },
     list: {
         height: "200px",
         overflow: "scroll"
+    },
+    pollTitle: {
+        fontWeight: "600"
+    },
+    gridList: {
+        width: "auto",
+        height: 200
+    },
+    icon: {
+        color: theme.palette.common.red,
+        marginRight: "2px"
+    },
+    votes: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: theme.spacing(2)
+    },
+    votesContainer: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around"
     },
     slider: {
         position: "relative",

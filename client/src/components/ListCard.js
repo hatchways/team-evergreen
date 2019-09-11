@@ -42,7 +42,7 @@ function ListCard(props) {
                     title={
                         <Typography
                             component="h3"
-                            className={classes.cardTitle}>
+                            className={classes.listTitle}>
                             {title}
                         </Typography>
                     }

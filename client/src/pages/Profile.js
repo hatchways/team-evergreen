@@ -28,9 +28,9 @@ class Profile extends Component {
             polls: [],
             drawerIsOpen: true,
             users: [],
-            listMove: -1,
+            listMove: 0,
             moveListBy: 0,
-            pollMove: -1,
+            pollMove: 0,
             movePollBy: 0
         };
     }
@@ -101,8 +101,8 @@ class Profile extends Component {
             });
         } else {
             this.setState({
-                pollMove: this.state.listMove + 1,
-                movePollBy: this.state.moveListBy + 100
+                pollMove: this.state.pollMove + 1,
+                movePollBy: this.state.movePollBy + 100
             });
         }
     };
@@ -115,8 +115,8 @@ class Profile extends Component {
             });
         } else {
             this.setState({
-                pollMove: this.state.listMove - 1,
-                movePollBy: this.state.moveListBy - 100
+                pollMove: this.state.pollMove - 1,
+                movePollBy: this.state.movePollBy - 100
             });
         }
     };
@@ -130,7 +130,9 @@ class Profile extends Component {
             lists,
             drawerIsOpen,
             listMove,
-            moveListBy
+            moveListBy,
+            pollMove,
+            movePollBy
         } = this.state;
 
         return (
@@ -184,11 +186,47 @@ class Profile extends Component {
                                         {/* <= move this button to poll dialog component */}
                                     </Grid>
                                 </Grid>
-                                <Grid container item spacing={4}>
+                                <Grid
+                                    container
+                                    item
+                                    spacing={4}
+                                    className={classes.slider}>
                                     {polls &&
-                                        polls.map((poll, i) => (
-                                            <PollCard key={i} poll={poll} />
+                                        sortBy(polls, true).map((poll, i) => (
+                                            <PollCard
+                                                key={i}
+                                                poll={poll}
+                                                movePollBy={movePollBy}
+                                            />
                                         ))}
+                                    <Grid
+                                        container
+                                        justify="space-between"
+                                        className={classes.sliderControls}
+                                        style={
+                                            polls.length > 3
+                                                ? { visibility: "visible" }
+                                                : { visibility: "hidden" }
+                                        }>
+                                        <IconButton
+                                            onClick={() =>
+                                                this.showPreviousSlide("poll")
+                                            }
+                                            className="prev"
+                                            disabled={pollMove === 0}>
+                                            <Icon>arrow_back_ios</Icon>
+                                        </IconButton>
+                                        <IconButton
+                                            className="next"
+                                            disabled={
+                                                pollMove === polls.length - 1
+                                            }
+                                            onClick={() =>
+                                                this.showNextSlide("poll")
+                                            }>
+                                            <Icon>arrow_forward_ios</Icon>
+                                        </IconButton>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                             <Grid
@@ -235,7 +273,6 @@ class Profile extends Component {
                                                 key={i}
                                                 list={list}
                                                 moveListBy={moveListBy}
-                                                listMove={listMove}
                                             />
                                         ))}
                                     <Grid
@@ -252,13 +289,13 @@ class Profile extends Component {
                                                 this.showPreviousSlide("list")
                                             }
                                             className="prev"
-                                            disabled={listMove === -1}>
+                                            disabled={listMove === 0}>
                                             <Icon>arrow_back_ios</Icon>
                                         </IconButton>
                                         <IconButton
                                             className="next"
                                             disabled={
-                                                listMove === lists.length - 2
+                                                listMove === lists.length - 1
                                             }
                                             onClick={() =>
                                                 this.showNextSlide("list")

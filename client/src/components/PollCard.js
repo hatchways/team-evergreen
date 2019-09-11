@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { profileStyles } from "../styles/profileStyles";
 import {
     Card,
     CardHeader,
@@ -11,57 +12,7 @@ import {
     Icon
 } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
-    cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8)
-    },
-    card: {
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)"
-    },
-    cardHeader: {
-        textAlign: "center"
-    },
-    cardMedia: {
-        paddingTop: "56.25%" // 16:9
-    },
-    cardActions: {
-        justifyContent: "center"
-    },
-    title: {
-        fontWeight: "600"
-    },
-    root: {
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-        overflow: "hidden",
-        backgroundColor: theme.palette.background.paper
-    },
-    gridList: {
-        width: "auto",
-        height: 200
-    },
-    icon: {
-        color: theme.palette.common.red,
-        marginRight: "2px"
-    },
-    votes: {
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingBottom: theme.spacing(2)
-    },
-    votesContainer: {
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-around"
-    }
-}));
+const useStyles = makeStyles(profileStyles);
 
 function PollCard(props) {
     const classes = useStyles();
@@ -81,12 +32,20 @@ function PollCard(props) {
     };
 
     return (
-        <Grid item key={poll.id} xs={12} md={6} lg={4}>
+        <Grid
+            item
+            key={poll._id}
+            xs={12}
+            md={6}
+            lg={4}
+            style={{ transform: `translateX(-${props.movePollBy}%)` }}>
             <Card className={classes.card}>
                 <CardHeader
-                    className={classes.cardHeader}
+                    className={classes.pollCardHeader}
                     title={
-                        <Typography component="h3" className={classes.title}>
+                        <Typography
+                            component="h3"
+                            className={classes.pollTitle}>
                             {poll.title}
                         </Typography>
                     }
