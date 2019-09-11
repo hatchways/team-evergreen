@@ -13,7 +13,12 @@ import {
     FormControl,
     FormHelperText,
     Select,
-    Icon
+    Icon,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,
+    ListItemSecondaryAction
 } from "@material-ui/core";
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -162,15 +167,13 @@ class AddPollDialog extends Component {
 
     render() {
         const { classes } = this.props;
-        const { errors, sendToList, title, image1, image2 } = this.state; // TODO need to add the
+        const { errors, sendToList, title, image1, image2, lists } = this.state; // TODO need to add the
         // list of
         // polls
         const isQuestionInvalid = errors.title && !title;
         const isImage1Invalid = errors.images && !image1.length;
         const isImage2Invalid = errors.images && !image2.length;
         const isSendToListInvalid = errors.sendToList && !sendToList.length;
-
-        const friendLists = ["Fashion", "Food", "Technology"];
 
         return (
             <div>
@@ -261,11 +264,18 @@ class AddPollDialog extends Component {
                                 <Select
                                     value={sendToList}
                                     onChange={this.onChange}
-                                    input={<Input id="select-list" />}
+                                    input={<Input id="select-poll-list" />}
                                     displayEmpty={true}>
-                                    <MenuItem key={"fashion"} value={"fashion"}>
-                                        "fashion"
-                                    </MenuItem>
+                                    {lists.map(list => {
+                                        return (
+                                            <MenuItem
+                                                key={list._id}
+                                                value={list.title}
+                                                className={classes.item}>
+                                                {list.title}
+                                            </MenuItem>
+                                        );
+                                    })}
                                 </Select>
                             </FormControl>
 
