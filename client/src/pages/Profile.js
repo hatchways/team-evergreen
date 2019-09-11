@@ -14,7 +14,6 @@ import ListCard from "../components/ListCard";
 import {
     CssBaseline,
     Typography,
-    Button,
     Container,
     Grid,
     IconButton,
@@ -141,7 +140,11 @@ class Profile extends Component {
         return (
             <div className={classes.root}>
                 <CssBaseline />
-                <AppNavbar user={user} open={drawerIsOpen} />
+                <AppNavbar
+                    user={user}
+                    open={drawerIsOpen}
+                    logOut={this.props.logOut}
+                />
                 <FriendsDrawer
                     users={users}
                     open={drawerIsOpen}

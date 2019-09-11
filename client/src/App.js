@@ -41,23 +41,7 @@ class App extends Component {
             const currentTime = Date.now() / 1000; // to get in milliseconds
 
             if (decoded.exp < currentTime) {
-                // Remove token from local storage
-                localStorage.removeItem("jwtToken");
-
-                // Remove auth header for future requests
-                setAuthToken(false);
-
-                // Reset the state
-                this.setState({
-                    isAuthenticated: false,
-                    user: {
-                        id: "",
-                        name: ""
-                    }
-                });
-
-                // Redirect to login
-                window.location.href = "./login";
+                this.logOut();
             }
         }
     }
@@ -70,6 +54,26 @@ class App extends Component {
                 name: data.name
             }
         });
+    };
+
+    logOut = () => {
+        // Remove token from local storage
+        localStorage.removeItem("jwtToken");
+
+        // Remove auth header for future requests
+        setAuthToken(false);
+
+        // Reset the state
+        this.setState({
+            isAuthenticated: false,
+            user: {
+                id: "",
+                name: ""
+            }
+        });
+
+        // Redirect to login
+        window.location.href = "./login";
     };
 
     render() {
@@ -113,7 +117,11 @@ class App extends Component {
                         path="/profile"
                         render={props =>
                             isAuthenticated ? (
-                                <Profile {...props} user={user} />
+                                <Profile
+                                    {...props}
+                                    user={user}
+                                    logOut={this.logOut}
+                                />
                             ) : (
                                 <Redirect to="/login" />
                             )

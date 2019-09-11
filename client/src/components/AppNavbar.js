@@ -1,18 +1,16 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-    Button,
-    AppBar,
-    Toolbar,
-    IconButton,
-    Avatar,
-    Link,
-    Menu,
-    MenuItem,
-    ListItemText,
-    Typography
-} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Avatar from "@material-ui/core/Avatar";
+import Link from "@material-ui/core/Link";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
 import logo from "../images/icons/logo.png";
 
 const drawerWidth = 240;
@@ -133,16 +131,25 @@ function AppNavbar(props) {
                             </Typography>
                         </IconButton>
                         <Menu
+                            getContentAnchorEl={null}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "center"
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "center"
+                            }}
                             id="app-menu"
                             anchorEl={anchorEl}
                             keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleClose}>
                             <MenuItem>
-                                <ListItemText primary="Settings" />
+                                <ListItemText primary="Edit profile" />
                             </MenuItem>
-                            <MenuItem>
-                                <ListItemText primary="Sign out" />
+                            <MenuItem onClick={props.logOut}>
+                                <ListItemText primary="Log out" />
                             </MenuItem>
                         </Menu>
                     </nav>
