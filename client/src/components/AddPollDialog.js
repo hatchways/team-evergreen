@@ -12,13 +12,7 @@ import {
     Typography,
     FormControl,
     FormHelperText,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    ListItemSecondaryAction,
     Select,
-    Avatar,
     Icon
 } from "@material-ui/core";
 
@@ -85,11 +79,10 @@ const DialogTitle = withStyles(styles)(props => {
     );
 });
 
-class AddPollList extends Component {
+class AddPollDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
             pollName: "",
             image1: "",
             image2: "",
@@ -99,15 +92,6 @@ class AddPollList extends Component {
             errors: {}
         };
     }
-
-    openDialog = () => {
-        this.setState({ open: true });
-    };
-
-    closeDialog = () => {
-        this.clearDialogData();
-        this.setState({ open: false });
-    };
 
     clearDialogData = () => {
         this.setState({
@@ -166,7 +150,8 @@ class AddPollList extends Component {
 
                     // add new poll to Profile and close dialog:
                     // this.props.addNewPoll(response.data);
-                    // this.closeDialog();
+                    // this.clearDialogData();
+                    // this.togglePollDialog();
                 })
                 .catch(err => {
                     console.log(err);
@@ -177,16 +162,7 @@ class AddPollList extends Component {
 
     render() {
         const { classes } = this.props;
-        const { users } = this.props;
-        const {
-            open,
-            errors,
-            sendToList,
-            title,
-            lists,
-            image1,
-            image2
-        } = this.state; // TODO need to add the
+        const { errors, sendToList, title, image1, image2 } = this.state; // TODO need to add the
         // list of
         // polls
         const isQuestionInvalid = errors.title && !title;
@@ -199,7 +175,7 @@ class AddPollList extends Component {
         return (
             <div>
                 <Button
-                    onClick={this.openDialog}
+                    onClick={this.props.togglePollDialog}
                     variant="contained"
                     color="primary"
                     size="medium">
@@ -208,10 +184,12 @@ class AddPollList extends Component {
                 <Dialog
                     fullWidth
                     maxWidth="xs"
-                    onClose={this.closeDialog}
+                    onClose={this.props.togglePollDialog}
                     aria-labelledby="create-poll"
-                    open={open}>
-                    <DialogTitle id="create-poll" onClose={this.closeDialog}>
+                    open={this.props.pollDialogIsOpen}>
+                    <DialogTitle
+                        id="create-poll"
+                        onClose={this.props.togglePollDialog}>
                         Create a poll
                     </DialogTitle>
 
@@ -233,7 +211,7 @@ class AddPollList extends Component {
                                     className={classes.error}>
                                     {isQuestionInvalid
                                         ? errors.title
-                                        : isListInvalid
+                                        : isSendToListInvalid
                                         ? errors.friends
                                         : errors.error}
                                 </FormHelperText>
@@ -275,14 +253,14 @@ class AddPollList extends Component {
                                     className={classes.error}>
                                     {isImage2Invalid
                                         ? errors.images
-                                        : isListInvalid
+                                        : isSendToListInvalid
                                         ? errors.friends
                                         : errors.error}
                                 </FormHelperText>
 
                                 <Select
                                     value={sendToList}
-                                    onChange={onChange}
+                                    onChange={this.onChange}
                                     input={<Input id="select-list" />}
                                     displayEmpty={true}>
                                     <MenuItem key={"fashion"} value={"fashion"}>

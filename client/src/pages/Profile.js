@@ -5,14 +5,15 @@ import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
+import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
 import AddFriendList from "../components/AddFriendList";
+import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
 import {
     CssBaseline,
     Typography,
-    Button,
     Container,
     Grid,
     IconButton,
@@ -27,6 +28,7 @@ class Profile extends Component {
             lists: [],
             polls: [],
             drawerIsOpen: true,
+            pollDialogIsOpen: false,
             users: [],
             listMove: 0,
             moveListBy: 0,
@@ -121,14 +123,20 @@ class Profile extends Component {
         }
     };
 
+    togglePollDialog = () => {
+        this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
+    };
+
     render() {
         const { classes } = this.props;
         const { id } = this.props.user;
         const {
+            user,
             users,
             polls,
             lists,
             drawerIsOpen,
+            pollDialogIsOpen,
             listMove,
             moveListBy,
             pollMove,
@@ -138,6 +146,12 @@ class Profile extends Component {
         return (
             <div className={classes.root}>
                 <CssBaseline />
+                <AppNavbar
+                    user={user}
+                    open={drawerIsOpen}
+                    logOut={this.props.logOut}
+                    togglePollDialog={this.togglePollDialog}
+                />
                 <FriendsDrawer
                     users={users}
                     open={drawerIsOpen}
@@ -177,13 +191,15 @@ class Profile extends Component {
                                         </div>
                                     </Grid>
                                     <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="medium">
-                                            Create poll
-                                        </Button>
-                                        {/* <= move this button to poll dialog component */}
+                                        <AddPollDialog
+                                            userId={id}
+                                            lists={lists}
+                                            addNewPoll={this.addNewPoll}
+                                            togglePollDialog={
+                                                this.togglePollDialog
+                                            }
+                                            pollDialogIsOpen={pollDialogIsOpen}
+                                        />
                                     </Grid>
                                 </Grid>
                                 <Grid
