@@ -106,6 +106,11 @@ class AddPollDialog extends Component {
         });
     };
 
+    closeDialog = () => {
+        this.clearDialogData();
+        this.props.togglePollDialog();
+    };
+
     onChange = e => {
         this.setState({ pollName: e.target.value });
     };
@@ -130,35 +135,35 @@ class AddPollDialog extends Component {
                 errors: { pollImages: "Please add both images." }
             });
         } else {
-            // create new poll and send it to database:
-            const newPoll = {
-                userId: this.props.userId,
-                title: pollName,
-                image1: image1,
-                image2: image2,
-                expiresOn: expiresOn,
-                sendToList: sendToList,
-                target: "poll-images"
-            };
+            // load poll data and send it to upload api:
+            let formData = new FormData();
+            formData.append("userId", this.props.userId);
+            formData.append("title", pollName);
+            formData.append("image1", image1);
+            formData.append("image2", image2);
+            //formData.append("expiresOn", null);
+            formData.append("sendToList", sendToList);
+            formData.append("target", "poll_images");
 
             axios
-                .post("/api/images/upload", newPoll)
+                .post("/api/images/upload", formData)
                 .then(response => {
                     if (response.data.status !== 200) {
+                        console.log(response.data.errors);
                         this.setState({
                             errors: { error: response.data.error }
                         });
                         return;
                     }
 
+                    console.log("submit", response.data.status);
                     // add new poll to Profile and close dialog:
                     // this.props.addNewPoll(response.data);
-                    // this.clearDialogData();
-                    // this.togglePollDialog();
+                    this.closeDialog();
                 })
                 .catch(err => {
                     console.log(err);
-                    this.setState({ errors: err.response.data });
+                    //this.setState({ errors: err.response.data });
                 });
         }
     };
@@ -166,10 +171,10 @@ class AddPollDialog extends Component {
     // callback function to retrieve file from FileDrop component
     setImageFile = (file, option) => {
         if (option === 1) {
-            this.setState({ image1: file });
+            this.setState({ image1: file[0] });
         }
         if (option === 2) {
-            this.setState({ image2: file });
+            this.setState({ image2: file[0] });
         }
     };
 
@@ -243,7 +248,7 @@ class AddPollDialog extends Component {
                                         return (
                                             <MenuItem
                                                 key={list._id}
-                                                value={list.title}
+                                                value={list._id}
                                                 className={classes.item}>
                                                 {list.title}
                                             </MenuItem>

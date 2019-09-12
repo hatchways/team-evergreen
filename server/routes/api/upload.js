@@ -26,6 +26,7 @@ const TARGET_AVATAR = "avatar_image";
 
 router.post("/upload", function(req, res) {
     // no files uploaded
+
     if (req.files === null) {
         res.send({ status: 400, message: "No files to upload." });
     } else {
@@ -33,22 +34,19 @@ router.post("/upload", function(req, res) {
             if (response.status !== 200) {
                 res.send(response.result);
             } // There was an error
-
             // save the path to the image
             if (req.body.target === TARGET_POLLS) {
                 const params = {
                     userId: req.body.userId,
-                    pollTitle: req.body.pollTitle,
+                    pollTitle: req.body.title,
                     sendToList: req.body.sendToList,
-                    expiresOn: req.body.expiresOn,
+                    // expiresOn: req.body.expiresOn,
                     imageUrls: response.result
                 };
                 createNewPoll(params)
                     .then(response => res.send(response))
                     .catch(response => res.send(response));
-            }
-
-            if (req.body.target === TARGET_AVATAR) {
+            } else if (req.body.target === TARGET_AVATAR) {
                 const params = {
                     userId: req.body.userId,
                     imageUrls: response.result
@@ -56,6 +54,12 @@ router.post("/upload", function(req, res) {
                 updateUserAvatar(params)
                     .then(response => res.send(response))
                     .catch(response => res.send(response));
+            } else {
+                console.log("No target");
+                res.send({
+                    status: 500,
+                    errors: `No target specified. Given ${req.body.target}`
+                });
             }
         });
     }
