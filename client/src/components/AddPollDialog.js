@@ -7,18 +7,12 @@ import {
     Dialog,
     DialogContent,
     DialogActions,
-    Divider,
     TextField,
     Typography,
     FormControl,
     FormHelperText,
     Select,
     Icon,
-    ListItem,
-    ListItemAvatar,
-    Avatar,
-    ListItemText,
-    ListItemSecondaryAction,
     Grid
 } from "@material-ui/core";
 
@@ -115,6 +109,9 @@ class AddPollDialog extends Component {
     onChange = e => {
         this.setState({ pollName: e.target.value });
     };
+    handleSelectChange = e => {
+        this.setState({ sendToList: e.target.value });
+    };
 
     onSubmit = e => {
         e.preventDefault();
@@ -163,6 +160,16 @@ class AddPollDialog extends Component {
                     console.log(err);
                     this.setState({ errors: err.response.data });
                 });
+        }
+    };
+
+    // callback function to retrieve file from FileDrop component
+    setImageFile = (file, option) => {
+        if (option === 1) {
+            this.setState({ image1: file });
+        }
+        if (option === 2) {
+            this.setState({ image2: file });
         }
     };
 
@@ -229,7 +236,7 @@ class AddPollDialog extends Component {
                                 </Typography>
                                 <Select
                                     value={sendToList}
-                                    onChange={this.onChange}
+                                    onChange={this.handleSelectChange}
                                     input={<Input id="select-poll-list" />}
                                     displayEmpty={true}>
                                     {lists.map(list => {
@@ -252,39 +259,21 @@ class AddPollDialog extends Component {
                             </FormControl>
                             <Grid
                                 container
-                                justify="space-between"
+                                justify="space-evenly"
                                 direction="row">
                                 <Grid item xs={6}>
                                     <FormControl fullWidth>
                                         <FileDrop
-                                            value={file =>
-                                                this.setState({
-                                                    image2: file
-                                                })
-                                            }
-                                            error={errors.image2 && !image2}
-                                            onChange={this.onChange} // TODO How do I handle the change events
-                                            id="image2"
-                                            placeholder=""
-                                            margin="none"
-                                            variant="outlined"
+                                            option={1}
+                                            setImageFile={this.setImageFile}
                                         />
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <FormControl fullWidth>
                                         <FileDrop
-                                            value={file =>
-                                                this.setState({
-                                                    image2: file
-                                                })
-                                            }
-                                            error={errors.image2 && !image2}
-                                            onChange={this.onChange} // TODO How do I handle the change events
-                                            id="image2"
-                                            placeholder=""
-                                            margin="none"
-                                            variant="outlined"
+                                            option={2}
+                                            setImageFile={this.setImageFile}
                                         />
                                     </FormControl>
                                 </Grid>
