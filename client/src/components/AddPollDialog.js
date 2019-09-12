@@ -18,7 +18,8 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
-    ListItemSecondaryAction
+    ListItemSecondaryAction,
+    Grid
 } from "@material-ui/core";
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -203,7 +204,6 @@ class AddPollDialog extends Component {
                                     className={classes.subtitle}>
                                     Question:
                                 </Typography>
-
                                 <TextField
                                     value={title}
                                     error={errors.name && !title}
@@ -217,55 +217,10 @@ class AddPollDialog extends Component {
                                     error
                                     id="poll-question"
                                     className={classes.error}>
-                                    {isQuestionInvalid
-                                        ? errors.title
-                                        : isSendToListInvalid
-                                        ? errors.friends
-                                        : errors.error}
+                                    {isQuestionInvalid && errors.title}
                                 </FormHelperText>
-
-                                <FileDrop
-                                    value={image1}
-                                    error={errors.image1 && !image1}
-                                    onChange={this.onChange}
-                                    id="image1"
-                                    placeholder=""
-                                    margin="none"
-                                    variant="outlined"
-                                />
-
-                                <FormHelperText
-                                    error
-                                    id="image1"
-                                    className={classes.error}>
-                                    {isImage1Invalid
-                                        ? errors.images
-                                        : isSendToListInvalid
-                                        ? errors.sendToList
-                                        : errors.error}
-                                </FormHelperText>
-
-                                <FileDrop
-                                    value={image2}
-                                    error={errors.image2 && !image2}
-                                    onChange={this.onChange} // TODO How do I handle the change events
-                                    id="image2"
-                                    placeholder=""
-                                    margin="none"
-                                    variant="outlined"
-                                />
-
-                                <FormHelperText
-                                    error
-                                    id="image2"
-                                    className={classes.error}>
-                                    {isImage2Invalid
-                                        ? errors.images
-                                        : isSendToListInvalid
-                                        ? errors.friends
-                                        : errors.error}
-                                </FormHelperText>
-
+                            </FormControl>
+                            <FormControl fullWidth>
                                 <Typography
                                     variant="subtitle1"
                                     component="h4"
@@ -288,7 +243,52 @@ class AddPollDialog extends Component {
                                         );
                                     })}
                                 </Select>
+                                <FormHelperText
+                                    error
+                                    id="poll-question"
+                                    className={classes.error}>
+                                    {isQuestionInvalid ? errors.title : ""}
+                                </FormHelperText>
                             </FormControl>
+                            <Grid
+                                container
+                                justify="space-between"
+                                direction="row">
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <FileDrop
+                                            value={file =>
+                                                this.setState({
+                                                    image2: file
+                                                })
+                                            }
+                                            error={errors.image2 && !image2}
+                                            onChange={this.onChange} // TODO How do I handle the change events
+                                            id="image2"
+                                            placeholder=""
+                                            margin="none"
+                                            variant="outlined"
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <FileDrop
+                                            value={file =>
+                                                this.setState({
+                                                    image2: file
+                                                })
+                                            }
+                                            error={errors.image2 && !image2}
+                                            onChange={this.onChange} // TODO How do I handle the change events
+                                            id="image2"
+                                            placeholder=""
+                                            margin="none"
+                                            variant="outlined"
+                                        />
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
                         </DialogContent>
 
                         <DialogActions className={classes.action}>

@@ -1,22 +1,75 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-export function FileDrop() {
-    const onDrop = useCallback(acceptedFiles => {
-        console.log(acceptedFiles[0].size, acceptedFiles[0].type);
-    }, []);
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop
+const thumbsContainer = {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 16
+};
+
+const thumb = {
+    display: "inline-flex",
+    borderRadius: 2,
+    border: "1px solid #eaeaea",
+    marginBottom: 8,
+    marginRight: 8,
+    width: 150,
+    height: 150,
+    padding: 4,
+    boxSizing: "border-box"
+};
+
+const thumbInner = {
+    display: "flex",
+    minWidth: 0,
+    overflow: "hidden"
+};
+
+const img = {
+    display: "block",
+    width: "auto",
+    height: "100%"
+};
+
+export function FileDrop(props) {
+    const [files, setFiles] = useState([]);
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: "image/*",
+        onDrop: acceptedFiles => {
+            setFiles(
+                acceptedFiles.map(file =>
+                    Object.assign(file, {
+                        preview: URL.createObjectURL(file)
+                    })
+                )
+            );
+        }
     });
 
-    return (
-        <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            {isDragActive ? (
-                <p>Drop the files here ...</p>
-            ) : (
-                <p>Drag 'n' drop some files here, or click to select files</p>
-            )}
+    const thumbs = files.map(file => (
+        <div style={thumb} key={file.name}>
+            <div style={thumbInner}>
+                <img src={file.preview} style={img} />
+            </div>
         </div>
+    ));
+
+    useEffect(
+        () => () => {
+            // Make sure to revoke the data uris to avoid memory leaks
+            files.forEach(file => URL.revokeObjectURL(file.preview));
+        },
+        [files]
+    );
+
+    return (
+        <section className="container">
+            <div {...getRootProps({ className: "dropzone" })}>
+                <input {...getInputProps()} />
+                <p>Drag 'n' drop some files here, or click to select files</p>
+            </div>
+            <aside style={thumbsContainer}>{thumbs}</aside>
+        </section>
     );
 }
