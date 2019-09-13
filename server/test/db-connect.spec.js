@@ -5,8 +5,10 @@
 import { describe } from "mocha";
 const expect = require("chai").expect;
 
+process.env.NODE_ENV = "test";
 // Setup database connection
 const mongoose = require("mongoose");
+require("../config/config");
 require("../config/db-connect");
 
 describe("Database connection", function() {

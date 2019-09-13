@@ -4,7 +4,8 @@
 const config = require("./config");
 const mongoose = require("mongoose");
 
-const dbUrl = `${config.db.dbType}://${config.db.host}:${config.db.port}/${config.db.name}`;
+const db = config["db"];
+const dbUrl = `${db.dbType}://${db.host}:${db.port}/${db.name}`;
 
 mongoose
     .connect(dbUrl, { useNewUrlParser: true, useCreateIndex: true })
