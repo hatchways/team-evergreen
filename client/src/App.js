@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { theme } from "./themes/theme";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
@@ -9,6 +9,7 @@ import setAuthToken from "./utils/setAuthToken";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import PollPage from "./pages/PollPage";
 
 import "./App.css";
 
@@ -82,51 +83,80 @@ class App extends Component {
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
-                    <Route
-                        exact
-                        path="/"
-                        render={props =>
-                            isAuthenticated ? (
-                                <Redirect to="/profile" />
-                            ) : (
-                                <Signup {...props} loadUser={this.loadUser} />
-                            )
-                        }
-                    />
-                    <Route
-                        path="/signup"
-                        render={props =>
-                            isAuthenticated ? (
-                                <Redirect to="/profile" />
-                            ) : (
-                                <Signup {...props} loadUser={this.loadUser} />
-                            )
-                        }
-                    />
-                    <Route
-                        path="/login"
-                        render={props =>
-                            isAuthenticated ? (
-                                <Redirect to="/profile" />
-                            ) : (
-                                <Login {...props} loadUser={this.loadUser} />
-                            )
-                        }
-                    />
-                    <Route
-                        path="/profile"
-                        render={props =>
-                            isAuthenticated ? (
-                                <Profile
-                                    {...props}
-                                    user={user}
-                                    logOut={this.logOut}
-                                />
-                            ) : (
-                                <Redirect to="/login" />
-                            )
-                        }
-                    />
+                    <Switch>
+                        <Route
+                            exact
+                            path="/"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Redirect to="/profile" />
+                                ) : (
+                                    <Signup
+                                        {...props}
+                                        loadUser={this.loadUser}
+                                    />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/signup"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Redirect to="/profile" />
+                                ) : (
+                                    <Signup
+                                        {...props}
+                                        loadUser={this.loadUser}
+                                    />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/login"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Redirect to="/profile" />
+                                ) : (
+                                    <Login
+                                        {...props}
+                                        loadUser={this.loadUser}
+                                    />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/profile"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Profile
+                                        {...props}
+                                        user={user}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/poll/:id"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <PollPage
+                                        {...props}
+                                        user={user}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                    </Switch>
                 </BrowserRouter>
             </MuiThemeProvider>
         );
