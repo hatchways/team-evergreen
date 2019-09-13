@@ -75,6 +75,7 @@ class Profile extends Component {
 
     addNewPoll = newPoll => {
         // add new poll
+        console.log(newPoll);
     };
 
     addNewList = newList => {
