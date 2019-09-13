@@ -16,7 +16,7 @@ const useStyles = makeStyles(profileStyles);
 
 function PollCard(props) {
     const classes = useStyles();
-    const poll = {
+    /*const poll = {
         id: 1,
         title: "Which do you like best?",
         options: [
@@ -29,7 +29,9 @@ function PollCard(props) {
                 votes: 2
             }
         ]
-    };
+    };*/
+    const { poll } = props;
+    console.log(poll);
 
     return (
         <Grid
@@ -51,33 +53,28 @@ function PollCard(props) {
                     }
                     subheader={
                         <Typography variant="body2">
-                            {poll.options[0].votes +
-                                poll.options[1].votes +
-                                " answers"}
+                            {"14 answers" /*TODO - Add proper counts*/}
                         </Typography>
                     }
                 />
                 <CardContent>
                     <GridList cellHeight={180} className={classes.gridList}>
                         <GridListTile key={1}>
-                            <img src={poll.options[0].url} alt="First option" />
+                            <img src={poll.options[0]} alt="First option" />
                         </GridListTile>
                         <GridListTile key={2}>
-                            <img
-                                src={poll.options[1].url}
-                                alt="Second option"
-                            />
+                            <img src={poll.options[1]} alt="Second option" />
                         </GridListTile>
                     </GridList>
 
                     <div className={classes.votesContainer}>
                         <div className={classes.votes}>
                             <Icon className={classes.icon}>favorite</Icon>
-                            {poll.options[0].votes}
+                            {12 /*TODO fix the votes*/}
                         </div>
                         <div className={classes.votes}>
                             <Icon className={classes.icon}>favorite</Icon>
-                            {poll.options[1].votes}
+                            {2 /*TODO fox the votes*/}
                         </div>
                     </div>
                 </CardContent>
