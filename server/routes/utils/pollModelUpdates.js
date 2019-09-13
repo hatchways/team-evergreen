@@ -15,7 +15,7 @@ export async function createNewPoll(data) {
             title: data.pollTitle,
             userId: data.userId,
             sendToList: data.sendToList,
-            expiresOn: data.expiresOn,
+            // expiresOn: data.expiresOn,  - not implemented TODO - enable expires on
             options: data.imageUrls
         });
         await newPoll.save();
@@ -28,6 +28,8 @@ export async function createNewPoll(data) {
         return { status: 200, pollId: newPoll._id };
     } catch (err) {
         console.log(err);
-        return { status: 500, message: "Unable to save poll images." };
+        return { status: 500, errors: "Unable to save poll images." };
+    } finally {
+        // console.log(data);
     }
 }

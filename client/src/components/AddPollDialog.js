@@ -7,13 +7,13 @@ import {
     Dialog,
     DialogContent,
     DialogActions,
-    Divider,
     TextField,
     Typography,
     FormControl,
     FormHelperText,
     Select,
-    Icon
+    Icon,
+    Grid
 } from "@material-ui/core";
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -106,8 +106,16 @@ class AddPollDialog extends Component {
         });
     };
 
+    closeDialog = () => {
+        this.clearDialogData();
+        this.props.togglePollDialog();
+    };
+
     onChange = e => {
         this.setState({ pollName: e.target.value });
+    };
+    handleSelectChange = e => {
+        this.setState({ sendToList: e.target.value });
     };
 
     onSubmit = e => {
@@ -127,50 +135,56 @@ class AddPollDialog extends Component {
                 errors: { pollImages: "Please add both images." }
             });
         } else {
-            // create new list and send it to database:
-            const newPoll = {
-                userId: this.props.userId,
-                title: pollName,
-                image1: image1,
-                image2: image2,
-                expiresOn: expiresOn,
-                sendToList: sendToList,
-                target: "poll-images"
-            };
+            // load poll data and send it to upload api:
+            let formData = new FormData();
+            formData.append("userId", this.props.userId);
+            formData.append("title", pollName);
+            formData.append("image1", image1);
+            formData.append("image2", image2);
+            //formData.append("expiresOn", null);
+            formData.append("sendToList", sendToList);
+            formData.append("target", "poll_images");
 
             axios
-                .post("/api/images/upload", newPoll)
+                .post("/api/images/upload", formData)
                 .then(response => {
                     if (response.data.status !== 200) {
+                        console.log(response.data.errors);
                         this.setState({
                             errors: { error: response.data.error }
                         });
                         return;
                     }
 
+                    console.log("submit", response.data.status);
                     // add new poll to Profile and close dialog:
                     // this.props.addNewPoll(response.data);
-                    // this.clearDialogData();
-                    // this.togglePollDialog();
+                    this.closeDialog();
                 })
                 .catch(err => {
                     console.log(err);
-                    this.setState({ errors: err.response.data });
+                    //this.setState({ errors: err.response.data });
                 });
         }
     };
 
+    // callback function to retrieve file from FileDrop component
+    setImageFile = (file, option) => {
+        if (option === 1) {
+            this.setState({ image1: file[0] });
+        }
+        if (option === 2) {
+            this.setState({ image2: file[0] });
+        }
+    };
+
     render() {
-        const { classes } = this.props;
-        const { errors, sendToList, title, image1, image2 } = this.state; // TODO need to add the
-        // list of
-        // polls
+        const { classes, lists } = this.props;
+        const { errors, sendToList, title, image1, image2 } = this.state;
         const isQuestionInvalid = errors.title && !title;
         const isImage1Invalid = errors.images && !image1.length;
         const isImage2Invalid = errors.images && !image2.length;
         const isSendToListInvalid = errors.sendToList && !sendToList.length;
-
-        const friendLists = ["Fashion", "Food", "Technology"];
 
         return (
             <div>
@@ -196,6 +210,12 @@ class AddPollDialog extends Component {
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
                             <FormControl fullWidth>
+                                <Typography
+                                    variant="subtitle1"
+                                    component="h4"
+                                    className={classes.subtitle}>
+                                    Question:
+                                </Typography>
                                 <TextField
                                     value={title}
                                     error={errors.name && !title}
@@ -209,73 +229,60 @@ class AddPollDialog extends Component {
                                     error
                                     id="poll-question"
                                     className={classes.error}>
-                                    {isQuestionInvalid
-                                        ? errors.title
-                                        : isSendToListInvalid
-                                        ? errors.friends
-                                        : errors.error}
+                                    {isQuestionInvalid && errors.title}
                                 </FormHelperText>
-
-                                <FileDrop
-                                    value={image1}
-                                    error={errors.image1 && !image1}
-                                    onChange={this.onChange}
-                                    id="image1"
-                                    placeholder=""
-                                    margin="none"
-                                    variant="outlined"
-                                />
-
-                                <FormHelperText
-                                    error
-                                    id="image1"
-                                    className={classes.error}>
-                                    {isImage1Invalid
-                                        ? errors.images
-                                        : isSendToListInvalid
-                                        ? errors.sendToList
-                                        : errors.error}
-                                </FormHelperText>
-
-                                <FileDrop
-                                    value={image2}
-                                    error={errors.image2 && !image2}
-                                    onChange={this.onChange} // TODO How do I handle the change events
-                                    id="image2"
-                                    placeholder=""
-                                    margin="none"
-                                    variant="outlined"
-                                />
-
-                                <FormHelperText
-                                    error
-                                    id="image2"
-                                    className={classes.error}>
-                                    {isImage2Invalid
-                                        ? errors.images
-                                        : isSendToListInvalid
-                                        ? errors.friends
-                                        : errors.error}
-                                </FormHelperText>
-
+                            </FormControl>
+                            <FormControl fullWidth>
+                                <Typography
+                                    variant="subtitle1"
+                                    component="h4"
+                                    className={classes.subtitle}>
+                                    Friend list:
+                                </Typography>
                                 <Select
                                     value={sendToList}
-                                    onChange={this.onChange}
-                                    input={<Input id="select-list" />}
+                                    onChange={this.handleSelectChange}
+                                    input={<Input id="select-poll-list" />}
                                     displayEmpty={true}>
-                                    <MenuItem key={"fashion"} value={"fashion"}>
-                                        "fashion"
-                                    </MenuItem>
+                                    {lists.map(list => {
+                                        return (
+                                            <MenuItem
+                                                key={list._id}
+                                                value={list._id}
+                                                className={classes.item}>
+                                                {list.title}
+                                            </MenuItem>
+                                        );
+                                    })}
                                 </Select>
+                                <FormHelperText
+                                    error
+                                    id="poll-question"
+                                    className={classes.error}>
+                                    {isQuestionInvalid ? errors.title : ""}
+                                </FormHelperText>
                             </FormControl>
-
-                            <Typography
-                                variant="subtitle1"
-                                component="h4"
-                                className={classes.subtitle}>
-                                Add friends:
-                            </Typography>
-                            <Divider />
+                            <Grid
+                                container
+                                justify="space-evenly"
+                                direction="row">
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <FileDrop
+                                            option={1}
+                                            setImageFile={this.setImageFile}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <FileDrop
+                                            option={2}
+                                            setImageFile={this.setImageFile}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
