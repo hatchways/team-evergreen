@@ -25,6 +25,12 @@ const pollSchema = new mongoose.Schema(
                 required: true
             }
         ],
+        votes: [
+            {
+                type: Number
+            }
+        ],
+
         expiresOn: Date
     },
     { timestamps: true }

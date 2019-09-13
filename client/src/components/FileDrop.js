@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import { GridListTileBarProps as classes } from "@material-ui/core/GridListTileBar/GridListTileBar";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const thumbsContainer = {

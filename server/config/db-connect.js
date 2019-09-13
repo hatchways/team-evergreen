@@ -1,7 +1,7 @@
 //db-connect.js
 /* Created by Fil on August 25, 2019 */
 
-const config = require("./config.js");
+const config = require("./config");
 const mongoose = require("mongoose");
 
 const dbUrl = `${config.db.dbType}://${config.db.host}:${config.db.port}/${config.db.name}`;
