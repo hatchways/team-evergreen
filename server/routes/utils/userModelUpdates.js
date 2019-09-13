@@ -6,7 +6,6 @@
  */
 
 import User from "../../models/User";
-import Poll from "../../models/Poll";
 
 export async function updateUserAvatar(data, res) {
     try {
