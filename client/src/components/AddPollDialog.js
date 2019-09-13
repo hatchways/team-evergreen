@@ -120,7 +120,7 @@ class AddPollDialog extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        const { pollName, image1, image2, expiresOn, sendToList } = this.state;
+        const { pollName, image1, image2, sendToList } = this.state;
 
         if (!pollName) {
             this.setState({
@@ -180,11 +180,8 @@ class AddPollDialog extends Component {
 
     render() {
         const { classes, lists } = this.props;
-        const { errors, sendToList, title, image1, image2 } = this.state;
+        const { errors, sendToList, title } = this.state;
         const isQuestionInvalid = errors.title && !title;
-        const isImage1Invalid = errors.images && !image1.length;
-        const isImage2Invalid = errors.images && !image2.length;
-        const isSendToListInvalid = errors.sendToList && !sendToList.length;
 
         return (
             <div>
