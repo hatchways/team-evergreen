@@ -9,7 +9,9 @@ import { registerVote } from "../utils/voteModelUpdates";
 /**
  * @desc Registers or updates a users vote depending on whether or not a vote
  * @desc was previously cast.
+ * @param req should be a json object -> {data: {pollId: value, userId: value, opinion: value }}
  */
+
 router.post("/vote", function(req, res) {
     if (req.data === null) {
         res.send({ status: 400, message: "No files to upload." });
