@@ -156,20 +156,6 @@ class App extends Component {
                         />
                         <Route
                             exact
-                            path="/polls"
-                            render={props =>
-                                isAuthenticated ? (
-                                    <FriendsPollPage
-                                        {...props}
-                                        logOut={this.logOut}
-                                    />
-                                ) : (
-                                    <Redirect to="/login" />
-                                )
-                            }
-                        />
-                        <Route
-                            exact
                             path="/user/:id"
                             render={props =>
                                 isAuthenticated ? (
