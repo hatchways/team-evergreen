@@ -10,7 +10,6 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
-import FriendsPollPage from "./pages/FriendsPollPage";
 
 import "./App.css";
 

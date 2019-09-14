@@ -194,7 +194,10 @@ class AddPollDialog extends Component {
                     onClick={this.props.togglePollDialog}
                     variant="contained"
                     color="primary"
-                    size="medium">
+                    size="medium"
+                    style={{
+                        display: this.props.isPollPage ? "none" : "block" // hide button on poll page
+                    }}>
                     Create poll
                 </Button>
                 <Dialog

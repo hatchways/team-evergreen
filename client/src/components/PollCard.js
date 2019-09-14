@@ -18,20 +18,6 @@ const useStyles = makeStyles(profileStyles);
 
 function PollCard(props) {
     const classes = useStyles();
-    /*const poll = {
-        id: 1,
-        title: "Which do you like best?",
-        options: [
-            {
-                url: "https://source.unsplash.com/random",
-                votes: 12
-            },
-            {
-                url: "https://source.unsplash.com/random",
-                votes: 2
-            }
-        ]
-    };*/
     const { poll } = props;
 
     return (
@@ -50,7 +36,9 @@ function PollCard(props) {
                         pathname: `/poll/${poll._id}`,
                         state: {
                             user: props.user,
-                            users: props.users
+                            users: props.users,
+                            lists: props.lists,
+                            poll: poll
                         }
                     }}>
                     <CardHeader

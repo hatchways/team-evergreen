@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { profileStyles } from "../styles/profileStyles";
 import { pollPageStyles } from "../styles/pollPageStyles";
 import { withStyles } from "@material-ui/core/styles";
+
+import AddPollDialog from "../components/AddPollDialog";
 import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
 import {
@@ -67,8 +70,8 @@ class PollPage extends Component {
 
     render() {
         const { classes } = this.props;
-        const { user, users, poll } = this.props.location.state;
-        const { drawerIsOpen, voted } = this.state;
+        const { user, users, poll, lists } = this.props.location.state;
+        const { drawerIsOpen, voted, pollDialogIsOpen } = this.state;
 
         return (
             <div className={classes.root}>
@@ -84,6 +87,13 @@ class PollPage extends Component {
                     open={drawerIsOpen}
                     toggleDrawer={this.toggleDrawer}
                 />
+                <AddPollDialog
+                    userId={user._id}
+                    lists={lists}
+                    togglePollDialog={this.togglePollDialog}
+                    pollDialogIsOpen={pollDialogIsOpen}
+                    isPollPage={true}
+                />
 
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
@@ -91,7 +101,9 @@ class PollPage extends Component {
                         <Grid container spacing={5} direction="column">
                             <Grid item xs={12} md={6}>
                                 <Button
-                                    href="/profile"
+                                    underline="none"
+                                    component={RouterLink}
+                                    to="/profile"
                                     className={classes.buttonLink}>
                                     <Icon>keyboard_arrow_left</Icon>Back
                                 </Button>

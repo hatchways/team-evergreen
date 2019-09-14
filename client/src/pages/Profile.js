@@ -45,15 +45,11 @@ class Profile extends Component {
         axios
             .get(`api/users/user/${id}`)
             .then(response => {
-                console.log("response from server: ", response);
-                this.setState(
-                    {
-                        user: response.data,
-                        lists: response.data.lists,
-                        polls: response.data.polls
-                    },
-                    () => console.log(this.state)
-                );
+                this.setState({
+                    user: response.data,
+                    lists: response.data.lists,
+                    polls: response.data.polls
+                });
             })
             .catch(err => console.log(err));
 
@@ -218,6 +214,7 @@ class Profile extends Component {
                                                 movePollBy={movePollBy}
                                                 user={user}
                                                 users={users}
+                                                lists={lists}
                                             />
                                         ))}
                                     <Grid
