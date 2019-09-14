@@ -15,6 +15,7 @@ import {
     GridList,
     GridListTile,
     Icon,
+    Button,
     List,
     ListItemAvatar,
     ListItemSecondaryAction,
@@ -87,7 +88,14 @@ class PollPage extends Component {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
-                        <Grid container spacing={6} direction="column">
+                        <Grid container spacing={5} direction="column">
+                            <Grid item xs={12} md={6}>
+                                <Button
+                                    href="/profile"
+                                    className={classes.buttonLink}>
+                                    <Icon>keyboard_arrow_left</Icon>Back
+                                </Button>
+                            </Grid>
                             <Grid item xs={12} md={6}>
                                 <Card className={classes.card}>
                                     <CardHeader
