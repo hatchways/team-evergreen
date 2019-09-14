@@ -15,5 +15,8 @@ export const pollPageStyles = theme => ({
         height: "60px",
         border: "1px solid gray",
         backgroundColor: ""
+    },
+    buttonLink: {
+        textTransform: "none"
     }
 });

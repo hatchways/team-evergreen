@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
+import FriendsPollPage from "./pages/FriendsPollPage";
 
 import "./App.css";
 
@@ -148,6 +149,31 @@ class App extends Component {
                             render={props =>
                                 isAuthenticated ? (
                                     <PollPage {...props} logOut={this.logOut} />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/polls"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <FriendsPollPage
+                                        {...props}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/user/:id"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Profile {...props} logOut={this.logOut} />
                                 ) : (
                                     <Redirect to="/login" />
                                 )

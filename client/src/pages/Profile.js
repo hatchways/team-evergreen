@@ -38,12 +38,14 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const { id } = this.props.user;
+        // for a profile page of a friend, get id from url:
+        const { id } = this.props.user || this.props.location.state.user;
 
         // fetch user data from database:
         axios
             .get(`api/users/user/${id}`)
             .then(response => {
+                console.log("response from server: ", response);
                 this.setState(
                     {
                         user: response.data,
@@ -129,7 +131,7 @@ class Profile extends Component {
 
     render() {
         const { classes } = this.props;
-        const { id } = this.props.user;
+        const { _id } = this.props.user || this.props.location.state.user;
         const {
             user,
             users,
@@ -192,7 +194,7 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddPollDialog
-                                            userId={id}
+                                            userId={_id}
                                             lists={lists}
                                             addNewPoll={this.addNewPoll}
                                             togglePollDialog={
@@ -213,6 +215,8 @@ class Profile extends Component {
                                                 key={i}
                                                 poll={poll}
                                                 movePollBy={movePollBy}
+                                                user={user}
+                                                users={users}
                                             />
                                         ))}
                                     <Grid
@@ -272,7 +276,7 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddFriendList
-                                            userId={id}
+                                            userId={_id}
                                             users={users}
                                             addNewList={this.addNewList}
                                         />
