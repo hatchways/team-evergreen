@@ -25,7 +25,7 @@ class App extends Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
         // Check for token to keep user logged in:
         if (localStorage.jwtToken) {
             // Set auth token header auth
@@ -74,11 +74,12 @@ class App extends Component {
         });
 
         // Redirect to login
-        window.location.href = "./login";
+        window.location.href = "/login";
     };
 
     render() {
-        const { isAuthenticated, user } = this.state;
+        const isAuthenticated = localStorage.jwtToken;
+        const { user } = this.state;
 
         return (
             <MuiThemeProvider theme={theme}>
@@ -146,11 +147,7 @@ class App extends Component {
                             path="/poll/:id"
                             render={props =>
                                 isAuthenticated ? (
-                                    <PollPage
-                                        {...props}
-                                        user={user}
-                                        logOut={this.logOut}
-                                    />
+                                    <PollPage {...props} logOut={this.logOut} />
                                 ) : (
                                     <Redirect to="/login" />
                                 )

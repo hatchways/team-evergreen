@@ -1,4 +1,5 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { profileStyles } from "../styles/profileStyles";
 import {
@@ -9,7 +10,8 @@ import {
     Grid,
     GridList,
     GridListTile,
-    Icon
+    Icon,
+    Link
 } from "@material-ui/core";
 
 const useStyles = makeStyles(profileStyles);
@@ -31,7 +33,6 @@ function PollCard(props) {
         ]
     };*/
     const { poll } = props;
-    console.log(poll);
 
     return (
         <Grid
@@ -42,42 +43,56 @@ function PollCard(props) {
             lg={4}
             style={{ transform: `translateX(-${props.movePollBy}%)` }}>
             <Card className={classes.card}>
-                <CardHeader
-                    className={classes.pollCardHeader}
-                    title={
-                        <Typography
-                            component="h3"
-                            className={classes.pollTitle}>
-                            {poll.title}
-                        </Typography>
-                    }
-                    subheader={
-                        <Typography variant="body2">
-                            {"14 answers" /*TODO - Add proper counts*/}
-                        </Typography>
-                    }
-                />
-                <CardContent>
-                    <GridList cellHeight={180} className={classes.gridList}>
-                        <GridListTile key={1}>
-                            <img src={poll.options[0]} alt="First option" />
-                        </GridListTile>
-                        <GridListTile key={2}>
-                            <img src={poll.options[1]} alt="Second option" />
-                        </GridListTile>
-                    </GridList>
+                <Link
+                    underline="none"
+                    component={RouterLink}
+                    to={{
+                        pathname: `/poll/${poll._id}`,
+                        state: {
+                            user: props.user,
+                            users: props.users
+                        }
+                    }}>
+                    <CardHeader
+                        className={classes.pollCardHeader}
+                        title={
+                            <Typography
+                                component="h3"
+                                className={classes.pollTitle}>
+                                {poll.title}
+                            </Typography>
+                        }
+                        subheader={
+                            <Typography variant="body2">
+                                {"14 answers" /*TODO - Add proper counts*/}
+                            </Typography>
+                        }
+                    />
+                    <CardContent>
+                        <GridList cellHeight={180} className={classes.gridList}>
+                            <GridListTile key={1}>
+                                <img src={poll.options[0]} alt="First option" />
+                            </GridListTile>
+                            <GridListTile key={2}>
+                                <img
+                                    src={poll.options[1]}
+                                    alt="Second option"
+                                />
+                            </GridListTile>
+                        </GridList>
 
-                    <div className={classes.votesContainer}>
-                        <div className={classes.votes}>
-                            <Icon className={classes.icon}>favorite</Icon>
-                            {12 /*TODO fix the votes*/}
+                        <div className={classes.votesContainer}>
+                            <div className={classes.votes}>
+                                <Icon className={classes.icon}>favorite</Icon>
+                                {12 /*TODO fix the votes*/}
+                            </div>
+                            <div className={classes.votes}>
+                                <Icon className={classes.icon}>favorite</Icon>
+                                {2 /*TODO fox the votes*/}
+                            </div>
                         </div>
-                        <div className={classes.votes}>
-                            <Icon className={classes.icon}>favorite</Icon>
-                            {2 /*TODO fox the votes*/}
-                        </div>
-                    </div>
-                </CardContent>
+                    </CardContent>
+                </Link>
             </Card>
         </Grid>
     );
