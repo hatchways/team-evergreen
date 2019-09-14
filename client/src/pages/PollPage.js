@@ -1,61 +1,59 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
-import { CssBaseline, Container, Grid } from "@material-ui/core";
+import {
+    CssBaseline,
+    Container,
+    Card,
+    CardHeader,
+    CardContent,
+    Typography,
+    Grid,
+    GridList,
+    GridListTile,
+    Icon,
+    List,
+    ListItemAvatar,
+    ListItemSecondaryAction,
+    ListItem,
+    ListItemText,
+    Box,
+    Divider,
+    Avatar
+} from "@material-ui/core";
 
 class PollPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: null,
-            lists: [],
-            polls: [],
             drawerIsOpen: true,
             pollDialogIsOpen: false,
-            users: []
+            voted: [
+                {
+                    name: "Alison Brown",
+                    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+                    option: 1
+                },
+                {
+                    name: "Caroline Chapman",
+                    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+                    option: 0
+                },
+                {
+                    name: "Dorothy Ferguson",
+                    avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+                    option: 1
+                },
+                {
+                    name: "Jack Murray",
+                    avatar: "https://randomuser.me/api/portraits/men/4.jpg",
+                    option: 1
+                }
+            ] // fake data for friends
         };
     }
-
-    componentDidMount() {
-        console.log("this.props.history in PollPage: ", this.props.history);
-
-        const { id } = this.props.user;
-
-        // fetch user data from database:
-        axios
-            .get(`api/users/user/${id}`)
-            .then(response => {
-                this.setState(
-                    {
-                        user: response.data,
-                        lists: response.data.lists,
-                        polls: response.data.polls
-                    },
-                    () => console.log(this.state)
-                );
-            })
-            .catch(err => console.log(err));
-
-        // get all users:
-        this.fetchUsers();
-    }
-
-    fetchUsers = () => {
-        // fetch all users and populate state
-        axios
-            .get("api/users/")
-            .then(response => {
-                // exclude current user from list of all users:
-                const users = response.data.filter(
-                    user => user._id !== this.props.user.id
-                );
-                this.setState({ users });
-            })
-            .catch(err => console.log(err));
-    };
 
     toggleDrawer = () => {
         this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
@@ -67,7 +65,8 @@ class PollPage extends Component {
 
     render() {
         const { classes } = this.props;
-        const { user, users, drawerIsOpen } = this.state;
+        const { user, users, poll } = this.props.location.state;
+        const { drawerIsOpen, voted } = this.state;
 
         return (
             <div className={classes.root}>
@@ -83,13 +82,110 @@ class PollPage extends Component {
                     open={drawerIsOpen}
                     toggleDrawer={this.toggleDrawer}
                 />
-                <div className={classes.appBarSpacer} />
 
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
-                        <Grid container spacing={6}>
-                            I am a poll page!
+                        <Grid container spacing={6} direction="column">
+                            <Grid item xs={12} md={6}>
+                                <Card className={classes.card}>
+                                    <CardHeader
+                                        className={classes.pollCardHeader}
+                                        title={
+                                            <Typography
+                                                component="h3"
+                                                className={classes.pollTitle}>
+                                                {poll.title}
+                                            </Typography>
+                                        }
+                                        subheader={
+                                            <Typography variant="body2">
+                                                {
+                                                    "14 answers" /*TODO - Add proper counts*/
+                                                }
+                                            </Typography>
+                                        }
+                                    />
+                                    <CardContent>
+                                        <GridList
+                                            cellHeight={180}
+                                            className={classes.gridList}>
+                                            <GridListTile key={1}>
+                                                <img
+                                                    src={poll.options[0]}
+                                                    alt="First option"
+                                                />
+                                            </GridListTile>
+                                            <GridListTile key={2}>
+                                                <img
+                                                    src={poll.options[1]}
+                                                    alt="Second option"
+                                                />
+                                            </GridListTile>
+                                        </GridList>
+
+                                        <div className={classes.votesContainer}>
+                                            <div className={classes.votes}>
+                                                <Icon className={classes.icon}>
+                                                    favorite
+                                                </Icon>
+                                                {12 /*TODO fix the votes*/}
+                                            </div>
+                                            <div className={classes.votes}>
+                                                <Icon className={classes.icon}>
+                                                    favorite
+                                                </Icon>
+                                                {2 /*TODO fox the votes*/}
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Divider />
+                                <List>
+                                    {voted.map(user => {
+                                        return (
+                                            <>
+                                                <ListItem
+                                                    key={user._id}
+                                                    className={classes.item}>
+                                                    <ListItemAvatar>
+                                                        <Avatar
+                                                            alt={`Avatar of ${user.name}`}
+                                                            src={user.avatar}
+                                                        />
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={`${user.name} voted`}
+                                                        secondary="24m ago"
+                                                    />
+
+                                                    <ListItemSecondaryAction>
+                                                        <Box
+                                                            style={{
+                                                                backgroundImage: `url(
+                                                                ${
+                                                                    user.option ===
+                                                                    0
+                                                                        ? poll
+                                                                              .options[0]
+                                                                        : poll
+                                                                              .options[1]
+                                                                }
+                                                            )`
+                                                            }}
+                                                            className={
+                                                                classes.thumbnail
+                                                            }></Box>
+                                                    </ListItemSecondaryAction>
+                                                </ListItem>
+                                                <Divider />
+                                            </>
+                                        );
+                                    })}
+                                </List>
+                            </Grid>
                         </Grid>
                     </Container>
                 </main>
