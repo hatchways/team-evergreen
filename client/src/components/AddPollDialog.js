@@ -83,12 +83,13 @@ class AddPollDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollName: "",
+            title: "",
             image1: "",
             image2: "",
             expiresOn: "",
             sendToList: "",
             target: "poll_images",
+            buttonIsDisabled: false,
             errors: {}
         };
     }
@@ -96,12 +97,13 @@ class AddPollDialog extends Component {
     clearDialogData = () => {
         this.setState({
             userId: this.props.userId,
-            pollName: "",
+            title: "",
             image1: "",
             image2: "",
             expiresOn: "",
             sendToList: "",
             target: "poll_images",
+            buttonIsDisabled: false,
             errors: {}
         });
     };
@@ -111,8 +113,8 @@ class AddPollDialog extends Component {
         this.props.togglePollDialog();
     };
 
-    onChange = e => {
-        this.setState({ pollName: e.target.value });
+    handleTitleChange = e => {
+        this.setState({ title: e.target.value });
     };
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
@@ -120,28 +122,29 @@ class AddPollDialog extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        const { pollName, image1, image2, sendToList } = this.state;
+        const { title, image1, image2, sendToList } = this.state;
 
-        if (!pollName) {
+        if (!title) {
             this.setState({
                 errors: { title: "Please provide a question for the poll." }
             });
         } else if (!sendToList) {
             this.setState({
-                errors: { sendToList: "Please add a Friend list." }
+                errors: { list: "Please add a Friend list." }
             });
         } else if (!image1 || !image2) {
             this.setState({
                 errors: { pollImages: "Please add both images." }
             });
         } else {
+            // disable the submit button to avoid duplicates
+            this.toggleSubmitButton();
             // load poll data and send it to upload api:
             let formData = new FormData();
             formData.append("userId", this.props.userId);
-            formData.append("title", pollName);
+            formData.append("title", title);
             formData.append("image1", image1);
             formData.append("image2", image2);
-            //formData.append("expiresOn", null);
             formData.append("sendToList", sendToList);
             formData.append("target", "poll_images");
 
@@ -156,9 +159,8 @@ class AddPollDialog extends Component {
                         return;
                     }
 
-                    console.log("submit", response.data.status);
                     // add new poll to Profile and close dialog:
-                    // this.props.addNewPoll(response.data);
+                    this.props.addNewPoll(response.data);
                     this.closeDialog();
                 })
                 .catch(err => {
@@ -178,10 +180,13 @@ class AddPollDialog extends Component {
         }
     };
 
+    toggleSubmitButton = () => {
+        this.setState({ buttonIsDisabled: !this.state.buttonIsDisabled });
+    };
+
     render() {
         const { classes, lists } = this.props;
-        const { errors, sendToList, title } = this.state;
-        const isQuestionInvalid = errors.title && !title;
+        const { errors, sendToList, title, buttonIsDisabled } = this.state;
 
         return (
             <div>
@@ -216,7 +221,7 @@ class AddPollDialog extends Component {
                                 <TextField
                                     value={title}
                                     error={errors.name && !title}
-                                    onChange={this.onChange}
+                                    onChange={this.handleTitleChange}
                                     id="poll-question"
                                     placeholder="Enter question ..."
                                     margin="none"
@@ -224,9 +229,9 @@ class AddPollDialog extends Component {
                                 />
                                 <FormHelperText
                                     error
-                                    id="poll-question"
+                                    id="poll-question-errir"
                                     className={classes.error}>
-                                    {isQuestionInvalid && errors.title}
+                                    {errors.title}
                                 </FormHelperText>
                             </FormControl>
                             <FormControl fullWidth>
@@ -238,6 +243,7 @@ class AddPollDialog extends Component {
                                 </Typography>
                                 <Select
                                     value={sendToList}
+                                    error={errors.list && !sendToList}
                                     onChange={this.handleSelectChange}
                                     input={<Input id="select-poll-list" />}
                                     displayEmpty={true}>
@@ -254,9 +260,9 @@ class AddPollDialog extends Component {
                                 </Select>
                                 <FormHelperText
                                     error
-                                    id="poll-question"
+                                    id="select-poll-error"
                                     className={classes.error}>
-                                    {isQuestionInvalid ? errors.title : ""}
+                                    {errors.list}
                                 </FormHelperText>
                             </FormControl>
                             <Grid
@@ -279,6 +285,12 @@ class AddPollDialog extends Component {
                                         />
                                     </FormControl>
                                 </Grid>
+                                <FormHelperText
+                                    error
+                                    id="image-files-error"
+                                    className={classes.error}>
+                                    {errors.pollImages}
+                                </FormHelperText>
                             </Grid>
                         </DialogContent>
 
@@ -287,6 +299,7 @@ class AddPollDialog extends Component {
                                 type="submit"
                                 variant="contained"
                                 size="small"
+                                disabled={buttonIsDisabled}
                                 color="primary">
                                 Create
                             </Button>

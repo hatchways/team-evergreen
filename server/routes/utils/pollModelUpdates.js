@@ -12,11 +12,10 @@ export async function createNewPoll(data) {
     try {
         //Create the new poll record
         const newPoll = await new Poll({
-            title: data.pollTitle,
+            title: data.title,
             userId: data.userId,
             sendToList: data.sendToList,
-            // expiresOn: data.expiresOn,  - not implemented TODO - enable expires on
-            options: data.imageUrls
+            options: data.options
         });
         await newPoll.save();
 
@@ -25,7 +24,7 @@ export async function createNewPoll(data) {
             { _id: data.userId },
             { $push: { polls: newPoll._id } }
         );
-        return { status: 200, pollId: newPoll._id };
+        return { status: 200, data };
     } catch (err) {
         console.log(err);
         return { status: 500, errors: "Unable to save poll images." };
