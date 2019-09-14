@@ -89,6 +89,7 @@ class AddPollDialog extends Component {
             expiresOn: "",
             sendToList: "",
             target: "poll_images",
+            buttonIsDisabled: false,
             errors: {}
         };
     }
@@ -102,6 +103,7 @@ class AddPollDialog extends Component {
             expiresOn: "",
             sendToList: "",
             target: "poll_images",
+            buttonIsDisabled: false,
             errors: {}
         });
     };
@@ -135,6 +137,8 @@ class AddPollDialog extends Component {
                 errors: { pollImages: "Please add both images." }
             });
         } else {
+            // disable the submit button to avoid duplicates
+            this.toggleSubmitButton();
             // load poll data and send it to upload api:
             let formData = new FormData();
             formData.append("userId", this.props.userId);
@@ -182,7 +186,7 @@ class AddPollDialog extends Component {
 
     render() {
         const { classes, lists } = this.props;
-        const { errors, sendToList, title } = this.state;
+        const { errors, sendToList, title, buttonIsDisabled } = this.state;
 
         return (
             <div>
@@ -295,6 +299,7 @@ class AddPollDialog extends Component {
                                 type="submit"
                                 variant="contained"
                                 size="small"
+                                disabled={buttonIsDisabled}
                                 color="primary">
                                 Create
                             </Button>
