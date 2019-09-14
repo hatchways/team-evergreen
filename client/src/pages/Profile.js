@@ -75,6 +75,7 @@ class Profile extends Component {
 
     addNewPoll = newPoll => {
         // add new poll
+        this.setState({ polls: [newPoll.data, ...this.state.polls] });
     };
 
     addNewList = newList => {

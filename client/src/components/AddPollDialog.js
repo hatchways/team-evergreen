@@ -141,7 +141,6 @@ class AddPollDialog extends Component {
             formData.append("title", pollName);
             formData.append("image1", image1);
             formData.append("image2", image2);
-            //formData.append("expiresOn", null);
             formData.append("sendToList", sendToList);
             formData.append("target", "poll_images");
 
@@ -156,9 +155,8 @@ class AddPollDialog extends Component {
                         return;
                     }
 
-                    console.log("submit", response.data.status);
                     // add new poll to Profile and close dialog:
-                    // this.props.addNewPoll(response.data);
+                    this.props.addNewPoll(response.data);
                     this.closeDialog();
                 })
                 .catch(err => {

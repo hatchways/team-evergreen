@@ -38,10 +38,10 @@ router.post("/upload", function(req, res) {
             if (req.body.target === TARGET_POLLS) {
                 const params = {
                     userId: req.body.userId,
-                    pollTitle: req.body.title,
+                    title: req.body.title,
                     sendToList: req.body.sendToList,
                     // expiresOn: req.body.expiresOn,
-                    imageUrls: response.result
+                    options: response.result
                 };
                 createNewPoll(params)
                     .then(response => res.send(response))
@@ -49,7 +49,7 @@ router.post("/upload", function(req, res) {
             } else if (req.body.target === TARGET_AVATAR) {
                 const params = {
                     userId: req.body.userId,
-                    imageUrls: response.result
+                    options: response.result
                 };
                 updateUserAvatar(params)
                     .then(response => res.send(response))

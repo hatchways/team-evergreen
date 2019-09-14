@@ -31,7 +31,6 @@ function PollCard(props) {
         ]
     };*/
     const { poll } = props;
-    console.log(poll);
 
     return (
         <Grid
