@@ -2,11 +2,8 @@
 
 export const pollPageStyles = theme => ({
     listItem: {
-        paddingTop: "10px",
-        paddingBottom: "10px",
-        "&:first-child": {
-            paddingTop: "inherit"
-        }
+        paddingTop: "14px",
+        paddingBottom: "14px"
     },
     listItemText: {
         fontWeight: "600"

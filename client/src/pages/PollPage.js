@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
+import { pollPageStyles } from "../styles/pollPageStyles";
 import { withStyles } from "@material-ui/core/styles";
 import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
@@ -141,7 +142,7 @@ class PollPage extends Component {
                                     </CardContent>
                                 </Card>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={8} lg={6}>
                                 <Divider />
                                 <List>
                                     {voted.map(user => {
@@ -149,7 +150,9 @@ class PollPage extends Component {
                                             <>
                                                 <ListItem
                                                     key={user._id}
-                                                    className={classes.item}>
+                                                    className={
+                                                        classes.listItem
+                                                    }>
                                                     <ListItemAvatar>
                                                         <Avatar
                                                             alt={`Avatar of ${user.name}`}
@@ -157,7 +160,16 @@ class PollPage extends Component {
                                                         />
                                                     </ListItemAvatar>
                                                     <ListItemText
-                                                        primary={`${user.name} voted`}
+                                                        primary={
+                                                            <Typography
+                                                                className={
+                                                                    classes.listItemText
+                                                                }
+                                                                variant="subtitle1">
+                                                                {user.name}{" "}
+                                                                voted
+                                                            </Typography>
+                                                        }
                                                         secondary="24m ago"
                                                     />
 
@@ -194,4 +206,7 @@ class PollPage extends Component {
     }
 }
 
-export default withStyles(profileStyles)(PollPage);
+export default withStyles(theme => ({
+    ...profileStyles(theme),
+    ...pollPageStyles(theme)
+}))(PollPage);

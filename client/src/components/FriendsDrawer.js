@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.leavingScreen
         }),
         width: theme.spacing(7),
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("xs")]: {
             width: "70px"
         }
     },
