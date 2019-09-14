@@ -243,7 +243,7 @@ class AddPollDialog extends Component {
                                 </Typography>
                                 <Select
                                     value={sendToList}
-                                    error={errors.list & !sendToList}
+                                    error={errors.list && !sendToList}
                                     onChange={this.handleSelectChange}
                                     input={<Input id="select-poll-list" />}
                                     displayEmpty={true}>
