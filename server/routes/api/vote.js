@@ -13,15 +13,15 @@ import { registerVote } from "../utils/voteModelUpdates";
  */
 
 router.post("/vote", function(req, res) {
-    if (req.data === null) {
-        res.send({ status: 400, message: "No files to upload." });
+    if (req.body === null) {
+        res.send({ status: 400, message: "No data provided." });
     } else {
-        registerVote(req.data)
+        registerVote(req.body.pollId, req.body.userId, req.body.option)
             .then(result => {
                 res.send(result);
             })
             .catch(err => {
-                console.log(err);
+                console.log("error", err);
                 res.send(err);
             });
     }

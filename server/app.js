@@ -16,6 +16,7 @@ const bodyParser = require("body-parser");
 // Load route files
 const users = require("./routes/api/users");
 const upload = require("./routes/api/upload");
+const vote = require("./routes/api/vote");
 
 const app = express();
 
@@ -40,6 +41,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 app.use("/api/images", upload);
+app.use("/api/poll", vote);
 
 app.use(logger("dev"));
 app.use(json());
