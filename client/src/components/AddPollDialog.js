@@ -160,7 +160,7 @@ class AddPollDialog extends Component {
                     }
 
                     // add new poll to Profile and close dialog:
-                    this.props.addNewPoll(response.data);
+                    this.props.addNewPoll(response.data.data);
                     this.closeDialog();
                 })
                 .catch(err => {

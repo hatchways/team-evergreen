@@ -137,7 +137,7 @@ class AddFriendsList extends Component {
                     }
 
                     // add new list to Profile and close dialog:
-                    this.props.addNewList(response.data);
+                    this.addNewList(response.data);
                     this.closeDialog();
                 })
                 .catch(err => {
@@ -157,6 +157,20 @@ class AddFriendsList extends Component {
             // add friend to friends list:
             this.setState({ friends: this.state.friends.concat(id) });
         }
+    };
+
+    addNewList = newList => {
+        // show friends' names and avatars for the newly created list:
+        newList.friends.forEach((id, i, array) => {
+            const user = this.props.users.find(user => user._id === id);
+
+            array[i] = {
+                _id: id,
+                name: user.name,
+                avatar: user.avatar
+            };
+        });
+        this.props.addNewList(newList);
     };
 
     render() {

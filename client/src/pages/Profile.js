@@ -1,7 +1,6 @@
 // inspiration: https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard
 
 import React, { Component } from "react";
-import axios from "axios";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
@@ -24,12 +23,8 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: null,
-            lists: [],
-            polls: [],
             drawerIsOpen: true,
             pollDialogIsOpen: false,
-            users: [],
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
@@ -38,57 +33,15 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        // for a profile page of a friend, get id from url:
-        const { id } = this.props.user || this.props.location.state.user;
+        console.log("Profile did mount!");
+        console.log("this props in Profile: ", this.props);
 
-        // fetch user data from database:
-        axios
-            .get(`api/users/user/${id}`)
-            .then(response => {
-                this.setState({
-                    user: response.data,
-                    lists: response.data.lists,
-                    polls: response.data.polls
-                });
-            })
-            .catch(err => console.log(err));
-
-        // get all users:
-        this.fetchUsers();
+        // load users for the friends drawer
+        // if profile page was loaded first (user was logged in previously)
+        if (!this.props.users.length) {
+            this.props.loadUsers();
+        }
     }
-
-    fetchUsers = () => {
-        // fetch all users and populate state
-        axios
-            .get("api/users/")
-            .then(response => {
-                // exclude current user from list of all users:
-                const users = response.data.filter(
-                    user => user._id !== this.props.user.id
-                );
-                this.setState({ users });
-            })
-            .catch(err => console.log(err));
-    };
-
-    addNewPoll = newPoll => {
-        // add new poll
-        this.setState({ polls: [newPoll.data, ...this.state.polls] });
-    };
-
-    addNewList = newList => {
-        // show friends' names and avatars for the newly created list:
-        newList.friends.forEach((id, i, array) => {
-            const user = this.state.users.find(user => user._id === id);
-
-            array[i] = {
-                _id: id,
-                name: user.name,
-                avatar: user.avatar
-            };
-        });
-        this.setState({ lists: [newList, ...this.state.lists] });
-    };
 
     toggleDrawer = () => {
         this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
@@ -127,13 +80,11 @@ class Profile extends Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { _id } = this.props.user || this.props.location.state.user;
+        console.log("this.props in render Profile: ", this.props);
+
+        const { classes, user, users } = this.props;
+        const { lists, polls } = this.props.user;
         const {
-            user,
-            users,
-            polls,
-            lists,
             drawerIsOpen,
             pollDialogIsOpen,
             listMove,
@@ -191,9 +142,9 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddPollDialog
-                                            userId={_id}
+                                            userId={user._id}
                                             lists={lists}
-                                            addNewPoll={this.addNewPoll}
+                                            addNewPoll={this.props.addNewPoll}
                                             togglePollDialog={
                                                 this.togglePollDialog
                                             }
@@ -274,9 +225,9 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddFriendList
-                                            userId={_id}
+                                            userId={user._id}
                                             users={users}
-                                            addNewList={this.addNewList}
+                                            addNewList={this.props.addNewList}
                                         />
                                     </Grid>
                                 </Grid>

@@ -19,6 +19,7 @@ const useStyles = makeStyles(profileStyles);
 function PollCard(props) {
     const classes = useStyles();
     const { poll } = props;
+    console.log("poll in PollCard: ", poll);
 
     return (
         <Grid
