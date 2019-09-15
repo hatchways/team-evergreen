@@ -21,8 +21,8 @@ router.post("/vote", function(req, res) {
                 res.send(result);
             })
             .catch(err => {
-                console.log("error", err);
-                res.send(err);
+                console.log("/api/poll/vote", err);
+                res.send({ status: 500, error: "/api/poll/vote failure", err });
             });
     }
 });
