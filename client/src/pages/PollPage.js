@@ -71,7 +71,11 @@ class PollPage extends Component {
         const { _id } = this.props.location.state.poll;
 
         axios
-            .get("/api/poll/results")
+            .get("/api/poll/results", {
+                params: {
+                    id: _id
+                }
+            })
             .then(response => {
                 if (response.data.status === 200) {
                     const hasVoted = response.data.find(
