@@ -11,14 +11,9 @@ router.get("/results", (req, res) => {
         res.send({ status: 400, error: "No poll id provided" });
     } else {
         try {
-            getVotes(req.body.pollId)
-                .then(result => {
-                    res.send(result);
-                })
-                .catch(err => {
-                    console.log("Call to getVotes returned error:", err);
-                    res.send(err);
-                });
+            getVotes(req.body.pollId).then(results => {
+                res.send({ status: 200, data: results });
+            });
         } catch (err) {
             console.log("/api/poll/results", err);
             res.send({
