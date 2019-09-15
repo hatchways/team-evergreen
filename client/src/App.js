@@ -24,8 +24,6 @@ import "./App.css";
 
 // declare what pieces of state we want to have access to:
 const mapStateToProps = state => {
-    console.log("state in mapStateToProps: ", state);
-
     return {
         user: state.userReducer,
         users: state.usersReducer.users
@@ -47,8 +45,6 @@ class App extends Component {
     componentDidMount() {
         // Check for token to keep user logged in:
         if (localStorage.jwtToken) {
-            console.log("User token exists!");
-
             // Set auth token header auth
             const token = localStorage.jwtToken;
             setAuthToken(token);
@@ -56,7 +52,6 @@ class App extends Component {
             // Decode token and get user info
             const decoded = jwt_decode(token);
 
-            console.log("decoded: ", decoded);
             // Set user:
             this.props.loadUserData(decoded.id);
 
@@ -132,6 +127,7 @@ class App extends Component {
                                     <Login
                                         {...props}
                                         loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -180,6 +176,7 @@ class App extends Component {
                                         {...props}
                                         users={this.props.users}
                                         user={this.props.user}
+                                        loadUsers={this.props.loadUsers}
                                         logOut={this.logOut}
                                     />
                                 ) : (

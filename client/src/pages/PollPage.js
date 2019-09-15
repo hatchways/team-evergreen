@@ -171,7 +171,7 @@ class PollPage extends Component {
                                                 <ListItem
                                                     key={user._id}
                                                     className={
-                                                        classes.listItem
+                                                        classes.boldTitle
                                                     }>
                                                     <ListItemAvatar>
                                                         <Avatar

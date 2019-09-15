@@ -174,8 +174,7 @@ class AddFriendsList extends Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { users } = this.props;
+        const { classes, users } = this.props;
         const { open, friends, errors, listName } = this.state;
         const isNameInvalid = errors.name && !listName;
         const isListInvalid = errors.friends && !friends.length;

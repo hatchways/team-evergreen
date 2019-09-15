@@ -78,6 +78,9 @@ class Login extends Component {
                     // Load current user
                     this.props.loadUser(decoded.id);
 
+                    // Load alls users
+                    this.props.loadUsers(decoded.id);
+
                     // redirect user to profile page:
                     this.props.history.push("/profile");
                 }

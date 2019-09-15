@@ -5,7 +5,6 @@ class fetchUsersAPI {
         return axios
             .get("../api/users")
             .then(response => {
-                console.log("response from server: ", response);
                 return response;
             })
             .catch(err => console.log(err));

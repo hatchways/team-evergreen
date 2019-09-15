@@ -44,7 +44,7 @@ export const profileStyles = theme => ({
     pollCardHeader: {
         textAlign: "center"
     },
-    listTitle: {
+    boldTitle: {
         fontWeight: "600"
     },
     cardActions: {
