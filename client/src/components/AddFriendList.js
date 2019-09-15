@@ -31,8 +31,7 @@ const styles = theme => ({
         textAlign: "center"
     },
     subtitle: {
-        fontWeight: "600",
-        marginBottom: theme.spacing(2)
+        fontWeight: "600"
     },
     error: {
         marginBottom: theme.spacing(2)
@@ -46,7 +45,10 @@ const styles = theme => ({
     action: {
         justifyContent: "center",
         paddingBottom: theme.spacing(4),
-        paddingTop: theme.spacing(2)
+        paddingTop: theme.spacing(4)
+    },
+    list: {
+        maxHeight: "220px"
     },
     item: {
         paddingLeft: "6px",
@@ -57,6 +59,14 @@ const styles = theme => ({
         "&.MuiButton-text": {
             textTransform: "initial"
         }
+    },
+    flexBox: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: theme.spacing(2),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1)
     }
 });
 
@@ -159,6 +169,17 @@ class AddFriendsList extends Component {
         }
     };
 
+    toggleAllUsers = () => {
+        if (this.state.friends.length === this.props.users.length) {
+            // clear all users from friends list:
+            this.setState({ friends: [] });
+        } else {
+            // add all users as friends:
+            const friends = this.props.users.map(user => user._id);
+            this.setState({ friends });
+        }
+    };
+
     render() {
         const { classes } = this.props;
         const { users } = this.props;
@@ -211,14 +232,24 @@ class AddFriendsList extends Component {
                                 </FormHelperText>
                             </FormControl>
 
-                            <Typography
-                                variant="subtitle1"
-                                component="h4"
-                                className={classes.subtitle}>
-                                Add friends:
-                            </Typography>
+                            <div className={classes.flexBox}>
+                                <Typography
+                                    variant="subtitle1"
+                                    component="h4"
+                                    className={classes.subtitle}>
+                                    Add friends:
+                                </Typography>
+                                <Button
+                                    onClick={this.toggleAllUsers}
+                                    color="secondary"
+                                    className={classes.button}>
+                                    {users.length === friends.length
+                                        ? "Remove all"
+                                        : "Select all"}
+                                </Button>
+                            </div>
                             <Divider />
-                            <List dense>
+                            <List dense className={classes.list}>
                                 {users.map(user => {
                                     const included = friends.includes(user._id);
                                     return (
