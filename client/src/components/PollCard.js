@@ -12,7 +12,8 @@ import {
     GridList,
     GridListTile,
     Icon,
-    Link
+    Link,
+    IconButton
 } from "@material-ui/core";
 
 const useStyles = makeStyles(profileStyles);
@@ -70,11 +71,24 @@ function PollCard(props) {
 
                         <CardActions className={classes.votesContainer}>
                             <div className={classes.votes}>
-                                <Icon className={classes.icon}>favorite</Icon>
-                                {/* TODO: if votes == 0, icon is gray */}0
+                                <IconButton
+                                    disabled
+                                    className={classes.icon}
+                                    aria-label="Votes for first image"
+                                    component="span">
+                                    <Icon>favorite</Icon>
+                                </IconButton>
+                                <Typography variant="body1">0</Typography>
                             </div>
                             <div className={classes.votes}>
-                                <Icon className={classes.icon}>favorite</Icon>0
+                                <IconButton
+                                    disabled
+                                    className={classes.icon}
+                                    aria-label="Votes for second image"
+                                    component="span">
+                                    <Icon>favorite</Icon>
+                                </IconButton>
+                                <Typography variant="body1">12</Typography>
                             </div>
                         </CardActions>
                     </CardContent>

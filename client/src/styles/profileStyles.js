@@ -50,9 +50,6 @@ export const profileStyles = theme => ({
     boldTitle: {
         fontWeight: "600"
     },
-    // cardActions: {
-    //     justifyContent: "center"
-    // },
     list: {
         height: "200px",
         overflow: "scroll"
@@ -65,8 +62,8 @@ export const profileStyles = theme => ({
         height: 200
     },
     icon: {
-        color: theme.palette.common.red,
-        marginRight: "2px"
+        marginRight: "-2px",
+        color: `${theme.palette.common.red} !important`
     },
     votes: {
         display: "flex",

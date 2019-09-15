@@ -68,6 +68,8 @@ class Profile extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    // TODO: get poll results for each poll to show correct number of votes
+
     render() {
         const { classes, user, users } = this.props;
         const { lists, polls } = this.props.user;

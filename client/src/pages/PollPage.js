@@ -28,6 +28,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
 
 class PollPage extends Component {
     constructor(props) {
@@ -35,6 +36,7 @@ class PollPage extends Component {
         this.state = {
             drawerIsOpen: true,
             pollDialogIsOpen: false,
+            hasVoted: false,
             voted: [
                 {
                     userId: 1,
@@ -60,7 +62,7 @@ class PollPage extends Component {
                     avatar: "https://randomuser.me/api/portraits/men/4.jpg",
                     option: 1
                 }
-            ] // fake data for friends
+            ] // fake data for poll results
         };
     }
 
@@ -68,11 +70,19 @@ class PollPage extends Component {
         // get voting data on the poll from the database:
         const { _id } = this.props.location.state.poll;
 
-        axios.get("/api/poll/results").then(response => {
-            if (response.data.status === 200) {
-                this.setState({ voted: response.data });
-            }
-        });
+        axios
+            .get("/api/poll/results")
+            .then(response => {
+                if (response.data.status === 200) {
+                    const hasVoted = response.data.find(
+                        voter => voter.userId === this.props.user._id
+                    );
+                    this.setState({ voted: response.data, hasVoted });
+                }
+            })
+            .catch(error => {
+                console.log("Cannot get poll results: ", error);
+            });
     }
 
     toggleDrawer = () => {
@@ -83,13 +93,21 @@ class PollPage extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    handleVote = option => {
+        // send new vote for current user, update voted array
+        this.setState({ hasVoted: true });
+    };
+
     render() {
         const { classes, user, users } = this.props;
         const { poll, lists } = this.props.location.state;
-        const { drawerIsOpen, voted, pollDialogIsOpen } = this.state;
-        console.log("props in Poll Page: ", this.props);
-        const isFriendsPoll = user.polls.find(poll => (poll.userId = user._id));
-        console.log("isFriendsPoll: ", isFriendsPoll);
+        const { drawerIsOpen, voted, pollDialogIsOpen, hasVoted } = this.state;
+
+        const votesForFirstImage = voted.filter(user => user.option === 0)
+            .length;
+        const votesForSecondImage = voted.length - votesForFirstImage;
+
+        const isMyPoll = user._id === poll.userId;
 
         return (
             <div className={classes.root}>
@@ -139,9 +157,7 @@ class PollPage extends Component {
                                         }
                                         subheader={
                                             <Typography variant="body2">
-                                                {
-                                                    "14 answers" /*TODO - Add proper counts*/
-                                                }
+                                                {voted.length} answers
                                             </Typography>
                                         }
                                     />
@@ -167,17 +183,34 @@ class PollPage extends Component {
                                     <CardActions
                                         className={classes.votesContainer}>
                                         <div className={classes.votes}>
-                                            <Icon className={classes.icon}>
-                                                favorite
-                                            </Icon>
-                                            {/* TODO: if votes == 0, icon is gray */}
-                                            0
+                                            <IconButton
+                                                onClick={() =>
+                                                    this.handleVote(0)
+                                                }
+                                                disabled={isMyPoll || hasVoted}
+                                                className={classes.icon}
+                                                aria-label="Vote for first image"
+                                                component="span">
+                                                <Icon>favorite</Icon>
+                                            </IconButton>
+                                            <Typography variant="body1">
+                                                {votesForFirstImage}
+                                            </Typography>
                                         </div>
                                         <div className={classes.votes}>
-                                            <Icon className={classes.icon}>
-                                                favorite
-                                            </Icon>
-                                            0
+                                            <IconButton
+                                                onClick={() =>
+                                                    this.handleVote(1)
+                                                }
+                                                disabled={isMyPoll || hasVoted}
+                                                className={classes.icon}
+                                                aria-label="Vote for second image"
+                                                component="span">
+                                                <Icon>favorite</Icon>
+                                            </IconButton>
+                                            <Typography variant="body1">
+                                                {votesForSecondImage}
+                                            </Typography>
                                         </div>
                                     </CardActions>
                                 </Card>
@@ -185,18 +218,18 @@ class PollPage extends Component {
                             <Grid item xs={12} md={8} lg={6}>
                                 <Divider />
                                 <List>
-                                    {voted.map(user => {
+                                    {voted.map(voter => {
                                         return (
                                             <>
                                                 <ListItem
-                                                    key={user.userId}
+                                                    key={voter.userId}
                                                     className={
                                                         classes.boldTitle
                                                     }>
                                                     <ListItemAvatar>
                                                         <Avatar
-                                                            alt={`Avatar of ${user.name}`}
-                                                            src={user.avatar}
+                                                            alt={`Avatar of ${voter.name}`}
+                                                            src={voter.avatar}
                                                         />
                                                     </ListItemAvatar>
                                                     <ListItemText
@@ -206,7 +239,10 @@ class PollPage extends Component {
                                                                     classes.listItemText
                                                                 }
                                                                 variant="subtitle1">
-                                                                {user.name}{" "}
+                                                                {voter.name ===
+                                                                user.name
+                                                                    ? "You "
+                                                                    : voter.name}
                                                                 voted
                                                             </Typography>
                                                         }
@@ -218,7 +254,7 @@ class PollPage extends Component {
                                                             style={{
                                                                 backgroundImage: `url(
                                                                 ${
-                                                                    user.option ===
+                                                                    voter.option ===
                                                                     0
                                                                         ? poll
                                                                               .options[0]
