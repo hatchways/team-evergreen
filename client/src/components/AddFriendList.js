@@ -132,7 +132,7 @@ class AddFriendsList extends Component {
             // create new list and send it to database:
             const newList = {
                 userId: this.props.userId,
-                title: listName,
+                title: listName.trim(),
                 friends
             };
 

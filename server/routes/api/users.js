@@ -122,35 +122,58 @@ router.post("/add_friend_list", (req, res) => {
         friends: req.body.friends
     });
 
-    // TODO: allow to store lists with same titles (for different users)
-    // TODO: check that title is unique per single user
-    newList
-        .save()
-        .then(list => {
-            User.findOneAndUpdate(
-                { _id: req.body.userId },
-                {
-                    $push: {
-                        lists: list["_id"]
-                    }
-                }
-            )
-                .then(response => {
-                    res.json(list);
-                })
-                .catch(err => {
-                    console.log("error: ", err);
-                    return res.json({
-                        status: 500,
-                        error: "Error updating the user list"
+    // check that title is unique for this user before saving list:
+    FriendList.find({ userId: req.body.userId })
+        .select("title")
+        .then(result => {
+            if (
+                result.length &&
+                result.find(
+                    list =>
+                        list.title.toLowerCase() ===
+                        req.body.title.toLowerCase()
+                )
+            ) {
+                return res
+                    .status(400)
+                    .json({ error: "List with this name already exists" });
+            } else {
+                newList
+                    .save()
+                    .then(list => {
+                        User.findOneAndUpdate(
+                            { _id: req.body.userId },
+                            {
+                                $push: {
+                                    lists: list["_id"]
+                                }
+                            }
+                        )
+                            .then(response => {
+                                res.json(list);
+                            })
+                            .catch(err => {
+                                console.log("error: ", err);
+                                return res.json({
+                                    status: 500,
+                                    error: "Error updating the user list"
+                                });
+                            });
+                    })
+                    .catch(err => {
+                        console.log("error: ", err);
+                        res.json({
+                            status: 500,
+                            error: "Unable to create a new list"
+                        });
                     });
-                });
+            }
         })
         .catch(err => {
             console.log("error: ", err);
             res.json({
                 status: 500,
-                error: "Unable to create a new list"
+                error: "Unable to create a new list2"
             });
         });
 });
