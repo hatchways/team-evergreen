@@ -99,7 +99,7 @@ class Profile extends Component {
                 />
                 <div className={classes.appBarSpacer} />
 
-                <main className={classes.content}>
+                <main className={classes.main}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={6}>

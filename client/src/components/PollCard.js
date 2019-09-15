@@ -6,6 +6,7 @@ import {
     Card,
     CardHeader,
     CardContent,
+    CardActions,
     Typography,
     Grid,
     GridList,
@@ -35,8 +36,6 @@ function PollCard(props) {
                     to={{
                         pathname: `/poll/${poll._id}`,
                         state: {
-                            user: props.user,
-                            users: props.users,
                             lists: props.lists,
                             poll: poll
                         }
@@ -56,7 +55,7 @@ function PollCard(props) {
                             </Typography>
                         }
                     />
-                    <CardContent>
+                    <CardContent className={classes.cardContent}>
                         <GridList cellHeight={180} className={classes.gridList}>
                             <GridListTile key={1}>
                                 <img src={poll.options[0]} alt="First option" />
@@ -69,16 +68,15 @@ function PollCard(props) {
                             </GridListTile>
                         </GridList>
 
-                        <div className={classes.votesContainer}>
+                        <CardActions className={classes.votesContainer}>
                             <div className={classes.votes}>
                                 <Icon className={classes.icon}>favorite</Icon>
-                                {12 /*TODO fix the votes*/}
+                                {/* TODO: if votes == 0, icon is gray */}0
                             </div>
                             <div className={classes.votes}>
-                                <Icon className={classes.icon}>favorite</Icon>
-                                {2 /*TODO fox the votes*/}
+                                <Icon className={classes.icon}>favorite</Icon>0
                             </div>
-                        </div>
+                        </CardActions>
                     </CardContent>
                 </Link>
             </Card>
