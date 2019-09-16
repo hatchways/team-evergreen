@@ -16,13 +16,10 @@ const bodyParser = require("body-parser");
 // Load route files
 const users = require("./routes/api/users");
 const upload = require("./routes/api/upload");
+const vote = require("./routes/api/vote");
+const results = require("./routes/api/results");
 
 const app = express();
-
-//Inserting new code to support back-end api.
-//Leaving the boiler plate code alone for now - may need to refactor
-//Author - Fil - 8/28/2019
-//Inspiration - https://blog.bitsrc.io/build-a-login-auth-app-with-mern-stack-part-1-c405048e3669
 
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -40,6 +37,8 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 app.use("/api/images", upload);
+app.use("/api/poll", vote);
+app.use("/api/poll", results);
 
 app.use(logger("dev"));
 app.use(json());
