@@ -1,21 +1,14 @@
-// inspiration: https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard
-
 import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
-import AddFriendList from "../components/AddFriendList";
-import PollCard from "../components/PollCard";
-import ListCard from "../components/ListCard";
+import FriendsPollCard from "../components/FriendsPollCard";
 import UserPanel from "../components/UserPanel";
 import AddPollDialog from "../components/AddPollDialog";
-import {
-    Typography,
-    Container,
-    Grid,
-    IconButton,
-    Icon
-} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 class FriendsPolls extends Component {
     constructor(props) {
@@ -35,7 +28,6 @@ class FriendsPolls extends Component {
 
     render() {
         const { classes, user, users } = this.props;
-        const { lists } = this.props.user;
         const { pollDialogIsOpen } = this.state;
         const friendsPolls = [
             {
@@ -100,7 +92,7 @@ class FriendsPolls extends Component {
                                     <Grid item>
                                         <AddPollDialog
                                             userId={user._id}
-                                            lists={lists}
+                                            lists={this.props.user.lists}
                                             addNewPoll={this.props.addNewPoll}
                                             togglePollDialog={
                                                 this.togglePollDialog
@@ -110,15 +102,11 @@ class FriendsPolls extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid
-                                    container
-                                    item
-                                    spacing={4}
-                                    className={classes.slider}>
+                                <Grid container item spacing={4}>
                                     {friendsPolls &&
                                         sortBy(friendsPolls, true).map(
                                             (poll, i) => (
-                                                <PollCard
+                                                <FriendsPollCard
                                                     key={i}
                                                     poll={poll}
                                                     user={user}
@@ -126,6 +114,21 @@ class FriendsPolls extends Component {
                                                 />
                                             )
                                         )}
+                                </Grid>
+                                <Grid item spacing={4} xs={12}>
+                                    <Button
+                                        style={{
+                                            margin: "32px auto",
+                                            display:
+                                                friendsPolls.length > 9
+                                                    ? "block"
+                                                    : "none"
+                                        }}
+                                        variant="contained"
+                                        color="primary"
+                                        size="medium">
+                                        Load more
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
