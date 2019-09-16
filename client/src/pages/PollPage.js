@@ -95,10 +95,6 @@ class PollPage extends Component {
         const { poll, lists } = this.props.location.state;
         const { voted, pollDialogIsOpen } = this.state;
 
-        const votesForFirstImage = voted.filter(user => user.option === 0)
-            .length;
-        const votesForSecondImage = voted.length - votesForFirstImage;
-
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -142,7 +138,9 @@ class PollPage extends Component {
                                         }
                                         subheader={
                                             <Typography variant="body2">
-                                                {voted.length} answers
+                                                {poll.votes[0] +
+                                                    poll.votes[1] || 0}{" "}
+                                                answers
                                             </Typography>
                                         }
                                     />
@@ -176,7 +174,7 @@ class PollPage extends Component {
                                                 <Icon>favorite</Icon>
                                             </IconButton>
                                             <Typography variant="body1">
-                                                {votesForFirstImage}
+                                                {poll.votes[0] || 0}
                                             </Typography>
                                         </div>
                                         <div className={classes.votes}>
@@ -188,7 +186,7 @@ class PollPage extends Component {
                                                 <Icon>favorite</Icon>
                                             </IconButton>
                                             <Typography variant="body1">
-                                                {votesForSecondImage}
+                                                {poll.votes[2] || 0}
                                             </Typography>
                                         </div>
                                     </CardActions>
