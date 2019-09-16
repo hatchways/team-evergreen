@@ -222,7 +222,7 @@ router.get("/", (req, res) => {
             if (!users.length) {
                 return res.status(404).json({ error: "Users were not found" });
             } else {
-                res.sttaus(200).json(users);
+                res.status(200).json(users);
             }
         })
         .catch(err => {
