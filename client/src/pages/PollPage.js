@@ -6,8 +6,7 @@ import { pollPageStyles } from "../styles/pollPageStyles";
 import { withStyles } from "@material-ui/core/styles";
 
 import AddPollDialog from "../components/AddPollDialog";
-import AppNavbar from "../components/AppNavbar";
-import FriendsDrawer from "../components/FriendsDrawer";
+import UserPanel from "../components/UserPanel";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
@@ -34,9 +33,7 @@ class PollPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            drawerIsOpen: true,
             pollDialogIsOpen: false,
-            hasVoted: false,
             voted: [
                 {
                     userId: 1,
@@ -89,43 +86,27 @@ class PollPage extends Component {
             });
     }
 
-    toggleDrawer = () => {
-        this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
-    };
-
     togglePollDialog = () => {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
-    };
-
-    handleVote = option => {
-        // send new vote for current user, update voted array
-        this.setState({ hasVoted: true });
     };
 
     render() {
         const { classes, user, users } = this.props;
         const { poll, lists } = this.props.location.state;
-        const { drawerIsOpen, voted, pollDialogIsOpen, hasVoted } = this.state;
+        const { voted, pollDialogIsOpen } = this.state;
 
         const votesForFirstImage = voted.filter(user => user.option === 0)
             .length;
         const votesForSecondImage = voted.length - votesForFirstImage;
 
-        const isMyPoll = user._id === poll.userId;
-
         return (
             <div className={classes.root}>
                 <CssBaseline />
-                <AppNavbar
+                <UserPanel
                     user={user}
-                    open={drawerIsOpen}
+                    users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
-                />
-                <FriendsDrawer
-                    users={users}
-                    open={drawerIsOpen}
-                    toggleDrawer={this.toggleDrawer}
                 />
                 <AddPollDialog
                     userId={user._id}
@@ -188,10 +169,7 @@ class PollPage extends Component {
                                         className={classes.votesContainer}>
                                         <div className={classes.votes}>
                                             <IconButton
-                                                onClick={() =>
-                                                    this.handleVote(0)
-                                                }
-                                                disabled={isMyPoll || hasVoted}
+                                                disabled
                                                 className={classes.icon}
                                                 aria-label="Vote for first image"
                                                 component="span">
@@ -203,10 +181,7 @@ class PollPage extends Component {
                                         </div>
                                         <div className={classes.votes}>
                                             <IconButton
-                                                onClick={() =>
-                                                    this.handleVote(1)
-                                                }
-                                                disabled={isMyPoll || hasVoted}
+                                                disabled
                                                 className={classes.icon}
                                                 aria-label="Vote for second image"
                                                 component="span">
@@ -243,11 +218,7 @@ class PollPage extends Component {
                                                                     classes.listItemText
                                                                 }
                                                                 variant="subtitle1">
-                                                                {voter.name ===
-                                                                user.name
-                                                                    ? "You "
-                                                                    : voter.name}
-                                                                voted
+                                                                {voter.name}
                                                             </Typography>
                                                         }
                                                         secondary="24m ago"

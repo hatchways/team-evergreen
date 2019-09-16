@@ -19,6 +19,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
+import FriendsPolls from "./pages/FriendsPolls";
 
 import "./App.css";
 
@@ -177,6 +178,22 @@ class App extends Component {
                                         users={this.props.users}
                                         user={this.props.user}
                                         loadUsers={this.props.loadUsers}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/friends-polls"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <FriendsPolls
+                                        {...props}
+                                        users={this.props.users}
+                                        user={this.props.user}
                                         logOut={this.logOut}
                                     />
                                 ) : (
