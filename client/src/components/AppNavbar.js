@@ -102,7 +102,7 @@ function AppNavbar(props) {
                         <Link
                             variant="subtitle1"
                             color="textPrimary"
-                            href="/polls"
+                            href="/friends-polls"
                             className={clsx(classes.link, classes.navItem)}>
                             Friends polls
                         </Link>
