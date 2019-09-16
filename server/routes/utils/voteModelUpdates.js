@@ -8,13 +8,13 @@
 import Vote from "../../models/Vote";
 import Poll from "../../models/Poll";
 
-export async function registerVote(data) {
-    const { pollId, userId, option } = data;
+export async function registerVote(pollId, userId, option) {
     try {
         //Update the vote for this poll and this user
         await Vote.findOneAndUpdate(
             { userId: userId, pollId: pollId },
-            { option: option }
+            { option: option },
+            { new: true, upsert: true }
         );
 
         const newCounts = await parallelSumOfCounts(pollId);
@@ -26,7 +26,7 @@ export async function registerVote(data) {
             }
         );
 
-        return { status: 200, avatarUrl: data.options[0] };
+        return { status: 200, pollId: pollId, option: option };
     } catch (err) {
         console.log(`PollId:${pollId}, UserId:${userId}`, err);
         return { status: 500, message: "Error occurred while saving vote." };
@@ -38,11 +38,11 @@ export async function registerVote(data) {
 async function parallelSumOfCounts(pollId) {
     const promises = [
         Vote.where({
-            _id: data.pollId,
+            _id: pollId,
             option: 0
         }).countDocuments(),
         Vote.where({
-            _id: data.pollId,
+            _id: pollId,
             option: 1
         }).countDocuments()
     ];

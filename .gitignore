@@ -22,3 +22,4 @@ yarn-error.log*
 
 #ignore bash script utilities
 lazy_git
+.vscode
