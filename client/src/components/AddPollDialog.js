@@ -160,7 +160,7 @@ class AddPollDialog extends Component {
                     }
 
                     // add new poll to Profile and close dialog:
-                    this.props.addNewPoll(response.data);
+                    this.props.addNewPoll(response.data.data);
                     this.closeDialog();
                 })
                 .catch(err => {
@@ -185,7 +185,7 @@ class AddPollDialog extends Component {
     };
 
     render() {
-        const { classes, lists } = this.props;
+        const { classes, lists, isPollPage, isFriendsProfile } = this.props;
         const { errors, sendToList, title, buttonIsDisabled } = this.state;
 
         return (
@@ -194,7 +194,12 @@ class AddPollDialog extends Component {
                     onClick={this.props.togglePollDialog}
                     variant="contained"
                     color="primary"
-                    size="medium">
+                    size="medium"
+                    style={{
+                        display:
+                            isPollPage || isFriendsProfile ? "none" : "block" // hide button on poll page
+                        // or on friend's profile
+                    }}>
                     Create poll
                 </Button>
                 <Dialog

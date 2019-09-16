@@ -5,7 +5,7 @@ export const profileStyles = theme => ({
         display: "flex"
     },
     appBarSpacer: theme.mixins.toolbar,
-    content: {
+    main: {
         backgroundColor: theme.palette.gray,
         flexGrow: 1,
         height: "100vh",
@@ -41,14 +41,14 @@ export const profileStyles = theme => ({
         flexDirection: "column",
         boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)"
     },
+    cardContent: {
+        paddingBottom: "0 !important"
+    },
     pollCardHeader: {
         textAlign: "center"
     },
-    listTitle: {
+    boldTitle: {
         fontWeight: "600"
-    },
-    cardActions: {
-        justifyContent: "center"
     },
     list: {
         height: "200px",
@@ -62,8 +62,8 @@ export const profileStyles = theme => ({
         height: 200
     },
     icon: {
-        color: theme.palette.common.red,
-        marginRight: "2px"
+        marginRight: "-2px",
+        color: `${theme.palette.common.red} !important`
     },
     votes: {
         display: "flex",
@@ -75,7 +75,9 @@ export const profileStyles = theme => ({
     votesContainer: {
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+        paddingTop: 0,
+        paddingBottom: theme.spacing(3)
     },
     slider: {
         position: "relative",

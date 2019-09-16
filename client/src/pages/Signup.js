@@ -97,7 +97,7 @@ class Signup extends Component {
                     const decoded = jwt_decode(token);
 
                     // Load current user
-                    this.props.loadUser(decoded);
+                    this.props.loadUser(decoded.id);
 
                     // redirect user to profile page:
                     this.props.history.push("/profile");

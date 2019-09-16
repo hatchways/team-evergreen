@@ -81,7 +81,7 @@ router.post("/login", (req, res) => {
     User.findOne({ email }).then(user => {
         // Check if user exists
         if (!user) {
-            return res.status(404).json({ emailnotfound: "Email not found" });
+            return res.status(404).json({ email: "Email not found" });
         }
 
         // Check password
@@ -107,8 +107,6 @@ router.post("/login", (req, res) => {
  * @desc Create a new friends list
  */
 router.post("/add_friend_list", (req, res) => {
-    console.log("request body: ", req.body);
-
     const { errors, isValid } = validateFriendListInput(req.body);
 
     // validate request info:
@@ -121,6 +119,7 @@ router.post("/add_friend_list", (req, res) => {
         title: req.body.title,
         friends: req.body.friends
     });
+
 
     // check that title is unique for this user before saving list:
     FriendList.find({ userId: req.body.userId })
@@ -171,9 +170,8 @@ router.post("/add_friend_list", (req, res) => {
         })
         .catch(err => {
             console.log("error: ", err);
-            res.json({
-                status: 500,
-                error: "Unable to create a new list2"
+            res.status(500).json({
+                error: "Unable to create a new list"
             });
         });
 });
@@ -209,8 +207,7 @@ router.get("/get_user_data", (req, res) => {
         })
         .catch(err => {
             console.log("error: ", err);
-            res.json({
-                status: 500,
+            res.status(500).json({
                 error: "Unable to retrieve data"
             });
         });
@@ -225,13 +222,12 @@ router.get("/", (req, res) => {
             if (!users.length) {
                 return res.status(404).json({ error: "Users were not found" });
             } else {
-                res.json(users);
+                res.status(200).json(users);
             }
         })
         .catch(err => {
             console.log("error: ", err);
-            res.json({
-                status: 500,
+            res.status(500).json({
                 error: "Unable to retrieve data"
             });
         });
@@ -255,8 +251,7 @@ router.get("/user/:id", (req, res) => {
         })
         .catch(err => {
             console.log("error: ", err);
-            res.json({
-                status: 500,
+            res.status(500).json({
                 error: "Unable to retrieve user data"
             });
         });

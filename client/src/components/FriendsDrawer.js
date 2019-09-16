@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { Link as RouterLink } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
     Drawer,
@@ -12,7 +13,8 @@ import {
     Badge,
     Divider,
     IconButton,
-    Icon
+    Icon,
+    Link
 } from "@material-ui/core";
 
 const StyledBadge = withStyles(theme => ({
@@ -72,7 +74,7 @@ const useStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.leavingScreen
         }),
         width: theme.spacing(7),
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("xs")]: {
             width: "70px"
         }
     },
@@ -126,20 +128,31 @@ function FriendsDrawer(props) {
                 }>
                 {props.users.map(user => {
                     return (
-                        <ListItem button key={user._id}>
-                            <ListItemAvatar>
-                                <StyledBadge
-                                    variant="dot"
-                                    overlap="circle"
-                                    color="secondary">
-                                    <Avatar
-                                        alt={`Avatar of ${user.name}`}
-                                        src={user.avatar}
-                                    />
-                                </StyledBadge>
-                            </ListItemAvatar>
-                            <ListItemText primary={user.name} />
-                        </ListItem>
+                        <Link
+                            underline="none"
+                            component={RouterLink}
+                            to={{
+                                pathname: `/user/${user._id}`,
+                                state: {
+                                    user: user,
+                                    users: props.users
+                                }
+                            }}>
+                            <ListItem button key={user._id}>
+                                <ListItemAvatar>
+                                    <StyledBadge
+                                        variant="dot"
+                                        overlap="circle"
+                                        color="secondary">
+                                        <Avatar
+                                            alt={`Avatar of ${user.name}`}
+                                            src={user.avatar}
+                                        />
+                                    </StyledBadge>
+                                </ListItemAvatar>
+                                <ListItemText primary={user.name} />
+                            </ListItem>
+                        </Link>
                     );
                 })}
             </List>
