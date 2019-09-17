@@ -12,6 +12,8 @@
   "dependencies": {
     "@material/select": "^3.1.0",
     "aws-sdk": "^2.524.0",
+    "axios": "^0.19.0",
+    "babel-polyfill": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-busboy": "0.0.2",
@@ -24,6 +26,7 @@
     "http-errors": "~1.6.3",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
     "mongo-seeding-cli": "^3.3.0",
     "mongoose": "^5.6.10",
     "mongoose-type-url": "^1.0.6",
