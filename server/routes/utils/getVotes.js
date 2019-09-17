@@ -16,7 +16,6 @@ export async function getVotes(pollId) {
     let results = [];
     votes.forEach(vote => {
         //console.log(vote);
-        console.log(vote.name);
         let friend = {
             userId: vote.userId._id,
             name: vote.userId.name,
@@ -24,7 +23,6 @@ export async function getVotes(pollId) {
             option: vote.option,
             updatedAt: vote.updatedAt
         };
-        console.log("Friend", friend);
         results.push(friend);
     });
 
