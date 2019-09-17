@@ -22,9 +22,9 @@ export async function registerVote(pollId, userId, option) {
         await Poll.findOneAndUpdate(
             { pollId: pollId },
             {
-                votes: newCounts
+                $push: { votes: [20, 20] }
             }
-        );
+        ).exec();
         console.log("vmu", pollId, option, newCounts);
         return { pollId: pollId, option: option, newCounts: newCounts };
     } catch (err) {
