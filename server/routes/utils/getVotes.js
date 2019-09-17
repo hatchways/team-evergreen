@@ -13,9 +13,9 @@ export async function getVotes(pollId) {
     let results = [];
     votes.forEach(vote => {
         let friend = {
-            userId: vote.userId._id,
-            name: vote.userId.name,
-            avatar: vote.userId.avatar,
+            userId: vote.userId,
+            name: vote.name,
+            avatar: vote.avatar,
             option: vote.option
         };
         results.push(friend);

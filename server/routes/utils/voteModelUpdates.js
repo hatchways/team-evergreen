@@ -15,17 +15,17 @@ export async function registerVote(pollId, userId, option) {
             { userId: userId, pollId: pollId },
             { option: option },
             { new: true, upsert: true }
-        );
+        ).exec();
 
         const newCounts = await parallelSumOfCounts(pollId);
 
         await Poll.findOneAndUpdate(
-            { _id: pollId },
+            { pollId: pollId },
             {
                 votes: newCounts
             }
         );
-
+        console.log("vmu", pollId, option, newCounts);
         return { pollId: pollId, option: option, newCounts: newCounts };
     } catch (err) {
         console.log(`PollId:${pollId}, UserId:${userId}`, err);
@@ -38,11 +38,11 @@ export async function registerVote(pollId, userId, option) {
 async function parallelSumOfCounts(pollId) {
     const promises = [
         Vote.where({
-            _id: pollId,
+            pollId: pollId,
             option: 0
         }).countDocuments(),
         Vote.where({
-            _id: pollId,
+            pollId: pollId,
             option: 1
         }).countDocuments()
     ];
