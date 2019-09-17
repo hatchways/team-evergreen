@@ -24,10 +24,10 @@ function FriendsPollCard(props) {
     const registerVote = option => {
         const dataToSend = {
             pollId: poll._id,
-            userId: this.props.userId,
+            userId: props.userId,
             option
         };
-        this.props.registerVote(dataToSend);
+        props.registerVote(dataToSend);
         setHasVoted(true);
     };
 
@@ -76,7 +76,7 @@ function FriendsPollCard(props) {
                         <div className={classes.votes}>
                             <IconButton
                                 disabled={hasVoted}
-                                onClick={() => this.registerVote(1)}
+                                onClick={() => registerVote(1)}
                                 className={classes.icon}
                                 aria-label="Votes for second image"
                                 component="span">

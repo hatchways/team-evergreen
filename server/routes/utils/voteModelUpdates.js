@@ -25,8 +25,8 @@ export async function registerVote(pollId, userId, option) {
                 votes: newCounts
             }
         );
-
-        return { status: 200, pollId: pollId, option: option };
+        console.log("newCounts: ", newCounts);
+        return { pollId, option, newCounts };
     } catch (err) {
         console.log(`PollId:${pollId}, UserId:${userId}`, err);
         return { status: 500, message: "Error occurred while saving vote." };
@@ -38,11 +38,11 @@ export async function registerVote(pollId, userId, option) {
 async function parallelSumOfCounts(pollId) {
     const promises = [
         Vote.where({
-            _id: pollId,
+            pollId: pollId,
             option: 0
         }).countDocuments(),
         Vote.where({
-            _id: pollId,
+            pollId: pollId,
             option: 1
         }).countDocuments()
     ];

@@ -1,11 +1,12 @@
 import {
     FETCH_USER_DATA_SUCCESS,
     FETCH_USERS_SUCCESS,
-    FETCH_REQUEST_FAILURE,
+    API_REQUEST_FAILURE,
     ADD_NEW_LIST,
     ADD_NEW_POLL,
     LOGOUT,
-    REGISTER_VOTE_SUCCESS
+    REGISTER_VOTE_SUCCESS,
+    GET_FRIENDS_POLLS_SUCCESS
 } from "./constants.js";
 
 const userInitialState = {
@@ -24,20 +25,7 @@ const usersInitialState = {
 };
 
 const friendsPollsInitialState = {
-    polls: [
-        {
-            _id: "5d7e7a4b2c55c706fbed8ac1",
-            options: [
-                "https://evegreen.s3.us-west-1.amazonaws.com/9dcd48c7-4884-4a67-877d-ee778aebb376",
-                "https://evegreen.s3.us-west-1.amazonaws.com/04292b5e-ca2b-4c17-842d-ae58d25ccc32"
-            ],
-            votes: [],
-            title: "lfhsd",
-            userId: "5d7da350c440f87937ef7174",
-            sendToList: "5d7deb294313b8033fa98b85",
-            createdAt: "2019-09-15T17:52:11.363+00:00"
-        }
-    ],
+    friendsPolls: [],
     error: ""
 };
 
@@ -64,7 +52,7 @@ export const userReducer = (state = userInitialState, action = {}) => {
                 });
             }
 
-        case FETCH_REQUEST_FAILURE:
+        case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
 
@@ -104,7 +92,7 @@ export const usersReducer = (state = usersInitialState, action = {}) => {
                 });
             }
 
-        case FETCH_REQUEST_FAILURE:
+        case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
 
@@ -115,19 +103,42 @@ export const usersReducer = (state = usersInitialState, action = {}) => {
 
 export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
     switch (action.type) {
-        case REGISTER_VOTE_SUCCESS:
+        case GET_FRIENDS_POLLS_SUCCESS:
             if (action.response.status === 200) {
-                // return new state with friends polls:
                 return Object.assign({}, state, {
-                    polls: action.response.data
+                    friendsPolls: action.response.data
                 });
             } else {
                 return Object.assign({}, state, {
                     error: action.response.data
                 });
             }
+        case REGISTER_VOTE_SUCCESS:
+            if (action.response.status === 200) {
+                const { pollId, newCounts } = action.response.data;
 
-        case FETCH_REQUEST_FAILURE:
+                const updatedPolls = state.friendsPolls.map(poll => {
+                    // Find the poll with the matching pollId
+                    if (poll._id === pollId) {
+                        // Return a new object
+                        return {
+                            ...poll, // copy the existing poll
+                            votes: newCounts // replace the votes array
+                        };
+                    }
+
+                    // Leave every other poll unchanged
+                    return poll;
+                });
+
+                return Object.assign({}, state, { polls: updatedPolls });
+            } else {
+                return Object.assign({}, state, {
+                    error: action.response.data
+                });
+            }
+
+        case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
 

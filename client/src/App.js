@@ -10,7 +10,8 @@ import {
     loadUsers,
     addNewList,
     addNewPoll,
-    registerVote
+    registerVote,
+    getFriendsPolls
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -29,7 +30,7 @@ const mapStateToProps = state => {
     return {
         user: state.userReducer,
         users: state.usersReducer.users,
-        polls: state.pollsReducer
+        friendsPolls: state.pollsReducer.friendsPolls
     };
 };
 
@@ -41,6 +42,7 @@ const mapDispatchToProps = dispatch => {
         addNewList: data => dispatch(addNewList(data)),
         addNewPoll: data => dispatch(addNewPoll(data)),
         registerVote: data => dispatch(registerVote(data)),
+        getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         logOut: () => dispatch(logOut())
     };
 };
@@ -199,6 +201,10 @@ class App extends Component {
                                         {...props}
                                         users={this.props.users}
                                         user={this.props.user}
+                                        friendsPolls={this.props.friendsPolls}
+                                        getFriendsPolls={
+                                            this.props.getFriendsPolls
+                                        }
                                         registerVote={this.props.registerVote}
                                         logOut={this.logOut}
                                     />
