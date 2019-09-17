@@ -63,6 +63,8 @@ class App extends Component {
 
             // fetch all users. Pass current user id to exclude
             // him from the list of all users:
+            console.log("loading all users in App...");
+
             this.props.loadUsers(decoded.id);
 
             // Check for expired token
@@ -83,9 +85,6 @@ class App extends Component {
 
         // Reset the state
         this.props.logOut();
-
-        // Redirect to login
-        window.location.href = "/login";
     };
 
     render() {
