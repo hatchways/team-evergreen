@@ -45,7 +45,7 @@ router.post("/upload", function(req, res) {
                 };
                 createNewPoll(params)
                     .then(response => res.status(200).json(response))
-                    .catch(response => res.status(200).json(response));
+                    .catch(err => res.status(500).json(err));
             } else if (req.body.target === TARGET_AVATAR) {
                 const params = {
                     userId: req.body.userId,
@@ -53,7 +53,7 @@ router.post("/upload", function(req, res) {
                 };
                 updateUserAvatar(params)
                     .then(response => res.status(200).json(response))
-                    .catch(response => res.status(200).json(response));
+                    .catch(err => res.status(500).json(err));
             } else {
                 console.log("No target");
                 res.status(500).json({
