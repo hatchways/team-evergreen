@@ -20,11 +20,11 @@ export async function registerVote(pollId, userId, option) {
         const newCounts = await parallelSumOfCounts(pollId);
 
         await Poll.findOneAndUpdate(
-            { pollId: pollId },
+            { _id: pollId },
             {
-                $push: { votes: [20, 20] }
+                votes: newCounts
             }
-        ).exec();
+        ).exec(result => console.log(result));
         console.log("vmu", pollId, option, newCounts);
         return { pollId: pollId, option: option, newCounts: newCounts };
     } catch (err) {
