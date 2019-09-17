@@ -149,13 +149,13 @@ class PollPage extends Component {
                                         <GridList
                                             cellHeight={180}
                                             className={classes.gridList}>
-                                            <GridListTile key={1}>
+                                            <GridListTile key={11}>
                                                 <img
                                                     src={poll.options[0]}
                                                     alt="First option"
                                                 />
                                             </GridListTile>
-                                            <GridListTile key={2}>
+                                            <GridListTile key={22}>
                                                 <img
                                                     src={poll.options[1]}
                                                     alt="Second option"

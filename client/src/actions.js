@@ -4,11 +4,13 @@ import {
     FETCH_USERS_SUCCESS,
     ADD_NEW_LIST,
     ADD_NEW_POLL,
-    FETCH_REQUEST_FAILURE
+    FETCH_REQUEST_FAILURE,
+    REGISTER_VOTE_SUCCESS
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchUserData";
 import fetchUsersAPI from "./api/fetchAllUsers";
+import postDataAPI from "./api/postDataAPI";
 
 export const loadUserData = data => dispatch => {
     return fetchDataAPI
@@ -32,6 +34,17 @@ export const loadUsers = id => dispatch => {
         });
 };
 
+export const registerVote = data => dispatch => {
+    return postDataAPI
+        .registerVote(data)
+        .then(response => {
+            dispatch(registerVoteSuccess(response));
+        })
+        .catch(error => {
+            dispatch(fetchRequestFailure(error));
+        });
+};
+
 export function fetchUsersSuccess(response, id) {
     return {
         type: FETCH_USERS_SUCCESS,
@@ -43,6 +56,13 @@ export function fetchUsersSuccess(response, id) {
 export function fetchUserDataSuccess(response) {
     return {
         type: FETCH_USER_DATA_SUCCESS,
+        response
+    };
+}
+
+export function registerVoteSuccess(response) {
+    return {
+        type: REGISTER_VOTE_SUCCESS,
         response
     };
 }

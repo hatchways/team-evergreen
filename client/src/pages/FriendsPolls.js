@@ -31,16 +31,16 @@ class FriendsPolls extends Component {
         const { pollDialogIsOpen } = this.state;
         const friendsPolls = [
             {
-                _id: "5d77db444293c8a68abbe09d",
+                _id: "5d7e7a4b2c55c706fbed8ac1",
                 options: [
-                    "https://evegreen.s3.us-west-1.amazonaws.com/4ca340ab-2a6a-40f5-ae68-710f5c1c92f6",
-                    "https://evegreen.s3.us-west-1.amazonaws.com/bdf758d0-ee77-45f6-8dbc-b05c31121c61"
+                    "https://evegreen.s3.us-west-1.amazonaws.com/9dcd48c7-4884-4a67-877d-ee778aebb376",
+                    "https://evegreen.s3.us-west-1.amazonaws.com/04292b5e-ca2b-4c17-842d-ae58d25ccc32"
                 ],
-                title: "TestPoll",
-                userId: "5d76cf055f78b983c25f8137",
-                sendToList: "5d7738ac949d55941f24a244",
-                createdAt: "2019-09-10T17:20:04.280+00:00",
-                votes: [24, 9]
+                votes: [],
+                title: "lfhsd",
+                userId: "5d7da350c440f87937ef7174",
+                sendToList: "5d7deb294313b8033fa98b85",
+                createdAt: "2019-09-15T17:52:11.363+00:00"
             }
         ]; // temp friends data
 
@@ -109,8 +109,10 @@ class FriendsPolls extends Component {
                                                 <FriendsPollCard
                                                     key={i}
                                                     poll={poll}
-                                                    user={user}
-                                                    users={users}
+                                                    userId={user._id}
+                                                    registerVote={
+                                                        this.props.registerVote
+                                                    }
                                                 />
                                             )
                                         )}

@@ -22,7 +22,12 @@ function FriendsPollCard(props) {
     const { poll } = props;
 
     const registerVote = option => {
-        // this.props.registerVote(option);
+        const dataToSend = {
+            pollId: poll._id,
+            userId: this.props.userId,
+            option
+        };
+        this.props.registerVote(dataToSend);
         setHasVoted(true);
     };
 

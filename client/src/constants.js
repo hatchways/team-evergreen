@@ -4,3 +4,4 @@ export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
 export const ADD_NEW_LIST = "ADD_NEW_LIST";
 export const ADD_NEW_POLL = "ADD_NEW_POLL";
 export const LOGOUT = "LOGOUT";
+export const REGISTER_VOTE_SUCCESS = "REGISTER_VOTE_SUCCESS";

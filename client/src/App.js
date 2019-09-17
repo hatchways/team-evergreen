@@ -9,7 +9,8 @@ import {
     logOut,
     loadUsers,
     addNewList,
-    addNewPoll
+    addNewPoll,
+    registerVote
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -27,7 +28,8 @@ import "./App.css";
 const mapStateToProps = state => {
     return {
         user: state.userReducer,
-        users: state.usersReducer.users
+        users: state.usersReducer.users,
+        polls: state.pollsReducer
     };
 };
 
@@ -38,6 +40,7 @@ const mapDispatchToProps = dispatch => {
         loadUsers: id => dispatch(loadUsers(id)),
         addNewList: data => dispatch(addNewList(data)),
         addNewPoll: data => dispatch(addNewPoll(data)),
+        registerVote: data => dispatch(registerVote(data)),
         logOut: () => dispatch(logOut())
     };
 };
@@ -100,6 +103,7 @@ class App extends Component {
                                     <Signup
                                         {...props}
                                         loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -114,6 +118,7 @@ class App extends Component {
                                     <Signup
                                         {...props}
                                         loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -194,6 +199,7 @@ class App extends Component {
                                         {...props}
                                         users={this.props.users}
                                         user={this.props.user}
+                                        registerVote={this.props.registerVote}
                                         logOut={this.logOut}
                                     />
                                 ) : (
