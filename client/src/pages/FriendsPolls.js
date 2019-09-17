@@ -19,8 +19,9 @@ class FriendsPolls extends Component {
     }
 
     componentDidMount() {
+        const { userId } = this.props.location.state;
         // get friends polls the user can vote on:
-        // this.props.getFriendsPolls();
+        this.props.getFriendsPolls(userId);
     }
 
     togglePollDialog = () => {
@@ -103,21 +104,6 @@ class FriendsPolls extends Component {
                                                 />
                                             )
                                         )}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Button
-                                        style={{
-                                            margin: "32px auto",
-                                            display:
-                                                friendsPolls.length > 9
-                                                    ? "block"
-                                                    : "none"
-                                        }}
-                                        variant="contained"
-                                        color="primary"
-                                        size="medium">
-                                        Load more
-                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>

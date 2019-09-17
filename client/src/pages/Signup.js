@@ -98,6 +98,9 @@ class Signup extends Component {
 
                     // Load current user
                     this.props.loadUser(decoded.id);
+
+                    // Load all users:
+                    this.props.loadUsers(decoded.id);
                 }
             })
             .catch(err => {

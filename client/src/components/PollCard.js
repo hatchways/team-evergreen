@@ -21,6 +21,7 @@ const useStyles = makeStyles(profileStyles);
 function PollCard(props) {
     const classes = useStyles();
     const { poll } = props;
+    const votesCount = poll.votes[0] + poll.votes[1];
 
     return (
         <Grid
@@ -52,7 +53,8 @@ function PollCard(props) {
                         }
                         subheader={
                             <Typography variant="body2">
-                                {poll.votes[0] + poll.votes[1] || 0} answers
+                                {votesCount || 0}{" "}
+                                {votesCount === 1 ? "answer" : "answers"}
                             </Typography>
                         }
                     />

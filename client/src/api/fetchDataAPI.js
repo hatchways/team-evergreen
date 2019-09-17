@@ -25,9 +25,12 @@ class fetchDataAPI {
     }
     static fetchFriendsPolls(id) {
         return axios
-            .get(`../api/polls/${id}`)
+            .get(`../api/poll/requests`, {
+                params: {
+                    userId: id
+                }
+            })
             .then(response => {
-                console.log("response from server: ", response);
                 return response;
             })
             .catch(err => {

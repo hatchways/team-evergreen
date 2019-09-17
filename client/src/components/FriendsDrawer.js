@@ -155,7 +155,7 @@ function FriendsDrawer(props) {
                                             />
                                         ) : (
                                             <Avatar className={classes.avatar}>
-                                                {user.name.split(" ")[0][0]}
+                                                {user.name[0]}
                                             </Avatar>
                                         )}
                                     </StyledBadge>

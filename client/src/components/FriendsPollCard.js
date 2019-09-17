@@ -20,6 +20,7 @@ function FriendsPollCard(props) {
     const classes = useStyles();
     const [hasVoted, setHasVoted] = React.useState(false);
     const { poll } = props;
+    const votesCount = poll.votes[0] + poll.votes[1];
 
     const registerVote = option => {
         const dataToSend = {
@@ -45,7 +46,8 @@ function FriendsPollCard(props) {
                     }
                     subheader={
                         <Typography variant="body2">
-                            {poll.votes[0] + poll.votes[1] || 0} answers
+                            {votesCount || 0}{" "}
+                            {votesCount === 1 ? "answer" : "answers"}
                         </Typography>
                     }
                 />

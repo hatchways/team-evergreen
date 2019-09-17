@@ -39,12 +39,6 @@ const useStyles = makeStyles(theme => ({
     homeButtonHidden: {
         visibility: "hidden"
     },
-    link: {
-        textTransform: "capitalize",
-        "&:hover": {
-            textDecoration: "none"
-        }
-    },
     navBar: {
         display: "flex",
         alignItems: "center"
@@ -110,10 +104,16 @@ function AppNavbar(props) {
                     </IconButton>
                     <nav className={classes.navBar}>
                         <Link
+                            component={RouterLink}
                             variant="subtitle1"
-                            color="textPrimary"
-                            href="/friends-polls"
-                            className={clsx(classes.link, classes.navItem)}>
+                            underline="none"
+                            to={{
+                                pathname: "/friends-polls",
+                                state: {
+                                    userId: user._id
+                                }
+                            }}
+                            className={classes.navItem}>
                             Friends polls
                         </Link>
                         <Button

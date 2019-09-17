@@ -131,7 +131,7 @@ export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
                     return poll;
                 });
 
-                return Object.assign({}, state, { polls: updatedPolls });
+                return Object.assign({}, state, { friendsPolls: updatedPolls });
             } else {
                 return Object.assign({}, state, {
                     error: action.response.data

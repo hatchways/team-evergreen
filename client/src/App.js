@@ -62,9 +62,7 @@ class App extends Component {
             this.props.loadUserData(decoded.id);
 
             // fetch all users. Pass current user id to exclude
-            // him from the list of all users:
-            console.log("loading all users in App...");
-
+            // him/her from the list of all users:
             this.props.loadUsers(decoded.id);
 
             // Check for expired token
