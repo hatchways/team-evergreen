@@ -3,7 +3,6 @@
 # dependencies
 node_modules/
 
-
 # production
 /build/
 
@@ -18,6 +17,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+#ignore .env file
+.env
 
-#TODO add .env to your gitignore
-
+#ignore bash script utilities
+lazy_git
+.vscode
