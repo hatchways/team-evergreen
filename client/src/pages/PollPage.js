@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Moment from "react-moment";
 import { Link as RouterLink } from "react-router-dom";
 import { profileStyles } from "../styles/profileStyles";
 import { pollPageStyles } from "../styles/pollPageStyles";
@@ -67,7 +68,6 @@ class PollPage extends Component {
         const { poll, lists } = this.props.location.state;
         const { results, pollDialogIsOpen } = this.state;
         const votesCount = poll.votes[0] + poll.votes[1];
-        console.log("results: ", results);
 
         return (
             <div className={classes.root}>
@@ -215,7 +215,11 @@ class PollPage extends Component {
                                                                 </Typography>
                                                             }
                                                             secondary={
-                                                                voter.updatedAt
+                                                                <Moment fromNow>
+                                                                    {
+                                                                        voter.updatedAt
+                                                                    }
+                                                                </Moment>
                                                             }
                                                         />
 
