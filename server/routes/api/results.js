@@ -12,7 +12,7 @@ router.get("/results", (req, res) => {
     } else {
         try {
             getVotes(req.body.pollId).then(results => {
-                res.status(200).json({ data: results });
+                res.status(200).json({ results });
             });
         } catch (err) {
             console.log("/api/poll/results", err);

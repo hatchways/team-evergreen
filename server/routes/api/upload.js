@@ -28,11 +28,11 @@ router.post("/upload", function(req, res) {
     // no files uploaded
 
     if (req.files === null) {
-        res.send({ status: 400, message: "No files to upload." });
+        res.status(400).json({ error: "No files to upload." });
     } else {
         filesToUpload(req["files"], response => {
             if (response.status !== 200) {
-                res.send(response.result);
+                res.status(response.status).json(response.result);
             } // There was an error
             // save the path to the image
             if (req.body.target === TARGET_POLLS) {
@@ -44,21 +44,20 @@ router.post("/upload", function(req, res) {
                     options: response.result
                 };
                 createNewPoll(params)
-                    .then(response => res.send(response))
-                    .catch(response => res.send(response));
+                    .then(response => res.status(200).json(response))
+                    .catch(response => res.status(200).json(response));
             } else if (req.body.target === TARGET_AVATAR) {
                 const params = {
                     userId: req.body.userId,
                     options: response.result
                 };
                 updateUserAvatar(params)
-                    .then(response => res.send(response))
-                    .catch(response => res.send(response));
+                    .then(response => res.status(200).json(response))
+                    .catch(response => res.status(200).json(response));
             } else {
                 console.log("No target");
-                res.send({
-                    status: 500,
-                    errors: `No target specified. Given ${req.body.target}`
+                res.status(500).json({
+                    error: `No target specified. Given ${req.body.target}`
                 });
             }
         });
