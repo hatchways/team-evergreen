@@ -5,19 +5,20 @@ const Polls = require("../../models/Poll");
 const Votes = require("../../models/Vote");
 
 export async function getRequests(userId) {
-    //Get all the lists the user is a member of
     try {
+        //Get all the lists the user is a member of
         const lists = await Lists.find({ friends: userId }, "_id", {
             lean: true
         }).exec();
 
+        //Get all the votes the user has already cast
         const votes = await Votes.find(
             { userId: userId },
             { pollId: 1, _id: 0 },
             { lean: true }
         ).exec();
 
-        // Strip out the key from the object
+        // Strip out the key from the votes object
         const votesArray = [];
         votes.map(poll => votesArray.push(poll.pollId));
 
