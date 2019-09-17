@@ -8,7 +8,7 @@ import { getVotes } from "../utils/getVotes";
 
 router.get("/results", (req, res) => {
     if (req.body === null) {
-        res.send({ status: 400, error: "No poll id provided" });
+        res.status(400).json({ error: "No poll id provided" });
     } else {
         try {
             getVotes(req.query.pollId).then(results => {
@@ -16,8 +16,7 @@ router.get("/results", (req, res) => {
             });
         } catch (err) {
             console.log("/api/poll/results", err);
-            res.send({
-                status: 500,
+            res.status(500).json({
                 error: "/api/poll/results failure",
                 err
             });
