@@ -38,11 +38,11 @@ export async function registerVote(pollId, userId, option) {
 async function parallelSumOfCounts(pollId) {
     const promises = [
         Vote.where({
-            _id: pollId,
+            pollId: pollId,
             option: 0
         }).countDocuments(),
         Vote.where({
-            _id: pollId,
+            pollId: pollId,
             option: 1
         }).countDocuments()
     ];
