@@ -15,14 +15,16 @@ export async function getVotes(pollId) {
     //Format the data in an array of objects [{name:, avatar:, option:}]
     let results = [];
     votes.forEach(vote => {
-        console.log(vote);
+        //console.log(vote);
+        console.log(vote.name);
         let friend = {
-            userId: vote.userId,
-            name: vote.name,
-            avatar: vote.avatar,
+            userId: vote.userId._id,
+            name: vote.userId.name,
+            avatar: vote.userId.avatar,
             option: vote.option,
             updatedAt: vote.updatedAt
         };
+        console.log("Friend", friend);
         results.push(friend);
     });
 
