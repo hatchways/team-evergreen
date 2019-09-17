@@ -7,11 +7,11 @@ const router = express.Router();
 import { getVotes } from "../utils/getVotes";
 
 router.get("/results", (req, res) => {
-    if (req.body === null) {
+    if (req.query.pollId === undefined) {
         res.status(400).json({ error: "No poll id provided" });
     } else {
         try {
-            getVotes(req.body.pollId).then(results => {
+            getVotes(req.query.pollId).then(results => {
                 res.status(200).json({ results });
             });
         } catch (err) {
