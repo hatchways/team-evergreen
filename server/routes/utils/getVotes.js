@@ -4,7 +4,10 @@ const Vote = require("../../models/Vote");
 
 export async function getVotes(pollId) {
     //Get the results for this poll
-    const votes = await Vote.find({ pollId: pollId }, "option").populate({
+    const votes = await Vote.find(
+        { pollId: pollId },
+        "option updatedAt"
+    ).populate({
         path: "userId",
         select: "name avatar"
     });
@@ -12,11 +15,13 @@ export async function getVotes(pollId) {
     //Format the data in an array of objects [{name:, avatar:, option:}]
     let results = [];
     votes.forEach(vote => {
+        console.log(vote);
         let friend = {
             userId: vote.userId,
             name: vote.name,
             avatar: vote.avatar,
-            option: vote.option
+            option: vote.option,
+            updatedAt: vote.updatedAt
         };
         results.push(friend);
     });
