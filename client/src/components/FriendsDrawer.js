@@ -84,6 +84,9 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "flex-end",
         padding: "0 8px",
         ...theme.mixins.toolbar
+    },
+    avatar: {
+        textTransform: "uppercase"
     }
 }));
 
@@ -151,10 +154,8 @@ function FriendsDrawer(props) {
                                                 src={user.avatar}
                                             />
                                         ) : (
-                                            <Avatar>
-                                                {user.name
-                                                    .split(" ")[0][0]
-                                                    .toUpperCase()}
+                                            <Avatar className={classes.avatar}>
+                                                {user.name.split(" ")[0][0]}
                                             </Avatar>
                                         )}
                                     </StyledBadge>

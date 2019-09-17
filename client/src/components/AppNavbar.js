@@ -70,6 +70,9 @@ const useStyles = makeStyles(theme => ({
         "& .MuiAvatar-root": {
             marginRight: theme.spacing(1)
         }
+    },
+    avatar: {
+        textTransform: "uppercase"
     }
 }));
 
@@ -145,7 +148,9 @@ function AppNavbar(props) {
                                     src={user.avatar}
                                 />
                             ) : (
-                                <Avatar>{user.name.split(" ")[0][0]}</Avatar>
+                                <Avatar className={classes.avatar}>
+                                    {user.name.split(" ")[0][0]}
+                                </Avatar>
                             )}
                         </IconButton>
                         <Menu
