@@ -129,6 +129,7 @@ function FriendsDrawer(props) {
                 {props.users.map(user => {
                     return (
                         <Link
+                            key={user._id}
                             underline="none"
                             component={RouterLink}
                             to={{
@@ -138,16 +139,24 @@ function FriendsDrawer(props) {
                                     users: props.users
                                 }
                             }}>
-                            <ListItem button key={user._id}>
+                            <ListItem button>
                                 <ListItemAvatar>
                                     <StyledBadge
                                         variant="dot"
                                         overlap="circle"
                                         color="secondary">
-                                        <Avatar
-                                            alt={`Avatar of ${user.name}`}
-                                            src={user.avatar}
-                                        />
+                                        {user.avatar ? (
+                                            <Avatar
+                                                alt={`Avatar of user ${user.name}`}
+                                                src={user.avatar}
+                                            />
+                                        ) : (
+                                            <Avatar>
+                                                {user.name
+                                                    .split(" ")[0][0]
+                                                    .toUpperCase()}
+                                            </Avatar>
+                                        )}
                                     </StyledBadge>
                                 </ListItemAvatar>
                                 <ListItemText primary={user.name} />

@@ -72,7 +72,7 @@ function PollCard(props) {
                         <CardActions className={classes.votesContainer}>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled="true"
+                                    disabled={true}
                                     className={classes.icon}
                                     aria-label="Votes for first image"
                                     component="span">
@@ -84,7 +84,7 @@ function PollCard(props) {
                             </div>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled="true"
+                                    disabled={true}
                                     className={classes.icon}
                                     aria-label="Votes for second image"
                                     component="span">

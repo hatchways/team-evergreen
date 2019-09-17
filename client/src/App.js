@@ -201,6 +201,7 @@ class App extends Component {
                                         {...props}
                                         users={this.props.users}
                                         user={this.props.user}
+                                        addNewPoll={this.props.addNewPoll}
                                         friendsPolls={this.props.friendsPolls}
                                         getFriendsPolls={
                                             this.props.getFriendsPolls

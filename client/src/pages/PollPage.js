@@ -34,7 +34,7 @@ class PollPage extends Component {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
-            voted: [
+            results: [
                 {
                     userId: 1,
                     name: "Alison Brown",
@@ -64,6 +64,7 @@ class PollPage extends Component {
     }
 
     componentDidMount() {
+        // TODO: show results array updaing in real time
         // get voting data on the poll from the database:
         const { _id } = this.props.location.state.poll;
 
@@ -75,10 +76,7 @@ class PollPage extends Component {
             })
             .then(response => {
                 if (response.data.status === 200) {
-                    const hasVoted = response.data.find(
-                        voter => voter.userId === this.props.user._id
-                    );
-                    this.setState({ voted: response.data, hasVoted });
+                    this.setState({ results: response.data });
                 }
             })
             .catch(error => {
@@ -93,7 +91,7 @@ class PollPage extends Component {
     render() {
         const { classes, user, users } = this.props;
         const { poll, lists } = this.props.location.state;
-        const { voted, pollDialogIsOpen } = this.state;
+        const { results, pollDialogIsOpen } = this.state;
 
         return (
             <div className={classes.root}>
@@ -195,7 +193,7 @@ class PollPage extends Component {
                             <Grid item xs={12} md={8} lg={6}>
                                 <Divider />
                                 <List>
-                                    {voted.map(voter => {
+                                    {results.map(voter => {
                                         return (
                                             <>
                                                 <ListItem

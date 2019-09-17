@@ -39,7 +39,6 @@ class FriendsPolls extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
-                    addNewPoll={this.props.addNewPoll}
                 />
 
                 <main className={classes.main}>
@@ -105,7 +104,7 @@ class FriendsPolls extends Component {
                                             )
                                         )}
                                 </Grid>
-                                <Grid item spacing={4} xs={12}>
+                                <Grid item xs={12}>
                                     <Button
                                         style={{
                                             margin: "32px auto",

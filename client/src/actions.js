@@ -25,7 +25,7 @@ export const loadUserData = data => dispatch => {
 
 export const loadUsers = id => dispatch => {
     return fetchDataAPI
-        .fetchUsersAPI(id)
+        .fetchUsers(id)
         .then(response => {
             dispatch(fetchUsersSuccess(response, id));
         })

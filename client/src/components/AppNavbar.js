@@ -45,8 +45,15 @@ const useStyles = makeStyles(theme => ({
             textDecoration: "none"
         }
     },
+    navBar: {
+        display: "flex",
+        alignItems: "center"
+    },
     navItem: {
-        margin: theme.spacing(1, 3)
+        margin: theme.spacing(1, 4),
+        "&:nth-child(3)": {
+            marginRight: theme.spacing(1)
+        }
     },
     toolbar: {
         flexWrap: "wrap",
@@ -98,7 +105,7 @@ function AppNavbar(props) {
                             src={logo}
                         />
                     </IconButton>
-                    <nav>
+                    <nav className={classes.navBar}>
                         <Link
                             variant="subtitle1"
                             color="textPrimary"
@@ -114,6 +121,15 @@ function AppNavbar(props) {
                             className={classes.navItem}>
                             Create poll
                         </Button>
+                        <Link
+                            className={classes.navItem}
+                            component={RouterLink}
+                            underline="none"
+                            to="/profile">
+                            <Typography variant="subtitle1">
+                                My profile
+                            </Typography>
+                        </Link>
                         <IconButton
                             className={classes.iconButton}
                             disableFocusRipple
@@ -123,13 +139,14 @@ function AppNavbar(props) {
                             aria-haspopup="true"
                             onClick={handleClick}
                             color="inherit">
-                            <Avatar
-                                alt={`Avatar of ${user ? user.name : "user"}`}
-                                src={user && user.avatar}
-                            />
-                            <Typography variant="subtitle1">
-                                My profile
-                            </Typography>
+                            {user.avatar ? (
+                                <Avatar
+                                    alt={`Avatar of user ${user.name}`}
+                                    src={user.avatar}
+                                />
+                            ) : (
+                                <Avatar>{user.name.split(" ")[0][0]}</Avatar>
+                            )}
                         </IconButton>
                         <Menu
                             getContentAnchorEl={null}
