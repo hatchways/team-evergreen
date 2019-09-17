@@ -1,6 +1,6 @@
 //startdata.js
 
-export const names = [
+export const usernames = [
     "Alison Brown",
     "Caroline Chapman",
     "Dorothy Ferguson",

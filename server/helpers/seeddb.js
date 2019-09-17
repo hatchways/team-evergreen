@@ -10,14 +10,15 @@ require("../config/db-connect");
 const mongoose = require("mongoose");
 
 // Application modules  and other configuration items
-import {
-    names,
-    avatars,
-    pollTitles,
-    pollImages,
-    listTitles
-} from "./startdata";
-import { config } from "../config/config";
+// import { names } from "./startdata";
+const startData = require("./startdata");
+const names = startData.usernames;
+const avatars = startData.avatars;
+const pollImages = startData.pollImages;
+const pollTitles = startData.pollTitles;
+const listTitles = startData.listTitles;
+
+const config = require("../config/config");
 import jwt_decode from "jwt-decode";
 import Users from "../models/User";
 import FriendList from "../models/friendList";
@@ -33,65 +34,94 @@ async function seedDb() {
     console.log(`!!WARNING!! Dropping database ${mongoose.connection.host}`);
     try {
         await mongoose.connection.dropDatabase();
+        console.log("Database dropped");
         const userIds = await createUsers();
-        console.log(userIds);
+        await addAvatarImages(userIds);
+        await addFriendLists(userIds);
     } catch (err) {
         console.log(err);
     }
 }
 
-seedDb().then(() => console.log("done?"));
+seedDb()
+    .then(() => console.log("Seed data created."))
+    .catch(err => console.log(err));
 //PRIVATE FUNCTIONS
+
+async function addPolls(userIds) {}
 
 async function addFriendLists(userIds) {
     // exclude current user since user cannot add himself to a friend list:
+    let promises = [];
+    let count = 0;
     await userIds.forEach((id, i) => {
-        try {
-            const friendIds = userIds.filter(friendId => friendId !== id);
-            const friends = [
-                friendIds[[Math.floor(Math.random() * 9)]],
-                friendIds[[Math.floor(Math.random() * 9)]],
-                friendIds[[Math.floor(Math.random() * 9)]],
-                friendIds[[Math.floor(Math.random() * 9)]]
-            ];
-            const newList = new FriendList({
-                title: listTitles[i],
-                friends: friends,
-                userId: id
-            });
-            newList.save();
-        } catch (err) {
-            console.log(err);
-        }
+        const friendIds = userIds.filter(friendId => friendId !== id);
+        const friends = [
+            friendIds[[Math.floor(Math.random() * 9)]],
+            friendIds[[Math.floor(Math.random() * 9)]],
+            friendIds[[Math.floor(Math.random() * 9)]],
+            friendIds[[Math.floor(Math.random() * 9)]]
+        ];
+        const newList = new FriendList({
+            title: listTitles[i],
+            friends: friends,
+            userId: id
+        });
+        newList.save();
+        const newPromise = Users.findByIdAndUpdate(id, {
+            lists: [newList._id]
+        }).exec();
+        promises.push(newPromise);
     });
+    await Promise.all(promises)
+        .then(results => (count = results.length))
+        .catch(err => console.log("****ERROR ADDING FRIEND LISTS\n", err));
+
+    console.log(`${count} friends lists created`);
 }
 
 async function addAvatarImages(userIds) {
-    await userIds.forEach((id, i) => {
-        Users.findByIdAndUpdate(id, { avatar: avatars[i], list: list });
+    const promises = [];
+    let count = 0;
+    userIds.forEach((id, i) => {
+        const newPromise = Users.findByIdAndUpdate(id, {
+            avatar: avatars[i]
+        }).exec();
+        promises.push(newPromise);
     });
+    await Promise.all(promises)
+        .then(results => (count = results.length))
+        .catch(err => console.log("****ERROR ADDING AVATARS\n", err));
+
+    console.log(`${count} avatars added`);
 }
 
 async function createUsers() {
-    console.log("Create Users");
     const newUserIds = [];
-    await names.forEach(name => {
+    const promises = [];
+    names.forEach(name => {
         let newUser = {
             name: name,
             email: `${name.split(" ")[0].toLowerCase()}@mail.com`,
-            password: config.app.samplePassword
+            password: config.app.samplePassword,
+            password2: config.app.samplePassword
         };
 
-        axios
-            .post("/api/users/register", newUser)
-            .then(result => {
+        const newPromise = axios.post(
+            "http://localhost:3001/api/users/register",
+            newUser
+        );
+        promises.push(newPromise);
+    });
+    await Promise.all(promises)
+        .then(results => {
+            results.forEach(result => {
                 const { token } = result.data;
                 const decoded = jwt_decode(token);
                 newUserIds.push(decoded.id);
-            })
-            .catch(err => {
-                console.log(err);
             });
-    });
+        })
+        .catch(err => console.log("********* ERROR *********", err));
+    console.log(`Created ${newUserIds.length} user ids.`);
     return newUserIds;
 }
