@@ -169,7 +169,6 @@ class AddFriendsList extends Component {
         }
     };
 
-
     addNewList = newList => {
         // show friends' names and avatars for the newly created list:
         newList.friends.forEach((id, i, array) => {
@@ -182,6 +181,7 @@ class AddFriendsList extends Component {
             };
         });
         this.props.addNewList(newList);
+    };
 
     toggleAllUsers = () => {
         if (this.state.friends.length === this.props.users.length) {

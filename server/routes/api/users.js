@@ -120,7 +120,6 @@ router.post("/add_friend_list", (req, res) => {
         friends: req.body.friends
     });
 
-
     // check that title is unique for this user before saving list:
     FriendList.find({ userId: req.body.userId })
         .select("title")
