@@ -40,6 +40,7 @@ async function seedDb() {
         await addAvatarImages(userIds);
         const friendsLists = await addFriendLists(userIds);
         await addPolls(userIds, friendsLists);
+        await addVotes();
     } catch (err) {
         console.log(err);
     }
@@ -49,6 +50,15 @@ seedDb()
     .then(() => console.log("Seed data created."))
     .catch(err => console.log(err));
 //PRIVATE FUNCTIONS
+
+async function addVotes() {
+    const results = await Poll.find().populate({
+        path: "sendToList",
+        populate: { path: "friends" }
+    });
+
+    Promise.all(results).then(res => console.log(res));
+}
 
 async function addPolls(userIds, friendsLists) {
     let createPollPromises = [];
