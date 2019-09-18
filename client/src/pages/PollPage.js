@@ -50,7 +50,7 @@ class PollPage extends Component {
                 }
             })
             .then(response => {
-                if ((response.status = 200)) {
+                if (response.status === 200) {
                     this.setState({ results: response.data.results });
                 }
             })
@@ -84,6 +84,7 @@ class PollPage extends Component {
                     togglePollDialog={this.togglePollDialog}
                     pollDialogIsOpen={pollDialogIsOpen}
                     isPollPage={true}
+                    addNewPoll={this.props.addNewPoll}
                 />
 
                 <main className={classes.main}>
@@ -170,11 +171,9 @@ class PollPage extends Component {
                             <Grid item xs={12} md={8} lg={6}>
                                 <Divider
                                     style={{
-                                        display:
-                                            results !== undefined &&
-                                            results.length
-                                                ? "block"
-                                                : "none"
+                                        display: results.length
+                                            ? "block"
+                                            : "none"
                                     }}
                                 />
                                 <List>
@@ -211,7 +210,8 @@ class PollPage extends Component {
                                                                         classes.listItemText
                                                                     }
                                                                     variant="subtitle1">
-                                                                    {voter.name}
+                                                                    {voter.name}{" "}
+                                                                    voted
                                                                 </Typography>
                                                             }
                                                             secondary={

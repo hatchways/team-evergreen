@@ -166,6 +166,7 @@ class App extends Component {
                                         users={this.props.users}
                                         user={this.props.user}
                                         logOut={this.logOut}
+                                        addNewPoll={this.props.addNewPoll}
                                     />
                                 ) : (
                                     <Redirect to="/login" />
