@@ -19,7 +19,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
-
+import Friends from "./pages/Friends";
 import "./App.css";
 
 // declare what pieces of state we want to have access to:
@@ -173,6 +173,23 @@ class App extends Component {
                             render={props =>
                                 isAuthenticated ? (
                                     <Profile
+                                        {...props}
+                                        users={this.props.users}
+                                        user={this.props.user}
+                                        loadUsers={this.props.loadUsers}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/user/:id"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Friends
                                         {...props}
                                         users={this.props.users}
                                         user={this.props.user}
