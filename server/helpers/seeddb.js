@@ -20,8 +20,9 @@ const listTitles = startData.listTitles;
 
 const config = require("../config/config");
 import jwt_decode from "jwt-decode";
-import Users from "../models/User";
+import User from "../models/User";
 import FriendList from "../models/friendList";
+import Poll from "../models/Poll";
 
 //Constants
 const TARGET_AVATAR = "avatar_image";
@@ -37,7 +38,8 @@ async function seedDb() {
         console.log("Database dropped");
         const userIds = await createUsers();
         await addAvatarImages(userIds);
-        await addFriendLists(userIds);
+        const friendsLists = await addFriendLists(userIds);
+        await addPolls(userIds, friendsLists);
     } catch (err) {
         console.log(err);
     }
@@ -48,13 +50,50 @@ seedDb()
     .catch(err => console.log(err));
 //PRIVATE FUNCTIONS
 
-async function addPolls(userIds) {}
+async function addPolls(userIds, friendsLists) {
+    let createPollPromises = [];
+    let addPollToUserPromises = [];
+    let count = 0;
+    let newPolls = {};
+    userIds.forEach((id, i) => {
+        const newPoll = new Poll({
+            title: pollTitles[i],
+            options: pollImages[i],
+            userId: id,
+            sendToList: friendsLists[id],
+            votes: [0, 0]
+        });
+        const newPromise = newPoll.save();
+        newPolls[id] = newPoll._id;
+        createPollPromises.push(newPromise);
+        const addPollToUser = User.findByIdAndUpdate(id, {
+            $push: { polls: newPoll._id }
+        });
+        addPollToUserPromises.push(addPollToUser);
+    });
+
+    //Create Polls
+    await Promise.all(createPollPromises)
+        .then(results => (count = results.length))
+        .catch(err => console.log("****ERROR ADDING POLLS\n", err));
+
+    console.log(`${count} polls`);
+
+    //Add polls to users
+
+    await Promise.all(addPollToUserPromises)
+        .then(results => (count = results.length))
+        .catch(err => console.log("****ERROR ADDING POLL TO USERS\n", err));
+
+    console.log(`${count} users updated with poll`);
+}
 
 async function addFriendLists(userIds) {
-    // exclude current user since user cannot add himself to a friend list:
     let promises = [];
     let count = 0;
+    let friendsLists = {};
     await userIds.forEach((id, i) => {
+        // exclude current user since user cannot add himself to a friend list:
         const friendIds = userIds.filter(friendId => friendId !== id);
         const friends = [
             friendIds[[Math.floor(Math.random() * 9)]],
@@ -68,23 +107,25 @@ async function addFriendLists(userIds) {
             userId: id
         });
         newList.save();
-        const newPromise = Users.findByIdAndUpdate(id, {
+        const newPromise = User.findByIdAndUpdate(id, {
             lists: [newList._id]
         }).exec();
         promises.push(newPromise);
+        friendsLists[id] = newList._id;
     });
     await Promise.all(promises)
         .then(results => (count = results.length))
         .catch(err => console.log("****ERROR ADDING FRIEND LISTS\n", err));
 
     console.log(`${count} friends lists created`);
+    return friendsLists;
 }
 
 async function addAvatarImages(userIds) {
     const promises = [];
     let count = 0;
     userIds.forEach((id, i) => {
-        const newPromise = Users.findByIdAndUpdate(id, {
+        const newPromise = User.findByIdAndUpdate(id, {
             avatar: avatars[i]
         }).exec();
         promises.push(newPromise);
