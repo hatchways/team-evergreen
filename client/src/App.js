@@ -9,7 +9,9 @@ import {
     logOut,
     loadUsers,
     addNewList,
-    addNewPoll
+    addNewPoll,
+    registerVote,
+    getFriendsPolls
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -19,14 +21,16 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
-import Friends from "./pages/Friends";
+import FriendsPolls from "./pages/FriendsPolls";
+
 import "./App.css";
 
 // declare what pieces of state we want to have access to:
 const mapStateToProps = state => {
     return {
         user: state.userReducer,
-        users: state.usersReducer.users
+        users: state.usersReducer.users,
+        friendsPolls: state.pollsReducer.friendsPolls
     };
 };
 
@@ -37,6 +41,8 @@ const mapDispatchToProps = dispatch => {
         loadUsers: id => dispatch(loadUsers(id)),
         addNewList: data => dispatch(addNewList(data)),
         addNewPoll: data => dispatch(addNewPoll(data)),
+        registerVote: data => dispatch(registerVote(data)),
+        getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         logOut: () => dispatch(logOut())
     };
 };
@@ -56,7 +62,7 @@ class App extends Component {
             this.props.loadUserData(decoded.id);
 
             // fetch all users. Pass current user id to exclude
-            // him from the list of all users:
+            // him/her from the list of all users:
             this.props.loadUsers(decoded.id);
 
             // Check for expired token
@@ -77,9 +83,6 @@ class App extends Component {
 
         // Reset the state
         this.props.logOut();
-
-        // Redirect to login
-        window.location.href = "/login";
     };
 
     render() {
@@ -99,6 +102,7 @@ class App extends Component {
                                     <Signup
                                         {...props}
                                         loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -113,6 +117,7 @@ class App extends Component {
                                     <Signup
                                         {...props}
                                         loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -161,6 +166,7 @@ class App extends Component {
                                         users={this.props.users}
                                         user={this.props.user}
                                         logOut={this.logOut}
+                                        addNewPoll={this.props.addNewPoll}
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -186,14 +192,19 @@ class App extends Component {
                         />
                         <Route
                             exact
-                            path="/user/:id"
+                            path="/friends-polls"
                             render={props =>
                                 isAuthenticated ? (
-                                    <Friends
+                                    <FriendsPolls
                                         {...props}
                                         users={this.props.users}
                                         user={this.props.user}
-                                        loadUsers={this.props.loadUsers}
+                                        addNewPoll={this.props.addNewPoll}
+                                        friendsPolls={this.props.friendsPolls}
+                                        getFriendsPolls={
+                                            this.props.getFriendsPolls
+                                        }
+                                        registerVote={this.props.registerVote}
                                         logOut={this.logOut}
                                     />
                                 ) : (

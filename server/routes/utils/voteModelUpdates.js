@@ -25,8 +25,8 @@ export async function registerVote(pollId, userId, option) {
                 votes: newCounts
             }
         );
-        console.log("vmu", pollId, option, newCounts);
-        return { pollId: pollId, option: option, newCounts: newCounts };
+        console.log("newCounts: ", newCounts);
+        return { pollId, option, newCounts };
     } catch (err) {
         console.log(`PollId:${pollId}, UserId:${userId}`, err);
         return { status: 500, message: "Error occurred while saving vote." };

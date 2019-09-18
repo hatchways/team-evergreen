@@ -84,6 +84,9 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "flex-end",
         padding: "0 8px",
         ...theme.mixins.toolbar
+    },
+    avatar: {
+        textTransform: "uppercase"
     }
 }));
 
@@ -129,6 +132,7 @@ function FriendsDrawer(props) {
                 {props.users.map(user => {
                     return (
                         <Link
+                            key={user._id}
                             underline="none"
                             component={RouterLink}
                             to={{
@@ -138,16 +142,22 @@ function FriendsDrawer(props) {
                                     users: props.users
                                 }
                             }}>
-                            <ListItem button key={user._id}>
+                            <ListItem button>
                                 <ListItemAvatar>
                                     <StyledBadge
                                         variant="dot"
                                         overlap="circle"
                                         color="secondary">
-                                        <Avatar
-                                            alt={`Avatar of ${user.name}`}
-                                            src={user.avatar}
-                                        />
+                                        {user.avatar ? (
+                                            <Avatar
+                                                alt={`Avatar of user ${user.name}`}
+                                                src={user.avatar}
+                                            />
+                                        ) : (
+                                            <Avatar className={classes.avatar}>
+                                                {user.name[0]}
+                                            </Avatar>
+                                        )}
                                     </StyledBadge>
                                 </ListItemAvatar>
                                 <ListItemText primary={user.name} />
