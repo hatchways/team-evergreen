@@ -85,7 +85,7 @@ class FriendsPolls extends Component {
                                                 this.togglePollDialog
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
-                                            isFriendsPolls={true}
+                                            hidePoll={true}
                                         />
                                     </Grid>
                                 </Grid>

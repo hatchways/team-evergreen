@@ -22,6 +22,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
+import Friends from "./pages/Friends";
 
 import "./App.css";
 
@@ -205,6 +206,24 @@ class App extends Component {
                                             this.props.getFriendsPolls
                                         }
                                         registerVote={this.props.registerVote}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/friends"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Friends
+                                        {...props}
+                                        users={this.props.users}
+                                        user={this.props.user}
+                                        loadUsers={this.props.loadUsers}
+                                        addNewPoll={this.props.addNewPoll}
                                         logOut={this.logOut}
                                     />
                                 ) : (

@@ -83,7 +83,7 @@ class PollPage extends Component {
                     lists={lists}
                     togglePollDialog={this.togglePollDialog}
                     pollDialogIsOpen={pollDialogIsOpen}
-                    isPollPage={true}
+                    hideButton={true}
                     addNewPoll={this.props.addNewPoll}
                 />
 
