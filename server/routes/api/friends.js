@@ -4,11 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 // External Modules
-import {
-    followUser,
-    unFollowUser,
-    getFriends
-} from "../utils/friendManagement";
+import { followUser, unFollowUser } from "../utils/friendManagement";
 
 /**
  * @desc Adds a new friend

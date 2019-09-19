@@ -3,8 +3,11 @@
 import User from "../../models/User";
 
 //Add user to friends list
-export function followUser(userId, friendId) {}
 
-export function unFollowUser(userId, friendId) {}
+export async function followUser(userId, friendId) {
+    return "follow";
+}
 
-export function getFriends(userId) {}
+export async function unFollowUser(userId, friendId) {
+    return { o: "follow" };
+}
