@@ -23,6 +23,7 @@ import jwt_decode from "jwt-decode";
 import User from "../models/User";
 import FriendList from "../models/friendList";
 import Poll from "../models/Poll";
+import Vote from "../models/Vote";
 
 //Constants
 const TARGET_AVATAR = "avatar_image";
@@ -52,12 +53,43 @@ seedDb()
 //PRIVATE FUNCTIONS
 
 async function addVotes() {
-    const results = await Poll.find().populate({
-        path: "sendToList",
-        populate: { path: "friends" }
+    const promises = [];
+    let count = 0;
+
+    //Join the poll collection with friendList collection to get friends array
+    const results = await Poll.aggregate([
+        {
+            $lookup: {
+                from: "friendlists",
+                localField: "sendToList",
+                foreignField: "_id",
+                as: "listOf"
+            }
+        },
+        { $project: { listOf: { friends: 1 } } },
+        { $unwind: "$listOf" }
+    ]).then(console.log("Done!"));
+
+    //Extract pollId and friends list from returned cursor
+    const _ = results.map(poll => {
+        poll.listOf.friends.map(voter => {
+            const newVote = new Vote({
+                userId: voter,
+                pollId: poll._id,
+                option: Math.round(Math.random())
+            });
+            const newPromise = newVote.save();
+            promises.push(newPromise);
+        });
     });
 
-    Promise.all(results).then(res => console.log(res));
+    //Save votes and complete promises
+    await Promise.all(promises)
+        .then(res => {
+            count = res.length;
+            console.log(`${count} votes cast`);
+        })
+        .catch(err => console.log("****ERROR ADDING VOTES\n", err));
 }
 
 async function addPolls(userIds, friendsLists) {
@@ -87,10 +119,9 @@ async function addPolls(userIds, friendsLists) {
         .then(results => (count = results.length))
         .catch(err => console.log("****ERROR ADDING POLLS\n", err));
 
-    console.log(`${count} polls`);
+    console.log(`${count} polls created`);
 
     //Add polls to users
-
     await Promise.all(addPollToUserPromises)
         .then(results => (count = results.length))
         .catch(err => console.log("****ERROR ADDING POLL TO USERS\n", err));
@@ -123,11 +154,13 @@ async function addFriendLists(userIds) {
         promises.push(newPromise);
         friendsLists[id] = newList._id;
     });
+
     await Promise.all(promises)
-        .then(results => (count = results.length))
+        .then(results => {
+            console.log(`${results.length} friends lists created`);
+        })
         .catch(err => console.log("****ERROR ADDING FRIEND LISTS\n", err));
 
-    console.log(`${count} friends lists created`);
     return friendsLists;
 }
 
@@ -141,10 +174,10 @@ async function addAvatarImages(userIds) {
         promises.push(newPromise);
     });
     await Promise.all(promises)
-        .then(results => (count = results.length))
+        .then(results => {
+            console.log(`${results.length} avatars added`);
+        })
         .catch(err => console.log("****ERROR ADDING AVATARS\n", err));
-
-    console.log(`${count} avatars added`);
 }
 
 async function createUsers() {
@@ -173,6 +206,7 @@ async function createUsers() {
             });
         })
         .catch(err => console.log("********* ERROR *********", err));
-    console.log(`Created ${newUserIds.length} user ids.`);
+
+    console.log(`${newUserIds.length} user ids created`);
     return newUserIds;
 }

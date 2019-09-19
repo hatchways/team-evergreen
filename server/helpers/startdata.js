@@ -27,7 +27,7 @@ export const avatars = [
 ];
 
 export const pollTitles = [
-    "Which patter do you like?",
+    "Which pattern do you like?",
     "Where do you want to go?",
     "Which one should I buy?",
     "Which should I build?",
