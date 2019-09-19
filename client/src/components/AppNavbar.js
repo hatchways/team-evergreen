@@ -108,6 +108,19 @@ function AppNavbar(props) {
                             variant="subtitle1"
                             underline="none"
                             to={{
+                                pathname: "/friends",
+                                state: {
+                                    userId: user._id
+                                }
+                            }}
+                            className={classes.navItem}>
+                            Friends
+                        </Link>
+                        <Link
+                            component={RouterLink}
+                            variant="subtitle1"
+                            underline="none"
+                            to={{
                                 pathname: "/friends-polls",
                                 state: {
                                     userId: user._id

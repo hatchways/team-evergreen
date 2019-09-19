@@ -4,12 +4,14 @@ import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
+import AppNavbar from "../components/AppNavbar";
+import FriendsDrawer from "../components/FriendsDrawer";
 import AddFriendList from "../components/AddFriendList";
+import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
-import UserPanel from "../components/UserPanel";
-import AddPollDialog from "../components/AddPollDialog";
 import {
+    CssBaseline,
     Typography,
     Container,
     Grid,
@@ -21,6 +23,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            drawerIsOpen: true,
             pollDialogIsOpen: false,
             listMove: 0,
             moveListBy: 0,
@@ -28,6 +31,10 @@ class Profile extends Component {
             movePollBy: 0
         };
     }
+
+    toggleDrawer = () => {
+        this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
+    };
 
     showNextSlide = target => {
         if (target === "list") {
@@ -61,10 +68,13 @@ class Profile extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    // TODO: get poll results for each poll to show correct number of votes
+
     render() {
         const { classes, user, users } = this.props;
         const { lists, polls } = this.props.user;
         const {
+            drawerIsOpen,
             pollDialogIsOpen,
             listMove,
             moveListBy,
@@ -72,15 +82,24 @@ class Profile extends Component {
             movePollBy
         } = this.state;
 
+        // handle friend's Profile data:
+        const isFriendsProfile = this.props.match.path.includes("user");
+
         return (
             <div className={classes.root}>
-                <UserPanel
+                <CssBaseline />
+                <AppNavbar
                     user={user}
-                    users={users}
+                    open={drawerIsOpen}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
-                    addNewPoll={this.props.addNewPoll}
                 />
+                <FriendsDrawer
+                    users={users}
+                    open={drawerIsOpen}
+                    toggleDrawer={this.toggleDrawer}
+                />
+                <div className={classes.appBarSpacer} />
 
                 <main className={classes.main}>
                     <div className={classes.appBarSpacer} />
@@ -122,6 +141,7 @@ class Profile extends Component {
                                                 this.togglePollDialog
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
+                                            isFriendsProfile={isFriendsProfile}
                                         />
                                     </Grid>
                                 </Grid>
@@ -171,82 +191,93 @@ class Profile extends Component {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid
-                                container
-                                item
-                                xs={12}
-                                className={classes.fixedHeightContainer}>
+                            {!isFriendsProfile ? (
                                 <Grid
+                                    container
                                     item
                                     xs={12}
-                                    container
-                                    justify="space-between">
-                                    <Grid item>
-                                        <Typography
-                                            display="inline"
-                                            variant="h6"
-                                            component="h2"
-                                            className={classes.title}>
-                                            Friend lists
-                                        </Typography>
-                                        <Typography
-                                            display="inline"
-                                            variant="subtitle1"
-                                            component="h3">
-                                            ({lists ? lists.length : 0})
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <AddFriendList
-                                            userId={user._id}
-                                            users={users}
-                                            addNewList={this.props.addNewList}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    container
-                                    item
-                                    spacing={4}
-                                    className={classes.slider}>
-                                    {lists &&
-                                        sortBy(lists, true).map((list, i) => (
-                                            <ListCard
-                                                key={i}
-                                                list={list}
-                                                moveListBy={moveListBy}
+                                    className={classes.fixedHeightContainer}>
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        container
+                                        justify="space-between">
+                                        <Grid item>
+                                            <Typography
+                                                display="inline"
+                                                variant="h6"
+                                                component="h2"
+                                                className={classes.title}>
+                                                Friend lists
+                                            </Typography>
+                                            <Typography
+                                                display="inline"
+                                                variant="subtitle1"
+                                                component="h3">
+                                                ({lists ? lists.length : 0})
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <AddFriendList
+                                                userId={user._id}
+                                                users={users}
+                                                addNewList={
+                                                    this.props.addNewList
+                                                }
                                             />
-                                        ))}
+                                        </Grid>
+                                    </Grid>
                                     <Grid
                                         container
-                                        justify="space-between"
-                                        className={classes.sliderControls}
-                                        style={
-                                            lists.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }>
-                                        <IconButton
-                                            onClick={() =>
-                                                this.showPreviousSlide("list")
-                                            }
-                                            className="prev"
-                                            disabled={listMove === 0}>
-                                            <Icon>arrow_back_ios</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            className="next"
-                                            disabled={
-                                                listMove === lists.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("list")
+                                        item
+                                        spacing={4}
+                                        className={classes.slider}>
+                                        {lists &&
+                                            sortBy(lists, true).map(
+                                                (list, i) => (
+                                                    <ListCard
+                                                        key={i}
+                                                        list={list}
+                                                        moveListBy={moveListBy}
+                                                    />
+                                                )
+                                            )}
+                                        <Grid
+                                            container
+                                            justify="space-between"
+                                            className={classes.sliderControls}
+                                            style={
+                                                lists.length > 3
+                                                    ? { visibility: "visible" }
+                                                    : { visibility: "hidden" }
                                             }>
-                                            <Icon>arrow_forward_ios</Icon>
-                                        </IconButton>
+                                            <IconButton
+                                                onClick={() =>
+                                                    this.showPreviousSlide(
+                                                        "list"
+                                                    )
+                                                }
+                                                className="prev"
+                                                disabled={listMove === 0}>
+                                                <Icon>arrow_back_ios</Icon>
+                                            </IconButton>
+                                            <IconButton
+                                                className="next"
+                                                disabled={
+                                                    listMove ===
+                                                    lists.length - 1
+                                                }
+                                                onClick={() =>
+                                                    this.showNextSlide("list")
+                                                }>
+                                                <Icon>arrow_forward_ios</Icon>
+                                            </IconButton>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
+                            ) : (
+                                ""
+                            )}
                         </Grid>
                     </Container>
                 </main>

@@ -3,6 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 import { profileStyles } from "../styles/profileStyles";
 import { friendsPageStyles } from "../styles/friendsPageStyles";
 
+import sortBy from "../utils/sortBy";
+import renderAvatar from "../utils/renderAvatar";
+
 import AddPollDialog from "../components/AddPollDialog";
 import UserPanel from "../components/UserPanel";
 import Typography from "@material-ui/core/Typography";
@@ -12,6 +15,13 @@ import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Button from "@material-ui/core/Button";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -23,11 +33,12 @@ function TabPanel(props) {
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}>
-            <Box p={3}>{children}</Box>
+            <Box p={4}>{children}</Box>
         </Paper>
     );
 }
 
+// support accessibility:
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -78,7 +89,7 @@ class Friends extends React.Component {
                                             display="inline"
                                             variant="h6"
                                             component="h2"
-                                            className={classes.title}>
+                                            className={classes.friendsTitle}>
                                             Friends
                                         </Typography>
                                     </Grid>
@@ -95,7 +106,7 @@ class Friends extends React.Component {
                                 <Grid
                                     item
                                     xs={12}
-                                    md={10}
+                                    md={8}
                                     container
                                     justify="center"
                                     spacing={4}
@@ -108,19 +119,97 @@ class Friends extends React.Component {
                                         textColor="primary"
                                         className={classes.tabs}>
                                         <Tab
-                                            label="Item One"
+                                            label="Following"
                                             {...a11yProps(0)}
                                         />
                                         <Tab
-                                            label="Item Two"
+                                            label="Suggested"
                                             {...a11yProps(1)}
                                         />
                                     </Tabs>
                                     <TabPanel value={value} index={0}>
-                                        Item One
+                                        <List className={classes.userList}>
+                                            {users &&
+                                                users.map(user => {
+                                                    return (
+                                                        <ListItem
+                                                            key={user._id}
+                                                            className={
+                                                                classes.listItem
+                                                            }>
+                                                            <ListItemAvatar>
+                                                                {renderAvatar(
+                                                                    user,
+                                                                    classes
+                                                                )}
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                primary={
+                                                                    user.name
+                                                                }
+                                                            />
+                                                            <ListItemSecondaryAction>
+                                                                <Button
+                                                                    className={
+                                                                        classes.button
+                                                                    }
+                                                                    onClick={() =>
+                                                                        this.handleClick(
+                                                                            user._id
+                                                                        )
+                                                                    }
+                                                                    variant="contained"
+                                                                    size="small"
+                                                                    color="secondary">
+                                                                    Follow
+                                                                </Button>
+                                                            </ListItemSecondaryAction>
+                                                        </ListItem>
+                                                    );
+                                                })}
+                                        </List>
                                     </TabPanel>
                                     <TabPanel value={value} index={1}>
-                                        Item Two
+                                        <List className={classes.userList}>
+                                            {users &&
+                                                users.map(user => {
+                                                    return (
+                                                        <ListItem
+                                                            key={user._id}
+                                                            className={
+                                                                classes.listItem
+                                                            }>
+                                                            <ListItemAvatar>
+                                                                {renderAvatar(
+                                                                    user,
+                                                                    classes
+                                                                )}
+                                                            </ListItemAvatar>
+                                                            <ListItemText
+                                                                primary={
+                                                                    user.name
+                                                                }
+                                                            />
+                                                            <ListItemSecondaryAction>
+                                                                <Button
+                                                                    className={
+                                                                        classes.button
+                                                                    }
+                                                                    onClick={() =>
+                                                                        this.handleClick(
+                                                                            user._id
+                                                                        )
+                                                                    }
+                                                                    variant="contained"
+                                                                    size="small"
+                                                                    color="secondary">
+                                                                    Follow
+                                                                </Button>
+                                                            </ListItemSecondaryAction>
+                                                        </ListItem>
+                                                    );
+                                                })}
+                                        </List>
                                     </TabPanel>
                                 </Grid>
                             </Grid>
