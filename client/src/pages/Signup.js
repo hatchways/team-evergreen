@@ -104,7 +104,7 @@ class Signup extends Component {
                 }
             })
             .catch(err => {
-                console.log(err);
+                console.log("Error registering user: ", err);
                 // show error messages returned from server:
                 this.setState({ errors: err.response.data });
             });
@@ -147,7 +147,9 @@ class Signup extends Component {
                                                     shrink: true
                                                 }}
                                             />
-                                            <FormHelperText error id="name">
+                                            <FormHelperText
+                                                error
+                                                id="name-error-field">
                                                 {errors.name}
                                             </FormHelperText>
                                         </Grid>
@@ -168,7 +170,9 @@ class Signup extends Component {
                                                     shrink: true
                                                 }}
                                             />
-                                            <FormHelperText error id="email">
+                                            <FormHelperText
+                                                error
+                                                id="email-error-field">
                                                 {errors.email}
                                             </FormHelperText>
                                         </Grid>
@@ -190,7 +194,9 @@ class Signup extends Component {
                                                     shrink: true
                                                 }}
                                             />
-                                            <FormHelperText error id="password">
+                                            <FormHelperText
+                                                error
+                                                id="password-error-field">
                                                 {errors.password}
                                             </FormHelperText>
                                         </Grid>
@@ -214,7 +220,7 @@ class Signup extends Component {
                                             />
                                             <FormHelperText
                                                 error
-                                                id="password2">
+                                                id="password2-error-field">
                                                 {errors.password2}
                                             </FormHelperText>
                                         </Grid>
@@ -244,7 +250,7 @@ class Signup extends Component {
                                             />
                                             <FormHelperText
                                                 error
-                                                id="userAgreement">
+                                                id="userAgreement-error-field">
                                                 {errors.userAgreement &&
                                                 !userAgreement
                                                     ? errors.userAgreement
@@ -254,12 +260,18 @@ class Signup extends Component {
                                     </Grid>
                                     <Button
                                         className={classes.btn}
+                                        id="submitButton"
                                         size="large"
                                         type="submit"
                                         variant="contained"
                                         color="primary">
                                         Create
                                     </Button>
+                                    <FormHelperText
+                                        error
+                                        id="submitButton-error-field">
+                                        {errors.error}
+                                    </FormHelperText>
                                 </form>
                             </div>
                         </Container>
