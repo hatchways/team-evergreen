@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import renderAvatar from "../utils/renderAvatar";
 import { withStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -17,7 +18,6 @@ import {
     ListItemText,
     ListItemAvatar,
     ListItemSecondaryAction,
-    Avatar,
     Icon
 } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -270,13 +270,9 @@ class AddFriendsList extends Component {
                                             key={user._id}
                                             className={classes.item}>
                                             <ListItemAvatar>
-                                                <Avatar
-                                                    alt={`Avatar of ${user.name}`}
-                                                    src={user.avatar}
-                                                />
+                                                {renderAvatar(user, classes)}
                                             </ListItemAvatar>
                                             <ListItemText primary={user.name} />
-                                            <Divider />
                                             <ListItemSecondaryAction>
                                                 <Button
                                                     className={classes.button}

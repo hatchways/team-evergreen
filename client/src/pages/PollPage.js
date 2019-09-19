@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Moment from "react-moment";
+import renderAvatar from "../utils/renderAvatar";
 import { Link as RouterLink } from "react-router-dom";
 import { profileStyles } from "../styles/profileStyles";
 import { pollPageStyles } from "../styles/pollPageStyles";
@@ -27,7 +28,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 
 class PollPage extends Component {
@@ -187,20 +187,9 @@ class PollPage extends Component {
                                                             classes.boldTitle
                                                         }>
                                                         <ListItemAvatar>
-                                                            {voter.avatar ? (
-                                                                <Avatar
-                                                                    alt={`Avatar of user ${voter.name}`}
-                                                                    src={
-                                                                        voter.avatar
-                                                                    }
-                                                                />
-                                                            ) : (
-                                                                <Avatar
-                                                                    className={
-                                                                        classes.avatar
-                                                                    }>
-                                                                    {voter.name[0].toUpperCase()}
-                                                                </Avatar>
+                                                            {renderAvatar(
+                                                                voter,
+                                                                classes
                                                             )}
                                                         </ListItemAvatar>
                                                         <ListItemText

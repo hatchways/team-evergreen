@@ -45,8 +45,11 @@ const useStyles = makeStyles(theme => ({
     },
     navItem: {
         margin: theme.spacing(1, 4),
-        "&:nth-child(3)": {
+        "&:last-child": {
             marginRight: theme.spacing(1)
+        },
+        "&:nth-child(3)": {
+            margin: theme.spacing(1, 2) // decrease margin for 'Create Poll' button since it has padding
         }
     },
     toolbar: {

@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import renderAvatar from "../utils/renderAvatar";
 import { Link as RouterLink } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
@@ -9,7 +10,6 @@ import {
     ListItem,
     ListItemText,
     ListItemAvatar,
-    Avatar,
     Badge,
     Divider,
     IconButton,
@@ -148,16 +148,7 @@ function FriendsDrawer(props) {
                                         variant="dot"
                                         overlap="circle"
                                         color="secondary">
-                                        {user.avatar ? (
-                                            <Avatar
-                                                alt={`Avatar of user ${user.name}`}
-                                                src={user.avatar}
-                                            />
-                                        ) : (
-                                            <Avatar className={classes.avatar}>
-                                                {user.name[0]}
-                                            </Avatar>
-                                        )}
+                                        {renderAvatar(user, classes)}
                                     </StyledBadge>
                                 </ListItemAvatar>
                                 <ListItemText primary={user.name} />

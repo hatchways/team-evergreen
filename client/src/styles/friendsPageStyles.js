@@ -25,5 +25,13 @@ export const friendsPageStyles = theme => ({
         "& .Mui-selected": {
             fontWeight: "600 !important"
         }
+    },
+    disabled: {
+        opacity: "0.4"
+    },
+    button: {
+        "&.MuiButton-text": {
+            textTransform: "initial"
+        }
     }
 });
