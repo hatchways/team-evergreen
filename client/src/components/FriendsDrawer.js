@@ -81,12 +81,16 @@ const useStyles = makeStyles(theme => ({
     toolbarIcon: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-end",
-        padding: "0 8px",
         ...theme.mixins.toolbar
     },
     avatar: {
         textTransform: "uppercase"
+    },
+    arrowIcon: {
+        margin: "0 0 0 auto",
+        [theme.breakpoints.up("xs")]: {
+            padding: "20px"
+        }
     }
 }));
 
@@ -106,7 +110,7 @@ function FriendsDrawer(props) {
             open={open}>
             <div className={classes.toolbarIcon}>
                 <IconButton
-                    edge="start"
+                    className={classes.arrowIcon}
                     color="inherit"
                     aria-label="open drawer"
                     onClick={toggleDrawer}>
