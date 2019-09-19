@@ -38,19 +38,20 @@ async function seedDb() {
     console.log(`!!WARNING!! Dropping database ${mongoose.connection.host}`);
     try {
         await mongoose.connection.dropDatabase();
-        console.log("Database dropped");
+        console.log("\n*****Database dropped*****\n");
         const userIds = await createUsers(NO_OF_USERS);
         await addAvatarImages(userIds);
         const friendsLists = await addFriendLists(userIds);
         await addPolls(userIds, friendsLists);
         await addVotes();
+        console.log("\n*****SEED DATA LOADED*****");
     } catch (err) {
         console.log(err);
     }
 }
 
 seedDb()
-    .then(() => console.log("\n*****SEED DATA LOADED*****"))
+    .then(() => {})
     .catch(err => console.log(err));
 //PRIVATE FUNCTIONS
 
