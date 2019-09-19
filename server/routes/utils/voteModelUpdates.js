@@ -20,15 +20,13 @@ export async function registerVote(pollId, userId, option) {
         const newCounts = await parallelSumOfCounts(pollId);
 
         await Poll.findOneAndUpdate(
-            { pollId: pollId },
+            { _id: pollId },
             {
                 votes: newCounts
             }
-        );
-        console.log("vmu", pollId, option, newCounts);
+        ).exec(result => console.log(result));
         return { pollId: pollId, option: option, newCounts: newCounts };
     } catch (err) {
-        console.log(`PollId:${pollId}, UserId:${userId}`, err);
         return { status: 500, message: "Error occurred while saving vote." };
     }
 }
