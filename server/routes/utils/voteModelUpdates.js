@@ -15,7 +15,7 @@ export async function registerVote(pollId, userId, option) {
             { userId: userId, pollId: pollId },
             { option: option },
             { new: true, upsert: true }
-        );
+        ).exec();
 
         const newCounts = await parallelSumOfCounts(pollId);
 
@@ -24,11 +24,9 @@ export async function registerVote(pollId, userId, option) {
             {
                 votes: newCounts
             }
-        );
-        console.log("newCounts: ", newCounts);
-        return { pollId, option, newCounts };
+        ).exec(result => console.log(result));
+        return { pollId: pollId, option: option, newCounts: newCounts };
     } catch (err) {
-        console.log(`PollId:${pollId}, UserId:${userId}`, err);
         return { status: 500, message: "Error occurred while saving vote." };
     }
 }

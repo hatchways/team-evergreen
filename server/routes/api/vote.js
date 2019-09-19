@@ -13,16 +13,16 @@ import { registerVote } from "../utils/voteModelUpdates";
  */
 
 router.post("/vote", function(req, res) {
-    if (req.body === null) {
-        res.send({ status: 400, message: "No data provided." });
+    if (req.body.pollId === undefined) {
+        res.status(400).json({ error: "No data provided." });
     } else {
         registerVote(req.body.pollId, req.body.userId, req.body.option)
             .then(result => {
-                res.send(result);
+                res.status(200).json(result);
             })
             .catch(err => {
                 console.log("/api/poll/vote", err);
-                res.send({ status: 500, error: "/api/poll/vote failure", err });
+                res.status(500).json({ error: "/api/poll/vote failure", err });
             });
     }
 });

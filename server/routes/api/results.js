@@ -7,17 +7,16 @@ const router = express.Router();
 import { getVotes } from "../utils/getVotes";
 
 router.get("/results", (req, res) => {
-    if (req.body === null) {
-        res.send({ status: 400, error: "No poll id provided" });
+    if (req.query.pollId === undefined) {
+        res.status(400).json({ error: "No poll id provided" });
     } else {
         try {
-            getVotes(req.body.pollId).then(results => {
-                res.send({ status: 200, data: results });
+            getVotes(req.query.pollId).then(results => {
+                res.status(200).json({ results });
             });
         } catch (err) {
             console.log("/api/poll/results", err);
-            res.send({
-                status: 500,
+            res.status(500).json({
                 error: "/api/poll/results failure",
                 err
             });
