@@ -13,7 +13,7 @@ import { registerVote } from "../utils/voteModelUpdates";
  */
 
 router.post("/vote", function(req, res) {
-    if (req.body === null) {
+    if (req.body.pollId === undefined) {
         res.status(400).json({ error: "No data provided." });
     } else {
         registerVote(req.body.pollId, req.body.userId, req.body.option)
