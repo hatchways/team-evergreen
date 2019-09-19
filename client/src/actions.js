@@ -4,11 +4,13 @@ import {
     FETCH_USERS_SUCCESS,
     ADD_NEW_LIST,
     ADD_NEW_POLL,
-    FETCH_REQUEST_FAILURE
+    API_REQUEST_FAILURE,
+    REGISTER_VOTE_SUCCESS,
+    GET_FRIENDS_POLLS_SUCCESS
 } from "./constants.js";
 
-import fetchDataAPI from "./api/fetchUserData";
-import fetchUsersAPI from "./api/fetchAllUsers";
+import fetchDataAPI from "./api/fetchDataAPI";
+import postDataAPI from "./api/postDataAPI";
 
 export const loadUserData = data => dispatch => {
     return fetchDataAPI
@@ -17,18 +19,40 @@ export const loadUserData = data => dispatch => {
             dispatch(fetchUserDataSuccess(response));
         })
         .catch(error => {
-            dispatch(fetchRequestFailure(error));
+            dispatch(apiRequestFailure(error));
         });
 };
 
 export const loadUsers = id => dispatch => {
-    return fetchUsersAPI
+    return fetchDataAPI
         .fetchUsers(id)
         .then(response => {
             dispatch(fetchUsersSuccess(response, id));
         })
         .catch(error => {
-            dispatch(fetchRequestFailure(error));
+            dispatch(apiRequestFailure(error));
+        });
+};
+
+export const getFriendsPolls = data => dispatch => {
+    return fetchDataAPI
+        .fetchFriendsPolls(data)
+        .then(response => {
+            dispatch(getFriendsPollsSuccess(response));
+        })
+        .catch(error => {
+            dispatch(apiRequestFailure(error));
+        });
+};
+
+export const registerVote = data => dispatch => {
+    return postDataAPI
+        .registerVote(data)
+        .then(response => {
+            dispatch(registerVoteSuccess(response));
+        })
+        .catch(error => {
+            dispatch(apiRequestFailure(error));
         });
 };
 
@@ -40,9 +64,23 @@ export function fetchUsersSuccess(response, id) {
     };
 }
 
+export function getFriendsPollsSuccess(response) {
+    return {
+        type: GET_FRIENDS_POLLS_SUCCESS,
+        response
+    };
+}
+
 export function fetchUserDataSuccess(response) {
     return {
         type: FETCH_USER_DATA_SUCCESS,
+        response
+    };
+}
+
+export function registerVoteSuccess(response) {
+    return {
+        type: REGISTER_VOTE_SUCCESS,
         response
     };
 }
@@ -67,9 +105,9 @@ export const logOut = () => {
     };
 };
 
-export function fetchRequestFailure(error) {
+export function apiRequestFailure(error) {
     return {
-        type: FETCH_REQUEST_FAILURE,
+        type: API_REQUEST_FAILURE,
         error
     };
 }

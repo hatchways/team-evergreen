@@ -18,6 +18,7 @@ const users = require("./routes/api/users");
 const upload = require("./routes/api/upload");
 const vote = require("./routes/api/vote");
 const results = require("./routes/api/results");
+const requests = require("./routes/api/requests");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/api/users", users);
 app.use("/api/images", upload);
 app.use("/api/poll", vote);
 app.use("/api/poll", results);
+app.use("/api/poll", requests);
 
 app.use(logger("dev"));
 app.use(json());

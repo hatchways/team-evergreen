@@ -21,6 +21,7 @@ const useStyles = makeStyles(profileStyles);
 function PollCard(props) {
     const classes = useStyles();
     const { poll } = props;
+    const votesCount = poll.votes[0] + poll.votes[1];
 
     return (
         <Grid
@@ -52,7 +53,8 @@ function PollCard(props) {
                         }
                         subheader={
                             <Typography variant="body2">
-                                {"14 answers" /*TODO - Add proper counts*/}
+                                {votesCount || 0}{" "}
+                                {votesCount === 1 ? "answer" : "answers"}
                             </Typography>
                         }
                     />
@@ -72,23 +74,27 @@ function PollCard(props) {
                         <CardActions className={classes.votesContainer}>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled
+                                    disabled={true}
                                     className={classes.icon}
                                     aria-label="Votes for first image"
                                     component="span">
                                     <Icon>favorite</Icon>
                                 </IconButton>
-                                <Typography variant="body1">0</Typography>
+                                <Typography variant="body1">
+                                    {poll.votes[0] || 0}
+                                </Typography>
                             </div>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled
+                                    disabled={true}
                                     className={classes.icon}
                                     aria-label="Votes for second image"
                                     component="span">
                                     <Icon>favorite</Icon>
                                 </IconButton>
-                                <Typography variant="body1">12</Typography>
+                                <Typography variant="body1">
+                                    {poll.votes[1] || 0}
+                                </Typography>
                             </div>
                         </CardActions>
                     </CardContent>
