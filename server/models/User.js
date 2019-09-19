@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
         ],
         friends: [
             {
-                type: mongoose.Shema.Types.ObjectId,
+                type: mongoose.Schema.Types.ObjectId,
                 ref: "user",
                 unique: true
             }
