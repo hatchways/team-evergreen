@@ -88,9 +88,16 @@ export const profileStyles = theme => ({
             flexShrink: 0
         }
     },
-    sliderControls: {
+    sliderControl: {
+        padding: "5px",
         position: "absolute",
         top: "50%",
-        transform: "translateY(-50%)"
+        transform: "translateY(-50%)",
+        "& .MuiIcon-root": {
+            fontSize: "2.5rem"
+        }
+    },
+    nextButton: {
+        right: 0
     }
 });
