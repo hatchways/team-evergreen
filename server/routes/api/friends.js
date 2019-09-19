@@ -30,6 +30,21 @@ router.post("/follow", function(req, res) {
     }
 });
 
+router.post("/unfollow", function(req, res) {
+    if (req.body.userId === undefined) {
+        res.status(400).json({ error: "No data provided." });
+    } else {
+        unFollowUser(req.body.userId, req.body.friendId)
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                console.log("/api/friends/follow", err);
+                res.status(500).json({ error: "/api/friends/follow", err });
+            });
+    }
+});
+
 //PRIVATE FUNCTIONS
 
 module.exports = router;
