@@ -29,6 +29,7 @@ import { registerVote } from "./voteModelUpdates2";
 const NO_OF_USERS = 50;
 const MAX_NO_OF_ADORNMENTS = 5; //Used in determining # of lists/polls to create/user
 const MAX_NO_OF_FRIENDS_PER_LIST = 5;
+const POLL_PERCENTAGE = 4; // 0 = 100%, 4 = 50%, 9 = 0%
 
 //network connectivity
 import axios from "axios";
@@ -55,11 +56,8 @@ seedDb()
     .catch(err => console.log(err));
 //PRIVATE FUNCTIONS
 
-async function sumUpVotes() {}
-
 async function addVotes() {
-    const promises = [];
-    let count = 0;
+    let votesCast = 0;
 
     //Join the poll collection with friendList collection to get friends array
     const results = await Poll.aggregate([
@@ -78,13 +76,14 @@ async function addVotes() {
     //Extract pollId and friends list from returned cursor
     results.map(poll => {
         poll.listOf.friends.map(voter => {
-            //does not post poll results about 1/2 of the time so we can see
-            //polls to vote on
-            if (Math.floor(Math.random() * 9) > 4) {
+            //register the vote - POLL_PERCENTAGE determines % of friends voting
+            if (Math.floor(Math.random() * 9) > POLL_PERCENTAGE) {
                 registerVote(poll._id, voter, Math.round(Math.random()));
+                votesCast++;
             }
         });
     });
+    console.log(`${votesCast} votes registered`);
 }
 
 async function addPolls(userIds, friendsLists) {
