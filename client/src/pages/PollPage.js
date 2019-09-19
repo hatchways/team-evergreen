@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Moment from "react-moment";
 import { Link as RouterLink } from "react-router-dom";
 import { profileStyles } from "../styles/profileStyles";
 import { pollPageStyles } from "../styles/pollPageStyles";
 import { withStyles } from "@material-ui/core/styles";
 
 import AddPollDialog from "../components/AddPollDialog";
-import AppNavbar from "../components/AppNavbar";
-import FriendsDrawer from "../components/FriendsDrawer";
+import UserPanel from "../components/UserPanel";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
@@ -34,54 +34,24 @@ class PollPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            drawerIsOpen: true,
             pollDialogIsOpen: false,
-            hasVoted: false,
-            voted: [
-                {
-                    userId: 1,
-                    name: "Alison Brown",
-                    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-                    option: 1
-                },
-                {
-                    userId: 2,
-                    name: "Caroline Chapman",
-                    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
-                    option: 0
-                },
-                {
-                    userId: 3,
-                    name: "Dorothy Ferguson",
-                    avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-                    option: 1
-                },
-                {
-                    userId: 4,
-                    name: "Jack Murray",
-                    avatar: "https://randomuser.me/api/portraits/men/4.jpg",
-                    option: 1
-                }
-            ] // fake data for poll results
+            results: []
         };
     }
 
     componentDidMount() {
+        // TODO: show results array updaing in real time
         // get voting data on the poll from the database:
         const { _id } = this.props.location.state.poll;
-
         axios
             .get("/api/poll/results", {
                 params: {
-                    id: _id
+                    pollId: _id
                 }
             })
             .then(response => {
-                if (response.data.status === 200) {
-                    const hasVoted = response.data.find(
-                        voter => voter.userId === this.props.user._id
-                    );
-                    this.setState({ voted: response.data, hasVoted });
+                if (response.status === 200) {
+                    this.setState({ results: response.data.results });
                 }
             })
             .catch(error => {
@@ -89,43 +59,24 @@ class PollPage extends Component {
             });
     }
 
-    toggleDrawer = () => {
-        this.setState({ drawerIsOpen: !this.state.drawerIsOpen });
-    };
-
     togglePollDialog = () => {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
-    };
-
-    handleVote = option => {
-        // send new vote for current user, update voted array
-        this.setState({ hasVoted: true });
     };
 
     render() {
         const { classes, user, users } = this.props;
         const { poll, lists } = this.props.location.state;
-        const { drawerIsOpen, voted, pollDialogIsOpen, hasVoted } = this.state;
-
-        const votesForFirstImage = voted.filter(user => user.option === 0)
-            .length;
-        const votesForSecondImage = voted.length - votesForFirstImage;
-
-        const isMyPoll = user._id === poll.userId;
+        const { results, pollDialogIsOpen } = this.state;
+        const votesCount = poll.votes[0] + poll.votes[1];
 
         return (
             <div className={classes.root}>
                 <CssBaseline />
-                <AppNavbar
+                <UserPanel
                     user={user}
-                    open={drawerIsOpen}
+                    users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
-                />
-                <FriendsDrawer
-                    users={users}
-                    open={drawerIsOpen}
-                    toggleDrawer={this.toggleDrawer}
                 />
                 <AddPollDialog
                     userId={user._id}
@@ -133,6 +84,7 @@ class PollPage extends Component {
                     togglePollDialog={this.togglePollDialog}
                     pollDialogIsOpen={pollDialogIsOpen}
                     isPollPage={true}
+                    addNewPoll={this.props.addNewPoll}
                 />
 
                 <main className={classes.main}>
@@ -161,7 +113,10 @@ class PollPage extends Component {
                                         }
                                         subheader={
                                             <Typography variant="body2">
-                                                {voted.length} answers
+                                                {votesCount || 0}{" "}
+                                                {votesCount === 1
+                                                    ? "answer"
+                                                    : "answers"}
                                             </Typography>
                                         }
                                     />
@@ -170,13 +125,13 @@ class PollPage extends Component {
                                         <GridList
                                             cellHeight={180}
                                             className={classes.gridList}>
-                                            <GridListTile key={1}>
+                                            <GridListTile key={11}>
                                                 <img
                                                     src={poll.options[0]}
                                                     alt="First option"
                                                 />
                                             </GridListTile>
-                                            <GridListTile key={2}>
+                                            <GridListTile key={22}>
                                                 <img
                                                     src={poll.options[1]}
                                                     alt="Second option"
@@ -188,75 +143,90 @@ class PollPage extends Component {
                                         className={classes.votesContainer}>
                                         <div className={classes.votes}>
                                             <IconButton
-                                                onClick={() =>
-                                                    this.handleVote(0)
-                                                }
-                                                disabled={isMyPoll || hasVoted}
+                                                disabled
                                                 className={classes.icon}
                                                 aria-label="Vote for first image"
                                                 component="span">
                                                 <Icon>favorite</Icon>
                                             </IconButton>
                                             <Typography variant="body1">
-                                                {votesForFirstImage}
+                                                {poll.votes[0] || 0}
                                             </Typography>
                                         </div>
                                         <div className={classes.votes}>
                                             <IconButton
-                                                onClick={() =>
-                                                    this.handleVote(1)
-                                                }
-                                                disabled={isMyPoll || hasVoted}
+                                                disabled
                                                 className={classes.icon}
                                                 aria-label="Vote for second image"
                                                 component="span">
                                                 <Icon>favorite</Icon>
                                             </IconButton>
                                             <Typography variant="body1">
-                                                {votesForSecondImage}
+                                                {poll.votes[1] || 0}
                                             </Typography>
                                         </div>
                                     </CardActions>
                                 </Card>
                             </Grid>
                             <Grid item xs={12} md={8} lg={6}>
-                                <Divider />
+                                <Divider
+                                    style={{
+                                        display: results.length
+                                            ? "block"
+                                            : "none"
+                                    }}
+                                />
                                 <List>
-                                    {voted.map(voter => {
-                                        return (
-                                            <>
-                                                <ListItem
-                                                    key={voter.userId}
-                                                    className={
-                                                        classes.boldTitle
-                                                    }>
-                                                    <ListItemAvatar>
-                                                        <Avatar
-                                                            alt={`Avatar of ${voter.name}`}
-                                                            src={voter.avatar}
+                                    {results &&
+                                        results.map(voter => {
+                                            return (
+                                                <>
+                                                    <ListItem
+                                                        key={voter.userId}
+                                                        className={
+                                                            classes.boldTitle
+                                                        }>
+                                                        <ListItemAvatar>
+                                                            {voter.avatar ? (
+                                                                <Avatar
+                                                                    alt={`Avatar of user ${voter.name}`}
+                                                                    src={
+                                                                        voter.avatar
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                <Avatar
+                                                                    className={
+                                                                        classes.avatar
+                                                                    }>
+                                                                    {voter.name[0].toUpperCase()}
+                                                                </Avatar>
+                                                            )}
+                                                        </ListItemAvatar>
+                                                        <ListItemText
+                                                            primary={
+                                                                <Typography
+                                                                    className={
+                                                                        classes.listItemText
+                                                                    }
+                                                                    variant="subtitle1">
+                                                                    {voter.name}{" "}
+                                                                    voted
+                                                                </Typography>
+                                                            }
+                                                            secondary={
+                                                                <Moment fromNow>
+                                                                    {
+                                                                        voter.updatedAt
+                                                                    }
+                                                                </Moment>
+                                                            }
                                                         />
-                                                    </ListItemAvatar>
-                                                    <ListItemText
-                                                        primary={
-                                                            <Typography
-                                                                className={
-                                                                    classes.listItemText
-                                                                }
-                                                                variant="subtitle1">
-                                                                {voter.name ===
-                                                                user.name
-                                                                    ? "You "
-                                                                    : voter.name}
-                                                                voted
-                                                            </Typography>
-                                                        }
-                                                        secondary="24m ago"
-                                                    />
 
-                                                    <ListItemSecondaryAction>
-                                                        <Box
-                                                            style={{
-                                                                backgroundImage: `url(
+                                                        <ListItemSecondaryAction>
+                                                            <Box
+                                                                style={{
+                                                                    backgroundImage: `url(
                                                                 ${
                                                                     voter.option ===
                                                                     0
@@ -266,16 +236,16 @@ class PollPage extends Component {
                                                                               .options[1]
                                                                 }
                                                             )`
-                                                            }}
-                                                            className={
-                                                                classes.thumbnail
-                                                            }></Box>
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                                <Divider />
-                                            </>
-                                        );
-                                    })}
+                                                                }}
+                                                                className={
+                                                                    classes.thumbnail
+                                                                }></Box>
+                                                        </ListItemSecondaryAction>
+                                                    </ListItem>
+                                                    <Divider />
+                                                </>
+                                            );
+                                        })}
                                 </List>
                             </Grid>
                         </Grid>

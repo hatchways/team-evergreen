@@ -1,10 +1,12 @@
 import {
     FETCH_USER_DATA_SUCCESS,
     FETCH_USERS_SUCCESS,
-    FETCH_REQUEST_FAILURE,
+    API_REQUEST_FAILURE,
     ADD_NEW_LIST,
     ADD_NEW_POLL,
-    LOGOUT
+    LOGOUT,
+    REGISTER_VOTE_SUCCESS,
+    GET_FRIENDS_POLLS_SUCCESS
 } from "./constants.js";
 
 const userInitialState = {
@@ -19,6 +21,11 @@ const userInitialState = {
 
 const usersInitialState = {
     users: [],
+    error: ""
+};
+
+const friendsPollsInitialState = {
+    friendsPolls: [],
     error: ""
 };
 
@@ -45,7 +52,7 @@ export const userReducer = (state = userInitialState, action = {}) => {
                 });
             }
 
-        case FETCH_REQUEST_FAILURE:
+        case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
 
@@ -85,7 +92,53 @@ export const usersReducer = (state = usersInitialState, action = {}) => {
                 });
             }
 
-        case FETCH_REQUEST_FAILURE:
+        case API_REQUEST_FAILURE:
+            console.log("action.error: ", action.error);
+            return Object.assign({}, state, { error: action.error });
+
+        default:
+            return state;
+    }
+};
+
+export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
+    switch (action.type) {
+        case GET_FRIENDS_POLLS_SUCCESS:
+            if (action.response.status === 200) {
+                return Object.assign({}, state, {
+                    friendsPolls: action.response.data
+                });
+            } else {
+                return Object.assign({}, state, {
+                    error: action.response.data
+                });
+            }
+        case REGISTER_VOTE_SUCCESS:
+            if (action.response.status === 200) {
+                const { pollId, newCounts } = action.response.data;
+
+                const updatedPolls = state.friendsPolls.map(poll => {
+                    // Find the poll with the matching pollId
+                    if (poll._id === pollId) {
+                        // Return a new object
+                        return {
+                            ...poll, // copy the existing poll
+                            votes: newCounts // replace the votes array
+                        };
+                    }
+
+                    // Leave every other poll unchanged
+                    return poll;
+                });
+
+                return Object.assign({}, state, { friendsPolls: updatedPolls });
+            } else {
+                return Object.assign({}, state, {
+                    error: action.response.data
+                });
+            }
+
+        case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
 

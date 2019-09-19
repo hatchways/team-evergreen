@@ -39,14 +39,15 @@ const useStyles = makeStyles(theme => ({
     homeButtonHidden: {
         visibility: "hidden"
     },
-    link: {
-        textTransform: "capitalize",
-        "&:hover": {
-            textDecoration: "none"
-        }
+    navBar: {
+        display: "flex",
+        alignItems: "center"
     },
     navItem: {
-        margin: theme.spacing(1, 3)
+        margin: theme.spacing(1, 4),
+        "&:nth-child(3)": {
+            marginRight: theme.spacing(1)
+        }
     },
     toolbar: {
         flexWrap: "wrap",
@@ -63,6 +64,9 @@ const useStyles = makeStyles(theme => ({
         "& .MuiAvatar-root": {
             marginRight: theme.spacing(1)
         }
+    },
+    avatar: {
+        textTransform: "uppercase"
     }
 }));
 
@@ -98,12 +102,18 @@ function AppNavbar(props) {
                             src={logo}
                         />
                     </IconButton>
-                    <nav>
+                    <nav className={classes.navBar}>
                         <Link
+                            component={RouterLink}
                             variant="subtitle1"
-                            color="textPrimary"
-                            href="/polls"
-                            className={clsx(classes.link, classes.navItem)}>
+                            underline="none"
+                            to={{
+                                pathname: "/friends-polls",
+                                state: {
+                                    userId: user._id
+                                }
+                            }}
+                            className={classes.navItem}>
                             Friends polls
                         </Link>
                         <Button
@@ -114,6 +124,15 @@ function AppNavbar(props) {
                             className={classes.navItem}>
                             Create poll
                         </Button>
+                        <Link
+                            className={classes.navItem}
+                            component={RouterLink}
+                            underline="none"
+                            to="/profile">
+                            <Typography variant="subtitle1">
+                                My profile
+                            </Typography>
+                        </Link>
                         <IconButton
                             className={classes.iconButton}
                             disableFocusRipple
@@ -123,13 +142,16 @@ function AppNavbar(props) {
                             aria-haspopup="true"
                             onClick={handleClick}
                             color="inherit">
-                            <Avatar
-                                alt={`Avatar of ${user ? user.name : "user"}`}
-                                src={user && user.avatar}
-                            />
-                            <Typography variant="subtitle1">
-                                My profile
-                            </Typography>
+                            {user.avatar ? (
+                                <Avatar
+                                    alt={`Avatar of user ${user.name}`}
+                                    src={user.avatar}
+                                />
+                            ) : (
+                                <Avatar className={classes.avatar}>
+                                    {user.name.split(" ")[0][0]}
+                                </Avatar>
+                            )}
                         </IconButton>
                         <Menu
                             getContentAnchorEl={null}
