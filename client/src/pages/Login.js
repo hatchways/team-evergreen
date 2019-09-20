@@ -83,7 +83,7 @@ class Login extends Component {
                 }
             })
             .catch(err => {
-                console.log(err);
+                console.log("Error logging user in: ", err);
                 // show errors from the server:
                 this.setState({ errors: err.response.data });
             });
@@ -125,7 +125,9 @@ class Login extends Component {
                                                     shrink: true
                                                 }}
                                             />
-                                            <FormHelperText error id="email">
+                                            <FormHelperText
+                                                error
+                                                id="email-error-field">
                                                 {errors.email}
                                             </FormHelperText>
                                         </Grid>
@@ -148,7 +150,9 @@ class Login extends Component {
                                                     shrink: true
                                                 }}
                                             />
-                                            <FormHelperText error id="password">
+                                            <FormHelperText
+                                                error
+                                                id="password-error-field">
                                                 {errors.password}
                                             </FormHelperText>
                                         </Grid>
@@ -175,7 +179,9 @@ class Login extends Component {
                                         color="primary">
                                         Login
                                     </Button>
-                                    <FormHelperText error id="submitButton">
+                                    <FormHelperText
+                                        error
+                                        id="submitButton-error-field">
                                         {errors.error}
                                     </FormHelperText>
                                 </form>

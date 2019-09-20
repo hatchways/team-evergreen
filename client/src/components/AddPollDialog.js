@@ -185,7 +185,7 @@ class AddPollDialog extends Component {
     };
 
     render() {
-        const { classes, lists, isPollPage, isFriendsPolls } = this.props;
+        const { classes, lists, hideButton } = this.props;
         const { errors, sendToList, title, buttonIsDisabled } = this.state;
 
         return (
@@ -196,7 +196,7 @@ class AddPollDialog extends Component {
                     color="primary"
                     size="medium"
                     style={{
-                        display: isPollPage || isFriendsPolls ? "none" : "block" // hide button on poll page
+                        display: hideButton ? "none" : "block" // hide button on poll page
                         // or on friend's profile
                     }}>
                     Create poll

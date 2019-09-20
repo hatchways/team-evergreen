@@ -6,7 +6,8 @@ import {
     ADD_NEW_POLL,
     LOGOUT,
     REGISTER_VOTE_SUCCESS,
-    GET_FRIENDS_POLLS_SUCCESS
+    GET_FRIENDS_POLLS_SUCCESS,
+    CHANGE_FRIEND_STATUS_SUCCESS
 } from "./constants.js";
 
 const userInitialState = {
@@ -16,6 +17,7 @@ const userInitialState = {
     avatar: "",
     lists: [],
     polls: [],
+    friends: [],
     error: ""
 };
 
@@ -41,6 +43,7 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     polls: action.response.data.polls,
                     lists: action.response.data.lists,
                     avatar: action.response.data.avatar,
+                    friends: action.response.data.friends,
                     error: ""
                 });
             } else if (action.response.status === 500) {
@@ -60,10 +63,43 @@ export const userReducer = (state = userInitialState, action = {}) => {
             return Object.assign({}, state, {
                 lists: [action.data, ...state.lists]
             });
+
         case ADD_NEW_POLL:
             return Object.assign({}, state, {
                 polls: [action.data, ...state.polls]
             });
+
+        case CHANGE_FRIEND_STATUS_SUCCESS:
+            if (action.action === "follow") {
+                if (action.response.data.status !== 500) {
+                    const newFriend = {
+                        _id: action.response.data.friendId,
+                        name: action.response.data.name,
+                        avatar: action.response.data.avatar
+                    };
+                    return Object.assign({}, state, {
+                        friends: [...state.friends, newFriend]
+                    });
+                } else {
+                    return Object.assign({}, state, {
+                        error: action.error
+                    });
+                }
+            } else {
+                if (action.response.data.status !== 500) {
+                    const updatedFriends = state.friends.filter(
+                        friend => friend._id !== action.response.data.friendId
+                    );
+                    return Object.assign({}, state, {
+                        friends: updatedFriends
+                    });
+                } else {
+                    return Object.assign({}, state, {
+                        error: action.error
+                    });
+                }
+            }
+
         case LOGOUT:
             return userInitialState;
         default:

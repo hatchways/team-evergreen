@@ -133,8 +133,10 @@ async function addPolls(userIds, friendsLists) {
 async function addFriendLists(userIds) {
     let promises = [];
     let friendsLists = {};
+
     const noOfUsers = userIds.length;
     await userIds.forEach(id => {
+        let allMyFriends = [];
         let listIds = [];
         let maxNoOfLists = Math.ceil(Math.random() * MAX_NO_OF_ADORNMENTS);
         for (let j = 0; j < maxNoOfLists; j++) {
@@ -162,25 +164,41 @@ async function addFriendLists(userIds) {
                 } while (!endLoop);
                 friends.push(newFriend);
             }
+            //Accumulate friends into one master list for this user
+            allMyFriends.push.apply(allMyFriends, friends);
 
+            //Create the new list of friends
             const newList = new FriendList({
                 title: listTitles[Math.floor(Math.random() * 9)],
                 friends: friends,
                 userId: id
             });
-            newList.save();
-            const newPromise = User.findByIdAndUpdate(id, {
-                $push: { lists: newList._id }
-            }).exec();
-            promises.push(newPromise);
+
+            //Push results of save to promises array
+            promises.push(newList.save());
+            promises.push(
+                User.findByIdAndUpdate(id, {
+                    $push: { lists: newList._id }
+                }).exec()
+            );
+
+            //save the new list in array to be returned
             listIds.push(newList._id);
         }
         friendsLists[id] = listIds;
+
+        // Create list of unique friends
+        const uniqueFriends = [...new Set(allMyFriends)];
+        promises.push(
+            User.findByIdAndUpdate(id, {
+                $push: { friends: { $each: uniqueFriends } }
+            }).exec()
+        );
     });
 
     await Promise.all(promises)
         .then(results => {
-            console.log(`${results.length} friends lists created`);
+            console.log(`${results.length} friends lists * friends created`);
         })
         .catch(err => console.log("****ERROR ADDING FRIEND LISTS\n", err));
 

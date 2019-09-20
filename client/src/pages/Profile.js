@@ -5,11 +5,11 @@ import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
+import UserPanel from "../components/UserPanel";
 import AddFriendList from "../components/AddFriendList";
+import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
-import UserPanel from "../components/UserPanel";
-import AddPollDialog from "../components/AddPollDialog";
 import {
     Typography,
     Container,
@@ -206,7 +206,7 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddFriendList
-                                            userId={user._id}
+                                            user={user}
                                             users={users}
                                             addNewList={this.props.addNewList}
                                         />

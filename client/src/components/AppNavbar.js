@@ -12,6 +12,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
+import Icon from "@material-ui/core/Icon";
 import logo from "../images/icons/logo.png";
 
 const drawerWidth = 240;
@@ -41,12 +42,26 @@ const useStyles = makeStyles(theme => ({
     },
     navBar: {
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
+        [theme.breakpoints.down("sm")]: {
+            display: "none"
+        }
     },
     navItem: {
         margin: theme.spacing(1, 4),
-        "&:nth-child(3)": {
+        "&:last-child": {
             marginRight: theme.spacing(1)
+        },
+        "&:nth-child(3)": {
+            margin: theme.spacing(1, 2), // decrease margin for 'Create Poll' button since it has padding
+            [theme.breakpoints.down("md")]: {
+                margin: theme.spacing(1)
+            }
+        },
+        [theme.breakpoints.down("md")]: {
+            marginRight: theme.spacing(2),
+            marginLeft: theme.spacing(2),
+            fontSize: "0.9rem"
         }
     },
     toolbar: {
@@ -67,20 +82,35 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
         textTransform: "uppercase"
+    },
+    mobileMenuButton: {
+        display: "none",
+        [theme.breakpoints.down("sm")]: {
+            display: "block"
+        }
     }
 }));
 
 function AppNavbar(props) {
     const { open, user } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
     const classes = useStyles();
 
-    const handleClick = event => {
+    const openMenu = event => {
         setAnchorEl(event.currentTarget);
+    };
+
+    const openMobileMenu = event => {
+        setMobileAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleMobileClose = () => {
+        setMobileAnchorEl(null);
     };
 
     return (
@@ -102,7 +132,99 @@ function AppNavbar(props) {
                             src={logo}
                         />
                     </IconButton>
+                    <IconButton
+                        className={classes.mobileMenuButton}
+                        aria-label="open mobile menu"
+                        aria-controls="mobile-menu"
+                        aria-haspopup="true"
+                        onClick={openMobileMenu}>
+                        <Icon>more_vert</Icon>
+                    </IconButton>
+                    <Menu
+                        id="mobile-menu"
+                        anchorEl={mobileAnchorEl}
+                        keepMounted
+                        open={Boolean(mobileAnchorEl)}
+                        onClose={handleMobileClose}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "center"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "center"
+                        }}>
+                        <MenuItem key={1} onClick={handleMobileClose}>
+                            <Link
+                                component={RouterLink}
+                                variant="subtitle1"
+                                underline="none"
+                                to={{
+                                    pathname: "/friends",
+                                    state: {
+                                        userId: user._id
+                                    }
+                                }}>
+                                Friends
+                            </Link>
+                        </MenuItem>
+                        <MenuItem key={2} onClick={handleMobileClose}>
+                            <Link
+                                component={RouterLink}
+                                variant="subtitle1"
+                                underline="none"
+                                to={{
+                                    pathname: "/friends-polls",
+                                    state: {
+                                        userId: user._id
+                                    }
+                                }}>
+                                Friends polls
+                            </Link>
+                        </MenuItem>
+                        <MenuItem key={3} onClick={props.togglePollDialog}>
+                            Create poll
+                        </MenuItem>
+                        <MenuItem key={4} onClick={handleMobileClose}>
+                            <Link
+                                component={RouterLink}
+                                underline="none"
+                                to="/profile">
+                                <Typography variant="subtitle1">
+                                    My profile
+                                </Typography>
+                            </Link>
+                        </MenuItem>
+                        <MenuItem key={5} onClick={handleMobileClose}>
+                            <Link
+                                component={RouterLink}
+                                underline="none"
+                                to="/edit-profile">
+                                <Typography variant="subtitle1">
+                                    Edit profile
+                                </Typography>
+                            </Link>
+                        </MenuItem>
+                        <MenuItem key={6} onClick={props.logOut}>
+                            Log out
+                        </MenuItem>
+                    </Menu>
+
                     <nav className={classes.navBar}>
+                        <Link
+                            component={RouterLink}
+                            variant="subtitle1"
+                            underline="none"
+                            to={{
+                                pathname: "/friends",
+                                state: {
+                                    userId: user._id
+                                }
+                            }}
+                            className={classes.navItem}>
+                            Friends
+                        </Link>
                         <Link
                             component={RouterLink}
                             variant="subtitle1"
@@ -140,7 +262,7 @@ function AppNavbar(props) {
                             aria-label="account of current user"
                             aria-controls="app-menu"
                             aria-haspopup="true"
-                            onClick={handleClick}
+                            onClick={openMenu}
                             color="inherit">
                             {user.avatar ? (
                                 <Avatar

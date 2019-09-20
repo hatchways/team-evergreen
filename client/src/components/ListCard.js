@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { profileStyles } from "../styles/profileStyles";
+import renderAvatar from "../utils/renderAvatar";
 import {
     Card,
     CardHeader,
@@ -9,7 +10,6 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Avatar,
     Typography,
     Divider,
     IconButton,
@@ -48,7 +48,8 @@ function ListCard(props) {
                     }
                     subheader={
                         <Typography variant="body2">
-                            {friends.length + " friends"}
+                            {friends.length +
+                                (friends.length === 1 ? " friend" : " friends")}
                         </Typography>
                     }
                 />
@@ -58,10 +59,7 @@ function ListCard(props) {
                         {friends.map(friend => (
                             <ListItem key={friend._id}>
                                 <ListItemAvatar>
-                                    <Avatar
-                                        src={friend.avatar}
-                                        alt={`Avatar of ${friend.name}`}
-                                    />
+                                    {renderAvatar(friend, classes)}
                                 </ListItemAvatar>
                                 <ListItemText primary={friend.name} />
                             </ListItem>
