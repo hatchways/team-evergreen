@@ -11,7 +11,13 @@ export async function followUser(userId, friendId) {
                 $push: { friends: friendId }
             }
         ).exec();
-        return { userId, friendId };
+        const details = await User.findById(friendId, "name avatar").exec();
+        return {
+            userId,
+            friendId,
+            name: details["name"],
+            avatar: details["avatar"]
+        };
     } catch (err) {
         console.log(`${userId} attempting to follow ${friendId}`, err);
         return {
