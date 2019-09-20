@@ -29,6 +29,7 @@ class FriendsPolls extends Component {
                     togglePollDialog={this.props.togglePollDialog}
                 />
                 <FriendsDrawer
+                    user={user}
                     users={users}
                     open={drawerIsOpen}
                     toggleDrawer={this.toggleDrawer}

@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import renderAvatar from "../utils/renderAvatar";
 import { Link as RouterLink } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
@@ -9,7 +10,6 @@ import {
     ListItem,
     ListItemText,
     ListItemAvatar,
-    Avatar,
     Badge,
     Divider,
     IconButton,
@@ -81,12 +81,16 @@ const useStyles = makeStyles(theme => ({
     toolbarIcon: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-end",
-        padding: "0 8px",
         ...theme.mixins.toolbar
     },
     avatar: {
         textTransform: "uppercase"
+    },
+    arrowIcon: {
+        margin: "0 0 0 auto",
+        [theme.breakpoints.up("xs")]: {
+            padding: "20px"
+        }
     }
 }));
 
@@ -106,7 +110,7 @@ function FriendsDrawer(props) {
             open={open}>
             <div className={classes.toolbarIcon}>
                 <IconButton
-                    edge="start"
+                    className={classes.arrowIcon}
                     color="inherit"
                     aria-label="open drawer"
                     onClick={toggleDrawer}>
@@ -129,16 +133,16 @@ function FriendsDrawer(props) {
                         Friends
                     </ListSubheader>
                 }>
-                {props.users.map(user => {
+                {props.user.friends.map(friend => {
                     return (
                         <Link
-                            key={user._id}
+                            key={friend._id}
                             underline="none"
                             component={RouterLink}
                             to={{
-                                pathname: `/user/${user._id}`,
+                                pathname: `/user/${friend._id}`,
                                 state: {
-                                    user: user,
+                                    user: friend,
                                     users: props.users
                                 }
                             }}>
@@ -148,19 +152,10 @@ function FriendsDrawer(props) {
                                         variant="dot"
                                         overlap="circle"
                                         color="secondary">
-                                        {user.avatar ? (
-                                            <Avatar
-                                                alt={`Avatar of user ${user.name}`}
-                                                src={user.avatar}
-                                            />
-                                        ) : (
-                                            <Avatar className={classes.avatar}>
-                                                {user.name[0]}
-                                            </Avatar>
-                                        )}
+                                        {renderAvatar(friend, classes)}
                                     </StyledBadge>
                                 </ListItemAvatar>
-                                <ListItemText primary={user.name} />
+                                <ListItemText primary={friend.name} />
                             </ListItem>
                         </Link>
                     );

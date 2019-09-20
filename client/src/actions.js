@@ -6,7 +6,8 @@ import {
     ADD_NEW_POLL,
     API_REQUEST_FAILURE,
     REGISTER_VOTE_SUCCESS,
-    GET_FRIENDS_POLLS_SUCCESS
+    GET_FRIENDS_POLLS_SUCCESS,
+    CHANGE_FRIEND_STATUS_SUCCESS
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -45,6 +46,17 @@ export const getFriendsPolls = data => dispatch => {
         });
 };
 
+export const changeFriendStatus = data => dispatch => {
+    return postDataAPI
+        .changeFriendStatus(data)
+        .then(response => {
+            dispatch(changeFriendStatusSuccess(response, data.action));
+        })
+        .catch(error => {
+            dispatch(apiRequestFailure(error));
+        });
+};
+
 export const registerVote = data => dispatch => {
     return postDataAPI
         .registerVote(data)
@@ -75,6 +87,14 @@ export function fetchUserDataSuccess(response) {
     return {
         type: FETCH_USER_DATA_SUCCESS,
         response
+    };
+}
+
+export function changeFriendStatusSuccess(response, action) {
+    return {
+        type: CHANGE_FRIEND_STATUS_SUCCESS,
+        response,
+        action
     };
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import renderAvatar from "../utils/renderAvatar";
 import { withStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -17,7 +18,6 @@ import {
     ListItemText,
     ListItemAvatar,
     ListItemSecondaryAction,
-    Avatar,
     Icon
 } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -131,7 +131,7 @@ class AddFriendsList extends Component {
         } else {
             // create new list and send it to database:
             const newList = {
-                userId: this.props.userId,
+                userId: this.props.user._id,
                 title: listName.trim(),
                 friends
             };
@@ -184,18 +184,18 @@ class AddFriendsList extends Component {
     };
 
     toggleAllUsers = () => {
-        if (this.state.friends.length === this.props.users.length) {
+        if (this.state.friends.length === this.props.user.friends.length) {
             // clear all users from friends list:
             this.setState({ friends: [] });
         } else {
             // add all users as friends:
-            const friends = this.props.users.map(user => user._id);
+            const friends = this.props.user.friends.map(user => user._id);
             this.setState({ friends });
         }
     };
 
     render() {
-        const { classes, users } = this.props;
+        const { classes, user } = this.props;
         const { open, friends, errors, listName } = this.state;
         const isNameInvalid = errors.name && !listName;
         const isListInvalid = errors.friends && !friends.length;
@@ -256,27 +256,23 @@ class AddFriendsList extends Component {
                                     onClick={this.toggleAllUsers}
                                     color="secondary"
                                     className={classes.button}>
-                                    {users.length === friends.length
+                                    {user.friends.length === friends.length
                                         ? "Remove all"
                                         : "Select all"}
                                 </Button>
                             </div>
                             <Divider />
                             <List dense className={classes.list}>
-                                {users.map(user => {
+                                {user.friends.map(user => {
                                     const included = friends.includes(user._id);
                                     return (
                                         <ListItem
                                             key={user._id}
                                             className={classes.item}>
                                             <ListItemAvatar>
-                                                <Avatar
-                                                    alt={`Avatar of ${user.name}`}
-                                                    src={user.avatar}
-                                                />
+                                                {renderAvatar(user, classes)}
                                             </ListItemAvatar>
                                             <ListItemText primary={user.name} />
-                                            <Divider />
                                             <ListItemSecondaryAction>
                                                 <Button
                                                     className={classes.button}

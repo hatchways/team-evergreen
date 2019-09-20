@@ -92,5 +92,8 @@ export const profileStyles = theme => ({
         position: "absolute",
         top: "50%",
         transform: "translateY(-50%)"
+    },
+    avatarLetter: {
+        textTranform: "uppercase"
     }
 });

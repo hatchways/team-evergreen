@@ -11,7 +11,8 @@ import {
     addNewList,
     addNewPoll,
     registerVote,
-    getFriendsPolls
+    getFriendsPolls,
+    changeFriendStatus
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -22,6 +23,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
+import Friends from "./pages/Friends";
 
 import "./App.css";
 
@@ -43,6 +45,7 @@ const mapDispatchToProps = dispatch => {
         addNewPoll: data => dispatch(addNewPoll(data)),
         registerVote: data => dispatch(registerVote(data)),
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
+        changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut())
     };
 };
@@ -205,6 +208,27 @@ class App extends Component {
                                             this.props.getFriendsPolls
                                         }
                                         registerVote={this.props.registerVote}
+                                        logOut={this.logOut}
+                                    />
+                                ) : (
+                                    <Redirect to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/friends"
+                            render={props =>
+                                isAuthenticated ? (
+                                    <Friends
+                                        {...props}
+                                        users={this.props.users}
+                                        user={this.props.user}
+                                        loadUsers={this.props.loadUsers}
+                                        addNewPoll={this.props.addNewPoll}
+                                        changeFriendStatus={
+                                            this.props.changeFriendStatus
+                                        }
                                         logOut={this.logOut}
                                     />
                                 ) : (
