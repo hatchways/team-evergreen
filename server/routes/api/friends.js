@@ -10,6 +10,9 @@ import {
     getSampleOfUsers
 } from "../utils/friendManagement";
 
+// Constants
+const DEFAULT_SAMPLE_SIZE = 10;
+
 // Follows friend
 router.post("/follow", function(req, res) {
     if (req.body.userId === undefined) {
@@ -54,7 +57,10 @@ router.get("/sample", function(req, res) {
     if (req.query.userId === undefined) {
         res.status(400).json({ error: "No data provided." });
     } else {
-        getSampleOfUsers(req.query.userId, Number(req.query.sampleSize))
+        getSampleOfUsers(
+            req.query.userId,
+            Number(req.query.sampleSize) || DEFAULT_SAMPLE_SIZE
+        )
             .then(result => {
                 res.status(200).json(result);
             })

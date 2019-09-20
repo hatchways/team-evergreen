@@ -2,9 +2,6 @@
 
 import User from "../../models/User";
 
-// Constants
-const DEFAULT_SAMPLE_SIZE = 10;
-
 //Add user to friends list
 export async function followUser(userId, friendId) {
     try {
@@ -48,6 +45,7 @@ export async function getSampleOfUsers(
     userId,
     sampleSize = DEFAULT_SAMPLE_SIZE
 ) {
+    console.log(sampleSize);
     try {
         const listOf = await User.findById(
             { _id: userId },
