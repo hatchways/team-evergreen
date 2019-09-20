@@ -133,17 +133,16 @@ function FriendsDrawer(props) {
                         Friends
                     </ListSubheader>
                 }>
-                {props.users.map(user => {
-                    // TODO: change to user friends!
+                {props.user.friends.map(friend => {
                     return (
                         <Link
-                            key={user._id}
+                            key={friend._id}
                             underline="none"
                             component={RouterLink}
                             to={{
-                                pathname: `/user/${user._id}`,
+                                pathname: `/user/${friend._id}`,
                                 state: {
-                                    user: user,
+                                    user: friend,
                                     users: props.users
                                 }
                             }}>
@@ -153,10 +152,10 @@ function FriendsDrawer(props) {
                                         variant="dot"
                                         overlap="circle"
                                         color="secondary">
-                                        {renderAvatar(user, classes)}
+                                        {renderAvatar(friend, classes)}
                                     </StyledBadge>
                                 </ListItemAvatar>
-                                <ListItemText primary={user.name} />
+                                <ListItemText primary={friend.name} />
                             </ListItem>
                         </Link>
                     );
