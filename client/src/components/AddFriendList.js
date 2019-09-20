@@ -184,12 +184,12 @@ class AddFriendsList extends Component {
     };
 
     toggleAllUsers = () => {
-        if (this.state.friends.length === this.props.users.length) {
+        if (this.state.friends.length === this.props.user.friends.length) {
             // clear all users from friends list:
             this.setState({ friends: [] });
         } else {
             // add all users as friends:
-            const friends = this.props.users.map(user => user._id);
+            const friends = this.props.user.friends.map(user => user._id);
             this.setState({ friends });
         }
     };
