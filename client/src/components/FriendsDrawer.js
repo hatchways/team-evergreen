@@ -134,6 +134,7 @@ function FriendsDrawer(props) {
                     </ListSubheader>
                 }>
                 {props.users.map(user => {
+                    // TODO: change to user friends!
                     return (
                         <Link
                             key={user._id}

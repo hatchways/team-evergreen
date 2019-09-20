@@ -50,36 +50,32 @@ class Friends extends React.Component {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
-            value: 0,
-            following: [] // list of all friends
+            value: 0
         };
-    }
-
-    componentDidMount() {
-        // this.setState({ following: this.props.user.friends });
     }
 
     handleChange = (e, newValue) => {
         this.setState({ value: newValue });
     };
 
-    followUser = id => {
-        // this.props.followUser(id);
-        // keep track of users who became friends:
-        this.setState({ following: this.state.following.concat(id) });
+    togglePollDialog = () => {
+        this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
-    unfollowUser = id => {
-        // this.props.unfollowUser(id);
-        this.setState(prevState => ({
-            friends: prevState.following.filter(friendId => friendId !== id)
-        }));
+    changeFriendStatus = (id, action) => {
+        const dataToSend = {
+            userId: this.props.user._id,
+            friendId: id,
+            action
+        };
+        this.props.changeFriendStatus(dataToSend);
     };
 
     render() {
         const { classes, user, users } = this.props;
-        const { lists } = this.props.user;
-        const { pollDialogIsOpen, value, following } = this.state;
+        const { lists, friends } = this.props.user;
+        const { pollDialogIsOpen, value } = this.state;
+
         return (
             <div className={classes.root}>
                 <UserPanel
@@ -87,7 +83,6 @@ class Friends extends React.Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
-                    addNewPoll={this.props.addNewPoll}
                 />
 
                 <main className={classes.main}>
@@ -114,6 +109,9 @@ class Friends extends React.Component {
                                         <AddPollDialog
                                             userId={user._id}
                                             lists={lists}
+                                            togglePollDialog={
+                                                this.togglePollDialog
+                                            }
                                             addNewPoll={this.props.addNewPoll}
                                             pollDialogIsOpen={pollDialogIsOpen}
                                             hideButton={true}
@@ -145,69 +143,85 @@ class Friends extends React.Component {
                                         />
                                     </Tabs>
                                     <TabPanel value={value} index={0}>
-                                        <List className={classes.userList}>
-                                            {users &&
-                                                users.map(friend => {
-                                                    const isFriend = following.includes(
-                                                        friend._id
-                                                    );
-                                                    // <=  TODO: change to list of friends
-                                                    return (
-                                                        <ListItem
-                                                            key={friend._id}
-                                                            className={clsx(
-                                                                classes.listItem,
-                                                                !isFriend &&
-                                                                    classes.disabled
-                                                            )}>
-                                                            <ListItemAvatar>
-                                                                {renderAvatar(
-                                                                    friend,
-                                                                    classes
-                                                                )}
-                                                            </ListItemAvatar>
-                                                            <ListItemText
-                                                                primary={
-                                                                    friend.name
-                                                                }
-                                                            />
-                                                            <ListItemSecondaryAction>
-                                                                <Button
-                                                                    className={
-                                                                        classes.button
+                                        {!friends.length ? (
+                                            <Typography variant="body1">
+                                                You look lonely! Add new friends
+                                                in 'Suggested' tab
+                                            </Typography>
+                                        ) : (
+                                            <List className={classes.userList}>
+                                                {friends &&
+                                                    friends.map(friend => {
+                                                        const isStillFriend = friends.find(
+                                                            u =>
+                                                                u._id ===
+                                                                friend._id
+                                                        );
+                                                        return (
+                                                            <ListItem
+                                                                key={friend._id}
+                                                                className={clsx(
+                                                                    classes.listItem,
+                                                                    isStillFriend ===
+                                                                        undefined &&
+                                                                        classes.disabled
+                                                                )}>
+                                                                ,
+                                                                <ListItemAvatar>
+                                                                    {renderAvatar(
+                                                                        friend,
+                                                                        classes
+                                                                    )}
+                                                                </ListItemAvatar>
+                                                                <ListItemText
+                                                                    primary={
+                                                                        friend.name
                                                                     }
-                                                                    onClick={() =>
-                                                                        this.unfollowUser(
-                                                                            friend._id
-                                                                        )
-                                                                    }
-                                                                    disabled={
-                                                                        !isFriend
-                                                                    }
-                                                                    variant={
-                                                                        isFriend
-                                                                            ? "contained"
-                                                                            : "text"
-                                                                    }
-                                                                    size="small"
-                                                                    color="secondary">
-                                                                    {isFriend
-                                                                        ? "Unfollow"
-                                                                        : "Removed"}
-                                                                </Button>
-                                                            </ListItemSecondaryAction>
-                                                        </ListItem>
-                                                    );
-                                                })}
-                                        </List>
+                                                                />
+                                                                <ListItemSecondaryAction>
+                                                                    <Button
+                                                                        className={
+                                                                            classes.button
+                                                                        }
+                                                                        onClick={() =>
+                                                                            this.changeFriendStatus(
+                                                                                friend._id,
+                                                                                "unfollow"
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            isStillFriend ===
+                                                                            undefined
+                                                                                ? true
+                                                                                : false
+                                                                        }
+                                                                        variant={
+                                                                            isStillFriend
+                                                                                ? "text"
+                                                                                : "contained"
+                                                                        }
+                                                                        size="small"
+                                                                        color="secondary">
+                                                                        {isStillFriend !==
+                                                                        undefined
+                                                                            ? "Unfollow"
+                                                                            : "Removed"}
+                                                                    </Button>
+                                                                </ListItemSecondaryAction>
+                                                            </ListItem>
+                                                        );
+                                                    })}
+                                            </List>
+                                        )}
                                     </TabPanel>
                                     <TabPanel value={value} index={1}>
                                         <List className={classes.userList}>
                                             {users &&
                                                 users.map(user => {
-                                                    const isFriend = following.includes(
-                                                        user._id
+                                                    const isFriend = friends.find(
+                                                        u => u._id === user._id
                                                     );
+
                                                     return (
                                                         <ListItem
                                                             key={user._id}
@@ -233,23 +247,29 @@ class Friends extends React.Component {
                                                                         classes.button
                                                                     }
                                                                     onClick={() =>
-                                                                        this.followUser(
-                                                                            user._id
+                                                                        this.changeFriendStatus(
+                                                                            user._id,
+                                                                            "follow"
                                                                         )
                                                                     }
                                                                     disabled={
-                                                                        isFriend
+                                                                        isFriend ===
+                                                                        undefined
+                                                                            ? false
+                                                                            : true
                                                                     }
                                                                     variant={
-                                                                        isFriend
+                                                                        isFriend !==
+                                                                        undefined
                                                                             ? "text"
                                                                             : "contained"
                                                                     }
                                                                     size="small"
                                                                     color="secondary">
-                                                                    {isFriend
-                                                                        ? "Following"
-                                                                        : "Follow"}
+                                                                    {isFriend ===
+                                                                    undefined
+                                                                        ? "Follow"
+                                                                        : "Following"}
                                                                 </Button>
                                                             </ListItemSecondaryAction>
                                                         </ListItem>

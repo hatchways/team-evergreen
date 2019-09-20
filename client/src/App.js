@@ -11,7 +11,8 @@ import {
     addNewList,
     addNewPoll,
     registerVote,
-    getFriendsPolls
+    getFriendsPolls,
+    changeFriendStatus
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -44,6 +45,7 @@ const mapDispatchToProps = dispatch => {
         addNewPoll: data => dispatch(addNewPoll(data)),
         registerVote: data => dispatch(registerVote(data)),
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
+        changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut())
     };
 };
@@ -224,6 +226,9 @@ class App extends Component {
                                         user={this.props.user}
                                         loadUsers={this.props.loadUsers}
                                         addNewPoll={this.props.addNewPoll}
+                                        changeFriendStatus={
+                                            this.props.changeFriendStatus
+                                        }
                                         logOut={this.logOut}
                                     />
                                 ) : (
