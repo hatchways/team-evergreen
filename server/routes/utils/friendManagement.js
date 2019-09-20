@@ -2,8 +2,10 @@
 
 import User from "../../models/User";
 
-//Add user to friends list
+// Constants
+const DEFAULT_SAMPLE_SIZE = 10;
 
+//Add user to friends list
 export async function followUser(userId, friendId) {
     try {
         await User.findByIdAndUpdate(
@@ -22,6 +24,7 @@ export async function followUser(userId, friendId) {
     }
 }
 
+//Remove user from friend list
 export async function unFollowUser(userId, friendId) {
     try {
         await User.findByIdAndUpdate(
@@ -40,6 +43,28 @@ export async function unFollowUser(userId, friendId) {
     }
 }
 
-export async function randomSuggestions(userId) {
-    return "Random Suggestions";
+//Return a sample of users
+export async function getSampleOfUsers(
+    userId,
+    sampleSize = DEFAULT_SAMPLE_SIZE
+) {
+    try {
+        const listOf = await User.findById(
+            { _id: userId },
+            { friends: 1, _id: 0 }
+        ).exec();
+        let exclusionList = listOf.friends;
+        exclusionList.push(userId);
+        return await User.aggregate([
+            { $project: { name: 1, avatar: 1 } },
+            { $sample: { size: sampleSize } },
+            { $match: { _id: { $nin: exclusionList } } }
+        ]).exec();
+    } catch (err) {
+        console.log(`Unable to select sample for ${userId}`, err);
+        return {
+            status: 500,
+            error: "Error occurred while trying to select sample."
+        };
+    }
 }
