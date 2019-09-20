@@ -7,15 +7,12 @@ const Votes = require("../../models/Vote");
 export async function getRequests(userId) {
     try {
         //Get all the lists the user is a member of
-        const lists = await Lists.find({ friends: userId }, "_id", {
-            lean: true
-        }).exec();
+        const lists = await Lists.find({ friends: userId }, "_id").exec();
 
         //Get all the votes the user has already cast
         const votes = await Votes.find(
             { userId: userId },
-            { pollId: 1, _id: 0 },
-            { lean: true }
+            { pollId: 1, _id: 0 }
         ).exec();
 
         // Strip out the key from the votes object
