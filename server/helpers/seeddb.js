@@ -189,10 +189,9 @@ async function addFriendLists(userIds) {
 
         // Create list of unique friends
         const uniqueFriends = [...new Set(allMyFriends)];
-        console.log(uniqueFriends[0], promises.length);
         promises.push(
             User.findByIdAndUpdate(id, {
-                $push: { friends: uniqueFriends[0] }
+                $push: { friends: { $each: uniqueFriends } }
             }).exec()
         );
     });
