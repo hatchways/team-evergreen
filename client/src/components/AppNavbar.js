@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     },
     navItem: {
         margin: theme.spacing(1, 4),
-        "&:last-child": {
+        "&:nth-child(4)": {
             marginRight: theme.spacing(1)
         },
         "&:nth-child(3)": {
@@ -121,17 +121,19 @@ function AppNavbar(props) {
                 color="inherit"
                 elevation={0}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="go to home page"
-                        className={clsx(open && classes.homeButtonHidden)}>
-                        <img
-                            className={classes.logo}
-                            alt="App logo"
-                            src={logo}
-                        />
-                    </IconButton>
+                    <Link component={RouterLink} underline="none" to="/profile">
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="go to home page"
+                            className={clsx(open && classes.homeButtonHidden)}>
+                            <img
+                                className={classes.logo}
+                                alt="App logo"
+                                src={logo}
+                            />
+                        </IconButton>
+                    </Link>
                     <IconButton
                         className={classes.mobileMenuButton}
                         aria-label="open mobile menu"
