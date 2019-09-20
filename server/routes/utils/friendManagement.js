@@ -55,8 +55,8 @@ export async function getSampleOfUsers(
         exclusionList.push(userId);
         return await User.aggregate([
             { $project: { name: 1, avatar: 1 } },
-            { $sample: { size: sampleSize } },
-            { $match: { _id: { $nin: exclusionList } } }
+            { $match: { _id: { $nin: exclusionList } } },
+            { $sample: { size: sampleSize } }
         ]).exec();
     } catch (err) {
         console.log(`Unable to select sample for ${userId}`, err);
