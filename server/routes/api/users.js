@@ -245,6 +245,7 @@ router.get("/user/:id", (req, res) => {
                 select: "name avatar"
             } // select only name and avatar for each friend
         })
+        .populate("friends", "name _id avatar")
         .then(result => {
             res.json(result);
         })
