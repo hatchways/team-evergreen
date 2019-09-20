@@ -181,7 +181,6 @@ router.post("/add_friend_list", (req, res) => {
  */
 router.get("/get_user_data", (req, res) => {
     const target = req.body.target; // 'lists' or 'polls'
-
     let populateOptions = {};
 
     // if lists are requested, friend ids should be populated too:
@@ -192,6 +191,15 @@ router.get("/get_user_data", (req, res) => {
                 path: "friends",
                 select: "name avatar"
             } // select only name and avatar for each friend
+        };
+    }
+    if (target === "friends") {
+        populateOptions = {
+            path: target,
+            populate: {
+                path: "users",
+                select: "name avatar"
+            }
         };
     } else {
         populateOptions = {
@@ -245,6 +253,7 @@ router.get("/user/:id", (req, res) => {
                 select: "name avatar"
             } // select only name and avatar for each friend
         })
+
         .then(result => {
             res.json(result);
         })

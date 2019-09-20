@@ -24,7 +24,7 @@ export async function registerVote(pollId, userId, option) {
             {
                 votes: newCounts
             }
-        ).exec(result => console.log(result));
+        ).exec();
         return { pollId: pollId, option: option, newCounts: newCounts };
     } catch (err) {
         return { status: 500, message: "Error occurred while saving vote." };
