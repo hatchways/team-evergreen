@@ -26,7 +26,7 @@ export async function getRequests(userId) {
         return await Polls.find(
             {
                 sendToList: lists,
-                _id: { $nin: [votesArray] }
+                _id: { $nin: votesArray }
             },
             "_id title votes options"
         );
