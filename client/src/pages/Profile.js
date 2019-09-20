@@ -198,7 +198,7 @@ class Profile extends Component {
                                     </Grid>
                                     <Grid item>
                                         <AddFriendList
-                                            userId={user._id}
+                                            user={user}
                                             users={users}
                                             addNewList={this.props.addNewList}
                                         />

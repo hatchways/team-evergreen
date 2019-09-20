@@ -18,11 +18,12 @@ class FriendsPolls extends Component {
     }
 
     componentDidMount() {
-        // const { userId } = this.props.location.state;
-        const { _id } = this.props.user;
+        // get user id from location state after redirection
+        // or from redux state on page refresh:
+        const userId = this.props.location.state.userId || this.props.user._id;
 
         // get friends polls the user can vote on:
-        this.props.getFriendsPolls(_id);
+        this.props.getFriendsPolls(userId);
     }
 
     togglePollDialog = () => {

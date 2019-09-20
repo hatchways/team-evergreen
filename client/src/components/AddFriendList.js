@@ -131,7 +131,7 @@ class AddFriendsList extends Component {
         } else {
             // create new list and send it to database:
             const newList = {
-                userId: this.props.userId,
+                userId: this.props.user._id,
                 title: listName.trim(),
                 friends
             };
@@ -195,7 +195,7 @@ class AddFriendsList extends Component {
     };
 
     render() {
-        const { classes, users } = this.props;
+        const { classes, user } = this.props;
         const { open, friends, errors, listName } = this.state;
         const isNameInvalid = errors.name && !listName;
         const isListInvalid = errors.friends && !friends.length;
@@ -256,14 +256,14 @@ class AddFriendsList extends Component {
                                     onClick={this.toggleAllUsers}
                                     color="secondary"
                                     className={classes.button}>
-                                    {users.length === friends.length
+                                    {user.friends.length === friends.length
                                         ? "Remove all"
                                         : "Select all"}
                                 </Button>
                             </div>
                             <Divider />
                             <List dense className={classes.list}>
-                                {users.map(user => {
+                                {user.friends.map(user => {
                                     const included = friends.includes(user._id);
                                     return (
                                         <ListItem
