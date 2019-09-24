@@ -218,7 +218,7 @@ class Friends extends React.Component {
                                         {!users.length ? (
                                             <Typography variant="body1">
                                                 No new users available at the
-                                                moment 😟
+                                                moment
                                             </Typography>
                                         ) : (
                                             <List className={classes.userList}>

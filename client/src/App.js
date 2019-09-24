@@ -18,6 +18,7 @@ import {
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 
+import Loader from "./components/Loader";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -25,12 +26,11 @@ import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
-import "./App.css";
-
 // declare what pieces of state we want to have access to:
 const mapStateToProps = state => {
     return {
         user: state.userReducer,
+        isLoading: state.userReducer.isLoading,
         users: state.usersReducer.users,
         friendsPolls: state.pollsReducer.friendsPolls
     };
@@ -61,12 +61,10 @@ class App extends Component {
             // Decode token and get user info
             const decoded = jwt_decode(token);
 
-            // Set user:
+            // Fetch current user data:
             this.props.loadUserData(decoded.id);
 
-            console.log("user id: ", decoded.id);
-            // fetch all users. Pass current user id to exclude
-            // him/her from the list of all users:
+            // fetch suggested users excluding current user and his/her friends:
             this.props.loadUsers(decoded.id);
 
             // Check for expired token
@@ -145,7 +143,9 @@ class App extends Component {
                             exact
                             path="/profile"
                             render={props =>
-                                isAuthenticated ? (
+                                this.props.isLoading ? (
+                                    <Loader />
+                                ) : isAuthenticated ? (
                                     <Profile
                                         {...props}
                                         user={this.props.user}
@@ -164,7 +164,9 @@ class App extends Component {
                             exact
                             path="/poll/:id"
                             render={props =>
-                                isAuthenticated ? (
+                                this.props.isLoading ? (
+                                    <Loader />
+                                ) : isAuthenticated ? (
                                     <PollPage
                                         {...props}
                                         users={this.props.users}
@@ -181,7 +183,9 @@ class App extends Component {
                             exact
                             path="/user/:id"
                             render={props =>
-                                isAuthenticated ? (
+                                this.props.isLoading ? (
+                                    <Loader />
+                                ) : isAuthenticated ? (
                                     <Profile
                                         {...props}
                                         users={this.props.users}
@@ -198,7 +202,9 @@ class App extends Component {
                             exact
                             path="/friends-polls"
                             render={props =>
-                                isAuthenticated ? (
+                                this.props.isLoading ? (
+                                    <Loader />
+                                ) : isAuthenticated ? (
                                     <FriendsPolls
                                         {...props}
                                         users={this.props.users}
@@ -220,7 +226,9 @@ class App extends Component {
                             exact
                             path="/friends"
                             render={props =>
-                                isAuthenticated ? (
+                                this.props.isLoading ? (
+                                    <Loader />
+                                ) : isAuthenticated ? (
                                     <Friends
                                         {...props}
                                         users={this.props.users}

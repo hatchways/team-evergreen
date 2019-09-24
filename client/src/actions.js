@@ -7,13 +7,15 @@ import {
     API_REQUEST_FAILURE,
     REGISTER_VOTE_SUCCESS,
     GET_FRIENDS_POLLS_SUCCESS,
-    CHANGE_FRIEND_STATUS_SUCCESS
+    CHANGE_FRIEND_STATUS_SUCCESS,
+    USER_DATA_LOADING
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
 import postDataAPI from "./api/postDataAPI";
 
 export const loadUserData = data => dispatch => {
+    dispatch({ type: USER_DATA_LOADING });
     return fetchDataAPI
         .fetchUserData(data)
         .then(response => {

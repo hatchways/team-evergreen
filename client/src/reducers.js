@@ -7,7 +7,8 @@ import {
     LOGOUT,
     REGISTER_VOTE_SUCCESS,
     GET_FRIENDS_POLLS_SUCCESS,
-    CHANGE_FRIEND_STATUS_SUCCESS
+    CHANGE_FRIEND_STATUS_SUCCESS,
+    USER_DATA_LOADING
 } from "./constants.js";
 
 const userInitialState = {
@@ -18,7 +19,8 @@ const userInitialState = {
     lists: [],
     polls: [],
     friends: [],
-    error: ""
+    error: "",
+    isLoading: false
 };
 
 const usersInitialState = {
@@ -33,6 +35,9 @@ const friendsPollsInitialState = {
 
 export const userReducer = (state = userInitialState, action = {}) => {
     switch (action.type) {
+        case USER_DATA_LOADING:
+            return Object.assign({}, state, { isLoading: true });
+
         case FETCH_USER_DATA_SUCCESS:
             if (action.response.status === 200) {
                 // return new state with user details:
@@ -44,7 +49,8 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     lists: action.response.data.lists,
                     avatar: action.response.data.avatar,
                     friends: action.response.data.friends,
-                    error: ""
+                    error: "",
+                    isLoading: false
                 });
             } else if (action.response.status === 500) {
                 // TODO: show spinner icon or eror
@@ -110,8 +116,6 @@ export const userReducer = (state = userInitialState, action = {}) => {
 export const usersReducer = (state = usersInitialState, action = {}) => {
     switch (action.type) {
         case FETCH_USERS_SUCCESS:
-            console.log("action.response: ", action.response);
-
             if (
                 action.response.status === 200 &&
                 action.response.data.status !== 500
