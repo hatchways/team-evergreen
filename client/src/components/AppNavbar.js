@@ -196,15 +196,10 @@ function AppNavbar(props) {
                                 </Typography>
                             </Link>
                         </MenuItem>
-                        <MenuItem key={5} onClick={handleMobileClose}>
-                            <Link
-                                component={RouterLink}
-                                underline="none"
-                                to="/edit-profile">
-                                <Typography variant="subtitle1">
-                                    Edit profile
-                                </Typography>
-                            </Link>
+                        <MenuItem
+                            key={5}
+                            onClick={props.toggleEditProfileDialog}>
+                            Edit profile
                         </MenuItem>
                         <MenuItem key={6} onClick={props.logOut}>
                             Log out
@@ -290,7 +285,9 @@ function AppNavbar(props) {
                             keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleClose}>
-                            <MenuItem component={RouterLink} to="/edit-profile">
+                            <MenuItem
+                                component={RouterLink}
+                                onClick={props.toggleEditProfileDialog}>
                                 <ListItemText primary="Edit profile" />
                             </MenuItem>
                             <MenuItem onClick={props.logOut}>

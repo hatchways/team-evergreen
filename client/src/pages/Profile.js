@@ -16,12 +16,14 @@ import {
     IconButton,
     Icon
 } from "@material-ui/core";
+import EditProfileDialog from "../components/EditProfileDialog";
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
+            editProfileDialogIsOpen: false,
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
@@ -61,11 +63,18 @@ class Profile extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    toggleEditProfileDialog = () => {
+        this.setState({
+            editProfileDialogIsOpen: !this.state.editProfileDialogIsOpen
+        });
+    };
+
     render() {
         const { classes, user, users } = this.props;
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
+            editProfileDialogIsOpen,
             listMove,
             moveListBy,
             pollMove,
@@ -79,6 +88,7 @@ class Profile extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
                 />
 
@@ -122,6 +132,20 @@ class Profile extends Component {
                                                 this.togglePollDialog
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <EditProfileDialog
+                                            userId={user._id}
+                                            name={user.name}
+                                            avatar={user.avatar}
+                                            email={user.email}
+                                            toggleEditProfileDialog={
+                                                this.toggleEditProfileDialog
+                                            }
+                                            editProfileDialogIsOpen={
+                                                editProfileDialogIsOpen
+                                            }
                                         />
                                     </Grid>
                                 </Grid>

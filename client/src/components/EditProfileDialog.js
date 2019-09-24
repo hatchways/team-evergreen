@@ -11,14 +11,11 @@ import {
     Typography,
     FormControl,
     FormHelperText,
-    Select,
-    Icon,
-    Grid
+    Icon
 } from "@material-ui/core";
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { FileDrop } from "./FileDrop";
-import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
 const TARGET_AVATAR = "avatar_image";
@@ -156,7 +153,7 @@ class EditProfileDialog extends Component {
             });
         } else if (!email) {
             this.setState({
-                errors: { list: "You need to provide an e-mail." }
+                errors: { email: "You need to provide an e-mail." }
             });
         } else {
             // disable the submit button to avoid duplicates
@@ -167,7 +164,6 @@ class EditProfileDialog extends Component {
             formData.append("name", this.props.name);
             formData.append("email", this.props.email);
             formData.append("avatar", this.props.avatar);
-            formData.append("sendToList", sendToList);
             formData.append("target", TARGET_AVATAR);
 
             console.log(formData);
@@ -188,7 +184,7 @@ class EditProfileDialog extends Component {
                     style={{
                         display: hideButton ? "none" : "block" // hide button on edit profile page
                     }}>
-                    Create poll
+                    edit
                 </Button>
                 <Dialog
                     fullWidth
