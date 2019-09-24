@@ -64,6 +64,7 @@ class App extends Component {
             // Set user:
             this.props.loadUserData(decoded.id);
 
+            console.log("user id: ", decoded.id);
             // fetch all users. Pass current user id to exclude
             // him/her from the list of all users:
             this.props.loadUsers(decoded.id);

@@ -110,17 +110,15 @@ export const userReducer = (state = userInitialState, action = {}) => {
 export const usersReducer = (state = usersInitialState, action = {}) => {
     switch (action.type) {
         case FETCH_USERS_SUCCESS:
-            // if user exists, proceed
-            if (action.response.status === 200) {
-                // exclude current user from all users
-                // (logged in user shouldn't see himself in the friends list):
-                const usersExceptCurrent = action.response.data.filter(
-                    user => user._id !== action.id
-                );
+            console.log("action.response: ", action.response);
 
+            if (
+                action.response.status === 200 &&
+                action.response.data.status !== 500
+            ) {
                 // return new state with users:
                 return Object.assign({}, state, {
-                    users: usersExceptCurrent
+                    users: action.response.data
                 });
             } else {
                 return Object.assign({}, state, {

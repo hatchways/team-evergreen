@@ -138,22 +138,23 @@ images for what this looks like in postman to the test directory.
 ## Uploading to S3
 
 ### Pre-requisites
+
 In order to use the \server\routes\utils\S3Upload.js file you will need to create a profile with Amazon to
-use the S3 service.  You will need to provide a credit card but the rates are ridiculously low
-and really only kick in for uploads of thousands's if not tens of thousands's of records.  To create an account go to 
-[AWS Amazon Console](https://aws.amazon.com/console/) and register.  Follow their instructions for sign up.
+use the S3 service. You will need to provide a credit card but the rates are ridiculously low
+and really only kick in for uploads of thousands's if not tens of thousands's of records. To create an account go to
+[AWS Amazon Console](https://aws.amazon.com/console/) and register. Follow their instructions for sign up.
 
 ### Create and Configure Bucket
 
 Once registered from within S3 create a bucket to hold your images and configure as follows:
 
-- Properties - none required but feel free to experiment
-- Permissions
-    -  Public Access - Turn on Public Access
-    -  Access Control List - Public Access\Everyone\List Objects - Yes
-- Bucket Policy - Leave Empty
-- CORS Configuration - Leave Default
-- Management - none required
+-   Properties - none required but feel free to experiment
+-   Permissions
+    -   Public Access - Turn on Public Access
+    -   Access Control List - Public Access\Everyone\List Objects - Yes
+-   Bucket Policy - Leave Empty
+-   CORS Configuration - Leave Default
+-   Management - none required
 
 ### Create an IAM Account
 
@@ -185,11 +186,11 @@ for IAM) and create a new account.
                 }
             ]
         }
-        ```
+      ```
 
 ### Create New User
 
-1. Go to the Users folder and click Add User, follow the prompts.  Use the following values for the various fields:
+1. Go to the Users folder and click Add User, follow the prompts. Use the following values for the various fields:
     - User Name - something unique that you will recognize(shows up in logs) - I used evergreen-robot
     - Access Type - Programmatic Access
 2. Select the checkbox next to the group you just created (You should be on Add User to Group Tab)
@@ -198,11 +199,11 @@ for IAM) and create a new account.
 5. Click on Next: Review
 6. Make sure you like what you see and click on Create User
 
-#***********  VERY IMPORTANT ************
-Once the user is created you will be provided with the user security credentials.  This is a one time opportunity so 
-download the csv and keep it somewhere secure (not in the project folder or it will\may get uploaded to GitHub).  If for
+#\***\*\*\*\*\*\*** VERY IMPORTANT \***\*\*\*\*\*\*\***
+Once the user is created you will be provided with the user security credentials. This is a one time opportunity so
+download the csv and keep it somewhere secure (not in the project folder or it will\may get uploaded to GitHub). If for
 some reason you lose this file, you can recreate the security credentials through the IAM portal.  
-#***********  VERY IMPORTANT ************
+#\***\*\*\*\*\*\*** VERY IMPORTANT \***\*\*\*\*\*\*\***
 
 ### Create AWS Environment Variables
 
@@ -213,16 +214,16 @@ AWS_ACCESS_KEY_ID=<from your user credentials file>
 AWS_SECRET_ACCESS_KEY=<from your user credentials file>
 AWS_IMAGES_BUCKET=<bucket name that you chose>
 AWS_REGION=<region that you chose for your S3 service>
-```                   
+```
 
 A note on the region value, in the S3 console you can see what region you chose but it is given in plain
-english and is not the actual code that you need.  For example my region is displayed as:
+english and is not the actual code that you need. For example my region is displayed as:
 
 ```
 US-East(Ohio)
 ```
 
-This is not the value you need for the region field.  The actual value you need is a code that looks like:
+This is not the value you need for the region field. The actual value you need is a code that looks like:
 
 ```
 us-east-2
@@ -236,7 +237,7 @@ You can use the \upload route and postman to test if you are set up correctly.
 
 1. Launch the dev server and mongoDB database
 2. From postman go to the following route:
-        http://localhost:3001/api/images/upload
+   http://localhost:3001/api/images/upload
 3. Choose form-data and add at least one file
 4. Send the request
 
@@ -244,16 +245,16 @@ If it worked properly you should get back a response with the url of the stored 
 
 ### Final Notes
 
-The files are named using a UUID, this is to guarantee filename uniqueness and to hide the details of 
-what's in the actual image.  The images however are not encrypted in any way.
+The files are named using a UUID, this is to guarantee filename uniqueness and to hide the details of
+what's in the actual image. The images however are not encrypted in any way.
 
 Even though we have set Public access it should not be possible for anyone besides an authorized account for
-you buckets to upload a file.  Everyone however should be able to read it.  To test that this is the
-case click on the url that you got back.  If your image\file opens up you are good to go.
+you buckets to upload a file. Everyone however should be able to read it. To test that this is the
+case click on the url that you got back. If your image\file opens up you are good to go.
 
 ## Seeding Data
 
-A custom module is available in \server\helpers to seed the database.  In order to use it
+A custom module is available in \server\helpers to seed the database. In order to use it
 you need to add a .env file the \helpers directory with one entry:
 
 ```
@@ -278,32 +279,11 @@ const MAX_NO_OF_ADORNMENTS = 5; //Used in determining # of lists/polls to create
 const MAX_NO_OF_FRIENDS_PER_LIST = 5;
 ```
 
-Seeding will also cast votes aligned to the friends lists attached to the poll.  The POLL_PERCENTAGE
-constant is used to determine what percentage of the users in the lists will cast a vote.  This should
+Seeding will also cast votes aligned to the friends lists attached to the poll. The POLL_PERCENTAGE
+constant is used to determine what percentage of the users in the lists will cast a vote. This should
 mean that some users will not have cast a vote and will have polls in the My Friends polls view. The default
 value for this constant is 4 but it can be changed to suit the type of data required.
 
 ```
 const POLL_PERCENTAGE = 4; // 0 = 100%, 4 = 50%, 9 = 0%
 ```
-
-
-## Seeding data (Deprecated)
-
-In order to add sample users and friend lists to database:
-
-1. Run `npm install` to install a new package mongo-seeding-cli or install it separately:
-
-```
-npm install -g mongo-seeding-cli
-```
-
-2. Navigate to server/data-import folder
-
-3. Run the following command. The old database will be dropped:
-
-```
-seed --db-uri 'mongodb://127.0.0.1:27017/evergreen_dev' --drop-database
-```
-
-NB! If you skip --drop-database option, users with same emails and names might be added (no validation for that is enforced)
