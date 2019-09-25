@@ -27,7 +27,10 @@ const useStyles = makeStyles(theme => ({
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
-        })
+        }),
+        [theme.breakpoints.down("xs")]: {
+            width: "100%"
+        }
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -35,10 +38,17 @@ const useStyles = makeStyles(theme => ({
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
-        })
+        }),
+        [theme.breakpoints.down("xs")]: {
+            marginLeft: 0,
+            width: "100%"
+        }
     },
     homeButtonHidden: {
-        visibility: "hidden"
+        visibility: "hidden",
+        [theme.breakpoints.down("xs")]: {
+            visibility: "visible"
+        }
     },
     navBar: {
         display: "flex",
@@ -88,11 +98,17 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down("sm")]: {
             display: "block"
         }
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up("sm")]: {
+            display: "none"
+        }
     }
 }));
 
 function AppNavbar(props) {
-    const { open, user } = props;
+    const { drawerIsOpen, user, toggleMobileDrawer } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
     const classes = useStyles();
@@ -117,16 +133,30 @@ function AppNavbar(props) {
         <div className={classes.root}>
             <AppBar
                 position="absolute"
-                className={clsx(classes.appBar, open && classes.appBarShift)}
+                className={clsx(
+                    classes.appBar,
+                    drawerIsOpen && classes.appBarShift
+                )}
                 color="inherit"
                 elevation={0}>
                 <Toolbar className={classes.toolbar}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open mobile drawer"
+                        edge="start"
+                        onClick={toggleMobileDrawer}
+                        className={classes.menuButton}>
+                        <Icon>supervised_user_circle</Icon>
+                    </IconButton>
+
                     <Link component={RouterLink} underline="none" to="/profile">
                         <IconButton
                             edge="start"
                             color="inherit"
                             aria-label="go to profile page"
-                            className={clsx(open && classes.homeButtonHidden)}>
+                            className={clsx(
+                                drawerIsOpen && classes.homeButtonHidden
+                            )}>
                             <img
                                 className={classes.logo}
                                 alt="App logo"
