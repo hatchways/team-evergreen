@@ -12,9 +12,13 @@ class fetchDataAPI {
                 return err;
             });
     }
-    static fetchUsers() {
+    static fetchUsers(id) {
         return axios
-            .get("../api/users")
+            .get("../api/friends/sample", {
+                params: {
+                    userId: id
+                }
+            })
             .then(response => {
                 return response;
             })

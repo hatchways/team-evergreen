@@ -125,7 +125,7 @@ function AppNavbar(props) {
                         <IconButton
                             edge="start"
                             color="inherit"
-                            aria-label="go to home page"
+                            aria-label="go to profile page"
                             className={clsx(open && classes.homeButtonHidden)}>
                             <img
                                 className={classes.logo}
