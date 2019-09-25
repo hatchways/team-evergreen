@@ -17,6 +17,7 @@ import {
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { FileDrop } from "./FileDrop";
 import Input from "@material-ui/core/Input";
+import Avatar from "@material-ui/core/Avatar";
 
 const TARGET_AVATAR = "avatar_image";
 
@@ -82,10 +83,9 @@ class EditProfileDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: props.userId,
-            name: props.name,
-            avatar: props.avatar,
-            email: props.email,
+            name: "",
+            avatar: "",
+            email: "",
             target: TARGET_AVATAR,
             saveIsDisabled: true,
             errors: {}
@@ -161,9 +161,9 @@ class EditProfileDialog extends Component {
             // load poll data and send it to upload api:
             let formData = new FormData();
             formData.append("userId", this.props.userId);
-            formData.append("name", this.props.name);
-            formData.append("email", this.props.email);
-            formData.append("avatar", this.props.avatar);
+            formData.append("name", this.state.name);
+            formData.append("email", this.state.email);
+            formData.append("avatar", this.state.avatar);
             formData.append("target", TARGET_AVATAR);
 
             console.log(formData);
@@ -176,16 +176,6 @@ class EditProfileDialog extends Component {
 
         return (
             <div>
-                <Button
-                    onClick={this.props.toggleEditProfileDialog}
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    style={{
-                        display: hideButton ? "none" : "block" // hide button on edit profile page
-                    }}>
-                    edit
-                </Button>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
@@ -197,9 +187,23 @@ class EditProfileDialog extends Component {
                         onClose={this.props.toggleEditProfileDialog}>
                         Edit Profile
                     </DialogTitle>
-
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
+                            <FormControl fullWidth>
+                                <Avatar
+                                    alt={`Avatar of user ${this.props.name}`}
+                                    src={avatar || this.props.avatar}
+                                />
+                                <TextField
+                                    value={avatar}
+                                    error={errors.name && !name}
+                                    onChange={this.handleAvatarChange}
+                                    id="avatar_value"
+                                    placeholder={this.props.avatar}
+                                    margin="none"
+                                    variant="outlined"
+                                />
+                            </FormControl>
                             <FormControl fullWidth>
                                 <Typography
                                     variant="subtitle1"
@@ -212,7 +216,7 @@ class EditProfileDialog extends Component {
                                     error={errors.name && !name}
                                     onChange={this.handleNameChange}
                                     id="name"
-                                    placeholder={name}
+                                    placeholder={this.props.name}
                                     margin="none"
                                     variant="outlined"
                                 />
@@ -235,7 +239,7 @@ class EditProfileDialog extends Component {
                                     error={errors.name && !email}
                                     onChange={this.handleEmailChange}
                                     id="email"
-                                    placeholder={email}
+                                    placeholder={this.props.email}
                                     margin="none"
                                     variant="outlined"
                                 />

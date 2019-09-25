@@ -14,6 +14,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 import Icon from "@material-ui/core/Icon";
 import logo from "../images/icons/logo.png";
+import EditProfileDialog from "./EditProfileDialog";
+import { Grid } from "@material-ui/core";
 
 const drawerWidth = 240;
 const closedDrawerWidth = 70;
@@ -95,6 +97,7 @@ function AppNavbar(props) {
     const { open, user } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
+    const [editProfileDialog, setEditProfileDialog] = React.useState(false);
     const classes = useStyles();
 
     const openMenu = event => {
@@ -110,6 +113,12 @@ function AppNavbar(props) {
     };
 
     const handleMobileClose = () => {
+        setMobileAnchorEl(null);
+    };
+
+    const toggleEditProfileDialog = () => {
+        setEditProfileDialog(!editProfileDialog);
+        setAnchorEl(null);
         setMobileAnchorEl(null);
     };
 
@@ -196,9 +205,7 @@ function AppNavbar(props) {
                                 </Typography>
                             </Link>
                         </MenuItem>
-                        <MenuItem
-                            key={5}
-                            onClick={props.toggleEditProfileDialog}>
+                        <MenuItem key={5} onClick={toggleEditProfileDialog}>
                             Edit profile
                         </MenuItem>
                         <MenuItem key={6} onClick={props.logOut}>
@@ -285,9 +292,7 @@ function AppNavbar(props) {
                             keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleClose}>
-                            <MenuItem
-                                component={RouterLink}
-                                onClick={props.toggleEditProfileDialog}>
+                            <MenuItem onClick={toggleEditProfileDialog}>
                                 <ListItemText primary="Edit profile" />
                             </MenuItem>
                             <MenuItem onClick={props.logOut}>
@@ -297,6 +302,14 @@ function AppNavbar(props) {
                     </nav>
                 </Toolbar>
             </AppBar>
+            <EditProfileDialog
+                userId={user._id}
+                name={user.name}
+                avatar={user.avatar}
+                email={user.email}
+                editProfileDialogIsOpen={editProfileDialog}
+                toggleEditProfileDialog={toggleEditProfileDialog}
+            />
         </div>
     );
 }

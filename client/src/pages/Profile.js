@@ -63,12 +63,6 @@ class Profile extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
-    toggleEditProfileDialog = () => {
-        this.setState({
-            editProfileDialogIsOpen: !this.state.editProfileDialogIsOpen
-        });
-    };
-
     render() {
         const { classes, user, users } = this.props;
         const { lists, polls } = this.props.user;
@@ -132,20 +126,6 @@ class Profile extends Component {
                                                 this.togglePollDialog
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <EditProfileDialog
-                                            userId={user._id}
-                                            name={user.name}
-                                            avatar={user.avatar}
-                                            email={user.email}
-                                            toggleEditProfileDialog={
-                                                this.toggleEditProfileDialog
-                                            }
-                                            editProfileDialogIsOpen={
-                                                editProfileDialogIsOpen
-                                            }
                                         />
                                     </Grid>
                                 </Grid>
