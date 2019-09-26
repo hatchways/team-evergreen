@@ -16,11 +16,11 @@ const production = {
     },
     db: {
         host: process.env.REMOTE_DB_HOST,
-        dbType: process.env.REMOTE_DB_TYPE,
-        dbUser: process.env.REMOTE_DB_USER,
-        dbPwd: process.env.REMOTE_DB_PWD,
         name: process.env.REMOTE_DB_NAME,
-        othr: process.env.REMOTE_DB_OTHR
+        userName: process.env.REMOTE_DB_USER,
+        pwd: process.env.REMOTE_DB_PWD,
+        options: process.env.REMOTE_DB_OTHR,
+        type: process.env.REMOTE_DB_TYPE
     }
 };
 
@@ -34,14 +34,7 @@ const dev = {
         host: process.env.DEV_DB_HOST || "localhost",
         port: parseInt(process.env.DEV_DB_PORT) || 27017,
         name: process.env.DEV_DB_NAME || "evergreen_dev",
-        dbType: process.env.DEV_DB_TYPE || "mongodb"
-    },
-    dbRemote: {
-        host: process.env.REMOTE_DB_HOST,
-        dbType: process.env.REMOTE_DB_TYPE,
-        dbUser: process.env.REMOTE_DB_USER,
-        dbPwd: process.env.REMOTE_DB_PWD,
-        name: process.env.REMOTE_DB_NAME
+        type: process.env.DEV_DB_TYPE || "mongodb"
     }
 };
 
@@ -55,14 +48,14 @@ const test = {
         host: process.env.TEST_DB_HOST || "localhost",
         port: parseInt(process.env.TEST_DB_PORT) || 27017,
         name: process.env.TEST_DB_NAME || "evergreen_test",
-        dbType: process.env.DEV_DB_TYPE || "mongodb"
+        type: process.env.TEST_DB_TYPE || "mongodb"
     }
 };
 
 const config = {
+    production,
     dev,
-    test,
-    production
+    test
 };
 
 module.exports = config[env];
