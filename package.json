@@ -10,7 +10,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}",
         "start": "run-p start:api:prod start:client:prod",
-        "start:api:prod": "npm run --prefix ./server start",
+        "start:api:prod": "npm run --prefix ./server build",
         "start:api:dev": "npm run --prefix ./server dev",
         "start:client:prod": "npm run --prefix ./client start",
         "start:client:dev": "npm run --prefix ./client start",
