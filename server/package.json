@@ -1,6 +1,9 @@
 {
-  "name": "server",
-  "version": "0.0.0",
+  "name": "optio-api-endpoints",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=10.16.0"
+  },
   "private": true,
   "scripts": {
     "build": "rm -rf dist && babel app.js -d dist",
