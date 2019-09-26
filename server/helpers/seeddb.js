@@ -6,6 +6,8 @@
 
 //Make a connection to the database - by default this is to development
 //To create for test set process.env.NODE_ENV='test'
+//To create for production set process.env.NODE_ENV='production'
+//process.env.NODE_ENV = "production";
 require("../config/db-connect");
 const mongoose = require("mongoose");
 
