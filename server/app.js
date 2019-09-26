@@ -1,4 +1,5 @@
 require("dotenv").config();
+import helmet from "helmet";
 import createError from "http-errors";
 import express, { json, urlencoded } from "express";
 import { join } from "path";
@@ -22,6 +23,9 @@ const requests = require("./routes/api/requests");
 const friends = require("./routes/api/friends");
 
 const app = express();
+
+// Helmet header management middleware
+app.use(helmet());
 
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
