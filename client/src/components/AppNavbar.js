@@ -146,7 +146,7 @@ function AppNavbar(props) {
                         edge="start"
                         onClick={toggleMobileDrawer}
                         className={classes.menuButton}>
-                        <Icon>supervised_user_circle</Icon>
+                        <Icon>chevron_right</Icon>
                     </IconButton>
 
                     <Link component={RouterLink} underline="none" to="/profile">
@@ -170,7 +170,7 @@ function AppNavbar(props) {
                         aria-controls="mobile-menu"
                         aria-haspopup="true"
                         onClick={openMobileMenu}>
-                        <Icon>more_vert</Icon>
+                        <Icon>menu</Icon>
                     </IconButton>
                     <Menu
                         id="mobile-menu"

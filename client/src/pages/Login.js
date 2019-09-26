@@ -181,30 +181,32 @@ class Login extends Component {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    <Button
-                                        className={classes.btn}
-                                        id="submitButton"
-                                        size="large"
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary">
-                                        Login
-                                    </Button>
-                                    <Button
-                                        onClick={this.demoLogin}
-                                        className={classes.btn}
-                                        id="demoSubmitButton"
-                                        size="large"
-                                        type="submit"
-                                        variant="contained"
-                                        color="secondary">
-                                        Demo Login
-                                    </Button>
-                                    <FormHelperText
-                                        error
-                                        id="submitButton-error-field">
-                                        {errors.error}
-                                    </FormHelperText>
+                                    <div className={classes.btnContainer}>
+                                        <Button
+                                            className={classes.btn}
+                                            id="submitButton"
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary">
+                                            Login
+                                        </Button>
+                                        <Button
+                                            onClick={this.demoLogin}
+                                            className={classes.btn}
+                                            id="demoSubmitButton"
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            color="secondary">
+                                            Demo Login
+                                        </Button>
+                                        <FormHelperText
+                                            error
+                                            id="submitButton-error-field">
+                                            {errors.error}
+                                        </FormHelperText>
+                                    </div>
                                 </form>
                             </div>
                         </Container>
