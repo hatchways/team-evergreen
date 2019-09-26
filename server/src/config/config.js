@@ -7,6 +7,7 @@
 require("dotenv").config();
 
 const env = process.env.NODE_ENV || "dev"; // defaults to dev environment if nothing set
+console.log(`Configuration loaded for ${env} environment`);
 
 const production = {
     app: {

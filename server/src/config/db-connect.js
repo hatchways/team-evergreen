@@ -15,5 +15,9 @@ if (process.env.NODE_ENV === "production") {
 
 mongoose
     .connect(dbUrl, { useNewUrlParser: true, useCreateIndex: true })
-    .then(() => console.log(`Connected to ${dbUrl}`))
+    .then(() =>
+        console.log(
+            `Database environment loaded from ${process.env.NODE_ENV}\nConnected to ${dbUrl}`
+        )
+    )
     .catch(err => console.log(`Unable to connect. ${err}`));
