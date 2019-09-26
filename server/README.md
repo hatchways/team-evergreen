@@ -132,7 +132,7 @@ Test scripts fo the endpoint validation files can be found in server\test and ar
 registration.validation.spec.js. These tests check to make sure the validations are setup correctly.
 
 To test the end points use postman, choose the appropriate data type you want to use (form-data to pass in the url) or
-(x-www-form-urlencoded which allows you to use a table to enter the data for end point you want to test). I've added
+(x-www.js-form-urlencoded which allows you to use a table to enter the data for end point you want to test). I've added
 images for what this looks like in postman to the test directory.
 
 ## Uploading to S3

@@ -2,11 +2,12 @@
 
 This readme describes how to:
 
-1. Start Client Server(#Start Client)
-2. Start Server Server(#Start Server)
-3. Combo Start(#Combo)
-4. Start MongoDB(#Start Mongo)
-5. Install Prettier(#Prettier)
+1. Start Client Server
+2. Start API Server
+3. Combo Start
+4. Start MongoDB
+5. Install Prettier
+6. Seed the local and remote databases
 
 ## Start Client
 
@@ -26,7 +27,7 @@ This readme describes how to:
 
     - `npm run dev` to start your dev environment using nodemon (will restart server whenever files change)
     - `npm run start` to run your server in production mode (uses node to load app.js)
-    - `npm run test` to run tests in \server\test directory
+    - `npm run test` to run tests in \server\src\test directory
 
 ## Combo Start
 
@@ -34,7 +35,9 @@ You can start both the client and server environments by running `npm run combo-
 server or client directory. This is a convenience script with minimal error checking (i.e. none) so if you run
 into issues try starting each server independently to make sure there are no other issues.
 
-## Start MongoDB
+You can likewise start the local db, client and server by running `npm run combo-start-all`.
+
+## Start MongoDB Locally
 
 ### Pre-requisites
 
@@ -51,7 +54,7 @@ The following commands will start the database for the appropriate OS:
 
 **MAC OS**
 
-From a terminal, issue the following to run MongoDB (i.e. the mongod process) in the foreground.
+To start the database from a terminal, issue the following to run MongoDB (i.e. the mongod process) in the foreground.
 
 `mongod --config /usr/local/etc/mongod.conf`
 
@@ -60,6 +63,10 @@ Alternatively, to run MongoDB as a macOS service, issue the following (the proce
 `brew services start mongodb-community@3.2`
 
 Running it as a service is ideal as MacOS will automatically start the database on restart of your laptop\desktop.
+
+A convenience script is available in the \server package.json file to start mongoDb on a mac:
+
+`npm run start-mongodb-on-mac`
 
 **Linux**
 
@@ -82,9 +89,33 @@ const db = mongoose.connection;
 
 To test if the database connection is ready check the value of readyState, if === 1 then open, if === 0 then not ready :
 
-```$xslt
+```
 db.readyState === 1
 ```
+
+### Connecting to MongoDB Atlas Service
+
+To connect to the remote instance of mongoDb add the following entries to your .env file:
+
+```
+REMOTE_DB_HOST="@cluster0-smgoh.mongodb.net"
+REMOTE_DB_TYPE="mongodb+srv"
+REMOTE_DB_USER=<user-name-you-set-up>
+REMOTE_DB_PWD=<password associated with REMOTE_DB_USER>
+REMOTE_DB_NAME="optioDB"
+REMOTE_DB_OTHR="?retryWrites=true&w=majority"
+```
+
+If you want to connect to a separate cluster change the host name in REMOTE_DB_HOST (and associated user
+and password).  If you want to change the database name change REMOTE_DB_NAME.
+
+REMOTE_DB_OTHR and REMOTE_DB_TYPE should not be changed unless you know what you are doing.
+
+Once you have this set up calling the db-connect.js script from within your code will check to see what
+process.env.NODE_ENV is set to and if set to 'production' it will use the REMOTE_DB keys in .env.
+
+Note that you can specify additional remote database by creating (and renaming) the REMOTE_DB set of keys
+in .env and updating config.js to choose the right set of keys depending on what NODE_ENV is set to.  
 
 ## Prettier
 
@@ -139,6 +170,24 @@ time you restart your laptop.
 There are additional methods to integrate Prettier into your workflow including configuring it as a
 [pre-commit hook](https://prettier.io/docs/en/precommit.html) that will run before every new commit. This has not been
 configured but you may want to look at it.
+
+##Seed Database
+
+Convenience scripts have been add to \server\package.json to add seed data to dev, test and prod environments.
+Note that there is only one seed module and all environments will receive the same sort of random data.
+
+If you need to create specific data for each environment you will need to modify the \src\helpers\seeddb.js module.
+
+The following commands will seed the corresponding database:
+
+```
+npm run seed-remote
+npm run seed-dev
+npm run seed-test
+```
+
+The seed modules requires that your local api server be up and running so make sure its up and running or
+run ```npm run dev```.
 
 ##PS
 

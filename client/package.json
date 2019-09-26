@@ -1,6 +1,9 @@
 {
-    "name": "client",
-    "version": "0.1.0",
+    "name": "optio",
+    "version": "1.0.0",
+    "engines": {
+        "node": ">=10.16.0"
+    },
     "private": true,
     "dependencies": {
         "@material-ui/core": "^4.1.3",

@@ -12,7 +12,7 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             sendToList: id,
-            options: ["www.google.ca", "www.microsoft.com"],
+            options: ["www.js.google.ca", "www.js.microsoft.com"],
             userId: id,
             expiresOn: new Date()
         });
@@ -26,8 +26,8 @@ describe("Poll model", function() {
         let poll = new Poll({
             sendToList: id,
             options: {
-                1: { url: "www.google.ca" },
-                2: { url: "www.microsoft.com" }
+                1: { url: "www.js.google.ca" },
+                2: { url: "www.js.microsoft.com" }
             },
             expiresOn: new Date()
         });
@@ -41,8 +41,8 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             options: {
-                1: { url: "www.google.ca" },
-                2: { url: "www.microsoft.com" }
+                1: { url: "www.js.google.ca" },
+                2: { url: "www.js.microsoft.com" }
             },
             expiresOn: new Date()
         });
@@ -68,7 +68,7 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             sendToList: id,
-            options: ["www.microsoft.com"],
+            options: ["www.js.microsoft.com"],
             expiresOn: new Date()
         });
         poll.validate(function(err) {

@@ -18,7 +18,7 @@ yarn-debug.log*
 yarn-error.log*
 
 #ignore .env file
-.env
+dist/.env
 
 #ignore bash script utilities
 lazy_git

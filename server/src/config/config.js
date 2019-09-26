@@ -7,6 +7,23 @@
 require("dotenv").config();
 
 const env = process.env.NODE_ENV || "dev"; // defaults to dev environment if nothing set
+console.log(`Configuration loaded for ${env} environment`);
+
+const production = {
+    app: {
+        port: parseInt(process.env.DEV_APP_PORT) || 3001,
+        secretOrKey: process.env.PASSWORD_CRYPTO_KEY,
+        samplePassword: process.env.SAMPLE_USER_PWD
+    },
+    db: {
+        host: process.env.REMOTE_DB_HOST,
+        name: process.env.REMOTE_DB_NAME,
+        userName: process.env.REMOTE_DB_USER,
+        pwd: process.env.REMOTE_DB_PWD,
+        options: process.env.REMOTE_DB_OTHR,
+        type: process.env.REMOTE_DB_TYPE
+    }
+};
 
 const dev = {
     app: {
@@ -18,9 +35,10 @@ const dev = {
         host: process.env.DEV_DB_HOST || "localhost",
         port: parseInt(process.env.DEV_DB_PORT) || 27017,
         name: process.env.DEV_DB_NAME || "evergreen_dev",
-        dbType: process.env.DEV_DB_TYPE || "mongodb"
+        type: process.env.DEV_DB_TYPE || "mongodb"
     }
 };
+
 const test = {
     app: {
         port: parseInt(process.env.TEST_APP_PORT) || 3001,
@@ -31,11 +49,12 @@ const test = {
         host: process.env.TEST_DB_HOST || "localhost",
         port: parseInt(process.env.TEST_DB_PORT) || 27017,
         name: process.env.TEST_DB_NAME || "evergreen_test",
-        dbType: process.env.DEV_DB_TYPE || "mongodb"
+        type: process.env.TEST_DB_TYPE || "mongodb"
     }
 };
 
 const config = {
+    production,
     dev,
     test
 };

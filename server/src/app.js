@@ -1,11 +1,12 @@
 require("dotenv").config();
+import helmet from "helmet";
 import createError from "http-errors";
 import express, { json, urlencoded } from "express";
 import { join } from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import indexRouter from "./routes/index";
+import indexRouter from "./routes";
 import pingRouter from "./routes/ping";
 
 // End point api imports
@@ -23,6 +24,9 @@ const friends = require("./routes/api/friends");
 
 const app = express();
 
+// Helmet header management middleware
+app.use(helmet());
+
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -34,7 +38,7 @@ const db = mongoose.connection
 
 //Passport config
 const passport = require("passport");
-require("./config/passport")(passport);
+//require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
