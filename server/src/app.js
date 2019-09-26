@@ -6,7 +6,7 @@ import { join } from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import indexRouter from "./routes/index";
+import indexRouter from "./routes";
 import pingRouter from "./routes/ping";
 
 // End point api imports
@@ -38,7 +38,7 @@ const db = mongoose.connection
 
 //Passport config
 const passport = require("passport");
-require("./config/passport")(passport);
+//require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);

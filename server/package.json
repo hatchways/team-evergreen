@@ -6,13 +6,14 @@
   },
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && babel app.js -d dist",
-    "start": "NODE_ENV=production npm run build && node ./bin/www",
-    "dev": "NODE_ENV=dev nodemon ./bin/www  --exec babel-node ./bin/www",
+    "clean": "rm -rf dist",
+    "build": "babel ./ -d dist",
+    "start": "NODE_ENV=production npm run build && node src/bin/www.js",
+    "dev": "NODE_ENV=dev nodemon src/bin/www.js  --exec babel-node bin/www.js",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --require @babel/register --exit --timeout 30000",
     "start-mongodb-on-mac": "mongod --config /usr/local/etc/mongod.conf",
-    "combo-start": "concurrently \"npm run --prefix ../client start\" \"nodemon --exec babel-node ./bin/www\" ",
-    "seed-database": "node -r @babel/register './helpers/seeddb.js' "
+    "combo-start": "concurrently \\\"npm run --prefix ../client start\\\" \\\"nodemon --exec babel-node src/bin/www\\\" ",
+    "seed-database": "node -r @babel/register 'src/helpers/seeddb.js' "
   },
   "dependencies": {
     "@material/select": "^3.1.0",

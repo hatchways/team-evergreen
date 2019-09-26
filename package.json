@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}",
         "start": "npm run --prefix ./server dev",
-        "server": "nodemon /server/bin/www",
+        "server": "nodemon /server/src/bin/www.js",
         "client": "npm run --prefix ./client start",
         "dev": "concurrently \"npm run server\" \"npm run client\""
     },
