@@ -1,6 +1,9 @@
 {
-    "name": "client",
-    "version": "0.1.0",
+    "name": "optio",
+    "version": "1.0.0",
+    "engines": {
+        "node": ">=10.16.0"
+    },
     "private": true,
     "dependencies": {
         "@material-ui/core": "^4.1.3",
@@ -10,6 +13,7 @@
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
         "npm": "^6.11.3",
+        "npm-run-all": "^4.1.5",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
         "react-dropzone": "^10.1.8",
@@ -23,11 +27,11 @@
         "typescript": "^3.6.2"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "react-scripts start ",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../server dev\" "
+        "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../ dev\" "
     },
     "eslintConfig": {
         "extends": "react-app"
