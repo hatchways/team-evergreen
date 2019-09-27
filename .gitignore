@@ -1,10 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules/
+/node_modules/
 
 # production
-/build/
+/client/build/
+/dist/
 
 # misc
 .DS_Store
@@ -22,4 +23,6 @@ yarn-error.log*
 
 #ignore bash script utilities
 lazy_git
-.vscode
+client/build/
+client/node_modules
+src/helpers/.env
