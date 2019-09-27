@@ -14,6 +14,7 @@
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
         "npm": "^6.11.3",
+        "npm-run-all": "^4.1.5",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
         "react-dropzone": "^10.1.8",
@@ -31,7 +32,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../server dev\" "
+        "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../ dev\" "
     },
     "eslintConfig": {
         "extends": "react-app"
