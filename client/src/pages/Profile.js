@@ -1,6 +1,7 @@
 // inspiration: https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard
 
 import React, { Component } from "react";
+import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
@@ -145,34 +146,41 @@ class Profile extends Component {
                                                 lists={lists}
                                             />
                                         ))}
-                                    <Grid
-                                        container
-                                        justify="space-between"
-                                        className={classes.sliderControls}
+
+                                    <IconButton
+                                        color="primary"
                                         style={
                                             polls.length > 3
                                                 ? { visibility: "visible" }
                                                 : { visibility: "hidden" }
+                                        }
+                                        className={clsx(
+                                            classes.prevButton,
+                                            classes.sliderControl
+                                        )}
+                                        onClick={() =>
+                                            this.showPreviousSlide("poll")
+                                        }
+                                        disabled={pollMove === 0}>
+                                        <Icon>chevron_left</Icon>
+                                    </IconButton>
+                                    <IconButton
+                                        color="primary"
+                                        style={
+                                            polls.length > 3
+                                                ? { visibility: "visible" }
+                                                : { visibility: "hidden" }
+                                        }
+                                        className={clsx(
+                                            classes.nextButton,
+                                            classes.sliderControl
+                                        )}
+                                        disabled={pollMove === polls.length - 1}
+                                        onClick={() =>
+                                            this.showNextSlide("poll")
                                         }>
-                                        <IconButton
-                                            onClick={() =>
-                                                this.showPreviousSlide("poll")
-                                            }
-                                            className="prev"
-                                            disabled={pollMove === 0}>
-                                            <Icon>arrow_back_ios</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            className="next"
-                                            disabled={
-                                                pollMove === polls.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("poll")
-                                            }>
-                                            <Icon>arrow_forward_ios</Icon>
-                                        </IconButton>
-                                    </Grid>
+                                        <Icon>chevron_right</Icon>
+                                    </IconButton>
                                 </Grid>
                             </Grid>
                             <Grid
@@ -221,34 +229,41 @@ class Profile extends Component {
                                                 moveListBy={moveListBy}
                                             />
                                         ))}
-                                    <Grid
-                                        container
-                                        justify="space-between"
-                                        className={classes.sliderControls}
+
+                                    <IconButton
+                                        color="primary"
                                         style={
                                             lists.length > 3
                                                 ? { visibility: "visible" }
                                                 : { visibility: "hidden" }
+                                        }
+                                        className={clsx(
+                                            classes.prevButton,
+                                            classes.sliderControl
+                                        )}
+                                        onClick={() =>
+                                            this.showPreviousSlide("list")
+                                        }
+                                        disabled={listMove === 0}>
+                                        <Icon>chevron_left</Icon>
+                                    </IconButton>
+                                    <IconButton
+                                        color="primary"
+                                        style={
+                                            polls.length > 3
+                                                ? { visibility: "visible" }
+                                                : { visibility: "hidden" }
+                                        }
+                                        className={clsx(
+                                            classes.nextButton,
+                                            classes.sliderControl
+                                        )}
+                                        disabled={listMove === lists.length - 1}
+                                        onClick={() =>
+                                            this.showNextSlide("list")
                                         }>
-                                        <IconButton
-                                            onClick={() =>
-                                                this.showPreviousSlide("list")
-                                            }
-                                            className="prev"
-                                            disabled={listMove === 0}>
-                                            <Icon>arrow_back_ios</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            className="next"
-                                            disabled={
-                                                listMove === lists.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("list")
-                                            }>
-                                            <Icon>arrow_forward_ios</Icon>
-                                        </IconButton>
-                                    </Grid>
+                                        <Icon>chevron_right</Icon>
+                                    </IconButton>
                                 </Grid>
                             </Grid>
                         </Grid>

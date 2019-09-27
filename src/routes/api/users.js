@@ -175,51 +175,6 @@ router.post("/add_friend_list", (req, res) => {
         });
 });
 
-/**
- * @route GET api/users/get_user_data
- * @desc Get all friend lists or polls for a specific user
- */
-router.get("/get_user_data", (req, res) => {
-    const target = req.body.target; // 'lists' or 'polls'
-    let populateOptions = {};
-
-    // if lists are requested, friend ids should be populated too:
-    if (target === "lists") {
-        populateOptions = {
-            path: target,
-            populate: {
-                path: "friends",
-                select: "name avatar"
-            } // select only name and avatar for each friend
-        };
-    }
-    if (target === "friends") {
-        populateOptions = {
-            path: target,
-            populate: {
-                path: "users",
-                select: "name avatar"
-            }
-        };
-    } else {
-        populateOptions = {
-            path: target
-        };
-    }
-
-    User.findById(req.body.userId)
-        .populate(populateOptions)
-        .then(result => {
-            res.json(result[target]);
-        })
-        .catch(err => {
-            console.log("error: ", err);
-            res.status(500).json({
-                error: "Unable to retrieve data"
-            });
-        });
-});
-
 // @route GET api/users/users
 // @desc Get all users
 // @access Private

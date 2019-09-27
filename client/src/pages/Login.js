@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
 
 import {
     Button,
@@ -87,6 +88,16 @@ class Login extends Component {
                 // show errors from the server:
                 this.setState({ errors: err.response.data });
             });
+    };
+
+    demoLogin = () => {
+        this.setState({ email: DEMO_EMAIL, password: DEMO_PASSWORD }, () => {
+            const user = {
+                email: DEMO_EMAIL,
+                password: DEMO_PASSWORD
+            };
+            this.loginUser(user);
+        });
     };
 
     render() {
@@ -178,6 +189,16 @@ class Login extends Component {
                                         variant="contained"
                                         color="primary">
                                         Login
+                                    </Button>
+                                    <Button
+                                        onClick={this.demoLogin}
+                                        className={classes.btn}
+                                        id="demoSubmitButton"
+                                        size="large"
+                                        type="submit"
+                                        variant="contained"
+                                        color="secondary">
+                                        Demo Login
                                     </Button>
                                     <FormHelperText
                                         error

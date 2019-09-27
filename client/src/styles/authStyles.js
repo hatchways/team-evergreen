@@ -35,6 +35,9 @@ export const authStyles = {
         textTransform: "uppercase"
     },
     btn: {
-        marginTop: "8px"
+        marginTop: "8px",
+        "&:nth-child(3)": {
+            marginLeft: "15px"
+        }
     }
 };

@@ -1,16 +1,19 @@
 require("dotenv").config();
+import helmet from "helmet";
 import createError from "http-errors";
 import express, { json, urlencoded } from "express";
 import { join } from "path";
+const path = require("path");
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import indexRouter from "./routes/index";
 import pingRouter from "./routes/ping";
 
-// End point api imports
+// Database connection
 import mongoose from "mongoose";
 require("./config/db-connect");
+
+// Other Middleware
 const bodyParser = require("body-parser");
 
 // Load route files
@@ -23,6 +26,9 @@ const friends = require("./routes/api/friends");
 
 const app = express();
 
+// Helmet header management middleware
+app.use(helmet());
+
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -34,7 +40,7 @@ const db = mongoose.connection
 
 //Passport config
 const passport = require("passport");
-require("./config/passport")(passport);
+//require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
@@ -43,6 +49,16 @@ app.use("/api/poll", vote);
 app.use("/api/poll", results);
 app.use("/api/poll", requests);
 app.use("/api/friends", friends);
+//app.use("/", indexRouter);
+app.use("/ping", pingRouter);
+
+
+// Any other route request will serve up react files
+// This route must be after all other routes
+app.use(express.static(path.join(__dirname, "..","client","build")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..","client","build", "index.html"));
+});
 
 app.use(logger("dev"));
 app.use(json());
@@ -52,10 +68,9 @@ app.use(cookieParser());
 //Passport middleware
 app.use(passport.initialize());
 
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "client", "build")));
 
-app.use("/", indexRouter);
-app.use("/ping", pingRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

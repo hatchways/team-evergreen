@@ -48,7 +48,8 @@ function ListCard(props) {
                     }
                     subheader={
                         <Typography variant="body2">
-                            {friends.length + " friends"}
+                            {friends.length +
+                                (friends.length === 1 ? " friend" : " friends")}
                         </Typography>
                     }
                 />
