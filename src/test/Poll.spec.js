@@ -4,7 +4,7 @@
 import { describe } from "mocha";
 
 const expect = require("chai").expect;
-const Poll = require("../models/Poll");
+const Poll = require("./models/Poll");
 const id = "53d7be30242b692a1138ac8c";
 
 describe("Poll model", function() {
@@ -12,7 +12,7 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             sendToList: id,
-            options: ["www.js.google.ca", "www.js.microsoft.com"],
+            options: ["www.google.ca", "www.microsoft.com"],
             userId: id,
             expiresOn: new Date()
         });
@@ -26,8 +26,8 @@ describe("Poll model", function() {
         let poll = new Poll({
             sendToList: id,
             options: {
-                1: { url: "www.js.google.ca" },
-                2: { url: "www.js.microsoft.com" }
+                1: { url: "www.google.ca" },
+                2: { url: "www.microsoft.com" }
             },
             expiresOn: new Date()
         });
@@ -41,8 +41,8 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             options: {
-                1: { url: "www.js.google.ca" },
-                2: { url: "www.js.microsoft.com" }
+                1: { url: "www.google.ca" },
+                2: { url: "www.microsoft.com" }
             },
             expiresOn: new Date()
         });
@@ -68,7 +68,7 @@ describe("Poll model", function() {
         let poll = new Poll({
             title: "Which one?",
             sendToList: id,
-            options: ["www.js.microsoft.com"],
+            options: ["www.microsoft.com"],
             expiresOn: new Date()
         });
         poll.validate(function(err) {
