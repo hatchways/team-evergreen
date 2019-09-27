@@ -3,10 +3,10 @@ import helmet from "helmet";
 import createError from "http-errors";
 import express, { json, urlencoded } from "express";
 import { join } from "path";
+const path = require("path");
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import indexRouter from "./routes";
 import pingRouter from "./routes/ping";
 
 // Database connection
@@ -49,8 +49,16 @@ app.use("/api/poll", vote);
 app.use("/api/poll", results);
 app.use("/api/poll", requests);
 app.use("/api/friends", friends);
-app.use("/", indexRouter);
+//app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+
+
+// Any other route request will serve up react files
+// This route must be after all other routes
+app.use(express.static(path.join(__dirname, "client")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "index.html"));
+});
 
 app.use(logger("dev"));
 app.use(json());

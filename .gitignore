@@ -4,8 +4,9 @@
 /node_modules/
 
 # production
-/client/build/
+/dist/client/build/
 /dist/
+/client/build/
 
 # misc
 .DS_Store
@@ -23,9 +24,9 @@ yarn-error.log*
 
 #ignore bash script utilities
 lazy_git
-client/build/
+dist/client/build/
 client/node_modules
-helpers/.env
+src/helpers/.env
 
 #IDE configurations
 .idea/
