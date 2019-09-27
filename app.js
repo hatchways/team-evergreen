@@ -9,9 +9,11 @@ import logger from "morgan";
 import indexRouter from "./routes";
 import pingRouter from "./routes/ping";
 
-// End point api imports
+// Database connection
 import mongoose from "mongoose";
 require("./config/db-connect");
+
+// Other Middleware
 const bodyParser = require("body-parser");
 
 // Load route files
@@ -47,6 +49,8 @@ app.use("/api/poll", vote);
 app.use("/api/poll", results);
 app.use("/api/poll", requests);
 app.use("/api/friends", friends);
+app.use("/", indexRouter);
+app.use("/ping", pingRouter);
 
 app.use(logger("dev"));
 app.use(json());
@@ -56,10 +60,9 @@ app.use(cookieParser());
 //Passport middleware
 app.use(passport.initialize());
 
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "client", "build")));
 
-app.use("/", indexRouter);
-app.use("/ping", pingRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

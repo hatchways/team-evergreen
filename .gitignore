@@ -25,4 +25,8 @@ yarn-error.log*
 lazy_git
 client/build/
 client/node_modules
-src/helpers/.env
+helpers/.env
+
+#IDE configurations
+.idea/
+.vscode/
