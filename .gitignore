@@ -25,7 +25,7 @@ yarn-error.log*
 lazy_git
 client/build/
 client/node_modules
-helpers/.env
+src/helpers/.env
 
 #IDE configurations
 .idea/
