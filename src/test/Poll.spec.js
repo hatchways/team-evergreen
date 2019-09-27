@@ -4,7 +4,7 @@
 import { describe } from "mocha";
 
 const expect = require("chai").expect;
-const Poll = require("./models/Poll");
+const Poll = require("../models/Poll");
 const id = "53d7be30242b692a1138ac8c";
 
 describe("Poll model", function() {
