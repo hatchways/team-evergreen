@@ -24,13 +24,6 @@ app.set("port", port);
 let server = http.createServer(app);
 
 /**
-* Serve up the react static files
- */
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
-
-/**
  * Listen on provided port, on all network interfaces.
  */
 
