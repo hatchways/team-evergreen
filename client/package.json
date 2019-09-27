@@ -29,7 +29,7 @@
     },
     "scripts": {
         "start": "react-scripts start ",
-        "build": "react-scripts build && rm -rf ../dist/client && mv build ../dist/client",
+        "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../ dev\" "
