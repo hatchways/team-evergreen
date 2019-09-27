@@ -55,9 +55,9 @@ app.use("/ping", pingRouter);
 
 // Any other route request will serve up react files
 // This route must be after all other routes
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, "client")));
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.join(__dirname, "client", "index.html"));
 });
 
 app.use(logger("dev"));

@@ -28,8 +28,8 @@
         "typescript": "^3.6.2"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
+        "start": "react-scripts start ",
+        "build": "react-scripts build && rm -rf ../dist/client && mv build ../dist/client",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "combo-start": "concurrently \"react-scripts start\" \"npm run --prefix ../ dev\" "
