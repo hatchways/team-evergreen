@@ -177,6 +177,9 @@ class Friends extends React.Component {
                                                                     primary={
                                                                         friend.name
                                                                     }
+                                                                    className={
+                                                                        classes.listItemText
+                                                                    }
                                                                 />
                                                                 <ListItemSecondaryAction>
                                                                     <Button
@@ -247,6 +250,9 @@ class Friends extends React.Component {
                                                                 <ListItemText
                                                                     primary={
                                                                         user.name
+                                                                    }
+                                                                    className={
+                                                                        classes.listItemText
                                                                     }
                                                                 />
                                                                 <ListItemSecondaryAction>

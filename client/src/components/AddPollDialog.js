@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
+import PollSnackbar from "./PollSnackbar";
 import {
     Button,
     IconButton,
@@ -90,7 +91,8 @@ class AddPollDialog extends Component {
             sendToList: "",
             target: "poll_images",
             buttonIsDisabled: false,
-            errors: {}
+            errors: {},
+            snackbarIsOpen: false
         };
     }
 
@@ -118,6 +120,18 @@ class AddPollDialog extends Component {
     };
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
+    };
+
+    openSnackbar = () => {
+        this.setState({ snackbarIsOpen: true });
+    };
+
+    closeSnackbar = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        this.setState({ snackbarIsOpen: false });
     };
 
     onSubmit = e => {
@@ -162,6 +176,8 @@ class AddPollDialog extends Component {
                     // add new poll to Profile and close dialog:
                     this.props.addNewPoll(response.data.data);
                     this.closeDialog();
+                    // open snackbar with success message:
+                    this.openSnackbar();
                 })
                 .catch(err => {
                     console.log(err);
@@ -186,7 +202,13 @@ class AddPollDialog extends Component {
 
     render() {
         const { classes, lists, hideButton } = this.props;
-        const { errors, sendToList, title, buttonIsDisabled } = this.state;
+        const {
+            errors,
+            sendToList,
+            title,
+            buttonIsDisabled,
+            snackbarIsOpen
+        } = this.state;
 
         return (
             <div>
@@ -310,6 +332,10 @@ class AddPollDialog extends Component {
                         </DialogActions>
                     </form>
                 </Dialog>
+                <PollSnackbar
+                    snackbarIsOpen={snackbarIsOpen}
+                    closeSnackbar={this.closeSnackbar}
+                />
             </div>
         );
     }
