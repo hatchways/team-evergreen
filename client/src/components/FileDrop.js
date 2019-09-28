@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Typography } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import initialDropzoneImage from "../images/dropzone.png";
 
 const thumbsContainer = {
     display: "flex",
@@ -13,8 +14,6 @@ const thumbsContainer = {
 
 const thumb = {
     display: "inline-flex",
-    borderRadius: 2,
-    border: "1px solid #eaeaea",
     marginLeft: "auto",
     marginRight: "auto",
     width: 150,
@@ -44,7 +43,7 @@ const useStyles = makeStyles({
 });
 
 export function FileDrop(props) {
-    const [files, setFiles] = useState([]);
+    const [dropzoneImage, setDropzoneImage] = useState(initialDropzoneImage);
     const { option, setImageFile } = props;
     const classes = useStyles();
     const { getRootProps, getInputProps } = useDropzone({
@@ -52,32 +51,21 @@ export function FileDrop(props) {
         multiple: false,
         onDrop: acceptedFiles => {
             setImageFile(acceptedFiles, option);
-            setFiles(
-                acceptedFiles.map(file =>
-                    Object.assign(file, {
-                        preview: URL.createObjectURL(file)
-                    })
-                )
-            );
+            acceptedFiles.map(file => {
+                Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                });
+                setDropzoneImage(file.preview);
+            });
         }
     });
-
-    const thumbs = files.map(file => (
-        <div style={thumb} key={file.name}>
-            <div style={thumbInner}>
-                <img src={file.preview} style={img} alt="option" />
-            </div>
-        </div>
-    ));
 
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
-            files.forEach(file => {
-                URL.revokeObjectURL(file.preview);
-            });
+            URL.revokeObjectURL(dropzoneImage.preview);
         },
-        [files]
+        [dropzoneImage]
     );
 
     return (
@@ -91,7 +79,13 @@ export function FileDrop(props) {
                     Drag and drop file here:
                 </Typography>
             </div>
-            <aside style={thumbsContainer}>{thumbs}</aside>
+            <aside style={thumbsContainer}>
+                <div style={thumb} key={option}>
+                    <div style={thumbInner}>
+                        <img src={dropzoneImage} style={img} alt="option" />
+                    </div>
+                </div>
+            </aside>
         </section>
     );
 }
