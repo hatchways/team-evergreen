@@ -144,6 +144,7 @@ class AddFriendsList extends Component {
                     this.closeDialog();
                 })
                 .catch(err => {
+                    console.log(err);
                     this.setState({ errors: err.response.data });
                 });
         }
