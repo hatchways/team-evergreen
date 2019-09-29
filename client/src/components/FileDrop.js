@@ -35,7 +35,9 @@ const useStyles = makeStyles({
     thumbsContainer: {
         display: "block",
         height: "180px",
-        width: "180px"
+        width: "180px",
+        marginLeft: "auto",
+        marginRight: "auto"
     }
 });
 
@@ -43,7 +45,7 @@ export function FileDrop(props) {
     const [dropzoneImage, setDropzoneImage] = useState(initialDropzoneImage);
     const { option, setImageFile } = props;
     const classes = useStyles();
-    const { getRootProps, getInputProps } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: "image/*",
         multiple: false,
         onDrop: acceptedFiles => {
