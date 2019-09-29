@@ -1,26 +1,32 @@
 import React, { Component } from "react";
 import axios from "axios";
+
+// Material UI Components
 import { withStyles } from "@material-ui/core/styles";
-import {
-    Button,
-    IconButton,
-    Dialog,
-    DialogContent,
-    DialogActions,
-    TextField,
-    Typography,
-    FormControl,
-    FormHelperText,
-    Icon
-} from "@material-ui/core";
-
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import { FileDrop } from "./FileDrop";
-import Input from "@material-ui/core/Input";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/button";
+import Icon from "@material-ui/core/icon";
+import IconButton from "@material-ui/core/iconbutton";
+import Dialog from "@material-ui/core/dialog";
+import DialogContent from "@material-ui/core/dialogcontent";
+import DialogActions from "@material-ui/core/dialogactions";
+import FormControl from "@material-ui/core/formcontrol";
+import FormHelperText from "@material-ui/core/formhelpertext";
+import Input from "@material-ui/core/Input";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/textfield";
+import Typography from "@material-ui/core/typography";
 
+// App components
+import { FileDrop } from "./FileDrop";
+
+// Utility Modules
+import renderAvatar from "../utils/renderAvatar";
+
+// Constants
 const TARGET_AVATAR = "avatar_image";
 
+// Component Styles
 const styles = theme => ({
     root: {
         paddingTop: theme.spacing(4)
@@ -56,6 +62,14 @@ const styles = theme => ({
         "&.MuiButton-text": {
             textTransform: "initial"
         }
+    },
+    bigAvatar: {
+        marginLeft: "auto",
+        marginRight: "auto",
+        width: "100px",
+        height: "100px",
+        marginBottom: theme.spacing(2),
+        cursor: "pointer"
     }
 });
 
@@ -79,6 +93,7 @@ const DialogTitle = withStyles(styles)(props => {
     );
 });
 
+// Component definition
 class EditProfileDialog extends Component {
     constructor(props) {
         super(props);
@@ -191,17 +206,9 @@ class EditProfileDialog extends Component {
                         <DialogContent>
                             <FormControl fullWidth>
                                 <Avatar
+                                    className={classes.bigAvatar}
                                     alt={`Avatar of user ${this.props.name}`}
                                     src={avatar || this.props.avatar}
-                                />
-                                <TextField
-                                    value={avatar}
-                                    error={errors.name && !name}
-                                    onChange={this.handleAvatarChange}
-                                    id="avatar_value"
-                                    placeholder={this.props.avatar}
-                                    margin="none"
-                                    variant="outlined"
                                 />
                             </FormControl>
                             <FormControl fullWidth>
