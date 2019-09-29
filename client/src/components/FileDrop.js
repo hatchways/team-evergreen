@@ -2,22 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Typography } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import initialDropzoneImage from "../images/dropzone.png";
-
-const thumbsContainer = {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justify: "space-evenly",
-    marginTop: 16
-};
+import initialDropzoneImage from "../images/dropzone300.png";
 
 const thumb = {
     display: "inline-flex",
     marginLeft: "auto",
     marginRight: "auto",
-    width: 150,
-    height: 150,
+    width: "180px",
+    height: "180px",
     textAlign: "center",
     padding: 4,
     boxSizing: "border-box"
@@ -39,6 +31,11 @@ const useStyles = makeStyles({
     root: {
         width: "100%",
         maxWidth: 180
+    },
+    thumbsContainer: {
+        display: "block",
+        height: "180px",
+        width: "180px"
     }
 });
 
@@ -69,23 +66,15 @@ export function FileDrop(props) {
     );
 
     return (
-        <section className="container">
-            <div {...getRootProps({ className: "dropzone" })}>
+        <section>
+            <div className={classes.thumbsContainer} {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Typography
-                    variant="subtitle1"
-                    component="h4"
-                    className={classes.subtitle}>
-                    Drag and drop file here:
-                </Typography>
-            </div>
-            <aside style={thumbsContainer}>
                 <div style={thumb} key={option}>
                     <div style={thumbInner}>
                         <img src={dropzoneImage} style={img} alt="option" />
                     </div>
                 </div>
-            </aside>
+            </div>
         </section>
     );
 }
