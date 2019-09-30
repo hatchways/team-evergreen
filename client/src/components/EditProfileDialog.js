@@ -19,6 +19,7 @@ import axios from "axios";
 // App components
 
 // Utility Modules
+import { updateAvatar, updateEmail, updateName } from "../utils/editUserData";
 
 // Constants
 const TARGET_AVATAR = "avatar_image";
@@ -108,9 +109,9 @@ class EditProfileDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: this.props.name,
-            avatar: this.props.avatar,
-            email: this.props.email,
+            newName: this.props.name,
+            newAvatar: this.props.avatar,
+            newEmail: this.props.email,
             newFile: "",
             target: TARGET_AVATAR,
             saveIsDisabled: true,
@@ -155,16 +156,29 @@ class EditProfileDialog extends Component {
     };
 
     handleEmailChange = e => {
-        if (e.target.value !== this.props.email) {
-            this.setState({ email: e.target.value });
-            this.setState({ saveIsDisabled: false });
+        this.setState({ newEmail: e.target.value });
+        this.setState({ saveIsDisabled: false });
+        this.setState({ errors: { email: " " } });
+        if (e.target.value === this.props.email || !e.target.value) {
+            this.setState({ saveIsDisabled: true });
+        }
+        if (!e.target.value) {
+            this.setState({
+                errors: { email: "You need to provide an e-mail." }
+            });
         }
     };
 
     handleNameChange = e => {
-        if (e.target.value !== this.props.name) {
-            this.setState({ name: e.target.value });
-            this.setState({ saveIsDisabled: false });
+        this.setState({ newName: e.target.value });
+        this.setState({ saveIsDisabled: false });
+        this.setState({ errors: { name: " " } });
+        if (e.target.value === this.props.name || !e.target.value) {
+            this.setState({ saveIsDisabled: true });
+        }
+        if (!e.target.value) {
+            this.setState({ saveIsDisabled: true });
+            this.setState({ errors: { name: "You need to provide a name." } });
         }
     };
 
@@ -175,47 +189,41 @@ class EditProfileDialog extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        const { name, email, avatar, newFile } = this.state;
+        const { newName, newEmail, newFile } = this.state;
+        const { userId, name, email, changeAvatar } = this.props;
 
-        if (!name) {
-            this.setState({
-                errors: { name: "You need to provide a name." }
-            });
-        } else if (!email) {
-            this.setState({
-                errors: { email: "You need to provide an e-mail." }
-            });
-        } else {
-            // disable the submit button to avoid duplicates
-            this.disableSaveButton();
-            // load new data and send it to upload api:
-            let formData = new FormData();
-            formData.append("userId", this.props.userId);
+        // disable the submit button to avoid duplicates
+        this.disableSaveButton();
+
+        // array to store promises
+        const promises = [];
+
+        // load new data and send it to upload api:
+        let formData = new FormData();
+        formData.append("userId", userId);
+        formData.append("target", TARGET_AVATAR);
+        if (newName !== name) {
             formData.append("name", name);
-            formData.append("email", email);
-            formData.append("avatar", avatar);
-            formData.append("target", TARGET_AVATAR);
-            formData.append("newFile", newFile, newFile.name);
-
-            axios
-                .post("/api/images/upload", formData)
-                .then(response => {
-                    if (response.data.status !== 200) {
-                        console.log(response.data.errors);
-                        this.setState({
-                            errors: { error: response.data.error }
-                        });
-                        return;
-                    }
-
-                    // replace current avatar and close dialog:
-                    this.props.updateAvatar(response.data.data);
-                    this.closeDialog();
-                })
-                .catch(err => {
-                    console.log(err);
-                });
         }
+        if (newEmail !== email) {
+            formData.append("email", email);
+        }
+        if (newFile) {
+            formData.append("newFile", newFile, newFile.name);
+            promises.push(
+                updateAvatar(formData, response => {
+                    this.props.changeAvatar(response.data.avatarUrl);
+                })
+            );
+        }
+
+        // replace current avatar and close dialog:
+        //this.props.changeAvatar(response.data.data);
+        Promise.all(promises)
+            .then(value => {
+                this.closeDialog();
+            })
+            .catch(err => console.log(err));
     };
 
     revokeUrl = e => {
@@ -225,7 +233,13 @@ class EditProfileDialog extends Component {
 
     render() {
         const { classes } = this.props;
-        const { errors, name, email, avatar, saveIsDisabled } = this.state;
+        const {
+            errors,
+            newName,
+            newEmail,
+            newAvatar,
+            saveIsDisabled
+        } = this.state;
 
         return (
             <div>
@@ -243,18 +257,18 @@ class EditProfileDialog extends Component {
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
                             <FormControl fullWidth>
-                                {avatar ? (
+                                {newAvatar ? (
                                     <Avatar
                                         className={classes.bigAvatar}
                                         alt={`Avatar of user ${this.props.name}`}
-                                        src={avatar || this.props.avatar}
+                                        src={newAvatar || this.props.avatar}
                                         onLoad={this.revokeUrl}
                                     />
                                 ) : (
                                     <Avatar
                                         className={classes.bigAvatar}
-                                        alt={`Avatar of user ${name}`}>
-                                        {name[0]}
+                                        alt={`Avatar of user ${newName}`}>
+                                        {newName[0]}
                                     </Avatar>
                                 )}
                                 <input
@@ -273,8 +287,8 @@ class EditProfileDialog extends Component {
                                     Name:
                                 </Typography>
                                 <TextField
-                                    value={name}
-                                    error={errors.name && !name}
+                                    value={newName}
+                                    error={errors.name && !newName}
                                     onChange={this.handleNameChange}
                                     id="name"
                                     margin="none"
@@ -295,8 +309,8 @@ class EditProfileDialog extends Component {
                                     e-mail:
                                 </Typography>
                                 <TextField
-                                    value={email}
-                                    error={errors.name && !email}
+                                    value={newEmail}
+                                    error={errors.email && !newEmail}
                                     onChange={this.handleEmailChange}
                                     id="email"
                                     margin="none"

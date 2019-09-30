@@ -141,8 +141,8 @@ function AppNavbar(props) {
         setMobileAnchorEl(null);
     };
 
-    const updateAvatar = () => {
-        console.log("Update avatar function");
+    const changeAvatar = newURL => {
+        console.log(newURL);
     };
 
     return (
@@ -348,7 +348,7 @@ function AppNavbar(props) {
                 email={user.email}
                 editProfileDialogIsOpen={editProfileDialog}
                 toggleEditProfileDialog={toggleEditProfileDialog}
-                updateAvatar={updateAvatar}
+                changeAvatar={changeAvatar}
             />
         </div>
     );
