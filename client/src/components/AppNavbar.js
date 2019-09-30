@@ -2,20 +2,23 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+
+// Material UI Styles
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
+import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Icon from "@material-ui/core/Icon";
+
+// Application modules
 import logo from "../images/icons/logo.png";
 import EditProfileDialog from "./EditProfileDialog";
-import { Grid } from "@material-ui/core";
 
 const drawerWidth = 240;
 const closedDrawerWidth = 70;
@@ -136,6 +139,10 @@ function AppNavbar(props) {
         setEditProfileDialog(!editProfileDialog);
         setAnchorEl(null);
         setMobileAnchorEl(null);
+    };
+
+    const updateAvatar = () => {
+        console.log("Update avatar function");
     };
 
     return (
@@ -341,6 +348,7 @@ function AppNavbar(props) {
                 email={user.email}
                 editProfileDialogIsOpen={editProfileDialog}
                 toggleEditProfileDialog={toggleEditProfileDialog}
+                updateAvatar={updateAvatar}
             />
         </div>
     );

@@ -18,7 +18,6 @@ import {
     Icon,
     Box
 } from "@material-ui/core";
-import EditProfileDialog from "../components/EditProfileDialog";
 
 class Profile extends Component {
     constructor(props) {
@@ -70,7 +69,6 @@ class Profile extends Component {
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
-            editProfileDialogIsOpen,
             listMove,
             moveListBy,
             pollMove,

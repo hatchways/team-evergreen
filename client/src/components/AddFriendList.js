@@ -233,8 +233,8 @@ class AddFriendsList extends Component {
                                     {isNameInvalid
                                         ? errors.name
                                         : isListInvalid
-                                            ? errors.friends
-                                            : errors.error}
+                                        ? errors.friends
+                                        : errors.error}
                                 </FormHelperText>
                             </FormControl>
 
