@@ -10,6 +10,8 @@ import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
+import AppSnackbar from '../components/AppSnackbar';
+
 import {
     Typography,
     Container,
@@ -29,6 +31,13 @@ class Profile extends Component {
             pollMove: 0,
             movePollBy: 0
         };
+    }
+
+    componentDidMount() {
+        // for a new user, show suggestion to add friends:
+        if (!this.props.user.friends.length) {
+            this.props.toggleSnackbar('open');
+        }
     }
 
     showNextSlide = target => {
@@ -285,6 +294,11 @@ class Profile extends Component {
                         </Grid>
                     </Container>
                 </main>
+                <AppSnackbar
+                    message={`Hello there! How about adding some friends?`}
+                    snackbarIsOpen={snackbarIsOpen}
+                    toggleSnackbar={toggleSnackbar}
+                />
             </div>
         );
     }
