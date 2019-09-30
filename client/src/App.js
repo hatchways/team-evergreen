@@ -16,7 +16,7 @@ import {
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
-import setAuthToken from "./utils/setAuthToken";
+import setAuthToken from './utils/setAuthToken';
 
 import Loader from "./components/Loader";
 import Signup from "./pages/Signup";
@@ -56,16 +56,9 @@ class App extends Component {
         if (localStorage.jwtToken) {
             // Set auth token header auth
             const token = localStorage.jwtToken;
-            setAuthToken(token);
 
-            // Decode token and get user info
-            const decoded = jwt_decode(token);
-
-            // Fetch current user data:
-            this.props.loadUserData(decoded.id);
-
-            // fetch suggested users excluding current user and his/her friends:
-            this.props.loadUsers(decoded.id);
+            // decode token, load user data and his/her suggested friends:
+            const decoded = this.decodeTokenAndFetchData(token);
 
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -75,6 +68,22 @@ class App extends Component {
             }
         }
     }
+
+    decodeTokenAndFetchData = (token) => {
+        setAuthToken(token);
+
+        // Decode token and get user info:
+        const decoded = jwt_decode(token);
+
+        // Fetch current user data:
+        this.props.loadUserData(decoded.id);
+
+        // Fetch suggested friends excluding current user and his/her curernt friends:
+        this.props.loadUsers(decoded.id);
+
+        return decoded;
+    }
+
 
     logOut = () => {
         // Remove token from local storage
@@ -101,12 +110,11 @@ class App extends Component {
                                 isAuthenticated ? (
                                     <Redirect to="/profile" />
                                 ) : (
-                                    <Signup
-                                        {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
-                                    />
-                                )
+                                        <Signup
+                                            {...props}
+                                            decodeTokenAndFetchData={this.decodeTokenAndFetchData}
+                                        />
+                                    )
                             }
                         />
                         <Route
@@ -116,12 +124,11 @@ class App extends Component {
                                 isAuthenticated ? (
                                     <Redirect to="/profile" />
                                 ) : (
-                                    <Signup
-                                        {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
-                                    />
-                                )
+                                        <Signup
+                                            {...props}
+                                            decodeTokenAndFetchData={this.decodeTokenAndFetchData}
+                                        />
+                                    )
                             }
                         />
                         <Route
@@ -131,12 +138,11 @@ class App extends Component {
                                 isAuthenticated ? (
                                     <Redirect to="/profile" />
                                 ) : (
-                                    <Login
-                                        {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
-                                    />
-                                )
+                                        <Login
+                                            {...props}
+                                            decodeTokenAndFetchData={this.decodeTokenAndFetchData}
+                                        />
+                                    )
                             }
                         />
                         <Route
@@ -156,8 +162,8 @@ class App extends Component {
                                         logOut={this.logOut}
                                     />
                                 ) : (
-                                    <Redirect to="/login" />
-                                )
+                                            <Redirect to="/login" />
+                                        )
                             }
                         />
                         <Route
@@ -175,8 +181,8 @@ class App extends Component {
                                         addNewPoll={this.props.addNewPoll}
                                     />
                                 ) : (
-                                    <Redirect to="/login" />
-                                )
+                                            <Redirect to="/login" />
+                                        )
                             }
                         />
                         <Route
@@ -194,8 +200,8 @@ class App extends Component {
                                         logOut={this.logOut}
                                     />
                                 ) : (
-                                    <Redirect to="/login" />
-                                )
+                                            <Redirect to="/login" />
+                                        )
                             }
                         />
                         <Route
@@ -218,8 +224,8 @@ class App extends Component {
                                         logOut={this.logOut}
                                     />
                                 ) : (
-                                    <Redirect to="/login" />
-                                )
+                                            <Redirect to="/login" />
+                                        )
                             }
                         />
                         <Route
@@ -241,8 +247,8 @@ class App extends Component {
                                         logOut={this.logOut}
                                     />
                                 ) : (
-                                    <Redirect to="/login" />
-                                )
+                                            <Redirect to="/login" />
+                                        )
                             }
                         />
                     </Switch>
