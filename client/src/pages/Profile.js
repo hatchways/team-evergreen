@@ -220,6 +220,8 @@ class Profile extends Component {
                                             user={user}
                                             users={users}
                                             addNewList={this.props.addNewList}
+                                            toggleSnackbar={toggleSnackbar}
+                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>

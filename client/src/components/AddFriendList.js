@@ -21,6 +21,8 @@ import {
     Icon
 } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import AppSnackbar from './AppSnackbar';
+
 
 const styles = theme => ({
     root: {
@@ -142,6 +144,9 @@ class AddFriendsList extends Component {
                     if (response.data) {
                         // add new list to Profile and close dialog:
                         this.addNewList(response.data);
+
+                        // open snackbar with success message:
+                        this.props.toggleSnackbar('open');
                         this.closeDialog();
                     }
                 })
@@ -192,7 +197,7 @@ class AddFriendsList extends Component {
     };
 
     render() {
-        const { classes, user } = this.props;
+        const { classes, user, snackbarIsOpen, toggleSnackbar } = this.props;
         const { open, friends, errors, listName } = this.state;
         const isNameInvalid = errors.name && !listName;
         const isListInvalid = errors.friends && !friends.length;
@@ -307,6 +312,11 @@ class AddFriendsList extends Component {
                         </DialogActions>
                     </form>
                 </Dialog>
+                <AppSnackbar
+                    message={'A new friend list was successfully created!'}
+                    snackbarIsOpen={snackbarIsOpen}
+                    toggleSnackbar={toggleSnackbar}
+                />
             </div>
         );
     }

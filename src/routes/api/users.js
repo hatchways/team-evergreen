@@ -148,7 +148,7 @@ router.post("/add_friend_list", (req, res) => {
                             }
                         )
                             .then(response => {
-                                res.json();
+                                res.json(list);
                             })
                             .catch(err => {
                                 console.log("error: ", err);
