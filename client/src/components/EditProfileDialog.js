@@ -14,12 +14,12 @@ import FormHelperText from "@material-ui/core/formhelpertext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/textfield";
 import Typography from "@material-ui/core/typography";
-import axios from "axios";
 
 // App components
 
 // Utility Modules
-import { updateAvatar, updateEmail, updateName } from "../utils/editUserData";
+import { updateAvatar, updateUserData } from "../utils/editUserData";
+const isEmpty = require("is-empty");
 
 // Constants
 const TARGET_AVATAR = "avatar_image";
@@ -197,17 +197,25 @@ class EditProfileDialog extends Component {
         // array to store promises
         const promises = [];
 
-        // load new data and send it to upload api:
-        let formData = new FormData();
-        formData.append("userId", userId);
-        formData.append("target", TARGET_AVATAR);
+        // create json object for name and e-mail changes
+        const newUserData = {};
         if (newName !== name) {
-            formData.append("name", name);
+            newUserData["name"] = newName;
         }
         if (newEmail !== email) {
-            formData.append("email", email);
+            newUserData["email"] = newEmail;
         }
+        if (!isEmpty(newUserData)) {
+            // add userId to query
+            newUserData["userId"] = userId;
+            promises.push(updateUserData(newUserData));
+        }
+
+        // create FormData object for file uploads
         if (newFile) {
+            const formData = new FormData();
+            formData.append("userId", userId);
+            formData.append("target", TARGET_AVATAR);
             formData.append("newFile", newFile, newFile.name);
             promises.push(
                 updateAvatar(formData, response => {
@@ -223,7 +231,11 @@ class EditProfileDialog extends Component {
             .then(value => {
                 this.closeDialog();
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                // TODO - how do we alert the user that there was a problem
+                this.closeDialog();
+                console.log(err);
+            });
     };
 
     revokeUrl = e => {

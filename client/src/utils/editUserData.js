@@ -14,6 +14,13 @@ export async function updateAvatar(formData, cb) {
         });
 }
 
-export async function updateName() {}
-
-export async function updateEmail() {}
+export async function updateUserData(newData) {
+    await axios
+        .patch("/api/users", newData)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
