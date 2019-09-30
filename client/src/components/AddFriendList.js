@@ -139,9 +139,11 @@ class AddFriendsList extends Component {
             axios
                 .post("/api/users/add_friend_list", newList)
                 .then(response => {
-                    // add new list to Profile and close dialog:
-                    this.addNewList(response.data);
-                    this.closeDialog();
+                    if (response.data) {
+                        // add new list to Profile and close dialog:
+                        this.addNewList(response.data);
+                        this.closeDialog();
+                    }
                 })
                 .catch(err => {
                     console.log(err);
@@ -167,11 +169,13 @@ class AddFriendsList extends Component {
         newList.friends.forEach((id, i, array) => {
             const user = this.props.user.friends.find(user => user._id === id);
 
-            array[i] = {
-                _id: id,
-                name: user.name,
-                avatar: user.avatar
-            };
+            if (user) {
+                array[i] = {
+                    _id: id,
+                    name: user.name,
+                    avatar: user.avatar
+                };
+            }
         });
         this.props.addNewList(newList);
     };
