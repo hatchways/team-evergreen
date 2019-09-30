@@ -12,7 +12,8 @@ import {
     addNewPoll,
     registerVote,
     getFriendsPolls,
-    changeFriendStatus
+    changeFriendStatus,
+    toggleSnackbar
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -32,7 +33,8 @@ const mapStateToProps = state => {
         user: state.userReducer,
         isLoading: state.userReducer.isLoading,
         users: state.usersReducer.users,
-        friendsPolls: state.pollsReducer.friendsPolls
+        friendsPolls: state.pollsReducer.friendsPolls,
+        snackbarIsOpen: state.snackbarReducer.snackbarIsOpen
     };
 };
 
@@ -46,7 +48,8 @@ const mapDispatchToProps = dispatch => {
         registerVote: data => dispatch(registerVote(data)),
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
-        logOut: () => dispatch(logOut())
+        logOut: () => dispatch(logOut()),
+        toggleSnackbar: (action) => dispatch(toggleSnackbar(action))
     };
 };
 
@@ -160,6 +163,8 @@ class App extends Component {
                                         addNewList={this.props.addNewList}
                                         addNewPoll={this.props.addNewPoll}
                                         logOut={this.logOut}
+                                        snackbarIsOpen={this.props.snackbarIsOpen}
+                                        toggleSnackbar={this.props.toggleSnackbar}
                                     />
                                 ) : (
                                             <Redirect to="/login" />

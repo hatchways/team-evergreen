@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
-import PollSnackbar from "./PollSnackbar";
 import {
     Button,
     IconButton,
@@ -21,6 +20,7 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { FileDrop } from "./FileDrop";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
+import AppSnackbar from './AppSnackbar';
 
 const styles = theme => ({
     root: {
@@ -91,8 +91,7 @@ class AddPollDialog extends Component {
             sendToList: "",
             target: "poll_images",
             buttonIsDisabled: false,
-            errors: {},
-            snackbarIsOpen: false
+            errors: {}
         };
     }
 
@@ -120,18 +119,6 @@ class AddPollDialog extends Component {
     };
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
-    };
-
-    openSnackbar = () => {
-        this.setState({ snackbarIsOpen: true });
-    };
-
-    closeSnackbar = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-
-        this.setState({ snackbarIsOpen: false });
     };
 
     onSubmit = e => {
@@ -177,7 +164,7 @@ class AddPollDialog extends Component {
                     this.props.addNewPoll(response.data.data);
                     this.closeDialog();
                     // open snackbar with success message:
-                    this.openSnackbar();
+                    this.props.toggleSnackbar('open');
                 })
                 .catch(err => {
                     console.log(err);
@@ -201,13 +188,12 @@ class AddPollDialog extends Component {
     };
 
     render() {
-        const { classes, lists, hideButton } = this.props;
+        const { classes, lists, hideButton, snackbarIsOpen, toggleSnackbar } = this.props;
         const {
             errors,
             sendToList,
             title,
-            buttonIsDisabled,
-            snackbarIsOpen
+            buttonIsDisabled
         } = this.state;
 
         return (
@@ -332,9 +318,10 @@ class AddPollDialog extends Component {
                         </DialogActions>
                     </form>
                 </Dialog>
-                <PollSnackbar
+                <AppSnackbar
+                    message={'A new poll was successfully created!'}
                     snackbarIsOpen={snackbarIsOpen}
-                    closeSnackbar={this.closeSnackbar}
+                    toggleSnackbar={toggleSnackbar}
                 />
             </div>
         );

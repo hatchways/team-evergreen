@@ -8,7 +8,8 @@ import {
     REGISTER_VOTE_SUCCESS,
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
-    USER_DATA_LOADING
+    USER_DATA_LOADING,
+    TOGGLE_SNACKBAR
 } from "./constants.js";
 
 const userInitialState = {
@@ -32,6 +33,10 @@ const friendsPollsInitialState = {
     friendsPolls: [],
     error: ""
 };
+
+const snackbarInitialState = {
+    snackbarIsOpen: false
+}
 
 export const userReducer = (state = userInitialState, action = {}) => {
     switch (action.type) {
@@ -179,6 +184,21 @@ export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
         case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
+
+        default:
+            return state;
+    }
+};
+
+
+export const snackbarReducer = (state = snackbarInitialState, action = {}) => {
+    switch (action.type) {
+        case TOGGLE_SNACKBAR:
+            if (action.action === 'open') {
+                return Object.assign({}, state, { snackbarIsOpen: true });
+            } else {
+                return Object.assign({}, state, { snackbarIsOpen: false });
+            }
 
         default:
             return state;

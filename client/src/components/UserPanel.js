@@ -6,6 +6,7 @@ import { CssBaseline } from "@material-ui/core";
 function UserPanel(props) {
     const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
     const [mobileDrawerIsOpen, setMobileDrawerIsOpen] = React.useState(false);
+
     const { user, users } = props;
 
     const toggleDrawer = () => {

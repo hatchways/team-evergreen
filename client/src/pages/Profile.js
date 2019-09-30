@@ -64,7 +64,7 @@ class Profile extends Component {
     };
 
     render() {
-        const { classes, user, users } = this.props;
+        const { classes, user, users, toggleSnackbar, snackbarIsOpen } = this.props;
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
@@ -124,6 +124,8 @@ class Profile extends Component {
                                                 this.togglePollDialog
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
+                                            toggleSnackbar={toggleSnackbar}
+                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>

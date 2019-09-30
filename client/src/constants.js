@@ -10,3 +10,4 @@ export const CHANGE_FRIEND_STATUS_SUCCESS = "CHANGE_FRIEND_STATUS_SUCCESS";
 export const USER_DATA_LOADING = "USER_DATA_LOADING";
 export const DEMO_EMAIL = "richard4@mail.com";
 export const DEMO_PASSWORD = "123456";
+export const TOGGLE_SNACKBAR = "TOGGLE_SNACKBAR";
