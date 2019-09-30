@@ -2,23 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Typography } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-
-const thumbsContainer = {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justify: "space-evenly",
-    marginTop: 16
-};
+import initialDropzoneImage from "../images/dropzone300.png";
 
 const thumb = {
     display: "inline-flex",
-    borderRadius: 2,
-    border: "1px solid #eaeaea",
     marginLeft: "auto",
     marginRight: "auto",
-    width: 150,
-    height: 150,
+    width: "180px",
+    height: "180px",
     textAlign: "center",
     padding: 4,
     boxSizing: "border-box"
@@ -40,58 +31,52 @@ const useStyles = makeStyles({
     root: {
         width: "100%",
         maxWidth: 180
+    },
+    thumbsContainer: {
+        display: "block",
+        height: "180px",
+        width: "180px",
+        marginLeft: "auto",
+        marginRight: "auto"
     }
 });
 
 export function FileDrop(props) {
-    const [files, setFiles] = useState([]);
+    const [dropzoneImage, setDropzoneImage] = useState(initialDropzoneImage);
     const { option, setImageFile } = props;
     const classes = useStyles();
-    const { getRootProps, getInputProps } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: "image/*",
         multiple: false,
         onDrop: acceptedFiles => {
             setImageFile(acceptedFiles, option);
-            setFiles(
-                acceptedFiles.map(file =>
-                    Object.assign(file, {
-                        preview: URL.createObjectURL(file)
-                    })
-                )
-            );
+            acceptedFiles.map(file => {
+                Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                });
+                setDropzoneImage(file.preview);
+            });
         }
     });
-
-    const thumbs = files.map(file => (
-        <div style={thumb} key={file.name}>
-            <div style={thumbInner}>
-                <img src={file.preview} style={img} alt="option" />
-            </div>
-        </div>
-    ));
 
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
-            files.forEach(file => {
-                URL.revokeObjectURL(file.preview);
-            });
+            URL.revokeObjectURL(dropzoneImage.preview);
         },
-        [files]
+        [dropzoneImage]
     );
 
     return (
-        <section className="container">
-            <div {...getRootProps({ className: "dropzone" })}>
+        <section>
+            <div className={classes.thumbsContainer} {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Typography
-                    variant="subtitle1"
-                    component="h4"
-                    className={classes.subtitle}>
-                    Drag and drop file here:
-                </Typography>
+                <div style={thumb} key={option}>
+                    <div style={thumbInner}>
+                        <img src={dropzoneImage} style={img} alt="option" />
+                    </div>
+                </div>
             </div>
-            <aside style={thumbsContainer}>{thumbs}</aside>
         </section>
     );
 }
