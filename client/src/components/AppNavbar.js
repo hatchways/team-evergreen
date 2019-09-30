@@ -142,7 +142,7 @@ function AppNavbar(props) {
     };
 
     const changeAvatar = newURL => {
-        console.log(newURL);
+        user.avatar = newURL;
     };
 
     return (

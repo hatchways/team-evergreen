@@ -121,10 +121,9 @@ class EditProfileDialog extends Component {
 
     clearDialogData = () => {
         this.setState({
-            userId: this.props.userId,
-            name: this.props.name,
-            avatar: this.props.avatar,
-            email: this.props.email,
+            newName: this.props.name,
+            newAvatar: this.props.avatar,
+            newEmail: this.props.email,
             target: TARGET_AVATAR,
             saveIsDisabled: true,
             errors: {}
@@ -132,7 +131,6 @@ class EditProfileDialog extends Component {
     };
 
     closeDialog = () => {
-        this.clearDialogData();
         this.props.toggleEditProfileDialog();
     };
 
@@ -148,7 +146,7 @@ class EditProfileDialog extends Component {
         if (e.target.files.length === 1) {
             window.URL = window.URL || window.webkitURL;
             this.setState({
-                avatar: window.URL.createObjectURL(e.target.files[0]),
+                newAvatar: window.URL.createObjectURL(e.target.files[0]),
                 newFile: e.target.files[0]
             });
             this.enableSaveButton();
@@ -184,6 +182,7 @@ class EditProfileDialog extends Component {
 
     onCancel = () => {
         // Added middle step in the event we need to add some closing routines
+        this.clearDialogData();
         this.closeDialog();
     };
 
@@ -212,7 +211,8 @@ class EditProfileDialog extends Component {
             formData.append("newFile", newFile, newFile.name);
             promises.push(
                 updateAvatar(formData, response => {
-                    this.props.changeAvatar(response.data.avatarUrl);
+                    this.setState({ newAvatar: response.data.avatarUrl });
+                    changeAvatar(response.data.avatarUrl);
                 })
             );
         }
@@ -228,6 +228,7 @@ class EditProfileDialog extends Component {
 
     revokeUrl = e => {
         // need to revoke url assigned to image to prevent memory leaks
+        window.URL = window.URL || window.webkitURL;
         window.URL.revokeObjectURL(e.target.src);
     };
 
