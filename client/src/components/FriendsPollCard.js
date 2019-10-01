@@ -13,6 +13,7 @@ import {
     Icon,
     IconButton
 } from "@material-ui/core";
+import { socket } from "./UserPanel";
 
 const useStyles = makeStyles(profileStyles);
 
@@ -22,13 +23,16 @@ function FriendsPollCard(props) {
     const { poll } = props;
     const votesCount = poll.votes[0] + poll.votes[1];
 
+
     const registerVote = option => {
         const dataToSend = {
             pollId: poll._id,
             userId: props.userId,
             option
         };
-        props.registerVote(dataToSend);
+
+        // Use socket for real-time updates:
+        socket.emit('register_vote', dataToSend);
         setHasVoted(true);
     };
 
