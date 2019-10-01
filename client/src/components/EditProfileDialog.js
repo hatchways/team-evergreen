@@ -319,7 +319,7 @@ class EditProfileDialog extends Component {
                                     variant="subtitle1"
                                     component="h4"
                                     className={classes.subtitle}>
-                                    e-mail:
+                                    Email:
                                 </Typography>
                                 <TextField
                                     value={newEmail}
