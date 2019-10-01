@@ -18,12 +18,14 @@ import {
     Icon,
     Box
 } from "@material-ui/core";
+import EditProfileDialog from "../components/EditProfileDialog";
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
+            editProfileDialogIsOpen: false,
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
@@ -68,6 +70,7 @@ class Profile extends Component {
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
+            editProfileDialogIsOpen,
             listMove,
             moveListBy,
             pollMove,
@@ -81,6 +84,7 @@ class Profile extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
                 />
 
