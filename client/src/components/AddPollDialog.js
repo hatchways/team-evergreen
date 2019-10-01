@@ -227,12 +227,10 @@ class AddPollDialog extends Component {
                 <Dialog
                     fullWidth
                     maxWidth="xs"
-                    onClose={this.props.togglePollDialog}
+                    onClose={this.closeDialog}
                     aria-labelledby="create-poll"
                     open={this.props.pollDialogIsOpen}>
-                    <DialogTitle
-                        id="create-poll"
-                        onClose={this.props.togglePollDialog}>
+                    <DialogTitle id="create-poll" onClose={this.closeDialog}>
                         Create a poll
                     </DialogTitle>
 
