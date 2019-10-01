@@ -104,6 +104,6 @@ export const profileStyles = theme => ({
         left: 0
     },
     avatarLetter: {
-        textTranform: "uppercase"
+        textTransform: "uppercase"
     }
 });
