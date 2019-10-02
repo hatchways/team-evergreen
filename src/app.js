@@ -10,6 +10,9 @@ import logger from "morgan";
 import path from "path";
 import { join } from "path";
 
+// Import utility functions
+import { sayHello } from "../src/routes/utils/routeAuthorization";
+
 // File management middleware
 const bodyParser = require("body-parser");
 
@@ -41,6 +44,9 @@ app.use(helmet());
 // Load file management middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Route firewall
+app.use(sayHello);
 
 // Routes
 app.use("/api/users", users);
