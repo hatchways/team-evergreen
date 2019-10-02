@@ -34,36 +34,70 @@ class PollPage extends Component {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
-            results: []
+            results: [],
+            votes: []
         };
     }
 
-    updateData = results => {
-        this.setState({ results });
+    updateResults = results => {
+        this.setState({ results }, () =>
+            console.log("Results were changed in state: ", this.state)
+        );
     };
 
-    fetchUpdatedData = () => {
+    updateVotes = votes => {
+        this.setState({ votes }, () =>
+            console.log("Votes were changed in state: ", this.state)
+        );
+    };
+
+    fetchUpdatedResults = () => {
         const { _id } = this.props.location.state.poll;
+        console.log("Fetching updated results...");
         socket.emit("initial_results", _id);
-    }
+    };
+
+    fetchUpdatedVotes = () => {
+        const { _id } = this.props.location.state.poll;
+        console.log("Fetching updated votes...");
+
+        socket.emit("initial_votes", _id);
+    };
 
     componentDidMount() {
         const { _id } = this.props.location.state.poll;
+
+        console.log("This is poll #", _id);
+
+        // Fire the initial_votes event to get initial votes count to initialize the state:
+        socket.emit("initial_votes", _id);
 
         // Fire the initial_results event to get the data to initialize the state:
         socket.emit("initial_results", _id);
 
         // When results are received, update state:
-        socket.on("update_results", this.updateData);
+        socket.on("update_results", this.updateResults);
+
+        // When votes count is received, update state:
+        socket.on("update_votes", data => {
+            if (data.pollId === _id) this.updateVotes(data.result);
+        });
 
         // If results were changed at back-end, fetch them:
-        socket.on("results_changed", this.fetchUpdatedData);
+        socket.on("results_changed", this.fetchUpdatedResults);
+
+        // If vote count was changed at back-end, fetch it:
+        socket.on("votes_changed", data => {
+            if (data.pollId === _id) this.fetchUpdatedVotes();
+        });
     }
 
     // Remove the listeners before unmounting in order to avoid addition of multiple listeners:
     componentWillUnmount() {
         socket.off("update_results");
         socket.off("results_changed");
+        socket.off("update_votes");
+        socket.off("votes_changed");
     }
 
     togglePollDialog = () => {
@@ -73,8 +107,8 @@ class PollPage extends Component {
     render() {
         const { classes, user, users } = this.props;
         const { poll, lists } = this.props.location.state;
-        const { results, pollDialogIsOpen } = this.state;
-        const votesCount = poll.votes[0] + poll.votes[1];
+        const { results, votes, pollDialogIsOpen } = this.state;
+        const votesCount = votes[0] + votes[1];
 
         return (
             <div className={classes.root}>
@@ -157,7 +191,7 @@ class PollPage extends Component {
                                                 <Icon>favorite</Icon>
                                             </IconButton>
                                             <Typography variant="body1">
-                                                {poll.votes[0] || 0}
+                                                {votes[0] || 0}
                                             </Typography>
                                         </div>
                                         <div className={classes.votes}>
@@ -169,7 +203,7 @@ class PollPage extends Component {
                                                 <Icon>favorite</Icon>
                                             </IconButton>
                                             <Typography variant="body1">
-                                                {poll.votes[1] || 0}
+                                                {votes[1] || 0}
                                             </Typography>
                                         </div>
                                     </CardActions>
@@ -224,13 +258,13 @@ class PollPage extends Component {
                                                                 style={{
                                                                     backgroundImage: `url(
                                                                 ${
-                                                                        voter.option ===
-                                                                            0
-                                                                            ? poll
-                                                                                .options[0]
-                                                                            : poll
-                                                                                .options[1]
-                                                                        }
+                                                                    voter.option ===
+                                                                    0
+                                                                        ? poll
+                                                                              .options[0]
+                                                                        : poll
+                                                                              .options[1]
+                                                                }
                                                             )`
                                                                 }}
                                                                 className={

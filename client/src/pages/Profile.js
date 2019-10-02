@@ -138,8 +138,6 @@ class Profile extends Component {
                                                 key={i}
                                                 poll={poll}
                                                 movePollBy={movePollBy}
-                                                user={user}
-                                                users={users}
                                                 lists={lists}
                                             />
                                         ))}

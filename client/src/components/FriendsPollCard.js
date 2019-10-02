@@ -23,7 +23,6 @@ function FriendsPollCard(props) {
     const { poll } = props;
     const votesCount = poll.votes[0] + poll.votes[1];
 
-
     const registerVote = option => {
         const dataToSend = {
             pollId: poll._id,
@@ -32,7 +31,7 @@ function FriendsPollCard(props) {
         };
 
         // Use socket for real-time updates:
-        socket.emit('register_vote', dataToSend);
+        socket.emit("register_vote", dataToSend);
         setHasVoted(true);
     };
 
