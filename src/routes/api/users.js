@@ -17,6 +17,7 @@ const jwt = require("jsonwebtoken");
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 const validateFriendListInput = require("../../validation/friendList");
+import { validateUserDataInput } from "../../validation/userData";
 
 // LOAD DATA MODELS
 
@@ -215,6 +216,31 @@ router.get("/user/:id", (req, res) => {
             res.status(500).json({
                 error: "Unable to retrieve user data"
             });
+        });
+});
+
+router.patch("/", (req, res) => {
+    const { errors, isValid } = validateUserDataInput(req.body);
+    const { userId, email, name } = req.body;
+    if (!isValid) {
+        res.status(400).json(errors);
+    }
+
+    const dataToUpdate = {
+        email: email,
+        name: name
+    };
+
+    User.findByIdAndUpdate(userId, dataToUpdate, {
+        lean: true,
+        omitUndefined: true
+    })
+        .then(result => {
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
         });
 });
 

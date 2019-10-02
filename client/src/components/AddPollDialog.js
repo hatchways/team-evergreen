@@ -117,6 +117,7 @@ class AddPollDialog extends Component {
     handleTitleChange = e => {
         this.setState({ title: e.target.value });
     };
+
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
     };
@@ -212,12 +213,10 @@ class AddPollDialog extends Component {
                 <Dialog
                     fullWidth
                     maxWidth="xs"
-                    onClose={this.props.togglePollDialog}
+                    onClose={this.closeDialog}
                     aria-labelledby="create-poll"
                     open={this.props.pollDialogIsOpen}>
-                    <DialogTitle
-                        id="create-poll"
-                        onClose={this.props.togglePollDialog}>
+                    <DialogTitle id="create-poll" onClose={this.closeDialog}>
                         Create a poll
                     </DialogTitle>
 
