@@ -1,13 +1,44 @@
 //routeAuthorization.js
 
-export function sayHello(req, res, next) {
-    console.log(req.body, req.ip, req.method);
-    if (!req.body.jwt && req.method !== "GET") {
-        //res.status(400).json({ error: "Unauthorized access request" });
-        //return { status: 400, error: "Unauthorized access" };
-        res.status(401)
-            .json({ error: "Unauthorized access request" })
-            .end();
+import jwt from "jsonwebtoken";
+
+const TOKEN_LIFETIME = 31556926;
+
+export function isRequestAuthorized(token, secret) {
+    console.log(token);
+    try {
+        return jwt.verify(token, secret);
+    } catch (err) {
+        return false;
     }
-    next();
+}
+
+/**
+ * @desc Creates a JWT token and returns it via callback provided
+ * @params user - an instance of a users
+ * @params res - call back function
+ * @access Private
+ */
+export function createToken(payload, res, secret, expiration = TOKEN_LIFETIME) {
+    // Sign token
+    jwt.sign(
+        payload,
+        secret,
+        {
+            expiresIn: expiration // 1 year in seconds
+        },
+        (err, token) => {
+            if (!err) {
+                res.json({
+                    status: 200,
+                    token: `Bearer ${token}`
+                });
+            } else {
+                res.json({
+                    status: 500,
+                    error: "Unable to generate token."
+                });
+            }
+        }
+    );
 }
