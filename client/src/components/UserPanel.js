@@ -34,6 +34,7 @@ function UserPanel(props) {
                 togglePollDialog={props.togglePollDialog}
                 toggleDrawer={toggleDrawer}
                 toggleMobileDrawer={toggleMobileDrawer}
+                toggleSnackbar={toggleSnackbar}
             />
             <FriendsDrawer
                 user={user}

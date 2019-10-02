@@ -113,7 +113,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AppNavbar(props) {
-    const { drawerIsOpen, user, toggleMobileDrawer } = props;
+    const { drawerIsOpen, user, toggleMobileDrawer, toggleSnackbar } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
     const [editProfileDialog, setEditProfileDialog] = React.useState(false);
@@ -349,6 +349,7 @@ function AppNavbar(props) {
                 editProfileDialogIsOpen={editProfileDialog}
                 toggleEditProfileDialog={toggleEditProfileDialog}
                 changeAvatar={changeAvatar}
+                toggleSnackbar={toggleSnackbar}
             />
         </div>
     );
