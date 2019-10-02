@@ -31,7 +31,14 @@ class FriendsPolls extends Component {
     };
 
     render() {
-        const { classes, user, users } = this.props;
+        const {
+            classes,
+            user,
+            users,
+            toggleSnackbar,
+            snackbarIsOpen,
+            snackbarMessage
+        } = this.props;
         const { pollDialogIsOpen } = this.state;
         const { friendsPolls } = this.props;
 
@@ -42,6 +49,9 @@ class FriendsPolls extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    toggleSnackbar={toggleSnackbar}
+                    snackbarIsOpen={snackbarIsOpen}
+                    snackbarMessage={snackbarMessage}
                 />
 
                 <main className={classes.main}>
@@ -89,6 +99,8 @@ class FriendsPolls extends Component {
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
                                             hideButton={true}
+                                            toggleSnackbar={toggleSnackbar}
+                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>

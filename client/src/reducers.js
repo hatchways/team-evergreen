@@ -35,8 +35,9 @@ const friendsPollsInitialState = {
 };
 
 const snackbarInitialState = {
-    snackbarIsOpen: false
-}
+    snackbarIsOpen: false,
+    snackbarMessage: ""
+};
 
 export const userReducer = (state = userInitialState, action = {}) => {
     switch (action.type) {
@@ -190,14 +191,19 @@ export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
     }
 };
 
-
 export const snackbarReducer = (state = snackbarInitialState, action = {}) => {
     switch (action.type) {
         case TOGGLE_SNACKBAR:
-            if (action.action === 'open') {
-                return Object.assign({}, state, { snackbarIsOpen: true });
+            if (action.action === "open") {
+                return Object.assign({}, state, {
+                    snackbarIsOpen: true,
+                    snackbarMessage: action.message
+                });
             } else {
-                return Object.assign({}, state, { snackbarIsOpen: false });
+                return Object.assign({}, state, {
+                    snackbarIsOpen: false,
+                    snackbarMessage: ""
+                });
             }
 
         default:

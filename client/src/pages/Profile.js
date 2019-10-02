@@ -10,7 +10,7 @@ import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
-import AppSnackbar from '../components/AppSnackbar';
+// import AppSnackbar from "../components/AppSnackbar";
 
 import {
     Typography,
@@ -35,9 +35,10 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        // for a new user, show suggestion to add friends:
-        if (!this.props.user.friends.length) {
-            this.props.toggleSnackbar('open');
+        // for a user with no friends, show suggestion to add friends:
+        if (this.props.user._id && this.props.user.friends.length === 0) {
+            const message = "Hi there! How about adding some friends?";
+            this.props.toggleSnackbar({ action: "open", message });
         }
     }
 
@@ -74,7 +75,14 @@ class Profile extends Component {
     };
 
     render() {
-        const { classes, user, users, toggleSnackbar, snackbarIsOpen } = this.props;
+        const {
+            classes,
+            user,
+            users,
+            toggleSnackbar,
+            snackbarIsOpen,
+            snackbarMessage
+        } = this.props;
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
@@ -93,6 +101,9 @@ class Profile extends Component {
                     togglePollDialog={this.togglePollDialog}
                     toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
+                    toggleSnackbar={toggleSnackbar}
+                    snackbarIsOpen={snackbarIsOpen}
+                    snackbarMessage={snackbarMessage}
                 />
 
                 <main className={classes.main}>
@@ -296,11 +307,6 @@ class Profile extends Component {
                         </Grid>
                     </Container>
                 </main>
-                <AppSnackbar
-                    message={`Hello there! How about adding some friends?`}
-                    snackbarIsOpen={snackbarIsOpen}
-                    toggleSnackbar={toggleSnackbar}
-                />
             </div>
         );
     }

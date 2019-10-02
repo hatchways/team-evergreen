@@ -135,9 +135,10 @@ export function apiRequestFailure(error) {
     };
 }
 
-export function toggleSnackbar(action) {
+export function toggleSnackbar(data) {
     return {
         type: TOGGLE_SNACKBAR,
-        action
+        action: data.action,
+        message: data.message
     };
 }

@@ -20,7 +20,6 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { FileDrop } from "./FileDrop";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
-import AppSnackbar from './AppSnackbar';
 
 const styles = theme => ({
     root: {
@@ -165,7 +164,10 @@ class AddPollDialog extends Component {
                     this.props.addNewPoll(response.data.data);
                     this.closeDialog();
                     // open snackbar with success message:
-                    this.props.toggleSnackbar('open');
+                    this.props.toggleSnackbar({
+                        action: "open",
+                        message: "A new poll was successfully created!"
+                    });
                 })
                 .catch(err => {
                     console.log(err);
@@ -189,13 +191,8 @@ class AddPollDialog extends Component {
     };
 
     render() {
-        const { classes, lists, hideButton, snackbarIsOpen, toggleSnackbar } = this.props;
-        const {
-            errors,
-            sendToList,
-            title,
-            buttonIsDisabled
-        } = this.state;
+        const { classes, lists, hideButton } = this.props;
+        const { errors, sendToList, title, buttonIsDisabled } = this.state;
 
         return (
             <div>
@@ -317,11 +314,6 @@ class AddPollDialog extends Component {
                         </DialogActions>
                     </form>
                 </Dialog>
-                <AppSnackbar
-                    message={'A new poll was successfully created!'}
-                    snackbarIsOpen={snackbarIsOpen}
-                    toggleSnackbar={toggleSnackbar}
-                />
             </div>
         );
     }

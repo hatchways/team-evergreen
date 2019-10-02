@@ -17,7 +17,7 @@ import {
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
-import setAuthToken from './utils/setAuthToken';
+import setAuthToken from "./utils/setAuthToken";
 
 import Loader from "./components/Loader";
 import Signup from "./pages/Signup";
@@ -34,7 +34,8 @@ const mapStateToProps = state => {
         isLoading: state.userReducer.isLoading,
         users: state.usersReducer.users,
         friendsPolls: state.pollsReducer.friendsPolls,
-        snackbarIsOpen: state.snackbarReducer.snackbarIsOpen
+        snackbarIsOpen: state.snackbarReducer.snackbarIsOpen,
+        snackbarMessage: state.snackbarReducer.snackbarMessage
     };
 };
 
@@ -49,7 +50,7 @@ const mapDispatchToProps = dispatch => {
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut()),
-        toggleSnackbar: (action) => dispatch(toggleSnackbar(action))
+        toggleSnackbar: data => dispatch(toggleSnackbar(data))
     };
 };
 
@@ -72,7 +73,7 @@ class App extends Component {
         }
     }
 
-    decodeTokenAndFetchData = (token) => {
+    decodeTokenAndFetchData = token => {
         setAuthToken(token);
 
         // Decode token and get user info:
@@ -85,8 +86,7 @@ class App extends Component {
         this.props.loadUsers(decoded.id);
 
         return decoded;
-    }
-
+    };
 
     logOut = () => {
         // Remove token from local storage
@@ -113,11 +113,13 @@ class App extends Component {
                                 isAuthenticated ? (
                                     <Redirect to="/profile" />
                                 ) : (
-                                        <Signup
-                                            {...props}
-                                            decodeTokenAndFetchData={this.decodeTokenAndFetchData}
-                                        />
-                                    )
+                                    <Signup
+                                        {...props}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
+                                    />
+                                )
                             }
                         />
                         <Route
@@ -127,11 +129,13 @@ class App extends Component {
                                 isAuthenticated ? (
                                     <Redirect to="/profile" />
                                 ) : (
-                                        <Signup
-                                            {...props}
-                                            decodeTokenAndFetchData={this.decodeTokenAndFetchData}
-                                        />
-                                    )
+                                    <Signup
+                                        {...props}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
+                                    />
+                                )
                             }
                         />
                         <Route
@@ -141,11 +145,13 @@ class App extends Component {
                                 isAuthenticated ? (
                                     <Redirect to="/profile" />
                                 ) : (
-                                        <Login
-                                            {...props}
-                                            decodeTokenAndFetchData={this.decodeTokenAndFetchData}
-                                        />
-                                    )
+                                    <Login
+                                        {...props}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
+                                    />
+                                )
                             }
                         />
                         <Route
@@ -163,12 +169,19 @@ class App extends Component {
                                         addNewList={this.props.addNewList}
                                         addNewPoll={this.props.addNewPoll}
                                         logOut={this.logOut}
-                                        snackbarIsOpen={this.props.snackbarIsOpen}
-                                        toggleSnackbar={this.props.toggleSnackbar}
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
-                                            <Redirect to="/login" />
-                                        )
+                                    <Redirect to="/login" />
+                                )
                             }
                         />
                         <Route
@@ -184,10 +197,19 @@ class App extends Component {
                                         user={this.props.user}
                                         logOut={this.logOut}
                                         addNewPoll={this.props.addNewPoll}
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
-                                            <Redirect to="/login" />
-                                        )
+                                    <Redirect to="/login" />
+                                )
                             }
                         />
                         <Route
@@ -205,8 +227,8 @@ class App extends Component {
                                         logOut={this.logOut}
                                     />
                                 ) : (
-                                            <Redirect to="/login" />
-                                        )
+                                    <Redirect to="/login" />
+                                )
                             }
                         />
                         <Route
@@ -227,10 +249,19 @@ class App extends Component {
                                         }
                                         registerVote={this.props.registerVote}
                                         logOut={this.logOut}
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
-                                            <Redirect to="/login" />
-                                        )
+                                    <Redirect to="/login" />
+                                )
                             }
                         />
                         <Route
@@ -250,10 +281,19 @@ class App extends Component {
                                             this.props.changeFriendStatus
                                         }
                                         logOut={this.logOut}
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
-                                            <Redirect to="/login" />
-                                        )
+                                    <Redirect to="/login" />
+                                )
                             }
                         />
                     </Switch>
