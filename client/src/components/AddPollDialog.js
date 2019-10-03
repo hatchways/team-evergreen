@@ -118,6 +118,7 @@ class AddPollDialog extends Component {
     handleTitleChange = e => {
         this.setState({ title: e.target.value });
     };
+
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
     };

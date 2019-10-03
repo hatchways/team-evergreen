@@ -24,6 +24,7 @@ class Profile extends Component {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
+            editProfileDialogIsOpen: false,
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
@@ -81,6 +82,7 @@ class Profile extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
                 />
 
