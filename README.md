@@ -12,6 +12,7 @@ This readme describes how to:
 8. Use The Registration\Login API
 9. Uploading to AWS S3
 10. Mocha test configuration
+11. Token authorization
 
 ## Start Client
 
@@ -424,5 +425,36 @@ To define which directory to use for the tests you can change the file evergreen
 directory to use for the tests.  To specify that all subdirectories be tested add the flag ```--recursive``` to the file
 on a new line.
 
+##Token Authorization
+
+User authorization is done using the jwt protocol.  On login a token is created and passed back to the client.
+On subsequent end-point requests the client returns the token in the ```Authorization``` header.
+The token is decoded and if token is valid the request is fulfilled.  If the request is not valid a status code of 401 is
+returned, along with the message "Unauthorized error":
+
+```
+return res
+    .status(401)
+    .json({ error: "Transaction is not authorized" })
+    .end();
+```
+
+The ```src\routes\utils\routeAuthorization.js``` module provides two functions to manage
+jwt tokens:
+
+1. isRequestAuthorized(token, secret, path) 
+    - token - the actual token to be verified
+    - secret - secret or key to verify token with
+    - path - a string that indicates the url being called - used for logging purposes
+    
+    Returns true if verified, false if token is invalid or missing (also logs the error message).
+
+2. createToken(payload, res, secret, expiration = TOKEN_LIFETIME )
+    - payload - the data to encrypt with the token sent as a json object
+    - res - the callback function to callback once token is created
+    - secret - secret or key to verify token with 
+    - expiration - lifetime of token in ms - defaults to a year
+    
+    Returns a jwt token.
 
 

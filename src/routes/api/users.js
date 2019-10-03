@@ -1,41 +1,26 @@
 //users.js
-//Author - Fil - August 28, 2019
-//Inspiration - https://blog.bitsrc.io/build-a-login-auth-app-with-mern-stack-part-1-c405048e3669
 
 // Core packages to enable routing functionality
 const express = require("express");
 const router = express.Router();
 
-// Loads .env keys depending on environment in use
-const SECRET = require("../../config/config").app.secretOrKey;
+// Loads .env keys needed for routing functions
+const keys = require("../../config/config");
+const SECRET = keys.app.secretOrKey;
 
 // Used to encrypt/decrypt password and for using jwt token
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 // LOAD VALIDATION FUNCTIONS
 import { validateRegisterInput } from "../../validation/register";
 import { validateLoginInput } from "../../validation/login";
 import { validateFriendListInput } from "../../validation/friendList";
 import { validateUserDataInput } from "../../validation/userData";
-import { isRequestAuthorized, createToken } from "../utils/routeAuthorization";
+import { createToken } from "../utils/routeAuthorization";
 
 // LOAD DATA MODELS
 const User = require("../../models/User");
 const FriendList = require("../../models/friendList");
-
-//@security - authorization wall for all routes
-//@params - req.get("Authorization") - jwt token in Authorization header
-router.use((req, res, next) => {
-    //Make sure request is authorized before continuing
-    if (
-        !isRequestAuthorized(req.get("Authorization"), SECRET) &&
-        !req.path in ["/login", "/register"]
-    ) {
-        return res.status(401).json({ error: "Transaction is not authorized" });
-    }
-    next();
-});
 
 // ROUTES
 /**

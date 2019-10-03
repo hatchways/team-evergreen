@@ -1,13 +1,15 @@
 // Load application environment configuration
 require("dotenv").config();
+const SECRET = require("./config/config").app.secretOrKey;
 
 // Load middleware used in managing and creating routes
 import helmet from "helmet";
 import createError from "http-errors";
 import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
-import logger from "morgan";
+import morgan from "morgan";
 import path from "path";
+import { isRequestAuthorized } from "./routes/utils/routeAuthorization";
 
 // File management middleware
 const bodyParser = require("body-parser");
@@ -38,6 +40,31 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Enable logging in development
+if (process.env.NODE_ENV === "dev") {
+    app.use(morgan("dev"));
+}
+
+app.use((req, res, next) => {
+    //Make sure request is authorized before continuing
+    try {
+        if (
+            !isRequestAuthorized(req.get("Authorization"), SECRET, req.path) &&
+            !req.path in ["/login", "/register"]
+        ) {
+            console.log("Unauthorized request", req.body, req.params, req.path);
+            return res
+                .status(401)
+                .json({ error: "Transaction is not authorized" })
+                .end();
+        }
+        next();
+    } catch (err) {
+        console.log("Unexpected error", err);
+        res.status(500).json(err);
+    }
+});
+
 // Routes
 app.use("/api/users", users);
 app.use("/api/images", upload);
@@ -56,7 +83,6 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
 });
 
-app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
