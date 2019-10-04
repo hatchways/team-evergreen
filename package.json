@@ -2,7 +2,7 @@
   "name": "optio-api",
   "version": "1.0.1",
   "engines": {
-    "node": ">=10.16.0"
+    "node": "12.10.0"
   },
   "private": true,
   "scripts": {
