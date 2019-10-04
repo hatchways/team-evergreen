@@ -11,6 +11,7 @@ This readme describes how to:
 7. Install Prettier
 8. Use The Registration\Login API
 9. Uploading to AWS S3
+10. Mocha test configuration
 
 ## Start Client
 
@@ -416,5 +417,12 @@ what's in the actual image. The images however are not encrypted in any way.
 Even though we have set Public access it should not be possible for anyone besides an authorized account for
 you buckets to upload a file. Everyone however should be able to read it. To test that this is the
 case click on the url that you got back. If your image\file opens up you are good to go.
+
+##Mocha Test Configuration
+
+To define which directory to use for the tests you can change the file evergreen\test\mocha.opts to change which
+directory to use for the tests.  To specify that all subdirectories be tested add the flag ```--recursive``` to the file
+on a new line.
+
 
 

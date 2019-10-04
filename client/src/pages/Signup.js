@@ -259,7 +259,7 @@ class Signup extends Component {
                                         </Grid>
                                     </Grid>
                                     <Button
-                                        className={classes.btn}
+                                        className={classes.signupBtn}
                                         id="submitButton"
                                         size="large"
                                         type="submit"

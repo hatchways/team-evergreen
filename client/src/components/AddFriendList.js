@@ -139,13 +139,6 @@ class AddFriendsList extends Component {
             axios
                 .post("/api/users/add_friend_list", newList)
                 .then(response => {
-                    if (response.data.status === 500) {
-                        this.setState({
-                            errors: { error: response.data.error }
-                        });
-                        return;
-                    }
-
                     // add new list to Profile and close dialog:
                     this.addNewList(response.data);
                     this.closeDialog();
@@ -172,7 +165,7 @@ class AddFriendsList extends Component {
     addNewList = newList => {
         // show friends' names and avatars for the newly created list:
         newList.friends.forEach((id, i, array) => {
-            const user = this.props.users.find(user => user._id === id);
+            const user = this.props.user.friends.find(user => user._id === id);
 
             array[i] = {
                 _id: id,
