@@ -21,7 +21,6 @@ import {
     Icon
 } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import setAuthToken from "../utils/setAuthToken";
 
 const styles = theme => ({
     root: {
@@ -136,9 +135,6 @@ class AddFriendsList extends Component {
                 title: listName.trim(),
                 friends
             };
-
-            const token = localStorage.jwtToken;
-            setAuthToken(token);
 
             axios
                 .post("/api/users/add_friend_list", newList)

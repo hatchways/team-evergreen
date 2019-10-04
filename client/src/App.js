@@ -26,6 +26,8 @@ import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
+import setupResultInterceptor from "./utils/axiosInterceptors";
+
 // declare what pieces of state we want to have access to:
 const mapStateToProps = state => {
     return {
@@ -79,9 +81,12 @@ class App extends Component {
         window.addEventListener("storage", e => {
             if (e.key === "jwtToken") {
                 setAuthToken(e.key);
-                console.log("\x1b[41m jwt token has changed! \x1b[0m");
+                console.error("\x1b[41m jwt token has changed! \x1b[0m");
             }
         });
+
+        // Register an Axios interceptor to catch 401 errors and logout automatically
+        setupResultInterceptor(this.logOut);
     }
 
     logOut = () => {
