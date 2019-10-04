@@ -20,6 +20,12 @@ export const friendsPageStyles = theme => ({
         paddingBottom: theme.spacing(2),
         borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
     },
+    listItemText: {
+        maxWidth: "60%",
+        [theme.breakpoints.up("md")]: {
+            maxWidth: "80%"
+        }
+    },
     tabs: {
         width: "100%",
         "& .Mui-selected": {

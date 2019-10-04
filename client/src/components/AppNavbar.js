@@ -2,18 +2,23 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+
+// Material UI Styles
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
+import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Icon from "@material-ui/core/Icon";
+
+// Application modules
 import logo from "../images/icons/logo.png";
+import EditProfileDialog from "./EditProfileDialog";
 
 const drawerWidth = 240;
 const closedDrawerWidth = 70;
@@ -27,7 +32,10 @@ const useStyles = makeStyles(theme => ({
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
-        })
+        }),
+        [theme.breakpoints.down("xs")]: {
+            width: "100%"
+        }
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -35,10 +43,17 @@ const useStyles = makeStyles(theme => ({
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
-        })
+        }),
+        [theme.breakpoints.down("xs")]: {
+            marginLeft: 0,
+            width: "100%"
+        }
     },
     homeButtonHidden: {
-        visibility: "hidden"
+        visibility: "hidden",
+        [theme.breakpoints.down("xs")]: {
+            visibility: "visible"
+        }
     },
     navBar: {
         display: "flex",
@@ -49,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     },
     navItem: {
         margin: theme.spacing(1, 4),
-        "&:last-child": {
+        "&:nth-child(4)": {
             marginRight: theme.spacing(1)
         },
         "&:nth-child(3)": {
@@ -88,13 +103,20 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down("sm")]: {
             display: "block"
         }
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up("sm")]: {
+            display: "none"
+        }
     }
 }));
 
 function AppNavbar(props) {
-    const { open, user } = props;
+    const { drawerIsOpen, user, toggleMobileDrawer } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
+    const [editProfileDialog, setEditProfileDialog] = React.useState(false);
     const classes = useStyles();
 
     const openMenu = event => {
@@ -113,32 +135,58 @@ function AppNavbar(props) {
         setMobileAnchorEl(null);
     };
 
+    const toggleEditProfileDialog = () => {
+        setEditProfileDialog(!editProfileDialog);
+        setAnchorEl(null);
+        setMobileAnchorEl(null);
+    };
+
+    const changeAvatar = newURL => {
+        user.avatar = newURL;
+    };
+
     return (
         <div className={classes.root}>
             <AppBar
                 position="absolute"
-                className={clsx(classes.appBar, open && classes.appBarShift)}
+                className={clsx(
+                    classes.appBar,
+                    drawerIsOpen && classes.appBarShift
+                )}
                 color="inherit"
                 elevation={0}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton
-                        edge="start"
                         color="inherit"
-                        aria-label="go to home page"
-                        className={clsx(open && classes.homeButtonHidden)}>
-                        <img
-                            className={classes.logo}
-                            alt="App logo"
-                            src={logo}
-                        />
+                        aria-label="open mobile drawer"
+                        edge="start"
+                        onClick={toggleMobileDrawer}
+                        className={classes.menuButton}>
+                        <Icon>chevron_right</Icon>
                     </IconButton>
+
+                    <Link component={RouterLink} underline="none" to="/profile">
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="go to profile page"
+                            className={clsx(
+                                drawerIsOpen && classes.homeButtonHidden
+                            )}>
+                            <img
+                                className={classes.logo}
+                                alt="App logo"
+                                src={logo}
+                            />
+                        </IconButton>
+                    </Link>
                     <IconButton
                         className={classes.mobileMenuButton}
                         aria-label="open mobile menu"
                         aria-controls="mobile-menu"
                         aria-haspopup="true"
                         onClick={openMobileMenu}>
-                        <Icon>more_vert</Icon>
+                        <Icon>menu</Icon>
                     </IconButton>
                     <Menu
                         id="mobile-menu"
@@ -196,15 +244,8 @@ function AppNavbar(props) {
                                 </Typography>
                             </Link>
                         </MenuItem>
-                        <MenuItem key={5} onClick={handleMobileClose}>
-                            <Link
-                                component={RouterLink}
-                                underline="none"
-                                to="/edit-profile">
-                                <Typography variant="subtitle1">
-                                    Edit profile
-                                </Typography>
-                            </Link>
+                        <MenuItem key={5} onClick={toggleEditProfileDialog}>
+                            Edit profile
                         </MenuItem>
                         <MenuItem key={6} onClick={props.logOut}>
                             Log out
@@ -290,7 +331,7 @@ function AppNavbar(props) {
                             keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleClose}>
-                            <MenuItem component={RouterLink} to="/edit-profile">
+                            <MenuItem onClick={toggleEditProfileDialog}>
                                 <ListItemText primary="Edit profile" />
                             </MenuItem>
                             <MenuItem onClick={props.logOut}>
@@ -300,6 +341,15 @@ function AppNavbar(props) {
                     </nav>
                 </Toolbar>
             </AppBar>
+            <EditProfileDialog
+                userId={user._id}
+                name={user.name}
+                avatar={user.avatar}
+                email={user.email}
+                editProfileDialogIsOpen={editProfileDialog}
+                toggleEditProfileDialog={toggleEditProfileDialog}
+                changeAvatar={changeAvatar}
+            />
         </div>
     );
 }

@@ -2,7 +2,7 @@ import hero from "../images/hero.png";
 
 // Login and Signup styling:
 
-export const authStyles = {
+export const authStyles = theme => ({
     heading: {
         marginBottom: "2.35em",
         fontWeight: "600"
@@ -34,7 +34,21 @@ export const authStyles = {
     uppercase: {
         textTransform: "uppercase"
     },
+    btnContainer: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
     btn: {
+        marginTop: "8px",
+        "&:nth-child(2)": {
+            marginLeft: "10px"
+        },
+        [theme.breakpoints.down("sm")]: {
+            flex: 1
+        }
+    },
+    signupBtn: {
         marginTop: "8px"
     }
-};
+});

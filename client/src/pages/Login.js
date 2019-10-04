@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
 
 import {
     Button,
@@ -89,6 +90,16 @@ class Login extends Component {
             });
     };
 
+    demoLogin = () => {
+        this.setState({ email: DEMO_EMAIL, password: DEMO_PASSWORD }, () => {
+            const user = {
+                email: DEMO_EMAIL,
+                password: DEMO_PASSWORD
+            };
+            this.loginUser(user);
+        });
+    };
+
     render() {
         const { classes } = this.props;
         const { errors } = this.state;
@@ -170,20 +181,32 @@ class Login extends Component {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    <Button
-                                        className={classes.btn}
-                                        id="submitButton"
-                                        size="large"
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary">
-                                        Login
-                                    </Button>
-                                    <FormHelperText
-                                        error
-                                        id="submitButton-error-field">
-                                        {errors.error}
-                                    </FormHelperText>
+                                    <div className={classes.btnContainer}>
+                                        <Button
+                                            className={classes.btn}
+                                            id="submitButton"
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary">
+                                            Login
+                                        </Button>
+                                        <Button
+                                            onClick={this.demoLogin}
+                                            className={classes.btn}
+                                            id="demoSubmitButton"
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            color="secondary">
+                                            Demo Login
+                                        </Button>
+                                        <FormHelperText
+                                            error
+                                            id="submitButton-error-field">
+                                            {errors.error}
+                                        </FormHelperText>
+                                    </div>
                                 </form>
                             </div>
                         </Container>

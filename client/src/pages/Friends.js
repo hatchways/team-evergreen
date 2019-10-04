@@ -177,6 +177,9 @@ class Friends extends React.Component {
                                                                     primary={
                                                                         friend.name
                                                                     }
+                                                                    className={
+                                                                        classes.listItemText
+                                                                    }
                                                                 />
                                                                 <ListItemSecondaryAction>
                                                                     <Button
@@ -215,67 +218,79 @@ class Friends extends React.Component {
                                         )}
                                     </TabPanel>
                                     <TabPanel value={value} index={1}>
-                                        <List className={classes.userList}>
-                                            {users &&
-                                                users.map(user => {
-                                                    const isFriend = friends.find(
-                                                        u => u._id === user._id
-                                                    );
+                                        {!users.length ? (
+                                            <Typography variant="body1">
+                                                No new users available at the
+                                                moment
+                                            </Typography>
+                                        ) : (
+                                            <List className={classes.userList}>
+                                                {users &&
+                                                    users.map(user => {
+                                                        const isFriend = friends.find(
+                                                            u =>
+                                                                u._id ===
+                                                                user._id
+                                                        );
 
-                                                    return (
-                                                        <ListItem
-                                                            key={user._id}
-                                                            className={clsx(
-                                                                classes.listItem,
-                                                                isFriend &&
-                                                                    classes.disabled
-                                                            )}>
-                                                            <ListItemAvatar>
-                                                                {renderAvatar(
-                                                                    user,
-                                                                    classes
-                                                                )}
-                                                            </ListItemAvatar>
-                                                            <ListItemText
-                                                                primary={
-                                                                    user.name
-                                                                }
-                                                            />
-                                                            <ListItemSecondaryAction>
-                                                                <Button
+                                                        return (
+                                                            <ListItem
+                                                                key={user._id}
+                                                                className={clsx(
+                                                                    classes.listItem,
+                                                                    isFriend &&
+                                                                        classes.disabled
+                                                                )}>
+                                                                <ListItemAvatar>
+                                                                    {renderAvatar(
+                                                                        user,
+                                                                        classes
+                                                                    )}
+                                                                </ListItemAvatar>
+                                                                <ListItemText
+                                                                    primary={
+                                                                        user.name
+                                                                    }
                                                                     className={
-                                                                        classes.button
+                                                                        classes.listItemText
                                                                     }
-                                                                    onClick={() =>
-                                                                        this.changeFriendStatus(
-                                                                            user._id,
-                                                                            "follow"
-                                                                        )
-                                                                    }
-                                                                    disabled={
-                                                                        isFriend ===
+                                                                />
+                                                                <ListItemSecondaryAction>
+                                                                    <Button
+                                                                        className={
+                                                                            classes.button
+                                                                        }
+                                                                        onClick={() =>
+                                                                            this.changeFriendStatus(
+                                                                                user._id,
+                                                                                "follow"
+                                                                            )
+                                                                        }
+                                                                        disabled={
+                                                                            isFriend ===
+                                                                            undefined
+                                                                                ? false
+                                                                                : true
+                                                                        }
+                                                                        variant={
+                                                                            isFriend !==
+                                                                            undefined
+                                                                                ? "text"
+                                                                                : "contained"
+                                                                        }
+                                                                        size="small"
+                                                                        color="secondary">
+                                                                        {isFriend ===
                                                                         undefined
-                                                                            ? false
-                                                                            : true
-                                                                    }
-                                                                    variant={
-                                                                        isFriend !==
-                                                                        undefined
-                                                                            ? "text"
-                                                                            : "contained"
-                                                                    }
-                                                                    size="small"
-                                                                    color="secondary">
-                                                                    {isFriend ===
-                                                                    undefined
-                                                                        ? "Follow"
-                                                                        : "Following"}
-                                                                </Button>
-                                                            </ListItemSecondaryAction>
-                                                        </ListItem>
-                                                    );
-                                                })}
-                                        </List>
+                                                                            ? "Follow"
+                                                                            : "Following"}
+                                                                    </Button>
+                                                                </ListItemSecondaryAction>
+                                                            </ListItem>
+                                                        );
+                                                    })}
+                                            </List>
+                                        )}
                                     </TabPanel>
                                 </Grid>
                             </Grid>

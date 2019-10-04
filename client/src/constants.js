@@ -7,3 +7,9 @@ export const LOGOUT = "LOGOUT";
 export const REGISTER_VOTE_SUCCESS = "REGISTER_VOTE_SUCCESS";
 export const GET_FRIENDS_POLLS_SUCCESS = "GET_FRIENDS_POLLS_SUCCESS";
 export const CHANGE_FRIEND_STATUS_SUCCESS = "CHANGE_FRIEND_STATUS_SUCCESS";
+export const USER_DATA_LOADING = "USER_DATA_LOADING";
+
+// make sure these values are the same as the ones in src/helpers/seeddb.js file
+export const DEMO_EMAIL = "demo_user@mail.com";
+export const DEMO_PASSWORD =
+    "passwordpurpossefullyvisibletoallowdemouseraccesswithoutcreatingunneccessarybackdoor";

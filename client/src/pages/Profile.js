@@ -1,6 +1,7 @@
 // inspiration: https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard
 
 import React, { Component } from "react";
+import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
@@ -14,7 +15,8 @@ import {
     Container,
     Grid,
     IconButton,
-    Icon
+    Icon,
+    Box
 } from "@material-ui/core";
 
 class Profile extends Component {
@@ -22,6 +24,7 @@ class Profile extends Component {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
+            editProfileDialogIsOpen: false,
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
@@ -79,6 +82,7 @@ class Profile extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
                 />
 
@@ -141,34 +145,49 @@ class Profile extends Component {
                                                 lists={lists}
                                             />
                                         ))}
-                                    <Grid
-                                        container
-                                        justify="space-between"
-                                        className={classes.sliderControls}
-                                        style={
-                                            polls.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }>
+
+                                    <Box
+                                        display={{
+                                            xs:
+                                                polls.length > 1
+                                                    ? "block"
+                                                    : "none",
+                                            md:
+                                                polls.length > 2
+                                                    ? "block"
+                                                    : "none",
+                                            lg:
+                                                polls.length > 3
+                                                    ? "block"
+                                                    : "none"
+                                        }}>
                                         <IconButton
+                                            color="primary"
+                                            className={clsx(
+                                                classes.prevButton,
+                                                classes.sliderControl
+                                            )}
                                             onClick={() =>
                                                 this.showPreviousSlide("poll")
                                             }
-                                            className="prev"
                                             disabled={pollMove === 0}>
-                                            <Icon>arrow_back_ios</Icon>
+                                            <Icon>chevron_left</Icon>
                                         </IconButton>
                                         <IconButton
-                                            className="next"
+                                            color="primary"
+                                            className={clsx(
+                                                classes.nextButton,
+                                                classes.sliderControl
+                                            )}
                                             disabled={
                                                 pollMove === polls.length - 1
                                             }
                                             onClick={() =>
                                                 this.showNextSlide("poll")
                                             }>
-                                            <Icon>arrow_forward_ios</Icon>
+                                            <Icon>chevron_right</Icon>
                                         </IconButton>
-                                    </Grid>
+                                    </Box>
                                 </Grid>
                             </Grid>
                             <Grid
@@ -217,34 +236,48 @@ class Profile extends Component {
                                                 moveListBy={moveListBy}
                                             />
                                         ))}
-                                    <Grid
-                                        container
-                                        justify="space-between"
-                                        className={classes.sliderControls}
-                                        style={
-                                            lists.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }>
+                                    <Box
+                                        display={{
+                                            xs:
+                                                polls.length > 1
+                                                    ? "block"
+                                                    : "none",
+                                            md:
+                                                polls.length > 2
+                                                    ? "block"
+                                                    : "none",
+                                            lg:
+                                                polls.length > 3
+                                                    ? "block"
+                                                    : "none"
+                                        }}>
                                         <IconButton
+                                            color="primary"
+                                            className={clsx(
+                                                classes.prevButton,
+                                                classes.sliderControl
+                                            )}
                                             onClick={() =>
                                                 this.showPreviousSlide("list")
                                             }
-                                            className="prev"
                                             disabled={listMove === 0}>
-                                            <Icon>arrow_back_ios</Icon>
+                                            <Icon>chevron_left</Icon>
                                         </IconButton>
                                         <IconButton
-                                            className="next"
+                                            color="primary"
+                                            className={clsx(
+                                                classes.nextButton,
+                                                classes.sliderControl
+                                            )}
                                             disabled={
                                                 listMove === lists.length - 1
                                             }
                                             onClick={() =>
                                                 this.showNextSlide("list")
                                             }>
-                                            <Icon>arrow_forward_ios</Icon>
+                                            <Icon>chevron_right</Icon>
                                         </IconButton>
-                                    </Grid>
+                                    </Box>
                                 </Grid>
                             </Grid>
                         </Grid>
