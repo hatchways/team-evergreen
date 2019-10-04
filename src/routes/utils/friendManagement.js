@@ -51,7 +51,6 @@ export async function getSampleOfUsers(
     userId,
     sampleSize = DEFAULT_SAMPLE_SIZE
 ) {
-    console.log(sampleSize);
     try {
         const listOf = await User.findById(
             { _id: userId },

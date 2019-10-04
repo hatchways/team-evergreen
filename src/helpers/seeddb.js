@@ -6,6 +6,10 @@
 
 //Make a connection to the database - by default this is to development
 //To create for test set process.env.NODE_ENV='test'
+
+//To create for production set process.env.NODE_ENV='production'
+//process.env.NODE_ENV = "production";
+
 require("../config/db-connect");
 const mongoose = require("mongoose");
 
@@ -22,8 +26,12 @@ import jwt_decode from "jwt-decode";
 import User from "../models/User";
 import FriendList from "../models/friendList";
 import Poll from "../models/Poll";
-import Vote from "../models/Vote";
-import { registerVote } from "./voteModelUpdates2";
+import { registerVote } from "../routes/utils/voteModelUpdates";
+
+//make sure these are the same values as in client/src/constants.js
+const DEMO_EMAIL = "demo_user@mail.com";
+const DEMO_PASSWORD =
+    "passwordpurpossefullyvisibletoallowdemouseraccesswithoutcreatingunneccessarybackdoor";
 
 //Constants
 const NO_OF_USERS = 50;
@@ -244,6 +252,21 @@ async function createUsers(noOfUsers) {
             promises.push(newPromise);
         });
     }
+
+    // Create demo user
+    let demoUser = {
+        name: "Demo User",
+        email: DEMO_EMAIL,
+        password: DEMO_PASSWORD,
+        password2: DEMO_PASSWORD
+    };
+
+    const newPromise = axios.post(
+        "http://localhost:3001/api/users/register",
+        demoUser
+    );
+    promises.push(newPromise);
+
     await Promise.all(promises)
         .then(results => {
             results.forEach(result => {

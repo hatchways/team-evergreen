@@ -15,7 +15,8 @@ import {
     Container,
     Grid,
     IconButton,
-    Icon
+    Icon,
+    Box
 } from "@material-ui/core";
 
 class Profile extends Component {
@@ -23,6 +24,7 @@ class Profile extends Component {
         super(props);
         this.state = {
             pollDialogIsOpen: false,
+            editProfileDialogIsOpen: false,
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
@@ -80,6 +82,7 @@ class Profile extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
                 />
 
@@ -143,40 +146,48 @@ class Profile extends Component {
                                             />
                                         ))}
 
-                                    <IconButton
-                                        color="primary"
-                                        style={
-                                            polls.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }
-                                        className={clsx(
-                                            classes.prevButton,
-                                            classes.sliderControl
-                                        )}
-                                        onClick={() =>
-                                            this.showPreviousSlide("poll")
-                                        }
-                                        disabled={pollMove === 0}>
-                                        <Icon>chevron_left</Icon>
-                                    </IconButton>
-                                    <IconButton
-                                        color="primary"
-                                        style={
-                                            polls.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }
-                                        className={clsx(
-                                            classes.nextButton,
-                                            classes.sliderControl
-                                        )}
-                                        disabled={pollMove === polls.length - 1}
-                                        onClick={() =>
-                                            this.showNextSlide("poll")
-                                        }>
-                                        <Icon>chevron_right</Icon>
-                                    </IconButton>
+                                    <Box
+                                        display={{
+                                            xs:
+                                                polls.length > 1
+                                                    ? "block"
+                                                    : "none",
+                                            md:
+                                                polls.length > 2
+                                                    ? "block"
+                                                    : "none",
+                                            lg:
+                                                polls.length > 3
+                                                    ? "block"
+                                                    : "none"
+                                        }}>
+                                        <IconButton
+                                            color="primary"
+                                            className={clsx(
+                                                classes.prevButton,
+                                                classes.sliderControl
+                                            )}
+                                            onClick={() =>
+                                                this.showPreviousSlide("poll")
+                                            }
+                                            disabled={pollMove === 0}>
+                                            <Icon>chevron_left</Icon>
+                                        </IconButton>
+                                        <IconButton
+                                            color="primary"
+                                            className={clsx(
+                                                classes.nextButton,
+                                                classes.sliderControl
+                                            )}
+                                            disabled={
+                                                pollMove === polls.length - 1
+                                            }
+                                            onClick={() =>
+                                                this.showNextSlide("poll")
+                                            }>
+                                            <Icon>chevron_right</Icon>
+                                        </IconButton>
+                                    </Box>
                                 </Grid>
                             </Grid>
                             <Grid
@@ -225,41 +236,48 @@ class Profile extends Component {
                                                 moveListBy={moveListBy}
                                             />
                                         ))}
-
-                                    <IconButton
-                                        color="primary"
-                                        style={
-                                            lists.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }
-                                        className={clsx(
-                                            classes.prevButton,
-                                            classes.sliderControl
-                                        )}
-                                        onClick={() =>
-                                            this.showPreviousSlide("list")
-                                        }
-                                        disabled={listMove === 0}>
-                                        <Icon>chevron_left</Icon>
-                                    </IconButton>
-                                    <IconButton
-                                        color="primary"
-                                        style={
-                                            polls.length > 3
-                                                ? { visibility: "visible" }
-                                                : { visibility: "hidden" }
-                                        }
-                                        className={clsx(
-                                            classes.nextButton,
-                                            classes.sliderControl
-                                        )}
-                                        disabled={listMove === lists.length - 1}
-                                        onClick={() =>
-                                            this.showNextSlide("list")
-                                        }>
-                                        <Icon>chevron_right</Icon>
-                                    </IconButton>
+                                    <Box
+                                        display={{
+                                            xs:
+                                                polls.length > 1
+                                                    ? "block"
+                                                    : "none",
+                                            md:
+                                                polls.length > 2
+                                                    ? "block"
+                                                    : "none",
+                                            lg:
+                                                polls.length > 3
+                                                    ? "block"
+                                                    : "none"
+                                        }}>
+                                        <IconButton
+                                            color="primary"
+                                            className={clsx(
+                                                classes.prevButton,
+                                                classes.sliderControl
+                                            )}
+                                            onClick={() =>
+                                                this.showPreviousSlide("list")
+                                            }
+                                            disabled={listMove === 0}>
+                                            <Icon>chevron_left</Icon>
+                                        </IconButton>
+                                        <IconButton
+                                            color="primary"
+                                            className={clsx(
+                                                classes.nextButton,
+                                                classes.sliderControl
+                                            )}
+                                            disabled={
+                                                listMove === lists.length - 1
+                                            }
+                                            onClick={() =>
+                                                this.showNextSlide("list")
+                                            }>
+                                            <Icon>chevron_right</Icon>
+                                        </IconButton>
+                                    </Box>
                                 </Grid>
                             </Grid>
                         </Grid>

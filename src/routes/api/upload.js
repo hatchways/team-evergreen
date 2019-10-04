@@ -31,9 +31,10 @@ router.post("/upload", function(req, res) {
         res.status(400).json({ error: "No files to upload." });
     } else {
         filesToUpload(req["files"], response => {
+            // Make sure there were no errors in the upload
             if (response.status !== 200) {
                 res.status(response.status).json(response.result);
-            } // There was an error
+            }
             // save the path to the image
             if (req.body.target === TARGET_POLLS) {
                 const params = {

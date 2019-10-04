@@ -2,20 +2,19 @@ import React from "react";
 import clsx from "clsx";
 import renderAvatar from "../utils/renderAvatar";
 import { Link as RouterLink } from "react-router-dom";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import {
-    Drawer,
-    List,
-    ListSubheader,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    Badge,
-    Divider,
-    IconButton,
-    Icon,
-    Link
-} from "@material-ui/core";
+import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Badge from "@material-ui/core/Badge";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import Icon from "@material-ui/core/Icon";
+import Link from "@material-ui/core/Link";
+import Hidden from "@material-ui/core/Hidden";
 
 const StyledBadge = withStyles(theme => ({
     badge: {
@@ -79,6 +78,7 @@ const useStyles = makeStyles(theme => ({
             width: "70px"
         }
     },
+    toolbar: theme.mixins.toolbar,
     toolbarIcon: {
         display: "flex",
         alignItems: "center",
@@ -96,73 +96,118 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function FriendsDrawer(props) {
-    const { open, toggleDrawer } = props;
+    const {
+        drawerIsOpen,
+        toggleDrawer,
+        mobileDrawerIsOpen,
+        toggleMobileDrawer
+    } = props;
     const classes = useStyles();
+    const theme = useTheme();
 
-    return (
-        <Drawer
-            variant="permanent"
-            classes={{
-                paper: clsx(
-                    classes.drawerPaper,
-                    !open && classes.drawerPaperClose
-                )
-            }}
-            open={open}>
+    const friendsList = (
+        <List
+            dense
+            component="nav"
+            aria-labelledby="friends-list-title"
+            subheader={
+                <ListSubheader
+                    className={clsx(
+                        classes.subtitle,
+                        !drawerIsOpen && classes.collapsed
+                    )}
+                    component="div"
+                    id="friends-list-title">
+                    Friends
+                </ListSubheader>
+            }>
+            {props.user.friends.map(friend => {
+                return (
+                    <Link
+                        key={friend._id}
+                        underline="none"
+                        component={RouterLink}
+                        to={{
+                            pathname: `/user/${friend._id}`,
+                            state: {
+                                user: friend,
+                                users: props.users
+                            }
+                        }}>
+                        <ListItem button>
+                            <ListItemAvatar>
+                                <StyledBadge
+                                    variant="dot"
+                                    overlap="circle"
+                                    color="secondary">
+                                    {renderAvatar(friend, classes)}
+                                </StyledBadge>
+                            </ListItemAvatar>
+                            <ListItemText primary={friend.name} />
+                        </ListItem>
+                    </Link>
+                );
+            })}
+        </List>
+    );
+
+    const mobileDrawer = (
+        <>
+            <div className={classes.toolbar} />
+            <Divider />
+            {friendsList}
+        </>
+    );
+
+    const desktopDrawer = (
+        <>
             <div className={classes.toolbarIcon}>
                 <IconButton
                     className={classes.arrowIcon}
                     color="inherit"
                     aria-label="open drawer"
                     onClick={toggleDrawer}>
-                    <Icon>{open ? "chevron_left" : "chevron_right"}</Icon>
+                    <Icon>
+                        {drawerIsOpen ? "chevron_left" : "chevron_right"}
+                    </Icon>
                 </IconButton>
             </div>
             <Divider />
-            <List
-                dense
-                component="nav"
-                aria-labelledby="friends-list-title"
-                subheader={
-                    <ListSubheader
-                        className={clsx(
-                            classes.subtitle,
-                            !open && classes.collapsed
-                        )}
-                        component="div"
-                        id="friends-list-title">
-                        Friends
-                    </ListSubheader>
-                }>
-                {props.user.friends.map(friend => {
-                    return (
-                        <Link
-                            key={friend._id}
-                            underline="none"
-                            component={RouterLink}
-                            to={{
-                                pathname: `/user/${friend._id}`,
-                                state: {
-                                    user: friend,
-                                    users: props.users
-                                }
-                            }}>
-                            <ListItem button>
-                                <ListItemAvatar>
-                                    <StyledBadge
-                                        variant="dot"
-                                        overlap="circle"
-                                        color="secondary">
-                                        {renderAvatar(friend, classes)}
-                                    </StyledBadge>
-                                </ListItemAvatar>
-                                <ListItemText primary={friend.name} />
-                            </ListItem>
-                        </Link>
-                    );
-                })}
-            </List>
-        </Drawer>
+            {friendsList}
+        </>
+    );
+
+    return (
+        <>
+            <Hidden smUp implementation="css">
+                <Drawer
+                    variant="temporary"
+                    anchor={theme.direction === "rtl" ? "right" : "left"}
+                    classes={{
+                        paper: clsx(classes.drawerPaper)
+                    }}
+                    open={mobileDrawerIsOpen}
+                    onClose={toggleMobileDrawer}
+                    ModalProps={{
+                        keepMounted: true // Better open performance on mobile.
+                    }}>
+                    {mobileDrawer}
+                </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+                <Drawer
+                    classes={{
+                        paper: clsx(
+                            classes.drawerPaper,
+                            !drawerIsOpen && classes.drawerPaperClose
+                        )
+                    }}
+                    variant="permanent"
+                    open={drawerIsOpen}>
+                    {desktopDrawer}
+                </Drawer>
+            </Hidden>
+        </>
     );
 }
 
