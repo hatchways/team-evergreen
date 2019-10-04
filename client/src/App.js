@@ -74,6 +74,14 @@ class App extends Component {
                 this.logOut();
             }
         }
+
+        // Re-set the authorization header if the jwtToken key is changed
+        window.addEventListener("storage", e => {
+            if (e.key === "jwtToken") {
+                setAuthToken(e.key);
+                console.log("\x1b[41m jwt token has changed! \x1b[0m");
+            }
+        });
     }
 
     logOut = () => {
