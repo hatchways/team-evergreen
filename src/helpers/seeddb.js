@@ -255,12 +255,11 @@ async function createUsers(noOfUsers) {
                 "http://localhost:3001/api/users/register",
                 newUser
             );
-            promises.push(newPromise.valueOf());
+            promises.push(newPromise);
         });
     }
 
     // Create demo user
-
     let demoUser = {
         name: "Demo User",
         email: DEMO_EMAIL,
@@ -274,11 +273,7 @@ async function createUsers(noOfUsers) {
     );
     promises.push(newPromise);
 
-    console.log(
-        "createUsers",
-        `added demo user`,
-        `${promises.length} promises loaded`
-    );
+    // Execute all the requests
     await Promise.all(promises)
         .then(results => {
             results.forEach(result => {
