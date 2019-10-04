@@ -9,7 +9,10 @@ import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import path from "path";
-import { isRequestAuthorized } from "./routes/utils/routeAuthorization";
+import {
+    isRequestAuthorized,
+    skipAuthorizationForRoute
+} from "./routes/utils/routeAuthorization";
 
 // File management middleware
 const bodyParser = require("body-parser");
@@ -48,11 +51,8 @@ if (process.env.NODE_ENV === "dev") {
 app.use((req, res, next) => {
     //Make sure request is authorized before continuing
     try {
-        if (
-            !isRequestAuthorized(req.get("Authorization"), SECRET, req.path) &&
-            !req.path in ["/login", "/register"]
-        ) {
-            console.log("Unauthorized request", req.body, req.params, req.path);
+        if (!isRequestAuthorized(req.get("Authorization"), SECRET, req.path)) {
+            console.log("Unauthorized request", req.body);
             return res
                 .status(401)
                 .json({ error: "Transaction is not authorized" })

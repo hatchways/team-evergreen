@@ -2,6 +2,7 @@
 
 // CONSTANTS
 const TOKEN_LIFETIME = 31556926;
+const PATHS_TO_SKIP_AUTHORIZATION = ["/api/users/login", "/api/users/register"];
 
 //JWT PACKAGES
 import jwt from "jsonwebtoken";
@@ -11,12 +12,16 @@ import jwt from "jsonwebtoken";
  * @security Validates that a token is still valid
  * @params token - jwt token from user request
  * @params secret - secret or key to decode jwt
- * @returns true if valid token, false if token not valid or missing
+ * @returns boolean if valid token, false if token not valid or missing
  * @access Public
  */
 export function isRequestAuthorized(token, secret, path) {
+    if (skipAuthorizationForRoute(path)) {
+        return true;
+    }
+
     try {
-        jwt.verify(token, secret);
+        const decode = jwt.verify(token, secret);
         return true;
     } catch (err) {
         console.log(
@@ -58,4 +63,14 @@ export function createToken(payload, res, secret, expiration = TOKEN_LIFETIME) {
             }
         }
     );
+}
+
+/**
+ * @security Checks if path should be exempt from authorization (i.e. login, register)
+ * @params path - the route to test
+ * @returns boolean if in the PATHS_TO_SKIP_AUTHORIZATION array
+ * @access Private
+ */
+export function skipAuthorizationForRoute(path) {
+    return PATHS_TO_SKIP_AUTHORIZATION.includes(path);
 }
