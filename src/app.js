@@ -52,7 +52,7 @@ app.use((req, res, next) => {
     //Make sure request is authorized before continuing
     try {
         if (!isRequestAuthorized(req.get("Authorization"), SECRET, req.path)) {
-            console.log("Unauthorized request", req.body);
+            console.error("Unauthorized request", req.body);
             return res
                 .status(401)
                 .json({ error: "Transaction is not authorized" })

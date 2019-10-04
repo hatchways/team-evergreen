@@ -65,12 +65,13 @@ export function createToken(payload, res, secret, expiration = TOKEN_LIFETIME) {
     );
 }
 
+//PRIVATE FUNCTIONS
 /**
  * @security Checks if path should be exempt from authorization (i.e. login, register)
  * @params path - the route to test
  * @returns boolean if in the PATHS_TO_SKIP_AUTHORIZATION array
  * @access Private
  */
-export function skipAuthorizationForRoute(path) {
+function skipAuthorizationForRoute(path) {
     return PATHS_TO_SKIP_AUTHORIZATION.includes(path);
 }
