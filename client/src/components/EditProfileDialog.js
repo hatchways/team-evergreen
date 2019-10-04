@@ -3,17 +3,17 @@ import React, { Component } from "react";
 // Material UI Components
 import { withStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/button";
-import Icon from "@material-ui/core/icon";
-import IconButton from "@material-ui/core/iconbutton";
-import Dialog from "@material-ui/core/dialog";
-import DialogContent from "@material-ui/core/dialogcontent";
-import DialogActions from "@material-ui/core/dialogactions";
-import FormControl from "@material-ui/core/formcontrol";
-import FormHelperText from "@material-ui/core/formhelpertext";
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import IconButton from "@material-ui/core/IconButton";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/textfield";
-import Typography from "@material-ui/core/typography";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 // App components
 
