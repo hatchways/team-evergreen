@@ -15,8 +15,7 @@ const production = {
     app: {
         port: parseInt(process.env.DEV_APP_PORT) || 3001,
         secretOrKey: process.env.PASSWORD_CRYPTO_KEY,
-        samplePassword: process.env.SAMPLE_USER_PWD,
-        demoPassword: process.env.DEMO_USER_PWD
+        samplePassword: process.env.SAMPLE_USER_PWD
     },
     db: {
         host: process.env.REMOTE_DB_HOST,
@@ -32,8 +31,7 @@ const dev = {
     app: {
         port: parseInt(process.env.DEV_APP_PORT) || 3001,
         secretOrKey: process.env.PASSWORD_CRYPTO_KEY,
-        samplePassword: process.env.SAMPLE_USER_PWD,
-        demoPassword: process.env.DEMO_USER_PWD
+        samplePassword: process.env.SAMPLE_USER_PWD
     },
     db: {
         host: process.env.DEV_DB_HOST || "localhost",
@@ -47,8 +45,7 @@ const test = {
     app: {
         port: parseInt(process.env.TEST_APP_PORT) || 3001,
         secretOrKey: process.env.PASSWORD_CRYPTO_KEY,
-        samplePassword: process.env.SAMPLE_USER_PWD,
-        demoPassword: process.env.DEMO_USER_PWD
+        samplePassword: process.env.SAMPLE_USER_PWD
     },
     db: {
         host: process.env.TEST_DB_HOST || "localhost",
