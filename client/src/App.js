@@ -81,7 +81,7 @@ class App extends Component {
         window.addEventListener("storage", e => {
             if (e.key === "jwtToken") {
                 setAuthToken(e.key);
-                console.error("\x1b[41m jwt token has changed! \x1b[0m");
+                console.log("\x1b[44m jwt token has changed! \x1b[0m");
             }
         });
 
