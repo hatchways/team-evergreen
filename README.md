@@ -428,19 +428,22 @@ on a new line.
 ##Token Authorization
 
 User authorization is done using the jwt protocol.  On login a token is created and passed back to the client.
-On subsequent end-point requests the client returns the token in the ```Authorization``` header.
-The token is decoded and if token is valid the request is fulfilled.  If the request is not valid a status code of 401 is
-returned, along with the message "Unauthorized error":
 
-```
-return res
-    .status(401)
-    .json({ error: "Transaction is not authorized" })
-    .end();
-```
+On subsequent end-point requests the client returns the token in the ```Authorization``` header for all api requests.  
+The header is set using the ```/client/src/utils/setAuthToken.js``` module and is called at startup, and by an event
+listener attached to the App.js component that fires every time the jwtToken value in local storage is changed.  This ensures
+that the latest copy of the token is always available for inclusion with the headers.
 
-The ```src\routes\utils\routeAuthorization.js``` module provides two functions to manage
-jwt tokens:
+A middleware function in app.js intercepts all api requests and validates the supplied token:
+    - if token is valid the request is fulfilled - no further action is taken
+    - if token is not valid the request is denied and a status code of ```401``` is returned, along with the message
+        "Unauthorized error"
+
+This code is intercepted by the client using an axios interceptor defined in the ```/client/src/utils/axiosInterceptors.js```
+module, if the status code is ```401``` localStorage is cleared and the user is logged out.  (Note:  all responses are
+inspected by the interceptor, other centralized actions can be taken here if desired).
+
+The ```src\routes\utils\routeAuthorization.js``` module provides two functions to manage jwt tokens:
 
 1. isRequestAuthorized(token, secret, path) 
     - token - the actual token to be verified
