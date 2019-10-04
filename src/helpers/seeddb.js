@@ -9,9 +9,8 @@
 
 //To create for production set process.env.NODE_ENV='production'
 //process.env.NODE_ENV = "production";
-
-require("../config/db-connect");
 const mongoose = require("mongoose");
+require("../config/db-connect");
 
 // Application modules  and other configuration items
 const startData = require("./startdata");
@@ -43,6 +42,13 @@ const POLL_PERCENTAGE = 4; // 0 = 100%, 4 = 50%, 9 = 0%
 import axios from "axios";
 
 async function seedDb() {
+    //Instruction messages
+    console.log(
+        "!!!!IMPORTANT!!!!\nMake sure your server is connected to the appropriate database before starting." +
+            "  Uses local " +
+            "instance of server to execute register requests!\n"
+    );
+
     //drop the database
     console.log(`!!WARNING!! Dropping database ${mongoose.connection.host}`);
     try {
@@ -267,6 +273,7 @@ async function createUsers(noOfUsers) {
     );
     promises.push(newPromise);
 
+    // Execute all the requests
     await Promise.all(promises)
         .then(results => {
             results.forEach(result => {
@@ -275,7 +282,9 @@ async function createUsers(noOfUsers) {
                 newUserIds.push(decoded.id);
             });
         })
-        .catch(err => console.log("********* ERROR *********", err));
+        .catch(err => {
+            console.log("********* ERROR *********\n\n", err.request);
+        });
 
     console.log(`${newUserIds.length} user ids created`);
     return newUserIds;
