@@ -26,8 +26,7 @@ import jwt_decode from "jwt-decode";
 import User from "../models/User";
 import FriendList from "../models/friendList";
 import Poll from "../models/Poll";
-import Vote from "../models/Vote";
-import { registerVote } from "./voteModelUpdates2";
+import { registerVote } from "../routes/utils/voteModelUpdates";
 
 //Constants
 const NO_OF_USERS = 50;
@@ -248,6 +247,9 @@ async function createUsers(noOfUsers) {
             promises.push(newPromise);
         });
     }
+
+    // Create demo user
+
     await Promise.all(promises)
         .then(results => {
             results.forEach(result => {
