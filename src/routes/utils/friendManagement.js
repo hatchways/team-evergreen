@@ -55,14 +55,18 @@ export async function getSampleOfUsers(
         const listOf = await User.findById(
             { _id: userId },
             { friends: 1, _id: 0 }
-        ).exec();
+        )
+            .sort("name")
+            .exec();
         let exclusionList = listOf.friends;
         exclusionList.push(userId);
         return await User.aggregate([
             { $project: { name: 1, avatar: 1 } },
             { $match: { _id: { $nin: exclusionList } } },
             { $sample: { size: sampleSize } }
-        ]).exec();
+        ])
+            .sort("name")
+            .exec();
     } catch (err) {
         console.log(`Unable to select sample for ${userId}`, err);
         return {
