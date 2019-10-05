@@ -55,9 +55,7 @@ export async function getSampleOfUsers(
         const listOf = await User.findById(
             { _id: userId },
             { friends: 1, _id: 0 }
-        )
-            .sort("name")
-            .exec();
+        ).exec();
         let exclusionList = listOf.friends;
         exclusionList.push(userId);
         return await User.aggregate([
