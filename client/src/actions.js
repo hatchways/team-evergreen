@@ -8,7 +8,8 @@ import {
     REGISTER_VOTE_SUCCESS,
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
-    USER_DATA_LOADING
+    USER_DATA_LOADING,
+    UPDATE_VOTES
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -131,5 +132,13 @@ export function apiRequestFailure(error) {
     return {
         type: API_REQUEST_FAILURE,
         error
+    };
+}
+
+export function updateVotes(pollId, votes) {
+    return {
+        type: UPDATE_VOTES,
+        pollId,
+        votes
     };
 }

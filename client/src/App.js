@@ -12,11 +12,13 @@ import {
     addNewPoll,
     registerVote,
     getFriendsPolls,
-    changeFriendStatus
+    changeFriendStatus,
+    updateVotes
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
+import { setSocketToken } from "./utils/setSocketToken";
 
 import Loader from "./components/Loader";
 import Signup from "./pages/Signup";
@@ -46,7 +48,8 @@ const mapDispatchToProps = dispatch => {
         registerVote: data => dispatch(registerVote(data)),
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
-        logOut: () => dispatch(logOut())
+        logOut: () => dispatch(logOut()),
+        updateVotes: (pollId, votes) => dispatch(updateVotes(pollId, votes))
     };
 };
 
@@ -66,6 +69,8 @@ class App extends Component {
 
             // fetch suggested users excluding current user and his/her friends:
             this.props.loadUsers(decoded.id);
+
+            setSocketToken(token);
 
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -173,6 +178,7 @@ class App extends Component {
                                         user={this.props.user}
                                         logOut={this.logOut}
                                         addNewPoll={this.props.addNewPoll}
+                                        updateVotes={this.props.updateVotes}
                                     />
                                 ) : (
                                     <Redirect to="/login" />

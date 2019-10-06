@@ -15,7 +15,7 @@ import {
     Link,
     IconButton
 } from "@material-ui/core";
-import { socket } from "../components/UserPanel";
+import { socket } from "../utils/setSocketToken";
 
 class PollCard extends Component {
     constructor(props) {
@@ -31,17 +31,15 @@ class PollCard extends Component {
         );
     };
 
-    fetchUpdatedVotes = () => {
-        const { _id } = this.props.poll;
-        console.log("Fetching updated votes...");
+    // fetchUpdatedVotes = () => {
+    //     const { _id } = this.props.poll;
+    //     console.log("Fetching updated votes...");
 
-        socket.emit("initial_votes", _id);
-    };
+    //     socket.emit("initial_votes", _id);
+    // };
 
     componentDidMount() {
         const { _id } = this.props.poll;
-
-        console.log("This is poll #", _id);
 
         // Fire the initial_votes event to get initial votes count to initialize the state:
         socket.emit("initial_votes", _id);
@@ -53,7 +51,7 @@ class PollCard extends Component {
 
         // If vote count was changed at back-end for this poll, fetch it:
         socket.on("votes_changed", data => {
-            if (data.pollId === _id) this.fetchUpdatedVotes();
+            if (data.pollId === _id) this.updateVotes(data.newCounts);
         });
     }
 

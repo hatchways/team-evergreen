@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import sortBy from "../utils/sortBy";
-import { UserPanel } from "../components/UserPanel";
+import UserPanel from "../components/UserPanel";
 import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
