@@ -3,9 +3,11 @@
 /* Sets up the environment variables from your .env file*/
 require("dotenv").config();
 
-import { registerVote } from "../routes/utils/voteModelUpdates";
+import {
+    registerVote,
+    parallelSumOfCounts
+} from "../routes/utils/voteModelUpdates";
 import { getVotes } from "../routes/utils/getVotes";
-import { parallelSumOfCounts } from "../routes/utils/voteModelUpdates";
 
 /**
  * Module dependencies.
@@ -27,14 +29,49 @@ app.set("port", port);
 
 let server = http.createServer(app);
 
-// Set up a new server instance of socket.io:
+// Set up a new Socket.io server instance:
 const io = require("socket.io")(server);
-
-const jwt = require("jsonwebtoken");
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+
+// The connection event is fired whenever a new client connects
+// It passes a client instance (= socket instance) to its callback
+// This client will receive any events that the client emits from their browser:
+io.on("connection", socket => {
+    console.log("Connection is established for socket id ", socket.id);
+
+    // When  socket gets established, listen for any “event” message.
+    // Get initial voting results for specific poll:
+    socket.on("initial_results", pollId => {
+        getVotes(pollId).then(result => {
+            io.sockets.emit("update_results", result);
+        });
+    });
+
+    // Get initial vote count for this specific poll:
+    socket.on("initial_votes", pollId => {
+        parallelSumOfCounts(pollId).then(result => {
+            io.sockets.emit("update_votes", { pollId, result });
+        });
+    });
+
+    socket.on("register_vote", data => {
+        registerVote(data.pollId, data.userId, data.option).then(result => {
+            // Let front-end know that results and vote count were changed:
+            io.sockets.emit("results_changed");
+            io.sockets.emit("votes_changed", {
+                pollId: result.pollId,
+                newCounts: result.newCounts
+            });
+        });
+    });
+
+    socket.on("disconnect", function() {
+        console.log("User disconnected");
+    });
+});
 
 server.listen(port);
 server.on("error", onError);
@@ -96,42 +133,3 @@ function onListening() {
 
     console.log("Listening on " + bind);
 }
-
-io.on("connection", socket => {
-    console.log("Connection is established for socket id ", socket._id);
-
-    // When  socket gets established, listen for any “event” message.
-    // Get initial voting results for specific poll:
-    socket.on("initial_results", pollId => {
-        console.log("Getting initial_results for poll #", pollId);
-        getVotes(pollId).then(result => {
-            console.log("Result in initial_results: ", result);
-            io.sockets.emit("update_results", result);
-        });
-    });
-
-    // Get initial vote count for this specific poll:
-    socket.on("initial_votes", pollId => {
-        console.log("Getting initial_votes for poll #", pollId);
-        parallelSumOfCounts(pollId).then(result => {
-            console.log("Result in initial_votes: ", result);
-            io.sockets.emit("update_votes", { pollId, result });
-        });
-    });
-
-    socket.on("register_vote", data => {
-        console.log("Registering new vote for poll #", data.pollId);
-        registerVote(data.pollId, data.userId, data.option).then(result => {
-            // Let front-end know that results and vote count were changed:
-            io.sockets.emit("results_changed");
-            io.sockets.emit("votes_changed", {
-                pollId: result.pollId,
-                newCounts: result.newCounts
-            });
-        });
-    });
-
-    socket.on("disconnect", function() {
-        console.log("User disconnected");
-    });
-});
