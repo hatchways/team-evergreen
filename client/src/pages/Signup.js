@@ -5,7 +5,6 @@ import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
-import { setSocketToken } from "../utils/setSocketToken";
 
 import {
     Button,
@@ -102,8 +101,6 @@ class Signup extends Component {
 
                     // Load all users:
                     this.props.loadUsers(decoded.id);
-
-                    setSocketToken(token);
                 }
             })
             .catch(err => {

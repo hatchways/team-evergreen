@@ -15,7 +15,7 @@ import {
     Link,
     IconButton
 } from "@material-ui/core";
-import { socket } from "../utils/setSocketToken";
+import { socket } from "./UserPanel";
 
 class PollCard extends Component {
     constructor(props) {
@@ -25,18 +25,7 @@ class PollCard extends Component {
         };
     }
 
-    updateVotes = votes => {
-        this.setState({ votes }, () =>
-            console.log("Votes were changed in state: ", this.state)
-        );
-    };
-
-    // fetchUpdatedVotes = () => {
-    //     const { _id } = this.props.poll;
-    //     console.log("Fetching updated votes...");
-
-    //     socket.emit("initial_votes", _id);
-    // };
+    updateVotes = votes => this.setState({ votes });
 
     componentDidMount() {
         const { _id } = this.props.poll;
@@ -57,7 +46,6 @@ class PollCard extends Component {
 
     // Remove the listeners before unmounting in order to avoid addition of multiple listeners:
     componentWillUnmount() {
-        console.log("poll card is unmounting!");
         socket.off("update_votes");
         socket.off("votes_changed");
     }
@@ -82,8 +70,9 @@ class PollCard extends Component {
                         to={{
                             pathname: `/poll/${poll._id}`,
                             state: {
-                                lists: lists,
-                                poll: poll
+                                lists,
+                                poll,
+                                votes
                             }
                         }}>
                         <CardHeader

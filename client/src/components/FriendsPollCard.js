@@ -13,13 +13,13 @@ import {
     Icon,
     IconButton
 } from "@material-ui/core";
-import { socket } from "../utils/setSocketToken";
+import { socket } from "./UserPanel";
 
 const useStyles = makeStyles(profileStyles);
 
 function FriendsPollCard(props) {
     const classes = useStyles();
-    const [votes, setVotes] = React.useState([]);
+    const [votes, setVotes] = React.useState([0, 0]);
     const [hasVoted, setHasVoted] = React.useState(false);
     const { poll } = props;
     const votesCount = votes[0] + votes[1];
@@ -39,11 +39,10 @@ function FriendsPollCard(props) {
         });
 
         return () => {
-            // stuff that happens when the component unmounts
             socket.off("update_votes");
             socket.off("votes_changed");
         };
-    }, []);
+    });
 
     const registerVote = option => {
         const dataToSend = {

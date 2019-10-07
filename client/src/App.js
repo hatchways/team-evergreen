@@ -18,7 +18,6 @@ import {
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import { setSocketToken } from "./utils/setSocketToken";
 
 import Loader from "./components/Loader";
 import Signup from "./pages/Signup";
@@ -71,8 +70,6 @@ class App extends Component {
 
             // fetch suggested users excluding current user and his/her friends:
             this.props.loadUsers(decoded.id);
-
-            setSocketToken(token);
 
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
