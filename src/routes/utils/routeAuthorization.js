@@ -99,5 +99,4 @@ function skipAuthorizationForRoute(path) {
         path.includes("/static") ||
         path.includes("/poll/")
     );
-
 }
