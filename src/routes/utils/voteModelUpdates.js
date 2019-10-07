@@ -33,7 +33,7 @@ export async function registerVote(pollId, userId, option) {
 
 //PRIVATE FUNCTIONS
 
-async function parallelSumOfCounts(pollId) {
+export async function parallelSumOfCounts(pollId) {
     const promises = [
         Vote.where({
             pollId: pollId,
