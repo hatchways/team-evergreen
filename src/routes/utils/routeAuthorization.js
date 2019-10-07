@@ -2,6 +2,7 @@
 
 // CONSTANTS
 const TOKEN_LIFETIME = 31556926;
+
 const PATHS_TO_SKIP_AUTHORIZATION = [
     "/api/users/login",
     "/api/users/register",
@@ -98,4 +99,5 @@ function skipAuthorizationForRoute(path) {
         path.includes("/static") ||
         path.includes("/poll/")
     );
+
 }
