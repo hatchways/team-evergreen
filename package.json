@@ -14,7 +14,7 @@
     "start-mongodb-on-mac": "mongod --config /usr/local/etc/mongod.conf",
     "start-client": "npm run --prefix client start",
     "combo-start": "./node_modules/.bin/npm-run-all -p dev start-client",
-    "combo-start-all": "./node_modules/.bin/run-p start-mongodb-on-mac combo-start",
+    "comqbo-start-all": "./node_modules/.bin/run-p start-mongodb-on-mac combo-start",
     "server:prod": "node dist/bin/www.js",
     "server:dev": "./node_modules/.bin/nodemon src/bin/www.js  --exec babel-node ./bin/www.js",
     "clean": "rm -rf dist",
