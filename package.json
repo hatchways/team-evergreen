@@ -6,7 +6,7 @@
   },
   "private": true,
   "scripts": {
-    "heroku-postbuild": "run-s npm:install build:server cd:client npm:install:dev npm:install build:client",
+    "heroku-postbuild": "run-s npm:install clean build:server cd:client npm:install:dev npm:install build:client",
     "npm:install:dev": "npm install --only=dev",
     "npm:install": "npm install",
     "cd:client": "cd client",
@@ -19,7 +19,7 @@
     "server:dev": "./node_modules/.bin/nodemon src/bin/www.js  --exec babel-node ./bin/www.js",
     "clean": "rm -rf dist",
     "kill-node": "killall node",
-    "build:server": "./node_modules/.bin/babel ./src --out-dir dist --ignore ./src/helpers --ignore ./src/test",
+    "build:server": "npx babel src --out-dir dist --ignore src/helpers --ignore src/test",
     "build:client": "npm run --prefix client build",
     "build": "run-s build:server build:client",
     "dev": "NODE_ENV=dev npm-run-all -s server:dev",
