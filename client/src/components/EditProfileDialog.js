@@ -131,6 +131,7 @@ class EditProfileDialog extends Component {
     };
 
     closeDialog = () => {
+        this.clearDialogData();
         this.props.toggleEditProfileDialog();
     };
 
@@ -182,14 +183,13 @@ class EditProfileDialog extends Component {
 
     onCancel = () => {
         // Added middle step in the event we need to add some closing routines
-        this.clearDialogData();
         this.closeDialog();
     };
 
     onSubmit = e => {
         e.preventDefault();
         const { newName, newEmail, newFile } = this.state;
-        const { userId, name, email, changeAvatar } = this.props;
+        const { userId, name, email, updateUserDataInState } = this.props;
 
         // disable the submit button to avoid duplicates
         this.disableSaveButton();
@@ -208,7 +208,24 @@ class EditProfileDialog extends Component {
         if (!isEmpty(newUserData)) {
             // add userId to query
             newUserData["userId"] = userId;
-            promises.push(updateUserData(newUserData));
+            promises.push(
+                updateUserData(newUserData, response => {
+                    // use redux action to update user details in global state:
+                    if (newUserData.name) {
+                        updateUserDataInState({
+                            target: "name",
+                            newData: newName
+                        });
+                    }
+
+                    if (newUserData.email) {
+                        updateUserDataInState({
+                            target: "email",
+                            newData: newEmail
+                        });
+                    }
+                })
+            );
         }
 
         // create FormData object for file uploads
@@ -219,22 +236,28 @@ class EditProfileDialog extends Component {
             formData.append("newFile", newFile, newFile.name);
             promises.push(
                 updateAvatar(formData, response => {
-                    this.setState({ newAvatar: response.data.avatarUrl });
-                    changeAvatar(response.data.avatarUrl);
+                    // use redux action to update avatar in global state:
+                    updateUserDataInState({
+                        target: "avatar",
+                        newData: response.data.avatarUrl
+                    });
                 })
             );
         }
 
         // replace current avatar and close dialog:
-        //this.props.changeAvatar(response.data.data);
+        // this.props.changeAvatar(response.data.data);
         Promise.all(promises)
             .then(value => {
                 this.closeDialog();
             })
             .catch(err => {
-                // TODO - how do we alert the user that there was a problem
-                this.closeDialog();
                 console.log(err);
+                this.setState({
+                    errors: {
+                        error: "Something went wrong. Please try again later."
+                    }
+                });
             });
     };
 
@@ -259,12 +282,10 @@ class EditProfileDialog extends Component {
                 <Dialog
                     fullWidth
                     maxWidth="xs"
-                    onClose={this.props.toggleEditProfileDialog}
+                    onClose={this.closeDialog}
                     aria-labelledby="edit-profile"
                     open={this.props.editProfileDialogIsOpen}>
-                    <DialogTitle
-                        id="edit-profile"
-                        onClose={this.props.toggleEditProfileDialog}>
+                    <DialogTitle id="edit-profile" onClose={this.closeDialog}>
                         Edit Profile
                     </DialogTitle>
                     <form noValidate onSubmit={this.onSubmit}>
@@ -333,11 +354,10 @@ class EditProfileDialog extends Component {
                                     error
                                     id="email-error"
                                     className={classes.error}>
-                                    {errors.email}
+                                    {errors.email || errors.error}
                                 </FormHelperText>
                             </FormControl>
                         </DialogContent>
-
                         <DialogActions className={classes.action}>
                             <Button
                                 type="submit"
