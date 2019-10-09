@@ -8,7 +8,6 @@ import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import path from "path";
-import { join } from "path";
 
 // Establish database connection
 import mongoose from "mongoose";
@@ -38,9 +37,6 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//Passport config
-const passport = require("passport");
-
 // Routes
 app.use("/api/users", users);
 app.use("/api/images", upload);
@@ -64,11 +60,6 @@ app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-
-//Load passport middleware
-app.use(passport.initialize());
-
-//app.use(express.static(join(__dirname, "client", "build")));
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
