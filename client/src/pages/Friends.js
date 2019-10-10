@@ -83,6 +83,7 @@ class Friends extends React.Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    updateUserDataInState={this.props.updateUserDataInState}
                 />
 
                 <main className={classes.main}>

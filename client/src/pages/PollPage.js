@@ -105,6 +105,7 @@ class PollPage extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    updateUserDataInState={this.props.updateUserDataInState}
                 />
                 <AddPollDialog
                     userId={user._id}

@@ -9,7 +9,8 @@ import {
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
     USER_DATA_LOADING,
-    UPDATE_VOTES
+    UPDATE_VOTES,
+    UPDATE_USER_DATA
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -140,5 +141,13 @@ export function updateVotes(pollId, votes) {
         type: UPDATE_VOTES,
         pollId,
         votes
+    };
+}
+
+export function updateUserDataInState(data) {
+    return {
+        type: UPDATE_USER_DATA,
+        target: data.target,
+        newData: data.newData
     };
 }
