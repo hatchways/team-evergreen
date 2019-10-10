@@ -6,6 +6,7 @@ import { authStyles } from "../styles/authStyles";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
+import { setSocketConnection } from "../utils/setSocketConnection";
 
 import {
     Button,
@@ -75,6 +76,8 @@ class Login extends Component {
 
                     // Decode token to get user data
                     const decoded = jwt_decode(token);
+
+                    setSocketConnection(decoded.id);
 
                     // Load current user
                     this.props.loadUser(decoded.id);

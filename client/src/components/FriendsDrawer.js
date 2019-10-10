@@ -16,6 +16,8 @@ import Icon from "@material-ui/core/Icon";
 import Link from "@material-ui/core/Link";
 import Hidden from "@material-ui/core/Hidden";
 
+import { socket } from "../utils/setSocketConnection";
+
 const StyledBadge = withStyles(theme => ({
     badge: {
         top: "5px",
@@ -105,6 +107,19 @@ function FriendsDrawer(props) {
     const classes = useStyles();
     const theme = useTheme();
 
+    React.useEffect(() => {
+        // Fire the initial_votes event to get initial votes count to initialize the state:
+        socket.emit("initial_votes", poll._id);
+
+        // When votes count is received, update state:
+        socket.on("user_joined", data => {});
+
+        return () => {
+            socket.off("update_votes");
+            socket.off("votes_changed");
+        };
+    });
+
     const friendsList = (
         <List
             dense
@@ -136,12 +151,16 @@ function FriendsDrawer(props) {
                         }}>
                         <ListItem button>
                             <ListItemAvatar>
-                                <StyledBadge
-                                    variant="dot"
-                                    overlap="circle"
-                                    color="secondary">
-                                    {renderAvatar(friend, classes)}
-                                </StyledBadge>
+                                {friend.online ? (
+                                    <StyledBadge
+                                        variant="dot"
+                                        overlap="circle"
+                                        color="secondary">
+                                        {renderAvatar(friend, classes)}
+                                    </StyledBadge>
+                                ) : (
+                                    renderAvatar(friend, classes)
+                                )}
                             </ListItemAvatar>
                             <ListItemText primary={friend.name} />
                         </ListItem>

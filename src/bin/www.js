@@ -8,6 +8,7 @@ import {
     parallelSumOfCounts
 } from "../routes/utils/voteModelUpdates";
 import { getVotes } from "../routes/utils/getVotes";
+import { updateUserStatus } from "../routes/utils/userModelUpdates";
 
 /**
  * Module dependencies.
@@ -35,6 +36,24 @@ const io = require("socket.io")(server);
 /**
  * Listen on provided port, on all network interfaces.
  */
+
+// middleware
+io.use((socket, next) => {
+    let userId = socket.request._query["userId"];
+    console.log("userId received on back-end: ", userId);
+
+    if (userId) {
+        updateUserStatus(userId).then(result => {
+            console.log("User connected: ", result);
+            socket.emit("user_joined", result);
+
+            // call next() to let the user connect to our socket
+            return next();
+        });
+    }
+
+    return next(new Error("Authentication error"));
+});
 
 // The connection event is fired whenever a new client connects
 // It passes a client instance (= socket instance) to its callback

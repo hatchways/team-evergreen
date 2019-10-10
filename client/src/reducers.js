@@ -21,7 +21,8 @@ const userInitialState = {
     polls: [],
     friends: [],
     error: "",
-    isLoading: false
+    isLoading: false,
+    online: false
 };
 
 const usersInitialState = {
@@ -50,6 +51,7 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     lists: action.response.data.lists,
                     avatar: action.response.data.avatar,
                     friends: action.response.data.friends,
+                    online: action.response.data.online,
                     error: "",
                     isLoading: false
                 });
