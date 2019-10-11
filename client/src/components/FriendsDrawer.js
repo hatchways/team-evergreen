@@ -99,6 +99,7 @@ const useStyles = makeStyles(theme => ({
 
 function FriendsDrawer(props) {
     const {
+        user,
         drawerIsOpen,
         toggleDrawer,
         mobileDrawerIsOpen,
@@ -106,19 +107,53 @@ function FriendsDrawer(props) {
     } = props;
     const classes = useStyles();
     const theme = useTheme();
+    const [friends, setFriends] = React.useState([]);
 
     React.useEffect(() => {
-        // Fire the initial_votes event to get initial votes count to initialize the state:
-        socket.emit("initial_votes", poll._id);
+        setFriends(user.friends);
+        console.log("Current user id: ", user._id);
 
-        // When votes count is received, update state:
-        socket.on("user_joined", data => {});
+        // listen to new users joining the app:
+        socket.on("user_joined", userId => {
+            console.log("New user joined the app!");
 
+            const updatedFriends = friends.map(friend => {
+                // Find a friend with the matching userId
+                if (friend._id === userId) {
+                    friend.online = true; // overwrite status key
+                }
+
+                // Leave every other friend unchanged
+                return friend;
+            });
+
+            setFriends(updatedFriends);
+        });
+
+        // listen to users leaving the app:
+        socket.on("user_left", userId => {
+            console.log("User has left the app!");
+
+            const updatedFriends = friends.map(friend => {
+                // Find a friend with the matching userId
+                if (friend._id === userId) {
+                    friend.online = false; // overwrite status key
+                }
+
+                // Leave every other friend unchanged
+                return friend;
+            });
+
+            setFriends(updatedFriends);
+        });
+
+        // cancel event listening
         return () => {
-            socket.off("update_votes");
-            socket.off("votes_changed");
+            socket.off("user_joined");
+            socket.off("user_left");
+            socket.off("friends_changed");
         };
-    });
+    }, [friends, user.friends, user._id]);
 
     const friendsList = (
         <List
@@ -136,7 +171,7 @@ function FriendsDrawer(props) {
                     Friends
                 </ListSubheader>
             }>
-            {props.user.friends.map(friend => {
+            {friends.map(friend => {
                 return (
                     <Link
                         key={friend._id}
@@ -151,16 +186,13 @@ function FriendsDrawer(props) {
                         }}>
                         <ListItem button>
                             <ListItemAvatar>
-                                {friend.online ? (
-                                    <StyledBadge
-                                        variant="dot"
-                                        overlap="circle"
-                                        color="secondary">
-                                        {renderAvatar(friend, classes)}
-                                    </StyledBadge>
-                                ) : (
-                                    renderAvatar(friend, classes)
-                                )}
+                                <StyledBadge
+                                    invisible={!friend.online}
+                                    variant="dot"
+                                    overlap="circle"
+                                    color="secondary">
+                                    {renderAvatar(friend, classes)}
+                                </StyledBadge>
                             </ListItemAvatar>
                             <ListItemText primary={friend.name} />
                         </ListItem>

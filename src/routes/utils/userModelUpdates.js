@@ -21,13 +21,20 @@ export async function updateUserAvatar(data, res) {
     }
 }
 
-export async function updateUserStatus(userId) {
+export async function setUserOnline(userId) {
     try {
-        const result = await User.findOneAndUpdate(
-            { _id: userId },
-            { online: true }
-        );
-        return { status: 200, result };
+        await User.findOneAndUpdate({ _id: userId }, { online: true });
+        return { status: 200, userId };
+    } catch (err) {
+        console.log(err);
+        return { status: 500, message: "Unable to change user status." };
+    }
+}
+
+export async function setUserOffline(userId) {
+    try {
+        await User.findOneAndUpdate({ _id: userId }, { online: false });
+        return { status: 200, userId };
     } catch (err) {
         console.log(err);
         return { status: 500, message: "Unable to change user status." };

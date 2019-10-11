@@ -29,6 +29,7 @@ import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
 import setupResultInterceptor from "./utils/axiosInterceptors";
+import { setSocketConnection, socket } from "./utils/setSocketConnection";
 
 // declare what pieces of state we want to have access to:
 const mapStateToProps = state => {
@@ -73,6 +74,8 @@ class App extends Component {
             // fetch suggested users excluding current user and his/her friends:
             this.props.loadUsers(decoded.id);
 
+            setSocketConnection(decoded.id);
+
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
 
@@ -102,6 +105,9 @@ class App extends Component {
 
         // Reset the state
         this.props.logOut();
+
+        // use socket connection to change user status in database:
+        socket.emit("user_logged_out", this.props.user._id);
     };
 
     render() {

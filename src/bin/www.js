@@ -8,7 +8,11 @@ import {
     parallelSumOfCounts
 } from "../routes/utils/voteModelUpdates";
 import { getVotes } from "../routes/utils/getVotes";
-import { updateUserStatus } from "../routes/utils/userModelUpdates";
+import {
+    setUserOnline,
+    setUserOffline
+} from "../routes/utils/userModelUpdates";
+import { getFriends } from "../routes/utils/getFriends";
 
 /**
  * Module dependencies.
@@ -43,9 +47,11 @@ io.use((socket, next) => {
     console.log("userId received on back-end: ", userId);
 
     if (userId) {
-        updateUserStatus(userId).then(result => {
-            console.log("User connected: ", result);
-            socket.emit("user_joined", result);
+        setUserOnline(userId).then(data => {
+            console.log("User is online: ", data);
+
+            // broadcast.emit() will send event to all clients except the sender:
+            socket.broadcast.emit("user_joined", data.userId);
 
             // call next() to let the user connect to our socket
             return next();
@@ -84,6 +90,13 @@ io.on("connection", socket => {
                 pollId: result.pollId,
                 newCounts: result.newCounts
             });
+        });
+    });
+
+    socket.on("user_logged_out", userId => {
+        setUserOffline(userId).then(data => {
+            console.log("User is offline: ", data);
+            socket.broadcast.emit("user_left", data.userId);
         });
     });
 
