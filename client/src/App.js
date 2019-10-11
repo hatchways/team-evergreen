@@ -12,7 +12,8 @@ import {
     addNewPoll,
     registerVote,
     getFriendsPolls,
-    changeFriendStatus
+    changeFriendStatus,
+    updateUserDataInState
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -46,7 +47,8 @@ const mapDispatchToProps = dispatch => {
         registerVote: data => dispatch(registerVote(data)),
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
-        logOut: () => dispatch(logOut())
+        logOut: () => dispatch(logOut()),
+        updateUserDataInState: data => dispatch(updateUserDataInState(data))
     };
 };
 
@@ -154,6 +156,9 @@ class App extends Component {
                                         addNewList={this.props.addNewList}
                                         addNewPoll={this.props.addNewPoll}
                                         logOut={this.logOut}
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -173,6 +178,9 @@ class App extends Component {
                                         user={this.props.user}
                                         logOut={this.logOut}
                                         addNewPoll={this.props.addNewPoll}
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -216,6 +224,9 @@ class App extends Component {
                                         }
                                         registerVote={this.props.registerVote}
                                         logOut={this.logOut}
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -239,6 +250,9 @@ class App extends Component {
                                             this.props.changeFriendStatus
                                         }
                                         logOut={this.logOut}
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />

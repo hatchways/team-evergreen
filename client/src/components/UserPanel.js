@@ -26,6 +26,7 @@ function UserPanel(props) {
                 togglePollDialog={props.togglePollDialog}
                 toggleDrawer={toggleDrawer}
                 toggleMobileDrawer={toggleMobileDrawer}
+                updateUserDataInState={props.updateUserDataInState}
             />
             <FriendsDrawer
                 user={user}

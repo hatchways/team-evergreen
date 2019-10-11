@@ -84,6 +84,7 @@ class Profile extends Component {
                     togglePollDialog={this.togglePollDialog}
                     toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
+                    updateUserDataInState={this.props.updateUserDataInState}
                 />
 
                 <main className={classes.main}>
