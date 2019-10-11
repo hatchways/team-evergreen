@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
+import { setSocketConnection } from "../utils/setSocketConnection";
 
 import {
     Button,
@@ -95,6 +96,9 @@ class Signup extends Component {
 
                     // Decode token to get user data
                     const decoded = jwt_decode(token);
+
+                    // initialize socket connection
+                    setSocketConnection(decoded.id);
 
                     // Load current user
                     this.props.loadUser(decoded.id);

@@ -74,6 +74,7 @@ class App extends Component {
             // fetch suggested users excluding current user and his/her friends:
             this.props.loadUsers(decoded.id);
 
+            // initialize socket connection
             setSocketConnection(decoded.id);
 
             // Check for expired token

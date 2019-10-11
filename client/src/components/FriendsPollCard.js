@@ -19,7 +19,7 @@ const useStyles = makeStyles(profileStyles);
 
 function FriendsPollCard(props) {
     const classes = useStyles();
-    const [votes, setVotes] = React.useState([0, 0]);
+    const [votes, setVotes] = React.useState([]);
     const [hasVoted, setHasVoted] = React.useState(false);
     const { poll } = props;
     const votesCount = votes[0] + votes[1];

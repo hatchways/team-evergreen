@@ -77,6 +77,7 @@ class Login extends Component {
                     // Decode token to get user data
                     const decoded = jwt_decode(token);
 
+                    // initialize socket connections
                     setSocketConnection(decoded.id);
 
                     // Load current user

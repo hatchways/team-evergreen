@@ -116,10 +116,7 @@ function FriendsDrawer(props) {
         setFriends(props.user.friends);
 
         socket.on("friends_changed", data => {
-            console.log(
-                "friends_changed! Data received in Friends Drawer: ",
-                data
-            );
+            console.log("friends_changed!");
 
             // update friends array in state if current user's friend is affected:
             if (user._id === data.userId) {
@@ -130,7 +127,6 @@ function FriendsDrawer(props) {
         // listen to new users joining the app:
         socket.on("user_joined", () => {
             console.log("New user joined the app!");
-
             // request udpated friends array:
             socket.emit("initial_friends", user._id);
         });
