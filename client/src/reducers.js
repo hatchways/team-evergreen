@@ -8,7 +8,8 @@ import {
     REGISTER_VOTE_SUCCESS,
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
-    USER_DATA_LOADING
+    USER_DATA_LOADING,
+    UPDATE_USER_DATA
 } from "./constants.js";
 
 const userInitialState = {
@@ -108,6 +109,11 @@ export const userReducer = (state = userInitialState, action = {}) => {
 
         case LOGOUT:
             return userInitialState;
+
+        case UPDATE_USER_DATA:
+            return Object.assign({}, state, {
+                [action.target]: action.newData
+            });
         default:
             return state;
     }
