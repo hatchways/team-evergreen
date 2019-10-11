@@ -9,7 +9,7 @@ import {
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
     USER_DATA_LOADING,
-    UPDATE_USER_DATA
+    TOGGLE_SNACKBAR
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -135,10 +135,10 @@ export function apiRequestFailure(error) {
     };
 }
 
-export function updateUserDataInState(data) {
+export function toggleSnackbar(data) {
     return {
-        type: UPDATE_USER_DATA,
-        target: data.target,
-        newData: data.newData
+        type: TOGGLE_SNACKBAR,
+        action: data.action,
+        message: data.message
     };
 }
