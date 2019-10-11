@@ -141,10 +141,6 @@ function AppNavbar(props) {
         setMobileAnchorEl(null);
     };
 
-    const changeAvatar = newURL => {
-        user.avatar = newURL;
-    };
-
     return (
         <div className={classes.root}>
             <AppBar

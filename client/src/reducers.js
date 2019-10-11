@@ -114,6 +114,11 @@ export const userReducer = (state = userInitialState, action = {}) => {
 
         case LOGOUT:
             return userInitialState;
+
+        case UPDATE_USER_DATA:
+            return Object.assign({}, state, {
+                [action.target]: action.newData
+            });
         default:
             return state;
     }

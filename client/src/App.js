@@ -204,7 +204,7 @@ class App extends Component {
                                             this.props.toggleSnackbar
                                         }
                                         snackbarMessage={
-                                            this.props.snackbarMessage
+
                                         }
                                     />
                                 ) : (
