@@ -6,7 +6,7 @@
   },
   "private": true,
   "scripts": {
-    "heroku-postbuild": "run-s clean build:server cd:client npm:install build:heroku:client",
+    "heroku-postbuild": "run-s clean build:server build:heroku:client",
     "npm:install:dev": "npm install --only=dev",
     "npm:install": "npm install",
     "cd:client": "cd client",
