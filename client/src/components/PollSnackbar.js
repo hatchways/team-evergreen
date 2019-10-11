@@ -10,9 +10,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function AppSnackbar(props) {
+export default function PollSnackbar(props) {
     const classes = useStyles();
-    const { snackbarIsOpen, toggleSnackbar, snackbarMessage } = props;
+    const { snackbarIsOpen, closeSnackbar } = props;
 
     return (
         <div>
@@ -23,12 +23,14 @@ export default function AppSnackbar(props) {
                 }}
                 open={snackbarIsOpen}
                 autoHideDuration={5000}
-                onClose={() => toggleSnackbar("close")}
+                onClose={closeSnackbar}
                 ContentProps={{
                     "aria-describedby": "create-poll-message"
                 }}
                 message={
-                    <span id="create-poll-message">{snackbarMessage}</span>
+                    <span id="create-poll-message">
+                        A new poll was successfully created!
+                    </span>
                 }
                 action={[
                     <IconButton
@@ -36,7 +38,7 @@ export default function AppSnackbar(props) {
                         aria-label="close"
                         color="inherit"
                         className={classes.close}
-                        onClick={() => toggleSnackbar("close")}>
+                        onClick={closeSnackbar}>
                         <Icon>close</Icon>
                     </IconButton>
                 ]}

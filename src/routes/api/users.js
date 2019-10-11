@@ -154,7 +154,7 @@ router.post("/add_friend_list", (req, res) => {
                             .catch(err => {
                                 console.log("error: ", err);
                                 return res.status(500).json({
-                                    error: "Unable to create a new list"
+                                    error: "Error updating the user list"
                                 });
                             });
                     })
