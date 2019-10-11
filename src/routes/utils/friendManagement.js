@@ -11,12 +11,16 @@ export async function followUser(userId, friendId) {
                 $push: { friends: friendId }
             }
         ).exec();
-        const details = await User.findById(friendId, "name avatar").exec();
+        const details = await User.findById(
+            friendId,
+            "name avatar online"
+        ).exec();
         return {
             userId,
             friendId,
             name: details["name"],
-            avatar: details["avatar"]
+            avatar: details["avatar"],
+            online: details["online"]
         };
     } catch (err) {
         console.log(`${userId} attempting to follow ${friendId}`, err);

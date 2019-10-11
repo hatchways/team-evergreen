@@ -85,7 +85,8 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     const newFriend = {
                         _id: action.response.data.friendId,
                         name: action.response.data.name,
-                        avatar: action.response.data.avatar
+                        avatar: action.response.data.avatar,
+                        online: action.response.data.online
                     };
                     return Object.assign({}, state, {
                         friends: [...state.friends, newFriend]
