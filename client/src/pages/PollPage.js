@@ -7,7 +7,7 @@ import { pollPageStyles } from "../styles/pollPageStyles";
 import { withStyles } from "@material-ui/core/styles";
 
 import AddPollDialog from "../components/AddPollDialog";
-import { UserPanel, socket } from "../components/UserPanel";
+import { UserPanel } from "../components/UserPanel";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
@@ -28,6 +28,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
+
+import { socket } from "../utils/setSocketConnection";
 
 class PollPage extends Component {
     constructor(props) {

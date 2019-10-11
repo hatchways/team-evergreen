@@ -13,7 +13,7 @@ import {
     Icon,
     IconButton
 } from "@material-ui/core";
-import { socket } from "./UserPanel";
+import { socket } from "../utils/setSocketConnection";
 
 const useStyles = makeStyles(profileStyles);
 

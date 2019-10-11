@@ -51,7 +51,7 @@ io.use((socket, next) => {
             console.log("User is online: ", data);
 
             // broadcast.emit() will send event to all clients except the sender:
-            socket.broadcast.emit("user_joined", data.userId);
+            socket.broadcast.emit("user_joined");
 
             // call next() to let the user connect to our socket
             return next();
@@ -68,6 +68,14 @@ io.on("connection", socket => {
     console.log("Connection is established for socket id ", socket.id);
 
     // When  socket gets established, listen for any “event” message.
+
+    // Get initial friends array for specific user:
+    socket.on("initial_friends", userId => {
+        getFriends(userId).then(result => {
+            io.sockets.emit("friends_changed", result);
+        });
+    });
+
     // Get initial voting results for specific poll:
     socket.on("initial_results", pollId => {
         getVotes(pollId).then(result => {
@@ -96,7 +104,7 @@ io.on("connection", socket => {
     socket.on("user_logged_out", userId => {
         setUserOffline(userId).then(data => {
             console.log("User is offline: ", data);
-            socket.broadcast.emit("user_left", data.userId);
+            socket.broadcast.emit("user_left");
         });
     });
 

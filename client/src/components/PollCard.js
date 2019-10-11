@@ -15,7 +15,7 @@ import {
     Link,
     IconButton
 } from "@material-ui/core";
-import { socket } from "./UserPanel";
+import { socket } from "../utils/setSocketConnection";
 
 class PollCard extends Component {
     constructor(props) {

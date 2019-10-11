@@ -110,41 +110,37 @@ function FriendsDrawer(props) {
     const [friends, setFriends] = React.useState([]);
 
     React.useEffect(() => {
-        setFriends(user.friends);
         console.log("Current user id: ", user._id);
 
+        // initialize friends array:
+        setFriends(props.user.friends);
+
+        socket.on("friends_changed", data => {
+            console.log(
+                "friends_changed! Data received in Friends Drawer: ",
+                data
+            );
+
+            // update friends array in state if current user's friend is affected:
+            if (user._id === data.userId) {
+                setFriends(data.friends);
+            }
+        });
+
         // listen to new users joining the app:
-        socket.on("user_joined", userId => {
+        socket.on("user_joined", () => {
             console.log("New user joined the app!");
 
-            const updatedFriends = friends.map(friend => {
-                // Find a friend with the matching userId
-                if (friend._id === userId) {
-                    friend.online = true; // overwrite status key
-                }
-
-                // Leave every other friend unchanged
-                return friend;
-            });
-
-            setFriends(updatedFriends);
+            // request udpated friends array:
+            socket.emit("initial_friends", user._id);
         });
 
         // listen to users leaving the app:
-        socket.on("user_left", userId => {
+        socket.on("user_left", () => {
             console.log("User has left the app!");
 
-            const updatedFriends = friends.map(friend => {
-                // Find a friend with the matching userId
-                if (friend._id === userId) {
-                    friend.online = false; // overwrite status key
-                }
-
-                // Leave every other friend unchanged
-                return friend;
-            });
-
-            setFriends(updatedFriends);
+            // request udpated friends array:
+            socket.emit("initial_friends", user._id);
         });
 
         // cancel event listening
@@ -153,7 +149,7 @@ function FriendsDrawer(props) {
             socket.off("user_left");
             socket.off("friends_changed");
         };
-    }, [friends, user.friends, user._id]);
+    }, [user._id, props.user.friends]);
 
     const friendsList = (
         <List
