@@ -72,14 +72,7 @@ class Friends extends React.Component {
     };
 
     render() {
-        const {
-            classes,
-            user,
-            users,
-            toggleSnackbar,
-            snackbarIsOpen,
-            snackbarMessage
-        } = this.props;
+        const { classes, user, users } = this.props;
         const { lists, friends } = this.props.user;
         const { pollDialogIsOpen, value } = this.state;
 
@@ -90,9 +83,7 @@ class Friends extends React.Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
-                    toggleSnackbar={toggleSnackbar}
-                    snackbarIsOpen={snackbarIsOpen}
-                    snackbarMessage={snackbarMessage}
+                    updateUserDataInState={this.props.updateUserDataInState}
                 />
 
                 <main className={classes.main}>
@@ -125,8 +116,6 @@ class Friends extends React.Component {
                                             addNewPoll={this.props.addNewPoll}
                                             pollDialogIsOpen={pollDialogIsOpen}
                                             hideButton={true}
-                                            toggleSnackbar={toggleSnackbar}
-                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>

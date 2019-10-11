@@ -13,7 +13,7 @@ import {
     registerVote,
     getFriendsPolls,
     changeFriendStatus,
-    toggleSnackbar
+    updateUserDataInState
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -33,9 +33,7 @@ const mapStateToProps = state => {
         user: state.userReducer,
         isLoading: state.userReducer.isLoading,
         users: state.usersReducer.users,
-        friendsPolls: state.pollsReducer.friendsPolls,
-        snackbarIsOpen: state.snackbarReducer.snackbarIsOpen,
-        snackbarMessage: state.snackbarReducer.snackbarMessage
+        friendsPolls: state.pollsReducer.friendsPolls
     };
 };
 
@@ -50,7 +48,7 @@ const mapDispatchToProps = dispatch => {
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut()),
-        toggleSnackbar: data => dispatch(toggleSnackbar(data))
+        updateUserDataInState: data => dispatch(updateUserDataInState(data))
     };
 };
 
@@ -60,9 +58,16 @@ class App extends Component {
         if (localStorage.jwtToken) {
             // Set auth token header auth
             const token = localStorage.jwtToken;
+            setAuthToken(token);
 
-            // decode token, load user data and his/her suggested friends:
-            const decoded = this.decodeTokenAndFetchData(token);
+            // Decode token and get user info
+            const decoded = jwt_decode(token);
+
+            // Fetch current user data:
+            this.props.loadUserData(decoded.id);
+
+            // fetch suggested users excluding current user and his/her friends:
+            this.props.loadUsers(decoded.id);
 
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -72,21 +77,6 @@ class App extends Component {
             }
         }
     }
-
-    decodeTokenAndFetchData = token => {
-        setAuthToken(token);
-
-        // Decode token and get user info:
-        const decoded = jwt_decode(token);
-
-        // Fetch current user data:
-        this.props.loadUserData(decoded.id);
-
-        // Fetch suggested friends excluding current user and his/her curernt friends:
-        this.props.loadUsers(decoded.id);
-
-        return decoded;
-    };
 
     logOut = () => {
         // Remove token from local storage
@@ -115,9 +105,8 @@ class App extends Component {
                                 ) : (
                                     <Signup
                                         {...props}
-                                        decodeTokenAndFetchData={
-                                            this.decodeTokenAndFetchData
-                                        }
+                                        loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -131,9 +120,8 @@ class App extends Component {
                                 ) : (
                                     <Signup
                                         {...props}
-                                        decodeTokenAndFetchData={
-                                            this.decodeTokenAndFetchData
-                                        }
+                                        loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -147,9 +135,8 @@ class App extends Component {
                                 ) : (
                                     <Login
                                         {...props}
-                                        decodeTokenAndFetchData={
-                                            this.decodeTokenAndFetchData
-                                        }
+                                        loadUser={this.props.loadUserData}
+                                        loadUsers={this.props.loadUsers}
                                     />
                                 )
                             }
@@ -169,14 +156,8 @@ class App extends Component {
                                         addNewList={this.props.addNewList}
                                         addNewPoll={this.props.addNewPoll}
                                         logOut={this.logOut}
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
                                         }
                                     />
                                 ) : (
@@ -197,14 +178,8 @@ class App extends Component {
                                         user={this.props.user}
                                         logOut={this.logOut}
                                         addNewPoll={this.props.addNewPoll}
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
                                         }
                                     />
                                 ) : (
@@ -249,14 +224,8 @@ class App extends Component {
                                         }
                                         registerVote={this.props.registerVote}
                                         logOut={this.logOut}
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
                                         }
                                     />
                                 ) : (
@@ -281,14 +250,8 @@ class App extends Component {
                                             this.props.changeFriendStatus
                                         }
                                         logOut={this.logOut}
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
+                                        updateUserDataInState={
+                                            this.props.updateUserDataInState
                                         }
                                     />
                                 ) : (
