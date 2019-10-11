@@ -26,7 +26,8 @@ export async function getRequests(userId) {
                 _id: { $nin: votesArray }
             },
             "_id title votes options"
-        ).sort("-createdAt");
+        ).sort("createdAt");
+
     } catch (err) {
         console.log("Error during requests query\n", err);
         return "Error during data request";

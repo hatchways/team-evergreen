@@ -5,7 +5,7 @@ const Vote = require("../../models/Vote");
 export async function getVotes(pollId) {
     //Get the results for this poll
     const votes = await Vote.find({ pollId: pollId }, "option updatedAt")
-        .sort("createdAt")
+        .sort("-createdAt")
         .populate({
             path: "userId",
             select: "name avatar"
