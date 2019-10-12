@@ -4,7 +4,12 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
-import { userReducer, usersReducer, pollsReducer } from "./reducers";
+import {
+    userReducer,
+    usersReducer,
+    pollsReducer,
+    snackbarReducer
+} from "./reducers";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -13,7 +18,12 @@ import * as serviceWorker from "./serviceWorker";
 const logger = createLogger();
 
 // use middleware between action and reducer:
-const appReducer = combineReducers({ userReducer, usersReducer, pollsReducer });
+const appReducer = combineReducers({
+    userReducer,
+    usersReducer,
+    pollsReducer,
+    snackbarReducer
+});
 
 const store = createStore(appReducer, applyMiddleware(thunkMiddleware, logger));
 

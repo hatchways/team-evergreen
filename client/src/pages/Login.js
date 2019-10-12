@@ -3,8 +3,6 @@ import axios from "axios";
 import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
-import jwt_decode from "jwt-decode";
-import setAuthToken from "../utils/setAuthToken";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
 
 import {
@@ -70,17 +68,7 @@ class Login extends Component {
                     // save token to localStorage
                     localStorage.setItem("jwtToken", token);
 
-                    // Set token to Auth header
-                    setAuthToken(token);
-
-                    // Decode token to get user data
-                    const decoded = jwt_decode(token);
-
-                    // Load current user
-                    this.props.loadUser(decoded.id);
-
-                    // Load all users:
-                    this.props.loadUsers(decoded.id);
+                    this.props.decodeTokenAndFetchData(token);
                 }
             })
             .catch(err => {
