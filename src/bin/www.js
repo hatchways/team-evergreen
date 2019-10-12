@@ -44,11 +44,10 @@ const io = require("socket.io")(server);
 // middleware
 io.use((socket, next) => {
     let userId = socket.request._query["userId"];
-    console.log("userId received on back-end: ", userId);
 
     if (userId) {
         setUserOnline(userId).then(data => {
-            console.log("User is online: ", data);
+            console.log("User is online");
 
             // broadcast.emit() will send event to all users except the sender:
             socket.broadcast.emit("user_joined");
@@ -102,7 +101,7 @@ io.on("connection", socket => {
 
     socket.on("user_logged_out", userId => {
         setUserOffline(userId).then(data => {
-            console.log("User is offline: ", data);
+            console.log("User is offline");
             socket.broadcast.emit("user_left");
         });
     });

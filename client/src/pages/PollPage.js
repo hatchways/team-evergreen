@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { socket } from "../utils/setSocketConnection";
 import Moment from "react-moment";
 import renderAvatar from "../utils/renderAvatar";
 import { Link as RouterLink } from "react-router-dom";
@@ -29,8 +30,6 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 
-import { socket } from "../utils/setSocketConnection";
-
 class PollPage extends Component {
     constructor(props) {
         super(props);
@@ -42,11 +41,18 @@ class PollPage extends Component {
     }
 
     updateResults = results => {
-        this.setState({ results });
+        // update state only if results have changed
+        if (this.state.results.length !== results.length)
+            this.setState({ results });
     };
 
-    updateVotes = votes => {
-        this.setState({ votes });
+    updateVotes = newVotes => {
+        const { votes } = this.state;
+
+        // update state only if votes count has changed:
+        if (votes[0] !== newVotes[0] || votes[1] !== newVotes[1]) {
+            this.setState({ votes: newVotes });
+        }
     };
 
     fetchUpdatedResults = () => {
@@ -57,27 +63,31 @@ class PollPage extends Component {
     componentDidMount() {
         const { _id } = this.props.location.state.poll;
 
-        // Fire the initial_votes event to get initial votes count to initialize the state:
-        socket.emit("initial_votes", _id);
+        if (socket) {
+            // Fire the initial_votes event to get initial votes count to initialize the state:
+            socket.emit("initial_votes", _id);
 
-        // Fire the initial_results event to get the data to initialize the state:
-        socket.emit("initial_results", _id);
+            // Fire the initial_results event to get the data to initialize the state:
+            socket.emit("initial_results", _id);
 
-        // When results are received, update state:
-        socket.on("update_results", this.updateResults);
+            // When results are received, update state:
+            socket.on("update_results", this.updateResults);
 
-        // When votes count is received, update state:
-        socket.on("update_votes", data => {
-            if (data.pollId === _id) this.updateVotes(data.result);
-        });
+            // When votes count is received, update state:
+            socket.on("update_votes", data => {
+                if (data.pollId === _id) this.updateVotes(data.result);
+            });
 
-        // If results were changed at back-end, fetch them:
-        socket.on("results_changed", this.fetchUpdatedResults);
+            // If results were changed at back-end, fetch them:
+            socket.on("results_changed", this.fetchUpdatedResults);
 
-        // If vote count was changed at back-end, fetch it:
-        socket.on("votes_changed", data => {
-            if (data.pollId === _id) this.updateVotes(data.newCounts);
-        });
+            // If vote count was changed at back-end, fetch it:
+            socket.on("votes_changed", data => {
+                if (data.pollId === _id) {
+                    this.updateVotes(data.newCounts);
+                }
+            });
+        }
     }
 
     // Remove the listeners before unmounting in order to avoid addition of multiple listeners:
@@ -97,7 +107,6 @@ class PollPage extends Component {
         const { poll, lists } = this.props.location.state;
         const { results, votes, pollDialogIsOpen } = this.state;
         const votesCount = votes[0] + votes[1];
-        console.log("results in Poll Page: ", results);
 
         return (
             <div className={classes.root}>

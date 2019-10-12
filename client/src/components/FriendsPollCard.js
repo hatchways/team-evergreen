@@ -42,7 +42,7 @@ function FriendsPollCard(props) {
             socket.off("update_votes");
             socket.off("votes_changed");
         };
-    });
+    }, [poll._id]);
 
     const registerVote = option => {
         const dataToSend = {

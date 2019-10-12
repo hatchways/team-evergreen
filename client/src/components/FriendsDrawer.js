@@ -110,14 +110,10 @@ function FriendsDrawer(props) {
     const [friends, setFriends] = React.useState([]);
 
     React.useEffect(() => {
-        console.log("Current user id: ", user._id);
-
         // initialize friends array:
         setFriends(props.user.friends);
 
         socket.on("friends_changed", data => {
-            console.log("friends_changed!");
-
             // update friends array in state if current user's friend is affected:
             if (user._id === data.userId) {
                 setFriends(data.friends);
@@ -126,15 +122,12 @@ function FriendsDrawer(props) {
 
         // listen to new users joining the app:
         socket.on("user_joined", () => {
-            console.log("New user joined the app!");
             // request udpated friends array:
             socket.emit("initial_friends", user._id);
         });
 
         // listen to users leaving the app:
         socket.on("user_left", () => {
-            console.log("User has left the app!");
-
             // request udpated friends array:
             socket.emit("initial_friends", user._id);
         });
