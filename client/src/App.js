@@ -13,7 +13,8 @@ import {
     registerVote,
     getFriendsPolls,
     changeFriendStatus,
-    updateUserDataInState
+    updateUserDataInState,
+    toggleSnackBar
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -28,13 +29,18 @@ import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
 // declare what pieces of state we want to have access to:
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = (
+    state,
+    newParam = {
         user: state.userReducer,
         isLoading: state.userReducer.isLoading,
         users: state.usersReducer.users,
-        friendsPolls: state.pollsReducer.friendsPolls
-    };
+        friendsPolls: state.pollsReducer.friendsPolls,
+        snackbarIsOpen: state.snackbarReducer.snackbarIsOpen,
+        snackbarMessage: state.snackbarReducer.snackbarMessage
+    }
+) => {
+    return newParam;
 };
 
 // declare which action creators you need to be able to dispatch:
@@ -48,7 +54,8 @@ const mapDispatchToProps = dispatch => {
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut()),
-        updateUserDataInState: data => dispatch(updateUserDataInState(data))
+        updateUserDataInState: data => dispatch(updateUserDataInState(data)),
+        toggleSnackbar: data => dispatch(toggleSnackbar(data))
     };
 };
 
@@ -58,16 +65,9 @@ class App extends Component {
         if (localStorage.jwtToken) {
             // Set auth token header auth
             const token = localStorage.jwtToken;
-            setAuthToken(token);
 
-            // Decode token and get user info
-            const decoded = jwt_decode(token);
-
-            // Fetch current user data:
-            this.props.loadUserData(decoded.id);
-
-            // fetch suggested users excluding current user and his/her friends:
-            this.props.loadUsers(decoded.id);
+            // decode token, load user data and his/her suggested friends:
+            const decoded = this.decodeTokenAndFetchData(token);
 
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
@@ -77,6 +77,21 @@ class App extends Component {
             }
         }
     }
+
+    decodeTokenAndFetchData = token => {
+        setAuthToken(token);
+
+        // Decode token and get user info:
+        const decoded = jwt_decode(token);
+
+        // Fetch current user data:
+        this.props.loadUserData(decoded.id);
+
+        // Fetch suggested friends excluding current user and his/her curernt friends:
+        this.props.loadUsers(decoded.id);
+
+        return decoded;
+    };
 
     logOut = () => {
         // Remove token from local storage
@@ -105,8 +120,9 @@ class App extends Component {
                                 ) : (
                                     <Signup
                                         {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
                                     />
                                 )
                             }
@@ -120,8 +136,9 @@ class App extends Component {
                                 ) : (
                                     <Signup
                                         {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
                                     />
                                 )
                             }
@@ -135,8 +152,9 @@ class App extends Component {
                                 ) : (
                                     <Login
                                         {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
                                     />
                                 )
                             }
@@ -159,6 +177,15 @@ class App extends Component {
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
                                         }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -180,6 +207,15 @@ class App extends Component {
                                         addNewPoll={this.props.addNewPoll}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
+                                        }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
                                         }
                                     />
                                 ) : (
@@ -227,6 +263,15 @@ class App extends Component {
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
                                         }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -252,6 +297,15 @@ class App extends Component {
                                         logOut={this.logOut}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
+                                        }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
                                         }
                                     />
                                 ) : (
