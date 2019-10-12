@@ -345,7 +345,6 @@ function AppNavbar(props) {
                 editProfileDialogIsOpen={editProfileDialog}
                 toggleEditProfileDialog={toggleEditProfileDialog}
                 updateUserDataInState={props.updateUserDataInState}
-                changeAvatar={changeAvatar}
                 toggleSnackbar={toggleSnackbar}
             />
         </div>
