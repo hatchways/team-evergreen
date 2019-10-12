@@ -14,7 +14,7 @@ import {
     getFriendsPolls,
     changeFriendStatus,
     updateUserDataInState,
-    toggleSnackBar
+    toggleSnackbar
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
