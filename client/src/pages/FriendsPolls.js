@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import sortBy from "../utils/sortBy";
+import { sortBy } from "../utils/sortBy";
 import FriendsPollCard from "../components/FriendsPollCard";
 import UserPanel from "../components/UserPanel";
 import AddPollDialog from "../components/AddPollDialog";

@@ -15,6 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Link from "@material-ui/core/Link";
 import Hidden from "@material-ui/core/Hidden";
+import { sortAlphabetically } from "../utils/sortBy";
 
 const StyledBadge = withStyles(theme => ({
     badge: {
@@ -104,6 +105,7 @@ function FriendsDrawer(props) {
     } = props;
     const classes = useStyles();
     const theme = useTheme();
+    const sortedFriends = sortAlphabetically(props.user.friends);
 
     const friendsList = (
         <List
@@ -121,7 +123,7 @@ function FriendsDrawer(props) {
                     Friends
                 </ListSubheader>
             }>
-            {props.user.friends.map(friend => {
+            {sortedFriends.map(friend => {
                 return (
                     <Link
                         key={friend._id}
