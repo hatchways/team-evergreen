@@ -114,6 +114,7 @@ function FriendsDrawer(props) {
             aria-labelledby="friends-list-title"
             subheader={
                 <ListSubheader
+                    disableSticky={true}
                     className={clsx(
                         classes.subtitle,
                         !drawerIsOpen && classes.collapsed
