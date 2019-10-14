@@ -249,6 +249,10 @@ class EditProfileDialog extends Component {
         // this.props.changeAvatar(response.data.data);
         Promise.all(promises)
             .then(value => {
+                this.props.toggleSnackbar({
+                    action: "open",
+                    message: "Your profile was successfully updated!"
+                });
                 this.closeDialog();
             })
             .catch(err => {

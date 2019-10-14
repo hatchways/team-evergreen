@@ -103,7 +103,14 @@ class PollPage extends Component {
     };
 
     render() {
-        const { classes, user, users } = this.props;
+        const {
+            classes,
+            user,
+            users,
+            toggleSnackbar,
+            snackbarIsOpen,
+            snackbarMessage
+        } = this.props;
         const { poll, lists } = this.props.location.state;
         const { results, votes, pollDialogIsOpen } = this.state;
         const votesCount = votes[0] + votes[1];
@@ -117,6 +124,9 @@ class PollPage extends Component {
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
                     updateUserDataInState={this.props.updateUserDataInState}
+                    toggleSnackbar={toggleSnackbar}
+                    snackbarIsOpen={snackbarIsOpen}
+                    snackbarMessage={snackbarMessage}
                 />
                 <AddPollDialog
                     userId={user._id}
@@ -125,6 +135,8 @@ class PollPage extends Component {
                     pollDialogIsOpen={pollDialogIsOpen}
                     hideButton={true}
                     addNewPoll={this.props.addNewPoll}
+                    toggleSnackbar={toggleSnackbar}
+                    snackbarIsOpen={snackbarIsOpen}
                 />
 
                 <main className={classes.main}>

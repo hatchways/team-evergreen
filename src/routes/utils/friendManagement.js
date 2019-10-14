@@ -66,7 +66,9 @@ export async function getSampleOfUsers(
             { $project: { name: 1, avatar: 1 } },
             { $match: { _id: { $nin: exclusionList } } },
             { $sample: { size: sampleSize } }
-        ]).exec();
+        ])
+            .sort("name")
+            .exec();
     } catch (err) {
         console.log(`Unable to select sample for ${userId}`, err);
         return {

@@ -10,6 +10,8 @@ import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
+// import AppSnackbar from "../components/AppSnackbar";
+
 import {
     Typography,
     Container,
@@ -30,6 +32,14 @@ class Profile extends Component {
             pollMove: 0,
             movePollBy: 0
         };
+    }
+
+    componentDidMount() {
+        // for a user with no friends, show suggestion to add friends:
+        if (this.props.user._id && this.props.user.friends.length === 0) {
+            const message = "Hi there! How about adding some friends?";
+            this.props.toggleSnackbar({ action: "open", message });
+        }
     }
 
     showNextSlide = target => {
@@ -65,7 +75,14 @@ class Profile extends Component {
     };
 
     render() {
-        const { classes, user, users } = this.props;
+        const {
+            classes,
+            user,
+            users,
+            toggleSnackbar,
+            snackbarIsOpen,
+            snackbarMessage
+        } = this.props;
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
@@ -85,6 +102,9 @@ class Profile extends Component {
                     toggleEditProfileDialog={this.toggleEditProfileDialog}
                     addNewPoll={this.props.addNewPoll}
                     updateUserDataInState={this.props.updateUserDataInState}
+                    toggleSnackbar={toggleSnackbar}
+                    snackbarIsOpen={snackbarIsOpen}
+                    snackbarMessage={snackbarMessage}
                 />
 
                 <main className={classes.main}>
@@ -127,6 +147,8 @@ class Profile extends Component {
                                                 this.togglePollDialog
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
+                                            toggleSnackbar={toggleSnackbar}
+                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>
@@ -219,6 +241,8 @@ class Profile extends Component {
                                             user={user}
                                             users={users}
                                             addNewList={this.props.addNewList}
+                                            toggleSnackbar={toggleSnackbar}
+                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>

@@ -10,6 +10,7 @@ export const CHANGE_FRIEND_STATUS_SUCCESS = "CHANGE_FRIEND_STATUS_SUCCESS";
 export const USER_DATA_LOADING = "USER_DATA_LOADING";
 export const UPDATE_VOTES = "UPDATE_VOTES";
 export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
+export const TOGGLE_SNACKBAR = "TOGGLE_SNACKBAR";
 
 // make sure these values are the same as the ones in src/helpers/seeddb.js file
 export const DEMO_EMAIL = "demo_user@mail.com";

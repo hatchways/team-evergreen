@@ -4,7 +4,6 @@ import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import jwt_decode from "jwt-decode";
-import setAuthToken from "../utils/setAuthToken";
 import { setSocketConnection } from "../utils/setSocketConnection";
 
 import {
@@ -91,20 +90,10 @@ class Signup extends Component {
 
                     localStorage.setItem("jwtToken", token);
 
-                    // Set token to Auth header
-                    setAuthToken(token);
+                    const decoded = this.props.decodeTokenAndFetchData(token);
 
-                    // Decode token to get user data
-                    const decoded = jwt_decode(token);
-
-                    // initialize socket connection
+                    // initialize socket connections
                     setSocketConnection(decoded.id);
-
-                    // Load current user
-                    this.props.loadUser(decoded.id);
-
-                    // Load all users:
-                    this.props.loadUsers(decoded.id);
                 }
             })
             .catch(err => {

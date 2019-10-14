@@ -14,7 +14,8 @@ import {
     getFriendsPolls,
     changeFriendStatus,
     updateVotes,
-    updateUserDataInState
+    updateUserDataInState,
+    toggleSnackbar
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -32,13 +33,18 @@ import setupResultInterceptor from "./utils/axiosInterceptors";
 import { setSocketConnection, socket } from "./utils/setSocketConnection";
 
 // declare what pieces of state we want to have access to:
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = (
+    state,
+    newParam = {
         user: state.userReducer,
         isLoading: state.userReducer.isLoading,
         users: state.usersReducer.users,
-        friendsPolls: state.pollsReducer.friendsPolls
-    };
+        friendsPolls: state.pollsReducer.friendsPolls,
+        snackbarIsOpen: state.snackbarReducer.snackbarIsOpen,
+        snackbarMessage: state.snackbarReducer.snackbarMessage
+    }
+) => {
+    return newParam;
 };
 
 // declare which action creators you need to be able to dispatch:
@@ -53,7 +59,8 @@ const mapDispatchToProps = dispatch => {
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut()),
         updateVotes: (pollId, votes) => dispatch(updateVotes(pollId, votes)),
-        updateUserDataInState: data => dispatch(updateUserDataInState(data))
+        updateUserDataInState: data => dispatch(updateUserDataInState(data)),
+        toggleSnackbar: data => dispatch(toggleSnackbar(data))
     };
 };
 
@@ -63,16 +70,9 @@ class App extends Component {
         if (localStorage.jwtToken) {
             // Set auth token header auth
             const token = localStorage.jwtToken;
-            setAuthToken(token);
 
-            // Decode token and get user info
-            const decoded = jwt_decode(token);
-
-            // Fetch current user data:
-            this.props.loadUserData(decoded.id);
-
-            // fetch suggested users excluding current user and his/her friends:
-            this.props.loadUsers(decoded.id);
+            // decode token, load user data and his/her suggested friends:
+            const decoded = this.decodeTokenAndFetchData(token);
 
             // initialize socket connection
             setSocketConnection(decoded.id);
@@ -84,18 +84,22 @@ class App extends Component {
                 this.logOut();
             }
         }
-
-        // Re-set the authorization header if the jwtToken key is changed
-        window.addEventListener("storage", e => {
-            if (e.key === "jwtToken") {
-                setAuthToken(e.key);
-                console.log("\x1b[44m jwt token has changed! \x1b[0m");
-            }
-        });
-
-        // Register an Axios interceptor to catch 401 errors and logout automatically
-        setupResultInterceptor(this.logOut);
     }
+
+    decodeTokenAndFetchData = token => {
+        setAuthToken(token);
+
+        // Decode token and get user info:
+        const decoded = jwt_decode(token);
+
+        // Fetch current user data:
+        this.props.loadUserData(decoded.id);
+
+        // Fetch suggested friends excluding current user and his/her curernt friends:
+        this.props.loadUsers(decoded.id);
+
+        return decoded;
+    };
 
     logOut = () => {
         // Remove token from local storage
@@ -127,8 +131,9 @@ class App extends Component {
                                 ) : (
                                     <Signup
                                         {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
                                     />
                                 )
                             }
@@ -142,8 +147,9 @@ class App extends Component {
                                 ) : (
                                     <Signup
                                         {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
                                     />
                                 )
                             }
@@ -157,8 +163,9 @@ class App extends Component {
                                 ) : (
                                     <Login
                                         {...props}
-                                        loadUser={this.props.loadUserData}
-                                        loadUsers={this.props.loadUsers}
+                                        decodeTokenAndFetchData={
+                                            this.decodeTokenAndFetchData
+                                        }
                                     />
                                 )
                             }
@@ -180,6 +187,15 @@ class App extends Component {
                                         logOut={this.logOut}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
+                                        }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
                                         }
                                     />
                                 ) : (
@@ -203,6 +219,15 @@ class App extends Component {
                                         updateVotes={this.props.updateVotes}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
+                                        }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
                                         }
                                     />
                                 ) : (
@@ -250,6 +275,15 @@ class App extends Component {
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
                                         }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -275,6 +309,15 @@ class App extends Component {
                                         logOut={this.logOut}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
+                                        }
+                                        snackbarIsOpen={
+                                            this.props.snackbarIsOpen
+                                        }
+                                        toggleSnackbar={
+                                            this.props.toggleSnackbar
+                                        }
+                                        snackbarMessage={
+                                            this.props.snackbarMessage
                                         }
                                     />
                                 ) : (
