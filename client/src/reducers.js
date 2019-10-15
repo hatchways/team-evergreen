@@ -9,7 +9,9 @@ import {
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
     USER_DATA_LOADING,
-    UPDATE_VOTES
+    UPDATE_VOTES,
+    UPDATE_USER_DATA,
+    TOGGLE_SNACKBAR
 } from "./constants.js";
 
 const userInitialState = {
@@ -32,6 +34,11 @@ const usersInitialState = {
 const friendsPollsInitialState = {
     friendsPolls: [],
     error: ""
+};
+
+const snackbarInitialState = {
+    snackbarIsOpen: false,
+    snackbarMessage: ""
 };
 
 export const userReducer = (state = userInitialState, action = {}) => {
@@ -125,6 +132,11 @@ export const userReducer = (state = userInitialState, action = {}) => {
 
         case LOGOUT:
             return userInitialState;
+
+        case UPDATE_USER_DATA:
+            return Object.assign({}, state, {
+                [action.target]: action.newData
+            });
         default:
             return state;
     }
@@ -196,6 +208,26 @@ export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
         case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
+
+        default:
+            return state;
+    }
+};
+
+export const snackbarReducer = (state = snackbarInitialState, action = {}) => {
+    switch (action.type) {
+        case TOGGLE_SNACKBAR:
+            if (action.action === "open") {
+                return Object.assign({}, state, {
+                    snackbarIsOpen: true,
+                    snackbarMessage: action.message
+                });
+            } else {
+                return Object.assign({}, state, {
+                    snackbarIsOpen: false,
+                    snackbarMessage: ""
+                });
+            }
 
         default:
             return state;

@@ -5,7 +5,7 @@
 const Validator = require("validator");
 const isEmpty = require("is-empty");
 
-export function validateLoginInput(data) {
+module.exports = function validateLoginInput(data) {
     let errors = {};
 
     // Convert empty fields to an empty string so we can use validator functions
@@ -28,4 +28,4 @@ export function validateLoginInput(data) {
         errors,
         isValid: isEmpty(errors)
     };
-}
+};

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import sortBy from "../utils/sortBy";
+import { sortBy } from "../utils/sortBy";
 import FriendsPollCard from "../components/FriendsPollCard";
 import { UserPanel } from "../components/UserPanel";
 import AddPollDialog from "../components/AddPollDialog";
@@ -31,7 +31,14 @@ class FriendsPolls extends Component {
     };
 
     render() {
-        const { classes, user, users } = this.props;
+        const {
+            classes,
+            user,
+            users,
+            toggleSnackbar,
+            snackbarIsOpen,
+            snackbarMessage
+        } = this.props;
         const { pollDialogIsOpen } = this.state;
         const { friendsPolls } = this.props;
 
@@ -42,6 +49,10 @@ class FriendsPolls extends Component {
                     users={users}
                     logOut={this.props.logOut}
                     togglePollDialog={this.togglePollDialog}
+                    updateUserDataInState={this.props.updateUserDataInState}
+                    toggleSnackbar={toggleSnackbar}
+                    snackbarIsOpen={snackbarIsOpen}
+                    snackbarMessage={snackbarMessage}
                 />
 
                 <main className={classes.main}>
@@ -89,6 +100,8 @@ class FriendsPolls extends Component {
                                             }
                                             pollDialogIsOpen={pollDialogIsOpen}
                                             hideButton={true}
+                                            toggleSnackbar={toggleSnackbar}
+                                            snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>
