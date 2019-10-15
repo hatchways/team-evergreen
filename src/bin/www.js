@@ -61,8 +61,8 @@ io.use((socket, next) => {
 });
 
 // The connection event is fired whenever a new client connects
-// It passes a client instance (= socket instance) to its callback
-// This client will receive any events that the client emits from their browser:
+// It passes a socket instance to its callback
+// This socket will receive any events that the client emits from the browser:
 io.on("connection", socket => {
     console.log("Connection is established for socket id ", socket.id);
 

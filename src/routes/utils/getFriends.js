@@ -3,7 +3,6 @@
 const User = require("../../models/User");
 
 export async function getFriends(userId) {
-    console.log("userId received in getFriends: ", userId);
     try {
         const user = await User.findById(userId).populate({
             path: "friends",

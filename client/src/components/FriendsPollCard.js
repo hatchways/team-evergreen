@@ -25,24 +25,21 @@ function FriendsPollCard(props) {
     const votesCount = votes[0] + votes[1];
 
     React.useEffect(() => {
-        // Fire the initial_votes event to get initial votes count to initialize the state:
-        socket.emit("initial_votes", poll._id);
+        // initialize votes count array:
+        setVotes(props.poll.votes);
 
-        // When votes count is received, update state:
-        socket.on("update_votes", data => {
-            if (data.pollId === poll._id) setVotes(data.result);
-        });
-
-        // If vote count was changed at back-end, fetch it:
+        // Listen to new vote registration event:
         socket.on("votes_changed", data => {
-            if (data.pollId === poll._id) setVotes(data.newCounts);
+            // if data change concerns this poll, update vote count:
+            if (data.pollId === poll._id) {
+                setVotes(data.newCounts);
+            }
         });
 
         return () => {
-            socket.off("update_votes");
             socket.off("votes_changed");
         };
-    }, [poll._id]);
+    }, [props.poll.votes, poll._id]);
 
     const registerVote = option => {
         const dataToSend = {
@@ -51,7 +48,7 @@ function FriendsPollCard(props) {
             option
         };
 
-        // Use socket for real-time updates:
+        // Emit new event to back-end:
         socket.emit("register_vote", dataToSend);
         setHasVoted(true);
     };

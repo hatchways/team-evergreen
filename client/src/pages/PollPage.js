@@ -64,10 +64,10 @@ class PollPage extends Component {
         const { _id } = this.props.location.state.poll;
 
         if (socket) {
-            // Fire the initial_votes event to get initial votes count to initialize the state:
+            // Fire the initial_votes event to get initial votes count:
             socket.emit("initial_votes", _id);
 
-            // Fire the initial_results event to get the data to initialize the state:
+            // Fire the initial_results event to get voting results:
             socket.emit("initial_results", _id);
 
             // When results are received, update state:
@@ -78,13 +78,17 @@ class PollPage extends Component {
                 if (data.pollId === _id) this.updateVotes(data.result);
             });
 
-            // If results were changed at back-end, fetch them:
+            // Listen for results change event:
             socket.on("results_changed", this.fetchUpdatedResults);
 
-            // If vote count was changed at back-end, fetch it:
+            //  Listen for new vote registration event:
             socket.on("votes_changed", data => {
+                // Update local state if change applies to current poll:
                 if (data.pollId === _id) {
+                    // update local state:
                     this.updateVotes(data.newCounts);
+
+                    this.props.updateVotes(data.pollId, data.newCounts);
                 }
             });
         }

@@ -110,7 +110,7 @@ class App extends Component {
         // Reset the state
         this.props.logOut();
 
-        // use socket connection to change user status in database:
+        // Notify back-end that user has logged out:
         socket.emit("user_logged_out", this.props.user._id);
     };
 
@@ -196,6 +196,7 @@ class App extends Component {
                                         snackbarMessage={
                                             this.props.snackbarMessage
                                         }
+                                        updateVotes={this.props.updateVotes}
                                     />
                                 ) : (
                                     <Redirect to="/login" />

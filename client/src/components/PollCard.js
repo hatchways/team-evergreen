@@ -18,41 +18,26 @@ import {
 import { socket } from "../utils/setSocketConnection";
 
 class PollCard extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            votes: []
-        };
-    }
-
-    updateVotes = votes => this.setState({ votes });
-
     componentDidMount() {
         const { _id } = this.props.poll;
 
-        // Fire the initial_votes event to get initial votes count to initialize the state:
-        socket.emit("initial_votes", _id);
-
-        // When votes count is received for this poll, update state:
-        socket.on("update_votes", data => {
-            if (data.pollId === _id) this.updateVotes(data.result);
-        });
-
-        // If vote count was changed at back-end for this poll, fetch it:
+        // Listen to new vote registration event:
         socket.on("votes_changed", data => {
-            if (data.pollId === _id) this.updateVotes(data.newCounts);
+            // if vote was registred for this poll, update vote count:
+            if (data.pollId === _id) {
+                this.props.updateVotes(data.pollId, data.newCounts);
+            }
         });
     }
 
     // Remove the listeners before unmounting in order to avoid addition of multiple listeners:
     componentWillUnmount() {
-        socket.off("update_votes");
         socket.off("votes_changed");
     }
 
     render() {
         const { classes, poll, lists } = this.props;
-        const { votes } = this.state;
+        const { votes } = this.props.poll;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -71,8 +56,7 @@ class PollCard extends Component {
                             pathname: `/poll/${poll._id}`,
                             state: {
                                 lists,
-                                poll,
-                                votes
+                                poll
                             }
                         }}>
                         <CardHeader
