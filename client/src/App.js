@@ -29,7 +29,6 @@ import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
-import setupResultInterceptor from "./utils/axiosInterceptors";
 import { setSocketConnection, socket } from "./utils/setSocketConnection";
 
 // declare what pieces of state we want to have access to:

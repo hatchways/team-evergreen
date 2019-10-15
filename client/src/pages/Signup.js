@@ -3,7 +3,6 @@ import axios from "axios";
 import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
-import jwt_decode from "jwt-decode";
 import { setSocketConnection } from "../utils/setSocketConnection";
 
 import {
