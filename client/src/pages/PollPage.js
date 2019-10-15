@@ -88,6 +88,7 @@ class PollPage extends Component {
                     // update local state:
                     this.updateVotes(data.newCounts);
 
+                    // update redux state to make new vote count available on Profile page:
                     this.props.updateVotes(data.pollId, data.newCounts);
                 }
             });
