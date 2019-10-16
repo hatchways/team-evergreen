@@ -8,8 +8,13 @@ if (!process.env.ENV_LOADED) {
     require("dotenv").config();
 }
 
-// Packages used for uploading to S3
+// Packages & constants used for uploading to S3
 const AWS = require("aws-sdk");
+const NEW_WIDTH = 300;
+const NEW_HEIGHT = 200;
+
+// Image manipulation package
+const sharp = require("sharp");
 
 // Miscellaneous Packages
 const uuidv4 = require("uuid/v4");
@@ -26,9 +31,14 @@ export function filesToUpload(req, res) {
     const uploadsPromised = [];
     files.forEach(fileName => {
         try {
-            uploadsPromised.push(promiseToUploadFileToS3(req[fileName]));
-        } catch {
-            console.log(error);
+            const file = resizeFile(req[fileName], NEW_WIDTH, NEW_HEIGHT);
+            uploadsPromised.push(promiseToUploadFileToS3(file));
+        } catch (error) {
+            console.log(
+                "Error during file resize or file promise creation:",
+                error
+            );
+            res.status(500).toJSON(error);
         }
     });
 
@@ -78,4 +88,23 @@ async function promiseToUploadFileToS3(file) {
             }
         });
     });
+}
+
+/**
+ * @desc Resizes file
+ * @param file -  {data: - file buffer, mimetype: - type of file being sent}
+ * @param height - height in pixels
+ * @param width - width in pixels
+ * @returns {error: *, status: 500} if file is corrupt or {status:200, file } if operation succeeded
+ * @access private
+ */
+function resizeFile(file, width, height) {
+    sharp(file.data)
+        .resize(width, height, { fit: "inside", withoutEnlargement: true })
+        .toFormat("png", {})
+        .toBuffer()
+        .then(outputBuffer => {
+            file.data = outputBuffer;
+            return file;
+        });
 }
