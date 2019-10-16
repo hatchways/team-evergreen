@@ -13,6 +13,7 @@ import {
     registerVote,
     getFriendsPolls,
     changeFriendStatus,
+    updateVotes,
     updateUserDataInState,
     toggleSnackbar
 } from "./actions";
@@ -54,6 +55,7 @@ const mapDispatchToProps = dispatch => {
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut()),
+        updateVotes: (pollId, votes) => dispatch(updateVotes(pollId, votes)),
         updateUserDataInState: data => dispatch(updateUserDataInState(data)),
         toggleSnackbar: data => dispatch(toggleSnackbar(data))
     };
@@ -205,6 +207,7 @@ class App extends Component {
                                         user={this.props.user}
                                         logOut={this.logOut}
                                         addNewPoll={this.props.addNewPoll}
+                                        updateVotes={this.props.updateVotes}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
                                         }

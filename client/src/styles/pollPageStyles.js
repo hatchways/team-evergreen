@@ -3,7 +3,8 @@
 export const pollPageStyles = theme => ({
     listItem: {
         paddingTop: "14px",
-        paddingBottom: "14px"
+        paddingBottom: "14px",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
     },
     listItemText: {
         fontWeight: "600"

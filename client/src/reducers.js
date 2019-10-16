@@ -9,6 +9,7 @@ import {
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
     USER_DATA_LOADING,
+    UPDATE_VOTES,
     UPDATE_USER_DATA,
     TOGGLE_SNACKBAR
 } from "./constants.js";
@@ -112,6 +113,22 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     });
                 }
             }
+        case UPDATE_VOTES:
+            const updatedPolls = state.polls.map(poll => {
+                // Find the poll with the matching pollId
+                if (poll._id === action.pollId) {
+                    // Return a new object
+                    return {
+                        ...poll, // copy the existing poll
+                        votes: action.votes // replace the votes array
+                    };
+                }
+
+                // Leave every other poll unchanged
+                return poll;
+            });
+
+            return Object.assign({}, state, { polls: updatedPolls });
 
         case LOGOUT:
             return userInitialState;
