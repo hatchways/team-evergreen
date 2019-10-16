@@ -17,6 +17,8 @@ import Link from "@material-ui/core/Link";
 import Hidden from "@material-ui/core/Hidden";
 import { sortAlphabetically } from "../utils/sortBy";
 
+import { socket } from "../utils/setSocketConnection";
+
 const StyledBadge = withStyles(theme => ({
     badge: {
         top: "5px",
@@ -98,6 +100,7 @@ const useStyles = makeStyles(theme => ({
 
 function FriendsDrawer(props) {
     const {
+        user,
         drawerIsOpen,
         toggleDrawer,
         mobileDrawerIsOpen,
@@ -105,8 +108,40 @@ function FriendsDrawer(props) {
     } = props;
     const classes = useStyles();
     const theme = useTheme();
+    const [friends, setFriends] = React.useState([]);
     const sortedFriends = sortAlphabetically(props.user.friends);
 
+    React.useEffect(() => {
+        // initialize friends array:
+        setFriends(props.user.friends);
+
+        socket.on("friends_changed", data => {
+            // update friends array in state if current user's friend is affected:
+            if (user._id === data.userId) {
+                setFriends(data.friends);
+            }
+        });
+
+        // listen to new users joining the app:
+        socket.on("user_joined", () => {
+            // request udpated friends array:
+            socket.emit("initial_friends", user._id);
+        });
+
+        // listen to users leaving the app:
+        socket.on("user_left", () => {
+            // request udpated friends array:
+            socket.emit("initial_friends", user._id);
+        });
+
+        // cancel event listening
+        return () => {
+            socket.off("user_joined");
+            socket.off("user_left");
+            socket.off("friends_changed");
+        };
+    }, [user._id, props.user.friends]);
+    
     const friendsList = (
         <List
             dense
@@ -140,6 +175,7 @@ function FriendsDrawer(props) {
                         <ListItem button>
                             <ListItemAvatar>
                                 <StyledBadge
+                                    invisible={!friend.online}
                                     variant="dot"
                                     overlap="circle"
                                     color="secondary">

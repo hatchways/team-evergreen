@@ -23,7 +23,8 @@ const userInitialState = {
     polls: [],
     friends: [],
     error: "",
-    isLoading: false
+    isLoading: false,
+    online: false
 };
 
 const usersInitialState = {
@@ -57,6 +58,7 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     lists: action.response.data.lists,
                     avatar: action.response.data.avatar,
                     friends: action.response.data.friends,
+                    online: action.response.data.online,
                     error: "",
                     isLoading: false
                 });
@@ -89,7 +91,8 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     const newFriend = {
                         _id: action.response.data.friendId,
                         name: action.response.data.name,
-                        avatar: action.response.data.avatar
+                        avatar: action.response.data.avatar,
+                        online: action.response.data.online
                     };
                     return Object.assign({}, state, {
                         friends: [...state.friends, newFriend]

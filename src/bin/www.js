@@ -8,6 +8,11 @@ import {
     parallelSumOfCounts
 } from "../routes/utils/voteModelUpdates";
 import { getVotes } from "../routes/utils/getVotes";
+import {
+    setUserOnline,
+    setUserOffline
+} from "../routes/utils/userModelUpdates";
+import { getFriends } from "../routes/utils/getFriends";
 
 /**
  * Module dependencies.
@@ -36,13 +41,39 @@ const io = require("socket.io")(server);
  * Listen on provided port, on all network interfaces.
  */
 
+// middleware
+io.use((socket, next) => {
+    let userId = socket.request._query["userId"];
+
+    if (userId) {
+        setUserOnline(userId).then(data => {
+            console.log("User is online");
+
+            // broadcast.emit() will send event to all users except the sender:
+            socket.broadcast.emit("user_joined");
+
+            // call next() to let the user connect to our socket
+            return next();
+        });
+    }
+
+    return next(new Error("Authentication error"));
+});
+
 // The connection event is fired whenever a new client connects
-// It passes a client instance (= socket instance) to its callback
-// This client will receive any events that the client emits from their browser:
+// It passes a socket instance to its callback
+// This socket will receive any events that the client emits from the browser:
 io.on("connection", socket => {
     console.log("Connection is established for socket id ", socket.id);
 
     // When  socket gets established, listen for any “event” message.
+    // Get initial friends array for specific user:
+    socket.on("initial_friends", userId => {
+        getFriends(userId).then(result => {
+            io.sockets.emit("friends_changed", result);
+        });
+    });
+
     // Get initial voting results for specific poll:
     socket.on("initial_results", pollId => {
         getVotes(pollId).then(result => {
@@ -65,6 +96,13 @@ io.on("connection", socket => {
                 pollId: result.pollId,
                 newCounts: result.newCounts
             });
+        });
+    });
+
+    socket.on("user_logged_out", userId => {
+        setUserOffline(userId).then(data => {
+            console.log("User is offline");
+            socket.broadcast.emit("user_left");
         });
     });
 

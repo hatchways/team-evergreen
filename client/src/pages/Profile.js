@@ -80,8 +80,10 @@ class Profile extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            updateVotes
         } = this.props;
+
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
@@ -163,6 +165,7 @@ class Profile extends Component {
                                                 poll={poll}
                                                 movePollBy={movePollBy}
                                                 lists={lists}
+                                                updateVotes={updateVotes}
                                             />
                                         ))}
 

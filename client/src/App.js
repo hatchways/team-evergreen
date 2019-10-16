@@ -29,6 +29,8 @@ import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
+import { setSocketConnection, socket } from "./utils/setSocketConnection";
+
 // declare what pieces of state we want to have access to:
 const mapStateToProps = (
     state,
@@ -71,6 +73,9 @@ class App extends Component {
             // decode token, load user data and his/her suggested friends:
             const decoded = this.decodeTokenAndFetchData(token);
 
+            // initialize socket connection
+            setSocketConnection(decoded.id);
+
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
 
@@ -104,6 +109,9 @@ class App extends Component {
 
         // Reset the state
         this.props.logOut();
+
+        // Notify back-end that user has logged out:
+        socket.emit("user_logged_out", this.props.user._id);
     };
 
     render() {
@@ -188,6 +196,7 @@ class App extends Component {
                                         snackbarMessage={
                                             this.props.snackbarMessage
                                         }
+                                        updateVotes={this.props.updateVotes}
                                     />
                                 ) : (
                                     <Redirect to="/login" />

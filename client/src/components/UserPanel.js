@@ -2,16 +2,11 @@ import React from "react";
 import AppNavbar from "../components/AppNavbar";
 import FriendsDrawer from "../components/FriendsDrawer";
 import { CssBaseline } from "@material-ui/core";
-import io from "socket.io-client";
-let socket;
 import AppSnackbar from "./AppSnackbar";
 
 function UserPanel(props) {
     const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
     const [mobileDrawerIsOpen, setMobileDrawerIsOpen] = React.useState(false);
-    socket = io("ws://localhost:3001", {
-        transports: ["websocket"]
-    });
     const {
         user,
         users,
@@ -58,4 +53,4 @@ function UserPanel(props) {
     );
 }
 
-export { UserPanel, socket };
+export { UserPanel };
