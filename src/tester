@@ -1,0 +1,108 @@
+{
+  polls: [
+    {
+      options: [Array],
+      votes: [Array],
+      _id: 5d97986848c5d0d5b1044d40,
+      title: 'Which one is your favourite?',
+      userId: 5d979863b9ac31d56d2358a7,
+      sendToList: 5d97986848c5d0d5b1044cda,
+      createdAt: 2019-10-04T19:07:20.682Z,
+      updatedAt: 2019-10-04T19:07:21.284Z,
+      __v: 0
+    },
+    {
+      options: [Array],
+      votes: [Array],
+      _id: 5d97986848c5d0d5b1044d3f,
+      title: 'Which should I build?',
+      userId: 5d979863b9ac31d56d2358a7,
+      sendToList: 5d97986848c5d0d5b1044cda,
+      createdAt: 2019-10-04T19:07:20.682Z,
+      updatedAt: 2019-10-04T19:07:21.360Z,
+      __v: 0
+    },
+    {
+      options: [Array],
+      votes: [],
+      _id: 5da4a0bde40d9425340cc30f,
+      title: "What's for Dinner?",
+      userId: 5d979863b9ac31d56d2358a7,
+      sendToList: 5d97986848c5d0d5b1044cda,
+      createdAt: 2019-10-14T16:22:21.889Z,
+      updatedAt: 2019-10-14T16:22:21.889Z,
+      __v: 0
+    }
+  ],
+  lists: [
+    {
+      friends: [Array],
+      _id: 5d97986848c5d0d5b1044cda,
+      title: 'Architecture',
+      userId: 5d979863b9ac31d56d2358a7,
+      createdAt: 2019-10-04T19:07:20.298Z,
+      updatedAt: 2019-10-04T19:07:20.298Z,
+      __v: 0
+    },
+    {
+      friends: [Array],
+      _id: 5da4a0dce40d9425340cc310,
+      userId: 5d979863b9ac31d56d2358a7,
+      title: 'Groceries',
+      createdAt: 2019-10-14T16:22:52.723Z,
+      updatedAt: 2019-10-14T16:22:52.723Z,
+      __v: 0
+    }
+  ],
+  friends: [
+    {
+      _id: 5d979861b9ac31d56d23587f,
+      name: 'Dorothy0 Ferguson',
+      avatar: 'https://randomuser.me/api/portraits/women/2.jpg'
+    },
+    {
+      _id: 5d979863b9ac31d56d23588b,
+      name: 'Alison3 Brown',
+      avatar: 'https://randomuser.me/api/portraits/men/4.jpg'
+    },
+    {
+      _id: 5d979863b9ac31d56d2358aa,
+      name: 'Dorothy2 Ferguson',
+      avatar: 'https://randomuser.me/api/portraits/women/3.jpg'
+    },
+    {
+      _id: 5d979862b9ac31d56d235883,
+      name: 'Paul0 Newman',
+      avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
+    },
+    {
+      _id: 5d979863b9ac31d56d2358ab,
+      name: 'Paul2 Newman',
+      avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
+    },
+    {
+      _id: 5d979863b9ac31d56d2358a5,
+      name: 'Paul3 Newman',
+      avatar: 'https://randomuser.me/api/portraits/women/6.jpg'
+    },
+    {
+      _id: 5d979863b9ac31d56d235888,
+      name: 'Peter1 Kelly',
+      avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
+    },
+    {
+      _id: 5d979863b9ac31d56d23589c,
+      name: 'Peter3 Kelly',
+      avatar: 'https://randomuser.me/api/portraits/women/5.jpg'
+    }
+  ],
+  _id: 5d979863b9ac31d56d2358a7,
+  name: 'Demo User',
+  email: 'demo_user@mail.com',
+  password: '$2a$10$LCQP5g399dbnJpB2d2pFneMO1J6/NnmcNJVU2KsOmrytU3W8p.e/a',
+  createdAt: 2019-10-04T19:07:19.853Z,
+  updatedAt: 2019-10-14T16:22:52.726Z,
+  __v: 0,
+  avatar: 'https://randomuser.me/api/portraits/men/2.jpg'
+}
+
