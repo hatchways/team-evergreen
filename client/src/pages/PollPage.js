@@ -42,8 +42,9 @@ class PollPage extends Component {
 
     updateResults = results => {
         // update state only if results have changed
-        if (this.state.results.length !== results.length)
+        if (this.state.results.length !== results.length) {
             this.setState({ results });
+        }
     };
 
     updateVotes = newVotes => {

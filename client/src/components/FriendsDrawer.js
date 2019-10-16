@@ -15,6 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Link from "@material-ui/core/Link";
 import Hidden from "@material-ui/core/Hidden";
+import { sortAlphabetically } from "../utils/sortBy";
 
 import { socket } from "../utils/setSocketConnection";
 
@@ -108,6 +109,7 @@ function FriendsDrawer(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [friends, setFriends] = React.useState([]);
+    const sortedFriends = sortAlphabetically(props.user.friends);
 
     React.useEffect(() => {
         // initialize friends array:
@@ -139,7 +141,7 @@ function FriendsDrawer(props) {
             socket.off("friends_changed");
         };
     }, [user._id, props.user.friends]);
-
+    
     const friendsList = (
         <List
             dense
@@ -147,6 +149,7 @@ function FriendsDrawer(props) {
             aria-labelledby="friends-list-title"
             subheader={
                 <ListSubheader
+                    disableSticky={true}
                     className={clsx(
                         classes.subtitle,
                         !drawerIsOpen && classes.collapsed
@@ -156,7 +159,7 @@ function FriendsDrawer(props) {
                     Friends
                 </ListSubheader>
             }>
-            {friends.map(friend => {
+            {sortedFriends.map(friend => {
                 return (
                     <Link
                         key={friend._id}
