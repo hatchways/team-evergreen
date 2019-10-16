@@ -7,7 +7,7 @@ import { friendsPageStyles } from "../styles/friendsPageStyles";
 import renderAvatar from "../utils/renderAvatar";
 
 import AddPollDialog from "../components/AddPollDialog";
-import UserPanel from "../components/UserPanel";
+import { UserPanel } from "../components/UserPanel";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";

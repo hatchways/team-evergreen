@@ -53,4 +53,4 @@ function UserPanel(props) {
     );
 }
 
-export default UserPanel;
+export { UserPanel };

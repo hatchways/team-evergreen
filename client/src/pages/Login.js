@@ -4,6 +4,7 @@ import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
+import { setSocketConnection } from "../utils/setSocketConnection";
 
 import {
     Button,
@@ -68,7 +69,10 @@ class Login extends Component {
                     // save token to localStorage
                     localStorage.setItem("jwtToken", token);
 
-                    this.props.decodeTokenAndFetchData(token);
+                    const decoded = this.props.decodeTokenAndFetchData(token);
+
+                    // initialize socket connections
+                    setSocketConnection(decoded.id);
                 }
             })
             .catch(err => {

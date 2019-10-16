@@ -4,13 +4,12 @@ import React, { Component } from "react";
 import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import sortBy from "../utils/sortBy";
-import UserPanel from "../components/UserPanel";
+import { UserPanel } from "../components/UserPanel";
+import { sortBy } from "../utils/sortBy";
 import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
-// import AppSnackbar from "../components/AppSnackbar";
 
 import {
     Typography,
@@ -81,8 +80,10 @@ class Profile extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            updateVotes
         } = this.props;
+
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
@@ -163,9 +164,8 @@ class Profile extends Component {
                                                 key={i}
                                                 poll={poll}
                                                 movePollBy={movePollBy}
-                                                user={user}
-                                                users={users}
                                                 lists={lists}
+                                                updateVotes={updateVotes}
                                             />
                                         ))}
 

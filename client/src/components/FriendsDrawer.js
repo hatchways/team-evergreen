@@ -15,6 +15,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Link from "@material-ui/core/Link";
 import Hidden from "@material-ui/core/Hidden";
+import { sortAlphabetically } from "../utils/sortBy";
+
+import { socket } from "../utils/setSocketConnection";
 
 const StyledBadge = withStyles(theme => ({
     badge: {
@@ -97,6 +100,7 @@ const useStyles = makeStyles(theme => ({
 
 function FriendsDrawer(props) {
     const {
+        user,
         drawerIsOpen,
         toggleDrawer,
         mobileDrawerIsOpen,
@@ -104,6 +108,41 @@ function FriendsDrawer(props) {
     } = props;
     const classes = useStyles();
     const theme = useTheme();
+    const [friends, setFriends] = React.useState([]);
+
+    React.useEffect(() => {
+        // initialize friends array:
+        setFriends(props.user.friends);
+
+        socket.on("friends_changed", data => {
+            // update friends array in state if current user's friend is affected:
+            if (user._id === data.userId) {
+                setFriends(data.friends);
+            }
+        });
+
+        // listen to new users joining the app:
+        socket.on("user_joined", () => {
+            // request udpated friends array:
+            socket.emit("initial_friends", user._id);
+        });
+
+        // listen to users leaving the app:
+        socket.on("user_left", () => {
+            // request udpated friends array:
+            socket.emit("initial_friends", user._id);
+        });
+
+        // cancel event listening
+        return () => {
+            socket.off("user_joined");
+            socket.off("user_left");
+            socket.off("friends_changed");
+        };
+    }, [user._id, props.user.friends]);
+
+    // sort friends by name:
+    const sortedFriends = sortAlphabetically(friends);
 
     const friendsList = (
         <List
@@ -112,6 +151,7 @@ function FriendsDrawer(props) {
             aria-labelledby="friends-list-title"
             subheader={
                 <ListSubheader
+                    disableSticky={true}
                     className={clsx(
                         classes.subtitle,
                         !drawerIsOpen && classes.collapsed
@@ -121,7 +161,7 @@ function FriendsDrawer(props) {
                     Friends
                 </ListSubheader>
             }>
-            {props.user.friends.map(friend => {
+            {sortedFriends.map(friend => {
                 return (
                     <Link
                         key={friend._id}
@@ -137,6 +177,7 @@ function FriendsDrawer(props) {
                         <ListItem button>
                             <ListItemAvatar>
                                 <StyledBadge
+                                    invisible={!friend.online}
                                     variant="dot"
                                     overlap="circle"
                                     color="secondary">

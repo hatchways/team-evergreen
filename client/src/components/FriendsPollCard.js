@@ -13,14 +13,33 @@ import {
     Icon,
     IconButton
 } from "@material-ui/core";
+import { socket } from "../utils/setSocketConnection";
 
 const useStyles = makeStyles(profileStyles);
 
 function FriendsPollCard(props) {
     const classes = useStyles();
+    const [votes, setVotes] = React.useState([]);
     const [hasVoted, setHasVoted] = React.useState(false);
     const { poll } = props;
-    const votesCount = poll.votes[0] + poll.votes[1];
+    const votesCount = votes[0] + votes[1];
+
+    React.useEffect(() => {
+        // initialize votes count array:
+        setVotes(props.poll.votes);
+
+        // Listen to new vote registration event:
+        socket.on("votes_changed", data => {
+            // if data change concerns this poll, update vote count:
+            if (data.pollId === poll._id) {
+                setVotes(data.newCounts);
+            }
+        });
+
+        return () => {
+            socket.off("votes_changed");
+        };
+    }, [props.poll.votes, poll._id]);
 
     const registerVote = option => {
         const dataToSend = {
@@ -28,7 +47,9 @@ function FriendsPollCard(props) {
             userId: props.userId,
             option
         };
-        props.registerVote(dataToSend);
+
+        // Emit new event to back-end:
+        socket.emit("register_vote", dataToSend);
         setHasVoted(true);
     };
 
@@ -72,7 +93,7 @@ function FriendsPollCard(props) {
                                 <Icon>favorite</Icon>
                             </IconButton>
                             <Typography variant="body1">
-                                {poll.votes[0] || 0}
+                                {votes[0] || 0}
                             </Typography>
                         </div>
                         <div className={classes.votes}>
@@ -85,7 +106,7 @@ function FriendsPollCard(props) {
                                 <Icon>favorite</Icon>
                             </IconButton>
                             <Typography variant="body1">
-                                {poll.votes[1] || 0}
+                                {votes[1] || 0}
                             </Typography>
                         </div>
                     </CardActions>
