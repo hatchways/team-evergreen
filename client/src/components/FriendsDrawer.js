@@ -109,7 +109,6 @@ function FriendsDrawer(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [friends, setFriends] = React.useState([]);
-    const sortedFriends = sortAlphabetically(props.user.friends);
 
     React.useEffect(() => {
         // initialize friends array:
@@ -141,7 +140,10 @@ function FriendsDrawer(props) {
             socket.off("friends_changed");
         };
     }, [user._id, props.user.friends]);
-    
+
+    // sort friends by name:
+    const sortedFriends = sortAlphabetically(friends);
+
     const friendsList = (
         <List
             dense
