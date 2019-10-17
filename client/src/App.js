@@ -29,6 +29,8 @@ import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
 
+import setupResultInterceptor from "./utils/axiosInterceptors";
+
 import { setSocketConnection, socket } from "./utils/setSocketConnection";
 
 // declare what pieces of state we want to have access to:
@@ -83,6 +85,17 @@ class App extends Component {
                 this.logOut();
             }
         }
+
+        // Re-set the authorization header if the jwtToken key is changed
+        window.addEventListener("storage", e => {
+            if (e.key === "jwtToken") {
+                setAuthToken(e.key);
+                console.log("\x1b[44m jwt token has changed! \x1b[0m");
+            }
+        });
+
+        // Register an Axios interceptor to catch 401 errors and logout automatically
+        setupResultInterceptor(this.logOut);
     }
 
     decodeTokenAndFetchData = token => {
