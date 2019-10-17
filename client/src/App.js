@@ -73,11 +73,13 @@ class App extends Component {
             // decode token, load user data and his/her suggested friends:
             const decoded = this.decodeTokenAndFetchData(token);
 
-            // initialize socket connection
-            setSocketConnection(decoded.id);
-
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
+
+            // log the user out in case of authentication error on back-end:
+            socket.on("authentication_error", () => {
+                this.logOut();
+            });
 
             if (decoded.exp < currentTime) {
                 this.logOut();
@@ -90,6 +92,9 @@ class App extends Component {
 
         // Decode token and get user info:
         const decoded = jwt_decode(token);
+
+        // initialize socket connection
+        setSocketConnection(token);
 
         // Fetch current user data:
         this.props.loadUserData(decoded.id);

@@ -2,6 +2,8 @@
 
 /* Sets up the environment variables from your .env file*/
 require("dotenv").config();
+const secret = require("../config/config").app.secretOrKey;
+import jwt from "jsonwebtoken";
 
 import {
     registerVote,
@@ -43,10 +45,13 @@ const io = require("socket.io")(server);
 
 // middleware
 io.use((socket, next) => {
-    let userId = socket.request._query["userId"];
+    let tokenBearer = socket.request._query["token"];
+    let token = tokenBearer.slice(7);
 
-    if (userId) {
-        setUserOnline(userId).then(data => {
+    try {
+        const decoded = jwt.verify(token, secret);
+
+        setUserOnline(decoded.id).then(data => {
             console.log("User is online");
 
             // broadcast.emit() will send event to all users except the sender:
@@ -55,9 +60,13 @@ io.use((socket, next) => {
             // call next() to let the user connect to our socket
             return next();
         });
-    }
+    } catch (error) {
+        console.log("Authentication error: ", error);
 
-    return next(new Error("Authentication error"));
+        // log the user out at front-end:
+        socket.emit("authentication_error");
+        return next(new Error("Authentication error"));
+    }
 });
 
 // The connection event is fired whenever a new client connects
