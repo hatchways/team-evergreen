@@ -9,10 +9,7 @@ import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import path from "path";
-import {
-    isRequestAuthorized,
-    skipAuthorizationForRoute
-} from "./routes/utils/routeAuthorization";
+import { isRequestAuthorized } from "./routes/utils/routeAuthorization";
 
 // File management middleware
 const bodyParser = require("body-parser");

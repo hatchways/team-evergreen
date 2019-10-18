@@ -8,7 +8,6 @@ const ERROR_CODES_TO_LOGOUT = [401];
 export default function setupResultInterceptor(logout) {
     axios.interceptors.response.use(
         response => {
-            console.log("got here");
             return response;
         },
         error => {
