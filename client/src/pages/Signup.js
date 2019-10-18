@@ -3,7 +3,6 @@ import axios from "axios";
 import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
-import { setSocketConnection } from "../utils/setSocketConnection";
 
 import {
     Button,
@@ -90,9 +89,6 @@ class Signup extends Component {
                     localStorage.setItem("jwtToken", token);
 
                     this.props.decodeTokenAndFetchData(token);
-
-                    // initialize socket connections
-                    setSocketConnection(token);
                 }
             })
             .catch(err => {
