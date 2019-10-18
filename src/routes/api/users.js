@@ -212,9 +212,21 @@ router.get("/", (req, res) => {
 // @access Private
 router.get("/user/:id", (req, res) => {
     User.findById(req.params.id)
-        .populate("polls")
+        .populate({
+            path: "polls",
+            options: {
+                sort: {
+                    createdAt: "descending"
+                }
+            }
+        })
         .populate({
             path: "lists",
+            options: {
+                sort: {
+                    updatedAt: "descending"
+                }
+            },
             populate: {
                 path: "friends",
                 select: "name avatar"
