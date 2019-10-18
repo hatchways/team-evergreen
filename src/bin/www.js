@@ -45,8 +45,7 @@ const io = require("socket.io")(server);
 
 // middleware
 io.use((socket, next) => {
-    let tokenBearer = socket.request._query["token"];
-    let token = tokenBearer.slice(7);
+    let token = socket.handshake.query.token;
 
     try {
         const decoded = jwt.verify(token, secret);
@@ -62,9 +61,6 @@ io.use((socket, next) => {
         });
     } catch (error) {
         console.log("Authentication error: ", error);
-
-        // log the user out at front-end:
-        socket.emit("authentication_error");
         return next(new Error("Authentication error"));
     }
 });
@@ -112,6 +108,7 @@ io.on("connection", socket => {
         setUserOffline(userId).then(data => {
             console.log("User is offline");
             socket.broadcast.emit("user_left");
+            socket.disconnect(true); // close connection for current user
         });
     });
 

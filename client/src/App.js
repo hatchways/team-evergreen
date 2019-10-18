@@ -78,11 +78,6 @@ class App extends Component {
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
 
-            // log the user out in case of authentication error on back-end:
-            socket.on("authentication_error", () => {
-                this.logOut();
-            });
-
             if (decoded.exp < currentTime) {
                 this.logOut();
             }
