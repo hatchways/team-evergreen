@@ -5,7 +5,6 @@ import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import { UserPanel } from "../components/UserPanel";
-import { sortBy } from "../utils/sortBy";
 import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
@@ -159,9 +158,9 @@ class Profile extends Component {
                                     spacing={4}
                                     className={classes.slider}>
                                     {polls &&
-                                        sortBy(polls, true).map((poll, i) => (
+                                        polls.map(poll => (
                                             <PollCard
-                                                key={i}
+                                                key={poll._id}
                                                 poll={poll}
                                                 movePollBy={movePollBy}
                                                 lists={lists}
@@ -254,9 +253,9 @@ class Profile extends Component {
                                     spacing={4}
                                     className={classes.slider}>
                                     {lists &&
-                                        sortBy(lists, true).map((list, i) => (
+                                        lists.map(list => (
                                             <ListCard
-                                                key={i}
+                                                key={list._id}
                                                 list={list}
                                                 moveListBy={moveListBy}
                                             />
