@@ -69,10 +69,10 @@ class Login extends Component {
                     // save token to localStorage
                     localStorage.setItem("jwtToken", token);
 
-                    const decoded = this.props.decodeTokenAndFetchData(token);
+                    this.props.decodeTokenAndFetchData(token);
 
                     // initialize socket connections
-                    setSocketConnection(decoded.id);
+                    setSocketConnection(token);
                 }
             })
             .catch(err => {

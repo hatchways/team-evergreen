@@ -75,9 +75,6 @@ class App extends Component {
             // decode token, load user data and his/her suggested friends:
             const decoded = this.decodeTokenAndFetchData(token);
 
-            // initialize socket connection
-            setSocketConnection(decoded.id);
-
             // Check for expired token
             const currentTime = Date.now() / 1000; // to get in milliseconds
 
@@ -103,6 +100,9 @@ class App extends Component {
 
         // Decode token and get user info:
         const decoded = jwt_decode(token);
+
+        // initialize socket connection
+        setSocketConnection(token);
 
         // Fetch current user data:
         this.props.loadUserData(decoded.id);
