@@ -106,7 +106,6 @@ io.on("connection", socket => {
 
     socket.on("user_logged_out", userId => {
         setUserOffline(userId).then(data => {
-            console.log("User is offline");
             socket.broadcast.emit("user_left");
             socket.disconnect(true); // close connection for current user
         });
