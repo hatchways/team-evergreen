@@ -24,7 +24,6 @@ function PollCard(props) {
 
     React.useEffect(() => {
         const { _id } = props.poll;
-        console.log("Card has mounted!", _id);
 
         //  Listen to new vote registration event:
         socket.on("votes_changed", data => {
