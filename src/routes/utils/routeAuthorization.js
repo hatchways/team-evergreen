@@ -2,7 +2,27 @@
 
 // CONSTANTS
 const TOKEN_LIFETIME = 31556926;
-const PATHS_TO_SKIP_AUTHORIZATION = ["/api/users/login", "/api/users/register"];
+const PATHS_TO_SKIP_AUTHORIZATION = [
+    "/api/users/login",
+    "/api/users/register",
+    "/ping",
+    "/",
+    "/login",
+    "/signup",
+    "/android-chrome-192x192.png",
+    "/android-chrome-384x384.png",
+    "/apple-touch-icon.png",
+    "/favicon.ico",
+    "/favicon-16x16.png",
+    "/favicon-32x32.png",
+    "/mstile-150x150.png",
+    "/safari-pinned.tab.svg",
+    "/service-worker.js",
+    "/site.webmanifest",
+    "/profile",
+    "/friends",
+    "/friends-polls"
+];
 
 //JWT PACKAGES
 import jwt from "jsonwebtoken";
@@ -73,5 +93,9 @@ export function createToken(payload, res, secret, expiration = TOKEN_LIFETIME) {
  * @access Private
  */
 function skipAuthorizationForRoute(path) {
-    return PATHS_TO_SKIP_AUTHORIZATION.includes(path);
+    return (
+        PATHS_TO_SKIP_AUTHORIZATION.includes(path) ||
+        path.includes("/static") ||
+        path.includes("/poll/")
+    );
 }
