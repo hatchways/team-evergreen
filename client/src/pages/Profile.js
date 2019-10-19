@@ -169,6 +169,7 @@ class Profile extends Component {
                                         ))}
 
                                     <Box
+                                        key={polls.length}
                                         display={{
                                             xs:
                                                 polls.length > 1
@@ -261,17 +262,18 @@ class Profile extends Component {
                                             />
                                         ))}
                                     <Box
+                                        key={lists.length}
                                         display={{
                                             xs:
-                                                polls.length > 1
+                                                lists.length > 1
                                                     ? "block"
                                                     : "none",
                                             md:
-                                                polls.length > 2
+                                                lists.length > 2
                                                     ? "block"
                                                     : "none",
                                             lg:
-                                                polls.length > 3
+                                                lists.length > 3
                                                     ? "block"
                                                     : "none"
                                         }}>
