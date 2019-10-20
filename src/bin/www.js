@@ -27,12 +27,9 @@ let http = require("http");
  * Get port from environment and store in Express.
  */
 
-let port = normalizePort(process.env.PORT || "3010");
-console.log(
-    `server side port is ${port}, process.env.PORT is ${process.env.PORT}`
-);
-process.env.PORT = 3010;
-console.log(`process.env.PORT is now ${process.env.PORT}`);
+let port = normalizePort(process.env.PORT || "3001");
+//process.env.PORT = 3010;
+//console.log(`process.env.PORT is now ${process.env.PORT}`);
 app.set("port", port);
 
 /**

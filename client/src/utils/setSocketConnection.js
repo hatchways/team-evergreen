@@ -1,12 +1,17 @@
 import io from "socket.io-client";
-import { DEFAULT_SERVER_PORT } from "../constants";
+import { DEVELOPMENT_SERVER_PORT } from "../constants";
 let socket;
 
-// load port from environment, otherwise default to 3001
-let port = process.env.PORT || DEFAULT_SERVER_PORT;
-console.log(`Port set to ${port}, process.env.PORT is ${process.env.port}`);
+// set websocket server port to appropriate value depending on environment
+let port;
+if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+    port = process.env.PORT || DEVELOPMENT_SERVER_PORT;
+} else {
+    port = window.location.port;
+}
+
 const setSocketConnection = token => {
-    socket = io(`ws://localhost`, {
+    socket = io(`ws://localhost:${port}`, {
         transports: ["websocket"],
         query: {
             token: token
