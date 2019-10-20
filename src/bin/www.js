@@ -28,6 +28,8 @@ let http = require("http");
  */
 
 let port = normalizePort(process.env.PORT || "3001");
+//process.env.PORT = 3010;
+//console.log(`process.env.PORT is now ${process.env.PORT}`);
 app.set("port", port);
 
 /**
