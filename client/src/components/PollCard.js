@@ -1,6 +1,6 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { profileStyles } from "../styles/profileStyles";
 import {
     Card,
@@ -15,13 +15,28 @@ import {
     Link,
     IconButton
 } from "@material-ui/core";
-
-const useStyles = makeStyles(profileStyles);
+import { socket } from "../utils/setSocketConnection";
 
 function PollCard(props) {
-    const classes = useStyles();
-    const { poll } = props;
-    const votesCount = poll.votes[0] + poll.votes[1];
+    const { classes, poll, lists } = props;
+    const { votes } = props.poll;
+    const votesCount = votes[0] + votes[1];
+
+    React.useEffect(() => {
+        const { _id } = props.poll;
+
+        //  Listen to new vote registration event:
+        socket.on("votes_changed", data => {
+            // if vote was registred for this poll, update vote count:
+            if (data.pollId === _id) {
+                props.updateVotes(data.pollId, data.newCounts);
+            }
+        });
+
+        return () => {
+            socket.off("votes_changed");
+        };
+    }, [props.poll._id]); // provide poll id so only new poll is mounted when it is added to polls array
 
     return (
         <Grid
@@ -38,8 +53,8 @@ function PollCard(props) {
                     to={{
                         pathname: `/poll/${poll._id}`,
                         state: {
-                            lists: props.lists,
-                            poll: poll
+                            lists,
+                            poll
                         }
                     }}>
                     <CardHeader
@@ -81,7 +96,7 @@ function PollCard(props) {
                                     <Icon>favorite</Icon>
                                 </IconButton>
                                 <Typography variant="body1">
-                                    {poll.votes[0] || 0}
+                                    {votes[0] || 0}
                                 </Typography>
                             </div>
                             <div className={classes.votes}>
@@ -93,7 +108,7 @@ function PollCard(props) {
                                     <Icon>favorite</Icon>
                                 </IconButton>
                                 <Typography variant="body1">
-                                    {poll.votes[1] || 0}
+                                    {votes[1] || 0}
                                 </Typography>
                             </div>
                         </CardActions>
@@ -104,4 +119,4 @@ function PollCard(props) {
     );
 }
 
-export default PollCard;
+export default withStyles(profileStyles)(PollCard);

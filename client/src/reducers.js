@@ -9,6 +9,7 @@ import {
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
     USER_DATA_LOADING,
+    UPDATE_VOTES,
     UPDATE_USER_DATA,
     TOGGLE_SNACKBAR
 } from "./constants.js";
@@ -22,7 +23,8 @@ const userInitialState = {
     polls: [],
     friends: [],
     error: "",
-    isLoading: false
+    isLoading: false,
+    online: false
 };
 
 const usersInitialState = {
@@ -56,6 +58,7 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     lists: action.response.data.lists,
                     avatar: action.response.data.avatar,
                     friends: action.response.data.friends,
+                    online: action.response.data.online,
                     error: "",
                     isLoading: false
                 });
@@ -88,7 +91,8 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     const newFriend = {
                         _id: action.response.data.friendId,
                         name: action.response.data.name,
-                        avatar: action.response.data.avatar
+                        avatar: action.response.data.avatar,
+                        online: action.response.data.online
                     };
                     return Object.assign({}, state, {
                         friends: [...state.friends, newFriend]
@@ -112,6 +116,22 @@ export const userReducer = (state = userInitialState, action = {}) => {
                     });
                 }
             }
+        case UPDATE_VOTES:
+            const updatedPolls = state.polls.map(poll => {
+                // Find the poll with the matching pollId
+                if (poll._id === action.pollId) {
+                    // Return a new object
+                    return {
+                        ...poll, // copy the existing poll
+                        votes: action.votes // replace the votes array
+                    };
+                }
+
+                // Leave every other poll unchanged
+                return poll;
+            });
+
+            return Object.assign({}, state, { polls: updatedPolls });
 
         case LOGOUT:
             return userInitialState;

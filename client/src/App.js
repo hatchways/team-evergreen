@@ -13,6 +13,7 @@ import {
     registerVote,
     getFriendsPolls,
     changeFriendStatus,
+    updateVotes,
     updateUserDataInState,
     toggleSnackbar
 } from "./actions";
@@ -27,6 +28,10 @@ import Profile from "./pages/Profile";
 import PollPage from "./pages/PollPage";
 import FriendsPolls from "./pages/FriendsPolls";
 import Friends from "./pages/Friends";
+
+import setupResultInterceptor from "./utils/axiosInterceptors";
+
+import { setSocketConnection, socket } from "./utils/setSocketConnection";
 
 // declare what pieces of state we want to have access to:
 const mapStateToProps = (
@@ -54,6 +59,7 @@ const mapDispatchToProps = dispatch => {
         getFriendsPolls: data => dispatch(getFriendsPolls(data)),
         changeFriendStatus: data => dispatch(changeFriendStatus(data)),
         logOut: () => dispatch(logOut()),
+        updateVotes: (pollId, votes) => dispatch(updateVotes(pollId, votes)),
         updateUserDataInState: data => dispatch(updateUserDataInState(data)),
         toggleSnackbar: data => dispatch(toggleSnackbar(data))
     };
@@ -76,6 +82,17 @@ class App extends Component {
                 this.logOut();
             }
         }
+
+        // Re-set the authorization header if the jwtToken key is changed
+        window.addEventListener("storage", e => {
+            if (e.key === "jwtToken") {
+                setAuthToken(e.key);
+                console.log("\x1b[44m jwt token has changed! \x1b[0m");
+            }
+        });
+
+        // Register an Axios interceptor to catch 401 errors and logout automatically
+        setupResultInterceptor(this.logOut);
     }
 
     decodeTokenAndFetchData = token => {
@@ -83,6 +100,9 @@ class App extends Component {
 
         // Decode token and get user info:
         const decoded = jwt_decode(token);
+
+        // initialize socket connection
+        setSocketConnection(token);
 
         // Fetch current user data:
         this.props.loadUserData(decoded.id);
@@ -102,6 +122,9 @@ class App extends Component {
 
         // Reset the state
         this.props.logOut();
+
+        // Notify back-end that user has logged out:
+        socket.emit("user_logged_out", this.props.user._id);
     };
 
     render() {
@@ -186,6 +209,7 @@ class App extends Component {
                                         snackbarMessage={
                                             this.props.snackbarMessage
                                         }
+                                        updateVotes={this.props.updateVotes}
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -205,6 +229,7 @@ class App extends Component {
                                         user={this.props.user}
                                         logOut={this.logOut}
                                         addNewPoll={this.props.addNewPoll}
+                                        updateVotes={this.props.updateVotes}
                                         updateUserDataInState={
                                             this.props.updateUserDataInState
                                         }

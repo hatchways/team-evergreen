@@ -4,13 +4,11 @@ import React, { Component } from "react";
 import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import sortBy from "../utils/sortBy";
-import UserPanel from "../components/UserPanel";
+import { UserPanel } from "../components/UserPanel";
 import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
 import PollCard from "../components/PollCard";
 import ListCard from "../components/ListCard";
-// import AppSnackbar from "../components/AppSnackbar";
 
 import {
     Typography,
@@ -81,8 +79,10 @@ class Profile extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            updateVotes
         } = this.props;
+
         const { lists, polls } = this.props.user;
         const {
             pollDialogIsOpen,
@@ -158,18 +158,18 @@ class Profile extends Component {
                                     spacing={4}
                                     className={classes.slider}>
                                     {polls &&
-                                        sortBy(polls, true).map((poll, i) => (
+                                        polls.map(poll => (
                                             <PollCard
-                                                key={i}
+                                                key={poll._id}
                                                 poll={poll}
                                                 movePollBy={movePollBy}
-                                                user={user}
-                                                users={users}
                                                 lists={lists}
+                                                updateVotes={updateVotes}
                                             />
                                         ))}
 
                                     <Box
+                                        key={polls.length}
                                         display={{
                                             xs:
                                                 polls.length > 1
@@ -254,25 +254,26 @@ class Profile extends Component {
                                     spacing={4}
                                     className={classes.slider}>
                                     {lists &&
-                                        sortBy(lists, true).map((list, i) => (
+                                        lists.map(list => (
                                             <ListCard
-                                                key={i}
+                                                key={list._id}
                                                 list={list}
                                                 moveListBy={moveListBy}
                                             />
                                         ))}
                                     <Box
+                                        key={lists.length}
                                         display={{
                                             xs:
-                                                polls.length > 1
+                                                lists.length > 1
                                                     ? "block"
                                                     : "none",
                                             md:
-                                                polls.length > 2
+                                                lists.length > 2
                                                     ? "block"
                                                     : "none",
                                             lg:
-                                                polls.length > 3
+                                                lists.length > 3
                                                     ? "block"
                                                     : "none"
                                         }}>

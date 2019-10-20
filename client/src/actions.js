@@ -9,6 +9,7 @@ import {
     GET_FRIENDS_POLLS_SUCCESS,
     CHANGE_FRIEND_STATUS_SUCCESS,
     USER_DATA_LOADING,
+    UPDATE_VOTES,
     UPDATE_USER_DATA,
     TOGGLE_SNACKBAR
 } from "./constants.js";
@@ -133,6 +134,14 @@ export function apiRequestFailure(error) {
     return {
         type: API_REQUEST_FAILURE,
         error
+    };
+}
+
+export function updateVotes(pollId, votes) {
+    return {
+        type: UPDATE_VOTES,
+        pollId,
+        votes
     };
 }
 
