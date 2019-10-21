@@ -20,6 +20,7 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { FileDrop } from "./FileDrop";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
+import Loader from "../components/Loader";
 
 const styles = theme => ({
     root: {
@@ -90,7 +91,8 @@ class AddPollDialog extends Component {
             sendToList: "",
             target: "poll_images",
             buttonIsDisabled: false,
-            errors: {}
+            errors: {},
+            isSaving: false
         };
     }
 
@@ -104,7 +106,8 @@ class AddPollDialog extends Component {
             sendToList: "",
             target: "poll_images",
             buttonIsDisabled: false,
-            errors: {}
+            errors: {},
+            isSaving: false
         });
     };
 
@@ -140,6 +143,10 @@ class AddPollDialog extends Component {
         } else {
             // disable the submit button to avoid duplicates
             this.toggleSubmitButton();
+
+            // set isSaving to true to load spinner
+            this.setState({ isSaving: true });
+
             // load poll data and send it to upload api:
             let formData = new FormData();
             formData.append("userId", this.props.userId);
@@ -192,10 +199,17 @@ class AddPollDialog extends Component {
 
     render() {
         const { classes, lists, hideButton } = this.props;
-        const { errors, sendToList, title, buttonIsDisabled } = this.state;
+        const {
+            errors,
+            sendToList,
+            title,
+            buttonIsDisabled,
+            isSaving
+        } = this.state;
 
         return (
             <div>
+                {isSaving && <Loader />}
                 <Button
                     onClick={this.props.togglePollDialog}
                     variant="contained"
