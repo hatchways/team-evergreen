@@ -105,8 +105,7 @@ class AddPollDialog extends Component {
             sendToList: "",
             target: "poll_images",
             buttonIsDisabled: false,
-            errors: {},
-            isSaving: false
+            errors: {}
         });
     };
 
@@ -142,9 +141,6 @@ class AddPollDialog extends Component {
         } else {
             // disable the submit button to avoid duplicates
             this.toggleSubmitButton();
-
-            // set isSaving to true to load spinner
-            this.setState({ isSaving: true });
 
             // load poll data and send it to upload api:
             let formData = new FormData();
