@@ -91,8 +91,7 @@ class AddPollDialog extends Component {
             sendToList: "",
             target: "poll_images",
             buttonIsDisabled: false,
-            errors: {},
-            isSaving: false
+            errors: {}
         };
     }
 
@@ -199,17 +198,10 @@ class AddPollDialog extends Component {
 
     render() {
         const { classes, lists, hideButton } = this.props;
-        const {
-            errors,
-            sendToList,
-            title,
-            buttonIsDisabled,
-            isSaving
-        } = this.state;
+        const { errors, sendToList, title, buttonIsDisabled } = this.state;
 
         return (
             <div>
-                {isSaving && <Loader />}
                 <Button
                     onClick={this.props.togglePollDialog}
                     variant="contained"
@@ -230,6 +222,7 @@ class AddPollDialog extends Component {
                     <DialogTitle id="create-poll" onClose={this.closeDialog}>
                         Create a poll
                     </DialogTitle>
+                    {buttonIsDisabled && <Loader />}
 
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
