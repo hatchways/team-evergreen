@@ -15,8 +15,6 @@ require("../config/db-connect");
 // Application modules  and other configuration items
 const startData = require("./startdata");
 const cleanData = require("./sampleData").cleanData();
-//const names = startData.usernames;
-const avatars = startData.avatars;
 const pollImages = startData.pollImages;
 const pollTitles = startData.pollTitles;
 const listTitles = startData.listTitles;
