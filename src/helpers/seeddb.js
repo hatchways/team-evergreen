@@ -14,7 +14,8 @@ require("../config/db-connect");
 
 // Application modules  and other configuration items
 const startData = require("./startdata");
-const names = startData.usernames;
+const sampleData = require("./sampleData");
+//const names = startData.usernames;
 const avatars = startData.avatars;
 const pollImages = startData.pollImages;
 const pollTitles = startData.pollTitles;
@@ -33,7 +34,7 @@ const DEMO_PASSWORD =
     "passwordpurpossefullyvisibletoallowdemouseraccesswithoutcreatingunneccessarybackdoor";
 
 //Constants
-const NO_OF_USERS = 50;
+//const NO_OF_USERS = 50;
 const MAX_NO_OF_ADORNMENTS = 5; //Used in determining # of lists/polls to create/user
 const MAX_NO_OF_FRIENDS_PER_LIST = 5;
 const POLL_PERCENTAGE = 4; // 0 = 100%, 4 = 50%, 9 = 0%
@@ -54,8 +55,8 @@ async function seedDb() {
     try {
         await mongoose.connection.dropDatabase();
         console.log("\n*****Database dropped*****\n");
-        const userIds = await createUsers(NO_OF_USERS);
-        await addAvatarImages(userIds);
+        const userIds = await createUsers();
+        // await addAvatarImages(userIds);
         const friendsLists = await addFriendLists(userIds);
         await addPolls(userIds, friendsLists);
         await addVotes();
@@ -235,29 +236,28 @@ async function addAvatarImages(userIds) {
         .catch(err => console.log("****ERROR ADDING AVATARS\n", err));
 }
 
-async function createUsers(noOfUsers) {
+async function createUsers() {
     //Will create users in multiples of 10
     const newUserIds = [];
     const promises = [];
-    let noOfLoops = Math.max(1, Math.floor(noOfUsers / 10));
-    for (let i = 0; i < noOfLoops; i++) {
-        names.forEach(name => {
-            let newUser = {
-                name: name.split(" ")[0] + String(i) + " " + name.split(" ")[1],
-                email: `${name.split(" ")[0].toLowerCase()}${String(
-                    i
-                )}@mail.com`,
-                password: config.app.samplePassword,
-                password2: config.app.samplePassword
-            };
+    //let noOfLoops = Math.max(1, Math.floor(noOfUsers / 10));
+    //for (let i = 0; i < noOfLoops; i++) {
+    sampleData.forEach(user => {
+        let newUser = {
+            name: user.name,
+            email: user.email,
+            avatar: user.avatar,
+            password: config.app.samplePassword,
+            password2: config.app.samplePassword
+        };
 
-            const newPromise = axios.post(
-                "http://localhost:3001/api/users/register",
-                newUser
-            );
-            promises.push(newPromise);
-        });
-    }
+        const newPromise = axios.post(
+            "http://localhost:3001/api/users/register",
+            newUser
+        );
+        promises.push(newPromise);
+    });
+    //}
 
     // Create demo user
     let demoUser = {
