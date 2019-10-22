@@ -648,15 +648,28 @@ const sampleData = [
             medium: "https://randomuser.me/api/portraits/med/men/58.jpg",
             thumbnail: "https://randomuser.me/api/portraits/thumb/men/58.jpg"
         }
+    },
+    {
+        name: {
+            title: "Mr",
+            first: "Demo",
+            last: "User"
+        },
+        email: "demo.user@example.com",
+        picture: {
+            large: "https://randomuser.me/api/portraits/men/58.jpg",
+            medium: "https://randomuser.me/api/portraits/med/men/58.jpg",
+            thumbnail: "https://randomuser.me/api/portraits/thumb/men/59.jpg"
+        }
     }
 ];
 
-export function userData() {
+export function cleanData() {
     const cleanData = [];
     sampleData.forEach(user => {
         let fullName = `${user["name"].first} ${user["name"].last}`;
         let email = user["email"];
-        let avatar = user["thumbnail"];
+        let avatar = user["picture"].thumbnail;
         cleanData.push({ fullName, email, avatar });
     });
     return cleanData;

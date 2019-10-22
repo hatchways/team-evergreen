@@ -14,7 +14,7 @@ require("../config/db-connect");
 
 // Application modules  and other configuration items
 const startData = require("./startdata");
-const sampleData = require("./sampleData");
+const cleanData = require("./sampleData").cleanData();
 //const names = startData.usernames;
 const avatars = startData.avatars;
 const pollImages = startData.pollImages;
@@ -56,7 +56,7 @@ async function seedDb() {
         await mongoose.connection.dropDatabase();
         console.log("\n*****Database dropped*****\n");
         const userIds = await createUsers();
-        // await addAvatarImages(userIds);
+        await addAvatarImages(userIds);
         const friendsLists = await addFriendLists(userIds);
         await addPolls(userIds, friendsLists);
         await addVotes();
@@ -222,12 +222,13 @@ async function addFriendLists(userIds) {
 
 async function addAvatarImages(userIds) {
     const promises = [];
-    let count = 0;
+    let avatarIndex = 0;
     userIds.forEach(id => {
         const newPromise = User.findByIdAndUpdate(id, {
-            avatar: avatars[Math.floor(Math.random() * 9)]
+            avatar: cleanData[avatarIndex].avatar
         }).exec();
         promises.push(newPromise);
+        avatarIndex += 1;
     });
     await Promise.all(promises)
         .then(results => {
@@ -240,15 +241,18 @@ async function createUsers() {
     //Will create users in multiples of 10
     const newUserIds = [];
     const promises = [];
-    //let noOfLoops = Math.max(1, Math.floor(noOfUsers / 10));
-    //for (let i = 0; i < noOfLoops; i++) {
-    sampleData.forEach(user => {
+    cleanData.forEach(user => {
         let newUser = {
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar,
-            password: config.app.samplePassword,
-            password2: config.app.samplePassword
+            name: user.fullName,
+            email: user.fullName !== "Demo User" ? user.email : DEMO_EMAIL,
+            password:
+                user.fullName !== "Demo User"
+                    ? config.app.samplePassword
+                    : DEMO_PASSWORD,
+            password2:
+                user.fullName !== "Demo User"
+                    ? config.app.samplePassword
+                    : DEMO_PASSWORD
         };
 
         const newPromise = axios.post(
@@ -257,21 +261,6 @@ async function createUsers() {
         );
         promises.push(newPromise);
     });
-    //}
-
-    // Create demo user
-    let demoUser = {
-        name: "Demo User",
-        email: DEMO_EMAIL,
-        password: DEMO_PASSWORD,
-        password2: DEMO_PASSWORD
-    };
-
-    const newPromise = axios.post(
-        "http://localhost:3001/api/users/register",
-        demoUser
-    );
-    promises.push(newPromise);
 
     // Execute all the requests
     await Promise.all(promises)
