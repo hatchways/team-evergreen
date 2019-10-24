@@ -11,7 +11,8 @@ import {
     USER_DATA_LOADING,
     UPDATE_VOTES,
     UPDATE_USER_DATA,
-    TOGGLE_SNACKBAR
+    TOGGLE_SNACKBAR,
+    RESET_FRIENDS_POLLS
 } from "./constants.js";
 
 const userInitialState = {
@@ -174,6 +175,8 @@ export const usersReducer = (state = usersInitialState, action = {}) => {
 export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
     switch (action.type) {
         case GET_FRIENDS_POLLS_SUCCESS:
+            // Object.assign({}, friendsPollsInitialState);
+
             if (action.response.status === 200) {
                 return Object.assign({}, state, {
                     friendsPolls: action.response.data
@@ -211,6 +214,9 @@ export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
         case API_REQUEST_FAILURE:
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
+
+        case RESET_FRIENDS_POLLS:
+            return friendsPollsInitialState;
 
         default:
             return state;

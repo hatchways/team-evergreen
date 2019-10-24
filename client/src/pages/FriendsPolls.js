@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import { sortBy } from "../utils/sortBy";
 import FriendsPollCard from "../components/FriendsPollCard";
 import { UserPanel } from "../components/UserPanel";
 import AddPollDialog from "../components/AddPollDialog";
@@ -29,6 +28,10 @@ class FriendsPolls extends Component {
     togglePollDialog = () => {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
+
+    componentWillUnmount() {
+        this.props.resetFriendsPolls();
+    }
 
     render() {
         const {
@@ -107,18 +110,16 @@ class FriendsPolls extends Component {
                                 </Grid>
                                 <Grid container item spacing={4}>
                                     {friendsPolls &&
-                                        sortBy(friendsPolls, true).map(
-                                            (poll, i) => (
-                                                <FriendsPollCard
-                                                    key={i}
-                                                    poll={poll}
-                                                    userId={user._id}
-                                                    registerVote={
-                                                        this.props.registerVote
-                                                    }
-                                                />
-                                            )
-                                        )}
+                                        friendsPolls.map(poll => (
+                                            <FriendsPollCard
+                                                key={poll._id}
+                                                poll={poll}
+                                                userId={user._id}
+                                                registerVote={
+                                                    this.props.registerVote
+                                                }
+                                            />
+                                        ))}
                                 </Grid>
                             </Grid>
                         </Grid>

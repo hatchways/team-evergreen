@@ -15,7 +15,8 @@ import {
     changeFriendStatus,
     updateVotes,
     updateUserDataInState,
-    toggleSnackbar
+    toggleSnackbar,
+    resetFriendsPolls
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -61,7 +62,8 @@ const mapDispatchToProps = dispatch => {
         logOut: () => dispatch(logOut()),
         updateVotes: (pollId, votes) => dispatch(updateVotes(pollId, votes)),
         updateUserDataInState: data => dispatch(updateUserDataInState(data)),
-        toggleSnackbar: data => dispatch(toggleSnackbar(data))
+        toggleSnackbar: data => dispatch(toggleSnackbar(data)),
+        resetFriendsPolls: () => dispatch(resetFriendsPolls())
     };
 };
 
@@ -296,6 +298,9 @@ class App extends Component {
                                         }
                                         snackbarMessage={
                                             this.props.snackbarMessage
+                                        }
+                                        resetFriendsPolls={
+                                            this.props.resetFriendsPolls
                                         }
                                     />
                                 ) : (
