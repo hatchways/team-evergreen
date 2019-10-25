@@ -17,6 +17,8 @@ import Typography from "@material-ui/core/Typography";
 
 // App components
 
+import { AdornedButton } from "./AdornedButton";
+
 // Utility Modules
 import { updateAvatar, updateUserData } from "../utils/editUserData";
 const isEmpty = require("is-empty");
@@ -115,6 +117,7 @@ class EditProfileDialog extends Component {
             newFile: "",
             target: TARGET_AVATAR,
             saveIsDisabled: true,
+            loading: false,
             errors: {}
         };
     }
@@ -126,6 +129,7 @@ class EditProfileDialog extends Component {
             newEmail: this.props.email,
             target: TARGET_AVATAR,
             saveIsDisabled: true,
+            loading: false,
             errors: {}
         });
     };
@@ -193,6 +197,9 @@ class EditProfileDialog extends Component {
 
         // disable the submit button to avoid duplicates
         this.disableSaveButton();
+
+        // set the loading flag to true
+        this.setState({ loading: true });
 
         // array to store promises
         const promises = [];
@@ -316,7 +323,14 @@ class EditProfileDialog extends Component {
                                     className={classes.bigInput}
                                     onChange={this.handleAvatarChange}
                                 />
+                                <Typography
+                                    align="center"
+                                    variant="caption"
+                                    className="center">
+                                    (Click image to edit)
+                                </Typography>
                             </FormControl>
+
                             <FormControl fullWidth>
                                 <Typography
                                     variant="subtitle1"
@@ -363,14 +377,16 @@ class EditProfileDialog extends Component {
                             </FormControl>
                         </DialogContent>
                         <DialogActions className={classes.action}>
-                            <Button
+                            <AdornedButton
+                                className={classes.button}
+                                loading={this.state.loading}
                                 type="submit"
                                 variant="contained"
                                 size="small"
                                 disabled={saveIsDisabled}
                                 color="secondary">
                                 Save
-                            </Button>
+                            </AdornedButton>
                             <Button
                                 type="button"
                                 onClick={this.onCancel}
