@@ -21,6 +21,8 @@ import { FileDrop } from "./FileDrop";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
+import AdornedButton from "./AdornedButton";
+
 const styles = theme => ({
     root: {
         paddingTop: theme.spacing(4)
@@ -196,7 +198,9 @@ class AddPollDialog extends Component {
 
         return (
             <div>
-                <Button
+                <AdornedButton
+                    className={classes.button}
+                    loading={this.state.buttonIsDisabled}
                     onClick={this.props.togglePollDialog}
                     variant="contained"
                     color="primary"
@@ -206,7 +210,7 @@ class AddPollDialog extends Component {
                         // or on friend's profile
                     }}>
                     Create poll
-                </Button>
+                </AdornedButton>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
@@ -303,14 +307,16 @@ class AddPollDialog extends Component {
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
-                            <Button
+                            <AdornedButton
+                                className={classes.button}
+                                loading={this.state.buttonIsDisabled}
                                 type="submit"
                                 variant="contained"
                                 size="small"
                                 disabled={buttonIsDisabled}
                                 color="primary">
                                 Create
-                            </Button>
+                            </AdornedButton>
                         </DialogActions>
                     </form>
                 </Dialog>
