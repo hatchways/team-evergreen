@@ -1,65 +1,15 @@
 import React from "react";
 import clsx from "clsx";
-import renderAvatar from "../utils/renderAvatar";
-import { Link as RouterLink } from "react-router-dom";
-import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
-import Link from "@material-ui/core/Link";
 import Hidden from "@material-ui/core/Hidden";
-import { sortAlphabetically } from "../utils/sortBy";
-
+import FriendsList from "./FriendsList";
 import { socket } from "../utils/setSocketConnection";
 
-const StyledBadge = withStyles(theme => ({
-    badge: {
-        top: "5px",
-        right: "5px",
-        backgroundColor: "#44b700",
-        boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-        "&::after": {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            borderRadius: "50%",
-            animation: "$ripple 1.2s infinite ease-in-out",
-            border: "1px solid #44b700",
-            content: '""'
-        }
-    },
-    "@keyframes ripple": {
-        "0%": {
-            transform: "scale(.8)",
-            opacity: 1
-        },
-        "100%": {
-            transform: "scale(2.4)",
-            opacity: 0
-        }
-    }
-}))(Badge);
-
 const useStyles = makeStyles(theme => ({
-    subtitle: {
-        fontWeight: "600",
-        transition: theme.transitions.create("font-size", {
-            easing: theme.transitions.easing.easeInOut,
-            duration: theme.transitions.duration.enteringScreen
-        })
-    },
-    collapsed: {
-        fontSize: "0.7rem"
-    },
     drawerPaper: {
         position: "relative",
         width: "240px",
@@ -135,62 +85,11 @@ function FriendsDrawer(props) {
         };
     }, [user._id, props.user.friends]);
 
-    // sort friends by name:
-    const sortedFriends = sortAlphabetically(friends);
-
-    const friendsList = (
-        <List
-            dense
-            component="nav"
-            aria-labelledby="friends-list-title"
-            subheader={
-                <ListSubheader
-                    disableSticky={true}
-                    className={clsx(
-                        classes.subtitle,
-                        !drawerIsOpen && classes.collapsed
-                    )}
-                    component="div"
-                    id="friends-list-title">
-                    Friends
-                </ListSubheader>
-            }>
-            {sortedFriends.map(friend => {
-                return (
-                    <Link
-                        key={friend._id}
-                        underline="none"
-                        component={RouterLink}
-                        to={{
-                            pathname: `/user/${friend._id}`,
-                            state: {
-                                user: friend,
-                                users: props.users
-                            }
-                        }}>
-                        <ListItem button>
-                            <ListItemAvatar>
-                                <StyledBadge
-                                    invisible={!friend.online}
-                                    variant="dot"
-                                    overlap="circle"
-                                    color="secondary">
-                                    {renderAvatar(friend, classes)}
-                                </StyledBadge>
-                            </ListItemAvatar>
-                            <ListItemText primary={friend.name} />
-                        </ListItem>
-                    </Link>
-                );
-            })}
-        </List>
-    );
-
     const mobileDrawer = (
         <>
             <div className={classes.toolbar} />
             <Divider />
-            {friendsList}
+            <FriendsList drawerIsOpen={drawerIsOpen} friends={friends} />
         </>
     );
 
@@ -208,7 +107,7 @@ function FriendsDrawer(props) {
                 </IconButton>
             </div>
             <Divider />
-            {friendsList}
+            <FriendsList drawerIsOpen={drawerIsOpen} friends={friends} />
         </>
     );
 
