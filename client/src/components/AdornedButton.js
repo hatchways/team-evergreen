@@ -12,10 +12,10 @@ const styles = {
 };
 
 const SpinnerAdornment = withStyles(styles)(props => (
-    <CircularProgress className={props.classes.spinner} size={20} />
+    <CircularProgress className={props.classes.spinner} size={18} />
 ));
 
-const AdornedButton = props => {
+export const AdornedButton = props => {
     const { children, loading, ...rest } = props;
     return (
         <Button {...rest}>

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import {
-    Button,
     IconButton,
     Dialog,
     DialogContent,
@@ -21,7 +20,7 @@ import { FileDrop } from "./FileDrop";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
-import AdornedButton from "./AdornedButton";
+import { AdornedButton } from "./AdornedButton";
 
 const styles = theme => ({
     root: {
@@ -199,6 +198,7 @@ class AddPollDialog extends Component {
         return (
             <div>
                 <AdornedButton
+                    aria-label="create poll button"
                     className={classes.button}
                     loading={this.state.buttonIsDisabled}
                     onClick={this.props.togglePollDialog}
