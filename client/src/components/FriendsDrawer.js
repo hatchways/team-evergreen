@@ -99,13 +99,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function FriendsDrawer(props) {
-    const {
-        user,
-        drawerIsOpen,
-        toggleDrawer,
-        mobileDrawerIsOpen,
-        toggleMobileDrawer
-    } = props;
+    const { user, drawerIsOpen, toggleDrawer, mobileDrawerIsOpen } = props;
     const classes = useStyles();
     const theme = useTheme();
     const [friends, setFriends] = React.useState([]);
@@ -207,7 +201,7 @@ function FriendsDrawer(props) {
                     className={classes.arrowIcon}
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={toggleDrawer}>
+                    onClick={() => toggleDrawer("drawerIsOpen")}>
                     <Icon>
                         {drawerIsOpen ? "chevron_left" : "chevron_right"}
                     </Icon>
@@ -228,7 +222,7 @@ function FriendsDrawer(props) {
                         paper: clsx(classes.drawerPaper)
                     }}
                     open={mobileDrawerIsOpen}
-                    onClose={toggleMobileDrawer}
+                    onClose={() => toggleDrawer("mobileDrawerIsOpen")}
                     ModalProps={{
                         keepMounted: true // Better open performance on mobile.
                     }}>

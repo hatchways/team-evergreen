@@ -12,7 +12,8 @@ import {
     UPDATE_VOTES,
     UPDATE_USER_DATA,
     TOGGLE_SNACKBAR,
-    RESET_FRIENDS_POLLS
+    RESET_FRIENDS_POLLS,
+    TOGGLE_DRAWER
 } from "./constants.js";
 
 const userInitialState = {
@@ -41,6 +42,11 @@ const friendsPollsInitialState = {
 const snackbarInitialState = {
     snackbarIsOpen: false,
     snackbarMessage: ""
+};
+
+const friendsDrawerInitialState = {
+    drawerIsOpen: true,
+    mobileDrawerIsOpen: false
 };
 
 export const userReducer = (state = userInitialState, action = {}) => {
@@ -237,6 +243,21 @@ export const snackbarReducer = (state = snackbarInitialState, action = {}) => {
                     snackbarMessage: ""
                 });
             }
+
+        default:
+            return state;
+    }
+};
+
+export const friendsDrawerReducer = (
+    state = friendsDrawerInitialState,
+    action = {}
+) => {
+    switch (action.type) {
+        case TOGGLE_DRAWER:
+            return Object.assign({}, state, {
+                [action.target]: !state[action.target]
+            });
 
         default:
             return state;

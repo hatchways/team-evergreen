@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunkMiddleware from "redux-thunk";
-// import { createLogger } from "redux-logger";
 import {
     userReducer,
     usersReducer,
     pollsReducer,
-    snackbarReducer
+    snackbarReducer,
+    friendsDrawerReducer
 } from "./reducers";
 import "./index.css";
 import App from "./App";
@@ -22,7 +22,8 @@ const appReducer = combineReducers({
     userReducer,
     usersReducer,
     pollsReducer,
-    snackbarReducer
+    snackbarReducer,
+    friendsDrawerReducer
 });
 
 const middlewares = [thunkMiddleware];

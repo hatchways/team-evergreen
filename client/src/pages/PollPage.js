@@ -115,7 +115,12 @@ class PollPage extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            logOut,
+            updateUserDataInState,
+            toggleDrawer,
+            drawerIsOpen,
+            mobileDrawerIsOpen
         } = this.props;
         const { poll, lists } = this.props.location.state;
         const { results, votes, pollDialogIsOpen } = this.state;
@@ -127,12 +132,15 @@ class PollPage extends Component {
                 <UserPanel
                     user={user}
                     users={users}
-                    logOut={this.props.logOut}
+                    logOut={logOut}
                     togglePollDialog={this.togglePollDialog}
-                    updateUserDataInState={this.props.updateUserDataInState}
+                    updateUserDataInState={updateUserDataInState}
                     toggleSnackbar={toggleSnackbar}
                     snackbarIsOpen={snackbarIsOpen}
                     snackbarMessage={snackbarMessage}
+                    toggleDrawer={toggleDrawer}
+                    drawerIsOpen={drawerIsOpen}
+                    mobileDrawerIsOpen={mobileDrawerIsOpen}
                 />
                 <AddPollDialog
                     userId={user._id}
