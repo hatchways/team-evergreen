@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import {
+    Button,
     IconButton,
     Dialog,
     DialogContent,
@@ -16,10 +17,10 @@ import {
 } from "@material-ui/core";
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import { FileDrop } from "./FileDrop";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
+import { FileDrop } from "./FileDrop";
 import { AdornedButton } from "./AdornedButton";
 
 const styles = theme => ({
@@ -197,10 +198,9 @@ class AddPollDialog extends Component {
 
         return (
             <div>
-                <AdornedButton
+                <Button
                     aria-label="create poll button"
                     className={classes.button}
-                    loading={this.state.buttonIsDisabled}
                     onClick={this.props.togglePollDialog}
                     variant="contained"
                     color="primary"
@@ -210,7 +210,7 @@ class AddPollDialog extends Component {
                         // or on friend's profile
                     }}>
                     Create poll
-                </AdornedButton>
+                </Button>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
@@ -308,6 +308,7 @@ class AddPollDialog extends Component {
 
                         <DialogActions className={classes.action}>
                             <AdornedButton
+                                aria-label="create poll"
                                 className={classes.button}
                                 loading={this.state.buttonIsDisabled}
                                 type="submit"
