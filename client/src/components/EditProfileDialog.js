@@ -192,7 +192,7 @@ class EditProfileDialog extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        const { newName, newEmail, newFile, loading } = this.state;
+        const { newName, newEmail, newFile } = this.state;
         const { userId, name, email, updateUserDataInState } = this.props;
 
         // disable the submit button to avoid duplicates
@@ -323,7 +323,14 @@ class EditProfileDialog extends Component {
                                     className={classes.bigInput}
                                     onChange={this.handleAvatarChange}
                                 />
+                                <Typography
+                                    align="center"
+                                    variant="caption"
+                                    className="center">
+                                    (Click image to edit)
+                                </Typography>
                             </FormControl>
+
                             <FormControl fullWidth>
                                 <Typography
                                     variant="subtitle1"
