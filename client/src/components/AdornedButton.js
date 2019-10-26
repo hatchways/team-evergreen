@@ -21,7 +21,6 @@ const SpinnerAdornment = withStyles(styles)(props => {
     return <CircularProgress className={props.classes.spinner} size={18} />;
 });
 
-//<Button style={loading ? { paddingRight: "4px" } : {}} {...rest}>
 export const AdornedButton = props => {
     const { children, loading, ...rest } = props;
     return (
