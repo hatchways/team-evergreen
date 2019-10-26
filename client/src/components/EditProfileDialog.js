@@ -371,7 +371,7 @@ class EditProfileDialog extends Component {
                         </DialogContent>
                         <DialogActions className={classes.action}>
                             <AdornedButton
-                                className={classes.button}
+                                className={classes.spinner}
                                 loading={this.state.loading}
                                 type="submit"
                                 variant="contained"

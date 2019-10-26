@@ -58,6 +58,9 @@ const styles = theme => ({
         "&.MuiButton-text": {
             textTransform: "initial"
         }
+    },
+    loadingButton: {
+        padding: "4px 4px 4px 22px"
     }
 });
 
@@ -200,7 +203,6 @@ class AddPollDialog extends Component {
             <div>
                 <Button
                     aria-label="create poll button"
-                    className={classes.button}
                     onClick={this.props.togglePollDialog}
                     variant="contained"
                     color="primary"
@@ -309,10 +311,14 @@ class AddPollDialog extends Component {
                         <DialogActions className={classes.action}>
                             <AdornedButton
                                 aria-label="create poll"
-                                className={classes.button}
                                 loading={this.state.buttonIsDisabled}
                                 type="submit"
                                 variant="contained"
+                                className={
+                                    this.state.buttonIsDisabled
+                                        ? classes.loadingButton
+                                        : ""
+                                }
                                 size="small"
                                 disabled={buttonIsDisabled}
                                 color="primary">
