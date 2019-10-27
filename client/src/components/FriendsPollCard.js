@@ -14,12 +14,14 @@ import {
     IconButton
 } from "@material-ui/core";
 import { socket } from "../utils/setSocketConnection";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
 const useStyles = makeStyles(profileStyles);
 
 function FriendsPollCard(props) {
     const classes = useStyles();
     const [votes, setVotes] = React.useState([]);
+    const [voteForOption, setOptionVotedFor] = React.useState(null);
     const [hasVoted, setHasVoted] = React.useState(false);
     const { poll } = props;
     const votesCount = votes[0] + votes[1];
@@ -51,6 +53,7 @@ function FriendsPollCard(props) {
         // Emit new event to back-end:
         socket.emit("register_vote", dataToSend);
         setHasVoted(true);
+        setOptionVotedFor(option);
     };
 
     return (
@@ -90,7 +93,11 @@ function FriendsPollCard(props) {
                                 className={classes.icon}
                                 aria-label="Votes for first image"
                                 component="span">
-                                <Icon>favorite</Icon>
+                                {voteForOption === 0 ? (
+                                    <Favorite />
+                                ) : (
+                                    <FavoriteBorder />
+                                )}
                             </IconButton>
                             <Typography variant="body1">
                                 {votes[0] || 0}
@@ -103,7 +110,11 @@ function FriendsPollCard(props) {
                                 className={classes.icon}
                                 aria-label="Votes for second image"
                                 component="span">
-                                <Icon>favorite</Icon>
+                                {voteForOption === 1 ? (
+                                    <Favorite />
+                                ) : (
+                                    <FavoriteBorder />
+                                )}
                             </IconButton>
                             <Typography variant="body1">
                                 {votes[1] || 0}
