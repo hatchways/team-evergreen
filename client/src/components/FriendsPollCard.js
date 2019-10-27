@@ -93,7 +93,6 @@ class FriendsPollCard extends React.Component {
                         <CardActions className={classes.votesContainer}>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled={hasVoted}
                                     onClick={() => this.registerVote(0)}
                                     className={classes.icon}
                                     aria-label="Votes for first image"
@@ -106,7 +105,6 @@ class FriendsPollCard extends React.Component {
                             </div>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled={hasVoted}
                                     onClick={() => this.registerVote(1)}
                                     className={classes.icon}
                                     aria-label="Votes for second image"
