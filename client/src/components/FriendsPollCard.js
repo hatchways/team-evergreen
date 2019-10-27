@@ -10,7 +10,6 @@ import {
     Grid,
     GridList,
     GridListTile,
-    Icon,
     IconButton
 } from "@material-ui/core";
 import { socket } from "../utils/setSocketConnection";
