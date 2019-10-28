@@ -218,7 +218,11 @@ router.get("/user/:id", (req, res) => {
                 sort: {
                     createdAt: "descending"
                 }
-            }
+            },
+            populate: {
+                path: "sendToList",
+                select: "title"
+            } // select only name and avatar for each friend
         })
         .populate({
             path: "lists",
