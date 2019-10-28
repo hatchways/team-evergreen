@@ -20,7 +20,6 @@ import { socket } from "../utils/setSocketConnection";
 class PollCard extends React.Component {
     componentDidMount() {
         const { _id } = this.props.poll;
-
         //   Listen to new vote registration event:
         socket.on("votes_changed", data => {
             // if vote was registred for this poll, update vote count:
@@ -37,6 +36,7 @@ class PollCard extends React.Component {
     render() {
         const { classes, poll, lists } = this.props;
         const { title, options, votes, _id } = this.props.poll;
+        const listName = this.props.poll.sendToList.title;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -71,7 +71,7 @@ class PollCard extends React.Component {
                                 <Typography variant="body2">
                                     {votesCount || 0}{" "}
                                     {votesCount === 1 ? "answer " : "answers "}
-                                    from List Name
+                                    from {listName}
                                 </Typography>
                             }
                         />
@@ -113,9 +113,6 @@ class PollCard extends React.Component {
                                     </Typography>
                                 </div>
                             </CardActions>
-                            <Typography variant="subtitle2">
-                                Hello List Name
-                            </Typography>
                         </CardContent>
                     </Link>
                 </Card>
