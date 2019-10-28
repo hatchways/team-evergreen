@@ -70,7 +70,8 @@ class PollCard extends React.Component {
                             subheader={
                                 <Typography variant="body2">
                                     {votesCount || 0}{" "}
-                                    {votesCount === 1 ? "answer" : "answers"}
+                                    {votesCount === 1 ? "answer " : "answers "}
+                                    from List Name
                                 </Typography>
                             }
                         />
@@ -112,6 +113,9 @@ class PollCard extends React.Component {
                                     </Typography>
                                 </div>
                             </CardActions>
+                            <Typography variant="subtitle2">
+                                Hello List Name
+                            </Typography>
                         </CardContent>
                     </Link>
                 </Card>
