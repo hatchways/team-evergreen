@@ -19,8 +19,8 @@ class FriendsPollCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hasVoted: false,
-            votes: []
+            votes: [],
+            votedForOption: null
         };
     }
 
@@ -52,13 +52,14 @@ class FriendsPollCard extends React.Component {
 
         // Emit new event to back-end:
         socket.emit("register_vote", dataToSend);
-        this.setState({ hasVoted: true });
+
+        this.setState({ votedForOption: option });
     };
 
     render() {
         const { classes } = this.props;
         const { title, options, id } = this.props.poll;
-        const { hasVoted, votes } = this.state;
+        const { votes, votedForOption } = this.state;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -93,12 +94,16 @@ class FriendsPollCard extends React.Component {
                         <CardActions className={classes.votesContainer}>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled={hasVoted}
+                                    disabled={votedForOption === 0}
                                     onClick={() => this.registerVote(0)}
                                     className={classes.icon}
                                     aria-label="Votes for first image"
                                     component="span">
-                                    <Icon>favorite</Icon>
+                                    {votedForOption === 0 ? (
+                                        <Icon>favorite</Icon>
+                                    ) : (
+                                        <Icon>favorite_border</Icon>
+                                    )}
                                 </IconButton>
                                 <Typography variant="body1">
                                     {votes[0] || 0}
@@ -106,12 +111,16 @@ class FriendsPollCard extends React.Component {
                             </div>
                             <div className={classes.votes}>
                                 <IconButton
-                                    disabled={hasVoted}
+                                    disabled={votedForOption === 1}
                                     onClick={() => this.registerVote(1)}
                                     className={classes.icon}
                                     aria-label="Votes for second image"
                                     component="span">
-                                    <Icon>favorite</Icon>
+                                    {votedForOption === 1 ? (
+                                        <Icon>favorite</Icon>
+                                    ) : (
+                                        <Icon>favorite_border</Icon>
+                                    )}
                                 </IconButton>
                                 <Typography variant="body1">
                                     {votes[1] || 0}
