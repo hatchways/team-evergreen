@@ -10,16 +10,15 @@ import {
     Grid,
     GridList,
     GridListTile,
+    Icon,
     IconButton
 } from "@material-ui/core";
 import { socket } from "../utils/setSocketConnection";
-import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
 class FriendsPollCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hasVoted: false,
             votes: [],
             votedForOption: null
         };
@@ -54,14 +53,13 @@ class FriendsPollCard extends React.Component {
         // Emit new event to back-end:
         socket.emit("register_vote", dataToSend);
 
-        this.setState({ hasVoted: true });
         this.setState({ votedForOption: option });
     };
 
     render() {
         const { classes } = this.props;
         const { title, options, id } = this.props.poll;
-        const { hasVoted, votes, votedForOption } = this.state;
+        const { votes, votedForOption } = this.state;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -102,9 +100,9 @@ class FriendsPollCard extends React.Component {
                                     aria-label="Votes for first image"
                                     component="span">
                                     {votedForOption === 0 ? (
-                                        <Favorite />
+                                        <Icon>favorite</Icon>
                                     ) : (
-                                        <FavoriteBorder />
+                                        <Icon>favorite_border</Icon>
                                     )}
                                 </IconButton>
                                 <Typography variant="body1">
@@ -119,9 +117,9 @@ class FriendsPollCard extends React.Component {
                                     aria-label="Votes for second image"
                                     component="span">
                                     {votedForOption === 1 ? (
-                                        <Favorite />
+                                        <Icon>favorite</Icon>
                                     ) : (
-                                        <FavoriteBorder />
+                                        <Icon>favorite_border</Icon>
                                     )}
                                 </IconButton>
                                 <Typography variant="body1">
