@@ -90,6 +90,7 @@ class AddPollDialog extends Component {
             image2: "",
             expiresOn: "",
             sendToList: "",
+            selectedList: "",
             target: "poll_images",
             buttonIsDisabled: false,
             errors: {}
@@ -121,6 +122,12 @@ class AddPollDialog extends Component {
 
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
+        //the select list value is set to a string of the form
+        //"list._id list.title" in order to be able to display the list title
+        //in the select input field -- this is a limitation imposed by the React
+        //component.  Need to extract the id from the sendToList component when
+        //saving it.  This change was made in order to add the list name to the
+        //poll card.
     };
 
     onSubmit = e => {
@@ -148,7 +155,7 @@ class AddPollDialog extends Component {
             formData.append("title", title);
             formData.append("image1", image1);
             formData.append("image2", image2);
-            formData.append("sendToList", sendToList);
+            formData.append("sendToList", sendToList.split(" ")[0]);
             formData.append("target", "poll_images");
 
             axios
@@ -162,7 +169,10 @@ class AddPollDialog extends Component {
                         return;
                     }
 
-                    // add new poll to Profile and close dialog:
+                    // add the list title to the returned data
+                    response.data.data["listTitle"] = sendToList.split(" ")[1];
+
+                    // add new poll to Profile and close dialog
                     this.props.addNewPoll(response.data.data);
                     this.closeDialog();
                     // open snackbar with success message:
@@ -241,7 +251,7 @@ class AddPollDialog extends Component {
                                 />
                                 <FormHelperText
                                     error
-                                    id="poll-question-errir"
+                                    id="poll-question-error"
                                     className={classes.error}>
                                     {errors.title}
                                 </FormHelperText>
@@ -263,7 +273,7 @@ class AddPollDialog extends Component {
                                         return (
                                             <MenuItem
                                                 key={list._id}
-                                                value={list._id}
+                                                value={`${list._id} ${list.title}`}
                                                 className={classes.item}>
                                                 {list.title}
                                             </MenuItem>
