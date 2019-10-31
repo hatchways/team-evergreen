@@ -170,8 +170,10 @@ class AddPollDialog extends Component {
                     }
 
                     // add the list title to the returned data
-                    response.data.data["listTitle"] = sendToList.split(" ")[1];
-
+                    response.data.data.sendToList = {
+                        _id: sendToList.split(" ")[0],
+                        title: sendToList.split(" ")[1]
+                    };
                     // add new poll to Profile and close dialog
                     this.props.addNewPoll(response.data.data);
                     this.closeDialog();
