@@ -105,6 +105,7 @@ class AddPollDialog extends Component {
             image2: "",
             expiresOn: "",
             sendToList: "",
+            selectedList: "",
             target: "poll_images",
             buttonIsDisabled: false,
             errors: {}
