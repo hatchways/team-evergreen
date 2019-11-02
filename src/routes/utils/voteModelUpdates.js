@@ -17,12 +17,16 @@ export async function registerVote(pollId, userId, option) {
             { new: true, upsert: true }
         ).exec();
 
+        // Retrieves counts by option and total # of votes needed
+        // newCounts[0,1] = vote counts for options
+        // newCounts[2] = number of votes needed
         const newCounts = await parallelSumOfCounts(pollId);
 
         await Poll.findOneAndUpdate(
             { _id: pollId },
             {
-                votes: newCounts
+                votes: newCounts,
+                complete: newCounts[0] + newCounts[1] === newCounts[2]
             }
         ).exec();
         return { pollId: pollId, option: option, newCounts: newCounts };
@@ -42,8 +46,9 @@ export async function parallelSumOfCounts(pollId) {
         Vote.where({
             pollId: pollId,
             option: 1
-        }).countDocuments()
+        }).countDocuments(),
+        Poll.findById(pollId).populate("sendToList", "friends")
     ];
-    const [count0, count1] = await Promise.all(promises);
-    return [count0, count1];
+    const [count0, count1, friends] = await Promise.all(promises);
+    return [count0, count1, friends.length];
 }
