@@ -15,7 +15,8 @@ export async function createNewPoll(data) {
             title: data.title,
             userId: data.userId,
             sendToList: data.sendToList,
-            options: data.options
+            options: data.options,
+            complete: false
         });
         await newPoll.save();
 

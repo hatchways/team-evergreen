@@ -209,7 +209,6 @@ class AddPollDialog extends Component {
     render() {
         const { classes, lists, hideButton } = this.props;
         const { errors, sendToList, title, buttonIsDisabled } = this.state;
-        debugger;
 
         return (
             <div>
