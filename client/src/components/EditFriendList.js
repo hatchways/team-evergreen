@@ -88,28 +88,26 @@ class EditFriendsList extends Component {
             });
         } else {
             this.setState({ loading: true, saveIsDisabled: true }, () => {
-                const newListData = {
-                    userId: this.props.user._id
-                };
+                const listData = { listId: this.props.listId };
 
                 // send new title if it was changed:
                 if (title !== this.props.title) {
-                    newListData["title"] = title.trim();
+                    listData["title"] = title.trim();
                 }
 
                 // TODO: check if friend ids have changed:
-                newListData["friends"] = friends;
+                listData["friends"] = friends;
 
-                if (newListData.title || newListData.friends) {
-                    updateFriendList(newListData, response => {
+                if (listData.title || listData.friends) {
+                    updateFriendList(listData, response => {
                         // use redux action to update list details in global state:
-                        if (newListData.title) {
+                        if (listData.title) {
                             this.props.updateFriendListInState({
                                 target: "title",
                                 newData: title
                             });
                         }
-                        if (newListData.friends) {
+                        if (listData.friends) {
                             this.props.updateFriendListInState({
                                 target: "friends",
                                 newData: friends

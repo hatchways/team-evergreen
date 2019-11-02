@@ -68,7 +68,7 @@ class AddFriendsList extends Component {
             };
 
             axios
-                .post("/api/users/add_friend_list", newList)
+                .post("/api/friend-list/add", newList)
                 .then(response => {
                     // add new list to Profile and close dialog:
                     if (response.data) {
