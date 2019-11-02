@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
 import renderAvatar from "../utils/renderAvatar";
 import { withStyles } from "@material-ui/core/styles";
 import { friendListStyles } from "../styles/friendListStyles";
+import { AdornedButton } from "./AdornedButton";
 import {
     Button,
     Dialog,
@@ -20,75 +20,116 @@ import {
     ListItemSecondaryAction
 } from "@material-ui/core";
 import { DialogTitle } from "./DialogTitle";
+import { updateFriendList } from "../utils/updateFriendList";
 
-class AddFriendsList extends Component {
+class EditFriendsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
-            listName: "",
+            title: "",
             friends: [],
-            errors: {}
+            errors: {},
+            saveIsDisabled: true,
+            loading: false
         };
     }
 
-    openDialog = () => {
-        this.setState({ open: true });
-    };
+    componentDidMount() {
+        const friendsIds = this.props.friends.map(friend => friend._id);
+        this.setState({ title: this.props.title, friends: friendsIds });
+    }
 
     closeDialog = () => {
         this.clearDialogData();
-        this.setState({ open: false });
+        this.props.closeDialog();
     };
 
     clearDialogData = () => {
-        this.setState({ listName: "", friends: [], errors: {} });
+        const friendsIds = this.props.friends.map(friend => friend._id);
+
+        this.setState({
+            title: this.props.title,
+            friends: friendsIds,
+            errors: {},
+            saveIsDisabled: true,
+            loading: false
+        });
+    };
+
+    enableSaveButton = () => {
+        this.setState({ saveIsDisabled: false });
+    };
+
+    disableSaveButton = () => {
+        this.setState({ saveIsDisabled: true });
     };
 
     onChange = e => {
-        this.setState({ listName: e.target.value });
+        const newTitle = e.target.value;
+
+        this.setState({ title: newTitle });
+
+        if (newTitle && newTitle !== this.props.title) {
+            this.enableSaveButton();
+        } else {
+            this.disableSaveButton();
+        }
     };
 
     onSubmit = e => {
         e.preventDefault();
-        const { listName, friends } = this.state;
+        const { title, friends } = this.state;
 
-        if (!listName) {
+        if (!title) {
             this.setState({ errors: { name: "Please provide list name" } });
         } else if (!friends.length) {
             this.setState({
                 errors: { friends: "Please add friends to the list" }
             });
         } else {
-            // create new list and send it to database:
-            const newList = {
-                userId: this.props.user._id,
-                title: listName.trim(),
-                friends
-            };
+            this.setState({ loading: true, saveIsDisabled: true }, () => {
+                const newListData = {
+                    userId: this.props.user._id
+                };
 
-            axios
-                .post("/api/users/add_friend_list", newList)
-                .then(response => {
-                    // add new list to Profile and close dialog:
-                    if (response.data) {
-                        // add new list to Profile and close dialog:
-                        this.addNewList(response.data);
+                // send new title if it was changed:
+                if (title !== this.props.title) {
+                    newListData["title"] = title.trim();
+                }
 
-                        // open snackbar with success message:
+                // TODO: check if friend ids have changed:
+                newListData["friends"] = friends;
+
+                if (newListData.title || newListData.friends) {
+                    updateFriendList(newListData, response => {
+                        // use redux action to update list details in global state:
+                        if (newListData.title) {
+                            this.props.updateFriendListInState({
+                                target: "title",
+                                newData: title
+                            });
+                        }
+                        if (newListData.friends) {
+                            this.props.updateFriendListInState({
+                                target: "friends",
+                                newData: friends
+                            });
+                        }
+                    });
+                    setTimeout(() => {
+                        this.closeDialog();
                         this.props.toggleSnackbar({
                             action: "open",
-                            message:
-                                "A new friend list was successfully created!"
+                            message: "Your list was successfully updated!"
                         });
-                        this.closeDialog();
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.setState({ errors: err.response.data });
-                });
+                    }, 500);
+                }
+            });
         }
+    };
+
+    onCancel = () => {
+        this.closeDialog();
     };
 
     handleClick = id => {
@@ -101,22 +142,7 @@ class AddFriendsList extends Component {
             // add friend to friends list:
             this.setState({ friends: this.state.friends.concat(id) });
         }
-    };
-
-    addNewList = newList => {
-        // show friends' names and avatars for the newly created list:
-        newList.friends.forEach((id, i, array) => {
-            const user = this.props.user.friends.find(user => user._id === id);
-
-            if (user) {
-                array[i] = {
-                    _id: id,
-                    name: user.name,
-                    avatar: user.avatar
-                };
-            }
-        });
-        this.props.addNewList(newList);
+        this.enableSaveButton();
     };
 
     toggleAllUsers = () => {
@@ -128,41 +154,35 @@ class AddFriendsList extends Component {
             const friends = this.props.user.friends.map(user => user._id);
             this.setState({ friends });
         }
+        this.enableSaveButton();
     };
 
     render() {
-        const { classes, user } = this.props;
-        const { open, friends, errors, listName } = this.state;
-        const isNameInvalid = errors.name && !listName;
+        const { classes, user, dialogIsOpen } = this.props;
+        const { friends, errors, title, saveIsDisabled, loading } = this.state;
+        const isNameInvalid = errors.name && !title;
         const isListInvalid = errors.friends && !friends.length;
 
         return (
             <div>
-                <Button
-                    onClick={this.openDialog}
-                    variant="contained"
-                    color="primary"
-                    size="medium">
-                    Create list
-                </Button>
                 <Dialog
                     fullWidth
                     maxWidth="xs"
                     onClose={this.closeDialog}
-                    aria-labelledby="create-friend-list"
-                    open={open}>
+                    aria-labelledby="edit-friend-list"
+                    open={dialogIsOpen}>
                     <DialogTitle
-                        id="create-friend-list"
+                        id="edit-friend-list"
                         onClose={this.closeDialog}>
-                        Create a friend list
+                        Edit a friend list
                     </DialogTitle>
 
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
                             <FormControl fullWidth>
                                 <TextField
-                                    value={listName}
-                                    error={errors.name && !listName}
+                                    value={title}
+                                    error={isNameInvalid}
                                     onChange={this.onChange}
                                     id="list-name"
                                     placeholder="Enter name of list"
@@ -186,7 +206,7 @@ class AddFriendsList extends Component {
                                     variant="subtitle1"
                                     component="h4"
                                     className={classes.subtitle}>
-                                    Add friends:
+                                    Add or remove friends:
                                 </Typography>
                                 <Button
                                     onClick={this.toggleAllUsers}
@@ -236,12 +256,22 @@ class AddFriendsList extends Component {
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
-                            <Button
+                            <AdornedButton
+                                loading={loading}
                                 type="submit"
                                 variant="contained"
                                 size="small"
+                                disabled={saveIsDisabled}
+                                color="secondary">
+                                Save
+                            </AdornedButton>
+                            <Button
+                                type="button"
+                                onClick={this.onCancel}
+                                variant="contained"
+                                size="small"
                                 color="primary">
-                                Create
+                                Cancel
                             </Button>
                         </DialogActions>
                     </form>
@@ -251,4 +281,4 @@ class AddFriendsList extends Component {
     }
 }
 
-export default withStyles(friendListStyles)(AddFriendsList);
+export default withStyles(friendListStyles)(EditFriendsList);

@@ -80,7 +80,8 @@ class Profile extends Component {
             toggleSnackbar,
             snackbarIsOpen,
             snackbarMessage,
-            updateVotes
+            updateVotes,
+            updateFriendListInState
         } = this.props;
 
         const { lists, polls } = this.props.user;
@@ -244,7 +245,7 @@ class Profile extends Component {
                                     <Grid item>
                                         <AddFriendList
                                             user={user}
-                                            users={users}
+                                            // users={users}
                                             addNewList={this.props.addNewList}
                                             toggleSnackbar={toggleSnackbar}
                                             snackbarIsOpen={snackbarIsOpen}
@@ -259,9 +260,15 @@ class Profile extends Component {
                                     {lists &&
                                         lists.map(list => (
                                             <ListCard
+                                                user={user}
                                                 key={list._id}
                                                 list={list}
                                                 moveListBy={moveListBy}
+                                                toggleSnackbar={toggleSnackbar}
+                                                snackbarIsOpen={snackbarIsOpen}
+                                                updateFriendListInState={
+                                                    updateFriendListInState
+                                                }
                                             />
                                         ))}
                                     <Box
