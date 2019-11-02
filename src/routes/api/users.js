@@ -216,6 +216,7 @@ router.get("/user/:id", (req, res) => {
             path: "polls",
             options: {
                 sort: {
+                    complete: "descending",
                     createdAt: "descending"
                 }
             },
