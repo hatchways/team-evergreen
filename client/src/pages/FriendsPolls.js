@@ -40,7 +40,12 @@ class FriendsPolls extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            logOut,
+            updateUserDataInState,
+            toggleDrawer,
+            drawerIsOpen,
+            mobileDrawerIsOpen
         } = this.props;
         const { pollDialogIsOpen } = this.state;
         const { friendsPolls } = this.props;
@@ -50,12 +55,15 @@ class FriendsPolls extends Component {
                 <UserPanel
                     user={user}
                     users={users}
-                    logOut={this.props.logOut}
+                    logOut={logOut}
                     togglePollDialog={this.togglePollDialog}
-                    updateUserDataInState={this.props.updateUserDataInState}
+                    updateUserDataInState={updateUserDataInState}
                     toggleSnackbar={toggleSnackbar}
                     snackbarIsOpen={snackbarIsOpen}
                     snackbarMessage={snackbarMessage}
+                    toggleDrawer={toggleDrawer}
+                    drawerIsOpen={drawerIsOpen}
+                    mobileDrawerIsOpen={mobileDrawerIsOpen}
                 />
 
                 <main className={classes.main}>
