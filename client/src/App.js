@@ -17,7 +17,8 @@ import {
     updateUserDataInState,
     toggleSnackbar,
     resetFriendsPolls,
-    toggleDrawer
+    toggleDrawer,
+    updateFriendListInState
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -67,7 +68,8 @@ const mapDispatchToProps = dispatch => {
         updateUserDataInState: data => dispatch(updateUserDataInState(data)),
         toggleSnackbar: data => dispatch(toggleSnackbar(data)),
         resetFriendsPolls: () => dispatch(resetFriendsPolls()),
-        toggleDrawer: data => dispatch(toggleDrawer(data))
+        toggleDrawer: data => dispatch(toggleDrawer(data)),
+        updateFriendListInState: data => dispatch(updateFriendListInState(data))
     };
 };
 
@@ -220,6 +222,9 @@ class App extends Component {
                                         drawerIsOpen={this.props.drawerIsOpen}
                                         mobileDrawerIsOpen={
                                             this.props.mobileDrawerIsOpen
+                                        }
+                                        updateFriendListInState={
+                                            this.props.updateFriendListInState
                                         }
                                     />
                                 ) : (

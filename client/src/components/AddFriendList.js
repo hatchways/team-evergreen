@@ -164,14 +164,14 @@ class AddFriendsList extends Component {
                                     value={listName}
                                     error={errors.name && !listName}
                                     onChange={this.onChange}
-                                    id="list-name"
+                                    aria-describedby="list-name-message"
                                     placeholder="Enter name of list"
                                     margin="none"
                                     variant="outlined"
                                 />
                                 <FormHelperText
                                     error
-                                    id="list-name"
+                                    id="list-name-message"
                                     className={classes.error}>
                                     {isNameInvalid
                                         ? errors.name

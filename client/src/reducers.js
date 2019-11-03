@@ -13,7 +13,8 @@ import {
     UPDATE_USER_DATA,
     TOGGLE_SNACKBAR,
     RESET_FRIENDS_POLLS,
-    TOGGLE_DRAWER
+    TOGGLE_DRAWER,
+    UPDATE_FRIEND_LIST
 } from "./constants.js";
 
 const userInitialState = {
@@ -86,6 +87,27 @@ export const userReducer = (state = userInitialState, action = {}) => {
             return Object.assign({}, state, {
                 lists: [action.data, ...state.lists]
             });
+
+        case UPDATE_FRIEND_LIST:
+            console.log("data received in reducers: ", action);
+
+            const { listId, target, newData } = action;
+
+            const updatedLists = state.lists.map(list => {
+                // Find the list with the matching listId
+                if (list._id === listId) {
+                    // Return a new object
+                    return {
+                        ...list, // copy the existing list
+                        [target]: newData // update title or friends
+                    };
+                }
+
+                // Leave every other list unchanged
+                return list;
+            });
+
+            return Object.assign({}, state, { lists: updatedLists });
 
         case ADD_NEW_POLL:
             return Object.assign({}, state, {

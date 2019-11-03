@@ -17,6 +17,7 @@ import Icon from "@material-ui/core/Icon";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import EditFriendList from "../components/EditFriendList";
+import DeleteFriendList from "../components/DeleteFriendList";
 
 const useStyles = makeStyles(profileStyles);
 
@@ -24,7 +25,8 @@ function ListCard(props) {
     const classes = useStyles();
     const { _id, title, friends } = props.list;
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
+    const [editDialogIsOpen, setEditDialogIsOpen] = React.useState(false);
+    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = React.useState(false);
 
     const openMenu = event => {
         setAnchorEl(event.currentTarget);
@@ -34,13 +36,22 @@ function ListCard(props) {
         setAnchorEl(null);
     };
 
-    const openDialog = () => {
+    const openEditDialog = () => {
         closeMenu();
-        setDialogIsOpen(true);
+        setEditDialogIsOpen(true);
     };
 
-    const closeDialog = () => {
-        setDialogIsOpen(false);
+    const closeEditDialog = () => {
+        setEditDialogIsOpen(false);
+    };
+
+    const openDeleteDialog = () => {
+        closeMenu();
+        setDeleteDialogIsOpen(true);
+    };
+
+    const closeDeleteDialog = () => {
+        setDeleteDialogIsOpen(false);
     };
 
     return (
@@ -77,10 +88,12 @@ function ListCard(props) {
                                     vertical: "top",
                                     horizontal: "center"
                                 }}>
-                                <MenuItem key={1} onClick={openDialog}>
+                                <MenuItem key={1} onClick={openEditDialog}>
                                     Edit list
                                 </MenuItem>
-                                <MenuItem key={2}>Remove list</MenuItem>
+                                <MenuItem key={2} onClick={openDeleteDialog}>
+                                    Remove list
+                                </MenuItem>
                             </Menu>
                         </>
                     }
@@ -115,13 +128,23 @@ function ListCard(props) {
             </Card>
 
             <EditFriendList
-                dialogIsOpen={dialogIsOpen}
-                closeDialog={closeDialog}
+                dialogIsOpen={editDialogIsOpen}
+                closeDialog={closeEditDialog}
                 title={title}
                 friends={friends}
                 listId={_id}
                 user={props.user}
                 updateFriendListInState={props.updateFriendListInState}
+                toggleSnackbar={props.toggleSnackbar}
+                snackbarIsOpen={props.snackbarIsOpen}
+            />
+
+            <DeleteFriendList
+                dialogIsOpen={deleteDialogIsOpen}
+                closeDialog={closeDeleteDialog}
+                listId={_id}
+                user={props.user}
+                deleteFriendListInState={props.deleteFriendListInState}
                 toggleSnackbar={props.toggleSnackbar}
                 snackbarIsOpen={props.snackbarIsOpen}
             />

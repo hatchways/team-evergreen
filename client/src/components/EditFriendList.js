@@ -103,12 +103,30 @@ class EditFriendsList extends Component {
                         // use redux action to update list details in global state:
                         if (listData.title) {
                             this.props.updateFriendListInState({
+                                listId: this.props.listId,
                                 target: "title",
-                                newData: title
+                                newData: title.trim()
                             });
                         }
+
                         if (listData.friends) {
+                            // save friend with name and avatar, not just id:
+                            friends.forEach((id, i, array) => {
+                                const user = this.props.user.friends.find(
+                                    user => user._id === id
+                                );
+
+                                if (user) {
+                                    array[i] = {
+                                        _id: id,
+                                        name: user.name,
+                                        avatar: user.avatar
+                                    };
+                                }
+                            });
+
                             this.props.updateFriendListInState({
+                                listId: this.props.listId,
                                 target: "friends",
                                 newData: friends
                             });
@@ -182,14 +200,14 @@ class EditFriendsList extends Component {
                                     value={title}
                                     error={isNameInvalid}
                                     onChange={this.onChange}
-                                    id="list-name"
+                                    aria-describedby="list-name-message"
                                     placeholder="Enter name of list"
                                     margin="none"
                                     variant="outlined"
                                 />
                                 <FormHelperText
                                     error
-                                    id="list-name"
+                                    id="list-name-message"
                                     className={classes.error}>
                                     {isNameInvalid
                                         ? errors.name
