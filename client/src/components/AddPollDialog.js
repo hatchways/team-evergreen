@@ -90,7 +90,6 @@ class AddPollDialog extends Component {
             image2: "",
             expiresOn: "",
             sendToList: "",
-            selectedList: "",
             target: "poll_images",
             buttonIsDisabled: false,
             errors: {}
@@ -105,7 +104,6 @@ class AddPollDialog extends Component {
             image2: "",
             expiresOn: "",
             sendToList: "",
-            selectedList: "",
             target: "poll_images",
             buttonIsDisabled: false,
             errors: {}
@@ -171,13 +169,13 @@ class AddPollDialog extends Component {
                     }
 
                     // add the list title and voter counts to the returned data
-                    response.data.data.sendToList = {
+                    response.data.newPoll.sendToList = {
                         _id: sendToList.split(" ")[0],
                         title: sendToList.split(" ")[1],
                         voterCount: sendToList.split(" ")[2]
                     };
                     // add new poll to Profile and close dialog
-                    this.props.addNewPoll(response.data.data);
+                    this.props.addNewPoll(response.data.newPoll);
                     this.closeDialog();
                     // open snackbar with success message:
                     this.props.toggleSnackbar({
