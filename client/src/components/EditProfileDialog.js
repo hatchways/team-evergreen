@@ -63,6 +63,11 @@ const styles = theme => ({
             textTransform: "initial"
         }
     },
+    loadingButton: {
+        color: theme.palette.grey[500],
+        disabled: true,
+        padding: "4px 4px 4px 22px"
+    },
     bigAvatar: {
         display: "inline-flex",
         marginLeft: "auto",
@@ -117,7 +122,7 @@ class EditProfileDialog extends Component {
             newFile: "",
             target: TARGET_AVATAR,
             saveIsDisabled: true,
-            loading: false,
+            saving: false,
             errors: {}
         };
     }
@@ -129,7 +134,7 @@ class EditProfileDialog extends Component {
             newEmail: this.props.email,
             target: TARGET_AVATAR,
             saveIsDisabled: true,
-            loading: false,
+            saving: false,
             errors: {}
         });
     };
@@ -199,7 +204,7 @@ class EditProfileDialog extends Component {
         this.disableSaveButton();
 
         // set the loading flag to true
-        this.setState({ loading: true });
+        this.setState({ saving: true });
 
         // array to store promises
         const promises = [];
@@ -285,7 +290,8 @@ class EditProfileDialog extends Component {
             newName,
             newEmail,
             newAvatar,
-            saveIsDisabled
+            saveIsDisabled,
+            saving
         } = this.state;
 
         return (
@@ -378,8 +384,8 @@ class EditProfileDialog extends Component {
                         </DialogContent>
                         <DialogActions className={classes.action}>
                             <AdornedButton
-                                className={classes.button}
-                                loading={this.state.loading}
+                                className={saving ? classes.loadingButton : ""}
+                                loading={saving}
                                 type="submit"
                                 variant="contained"
                                 size="small"
