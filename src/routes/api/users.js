@@ -207,7 +207,7 @@ router.get("/", (req, res) => {
         });
 });
 
-// @route GET api/users/users
+// @route GET api/users/user/:id
 // @desc Get all information for a single user
 // @access Private
 router.get("/user/:id", (req, res) => {
@@ -218,7 +218,11 @@ router.get("/user/:id", (req, res) => {
                 sort: {
                     createdAt: "descending"
                 }
-            }
+            },
+            populate: {
+                path: "sendToList",
+                select: "title"
+            } // select only name and avatar for each friend
         })
         .populate({
             path: "lists",

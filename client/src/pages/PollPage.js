@@ -124,6 +124,7 @@ class PollPage extends Component {
         } = this.props;
         const { poll, lists } = this.props.location.state;
         const { results, votes, pollDialogIsOpen } = this.state;
+        const listName = poll.sendToList.title;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -181,8 +182,9 @@ class PollPage extends Component {
                                             <Typography variant="body2">
                                                 {votesCount || 0}{" "}
                                                 {votesCount === 1
-                                                    ? "answer"
-                                                    : "answers"}
+                                                    ? "answer "
+                                                    : "answers "}
+                                                from {listName}
                                             </Typography>
                                         }
                                     />
