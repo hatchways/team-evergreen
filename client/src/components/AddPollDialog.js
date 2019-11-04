@@ -84,7 +84,6 @@ class AddPollDialog extends Component {
             image2: "",
             expiresOn: "",
             sendToList: "",
-            selectedList: "",
             target: "poll_images",
             buttonIsDisabled: false,
             errors: {}
@@ -99,7 +98,6 @@ class AddPollDialog extends Component {
             image2: "",
             expiresOn: "",
             sendToList: "",
-            selectedList: "",
             target: "poll_images",
             buttonIsDisabled: false,
             errors: {}
@@ -118,7 +116,7 @@ class AddPollDialog extends Component {
     handleSelectChange = e => {
         this.setState({ sendToList: e.target.value });
         //the select list value is set to a string of the form
-        //"list._id list.title" in order to be able to display the list title
+        //"list._id list.title list.friends.length" in order to be able to display the list title
         //in the select input field -- this is a limitation imposed by the React
         //component.  Need to extract the id from the sendToList component when
         //saving it.  This change was made in order to add the list name to the
@@ -164,13 +162,14 @@ class AddPollDialog extends Component {
                         return;
                     }
 
-                    // add the list title to the returned data
-                    response.data.data.sendToList = {
+                    // add the list title and voter counts to the returned data
+                    response.data.newPoll.sendToList = {
                         _id: sendToList.split(" ")[0],
-                        title: sendToList.split(" ")[1]
+                        title: sendToList.split(" ")[1],
+                        voterCount: sendToList.split(" ")[2]
                     };
                     // add new poll to Profile and close dialog
-                    this.props.addNewPoll(response.data.data);
+                    this.props.addNewPoll(response.data.newPoll);
                     this.closeDialog();
                     // open snackbar with success message:
                     this.props.toggleSnackbar({
@@ -269,7 +268,7 @@ class AddPollDialog extends Component {
                                         return (
                                             <MenuItem
                                                 key={list._id}
-                                                value={`${list._id} ${list.title}`}
+                                                value={`${list._id} ${list.title} ${list.friends.length}`}
                                                 className={classes.item}>
                                                 {list.title}
                                             </MenuItem>

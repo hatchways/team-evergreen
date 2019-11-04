@@ -216,13 +216,14 @@ router.get("/user/:id", (req, res) => {
             path: "polls",
             options: {
                 sort: {
+                    complete: "descending",
                     createdAt: "descending"
                 }
             },
             populate: {
                 path: "sendToList",
                 select: "title"
-            } // select only name and avatar for each friend
+            }
         })
         .populate({
             path: "lists",

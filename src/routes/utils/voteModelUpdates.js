@@ -17,16 +17,25 @@ export async function registerVote(pollId, userId, option) {
             { new: true, upsert: true }
         ).exec();
 
+        // Retrieves counts by option and total # of votes needed
+        // newCounts[0,1] = vote counts for options
+        // newCounts[2] = number of votes needed
         const newCounts = await parallelSumOfCounts(pollId);
 
         await Poll.findOneAndUpdate(
             { _id: pollId },
             {
-                votes: newCounts
+                votes: newCounts.slice(0, 2),
+                complete: newCounts[0] + newCounts[1] === newCounts[2]
             }
         ).exec();
-        return { pollId: pollId, option: option, newCounts: newCounts };
+        return {
+            pollId: pollId,
+            option: option,
+            newCounts: newCounts.slice(0, 2)
+        };
     } catch (err) {
+        console.log(err);
         return { status: 500, message: "Error occurred while saving vote." };
     }
 }
@@ -42,8 +51,13 @@ export async function parallelSumOfCounts(pollId) {
         Vote.where({
             pollId: pollId,
             option: 1
-        }).countDocuments()
+        }).countDocuments(),
+        Poll.findById(pollId, "-_id sendToList", { lean: true }).populate({
+            path: "sendToList",
+            select: "friends -_id"
+        })
     ];
-    const [count0, count1] = await Promise.all(promises);
-    return [count0, count1];
+    const [count0, count1, sendToList] = await Promise.all(promises);
+    const voters = sendToList["sendToList"]["friends"];
+    return [count0, count1, voters.length];
 }
