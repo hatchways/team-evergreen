@@ -22,7 +22,7 @@ class PollCard extends React.Component {
         const { _id } = this.props.poll;
         //   Listen to new vote registration event:
         socket.on("votes_changed", data => {
-            // if vote was registred for this poll, update vote count:
+            // if vote was registered for this poll, update vote count:
             if (data.pollId === _id) {
                 this.props.updateVotes(data.pollId, data.newCounts);
             }
