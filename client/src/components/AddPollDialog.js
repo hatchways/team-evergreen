@@ -52,15 +52,6 @@ const styles = theme => ({
     item: {
         paddingLeft: "6px",
         borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
-    },
-    button: {
-        padding: "4px 8px",
-        "&.MuiButton-text": {
-            textTransform: "initial"
-        }
-    },
-    loadingButton: {
-        padding: "4px 4px 4px 22px"
     }
 });
 
@@ -327,11 +318,6 @@ class AddPollDialog extends Component {
                                 loading={this.state.buttonIsDisabled}
                                 type="submit"
                                 variant="contained"
-                                className={
-                                    this.state.buttonIsDisabled
-                                        ? classes.loadingButton
-                                        : ""
-                                }
                                 size="small"
                                 disabled={buttonIsDisabled}
                                 color="primary">

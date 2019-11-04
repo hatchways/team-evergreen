@@ -53,21 +53,6 @@ const styles = theme => ({
         paddingBottom: theme.spacing(4),
         paddingTop: theme.spacing(2)
     },
-    item: {
-        paddingLeft: "6px",
-        borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
-    },
-    button: {
-        padding: "4px 8px",
-        "&.MuiButton-text": {
-            textTransform: "initial"
-        }
-    },
-    loadingButton: {
-        color: theme.palette.grey[500],
-        disabled: true,
-        padding: "4px 4px 4px 22px"
-    },
     bigAvatar: {
         display: "inline-flex",
         marginLeft: "auto",
@@ -204,77 +189,80 @@ class EditProfileDialog extends Component {
         this.disableSaveButton();
 
         // set the loading flag to true
-        this.setState({ saving: true });
+        this.setState({ saving: true }, () => {
+            // array to store promises
+            const promises = [];
 
-        // array to store promises
-        const promises = [];
+            // create json object for name and e-mail changes
+            const newUserData = {};
+            if (newName !== name) {
+                newUserData["name"] = newName;
+            }
+            if (newEmail !== email) {
+                newUserData["email"] = newEmail;
+            }
+            if (!isEmpty(newUserData)) {
+                // add userId to query
+                newUserData["userId"] = userId;
+                promises.push(
+                    updateUserData(newUserData, response => {
+                        // use redux action to update user details in global state:
+                        if (newUserData.name) {
+                            updateUserDataInState({
+                                target: "name",
+                                newData: newName
+                            });
+                        }
 
-        // create json object for name and e-mail changes
-        const newUserData = {};
-        if (newName !== name) {
-            newUserData["name"] = newName;
-        }
-        if (newEmail !== email) {
-            newUserData["email"] = newEmail;
-        }
-        if (!isEmpty(newUserData)) {
-            // add userId to query
-            newUserData["userId"] = userId;
-            promises.push(
-                updateUserData(newUserData, response => {
-                    // use redux action to update user details in global state:
-                    if (newUserData.name) {
+                        if (newUserData.email) {
+                            updateUserDataInState({
+                                target: "email",
+                                newData: newEmail
+                            });
+                        }
+                    })
+                );
+            }
+
+            // create FormData object for file uploads
+            if (newFile) {
+                const formData = new FormData();
+                formData.append("userId", userId);
+                formData.append("target", TARGET_AVATAR);
+                formData.append("newFile", newFile, newFile.name);
+                promises.push(
+                    updateAvatar(formData, response => {
+                        // use redux action to update avatar in global state:
                         updateUserDataInState({
-                            target: "name",
-                            newData: newName
+                            target: "avatar",
+                            newData: response.data.avatarUrl
                         });
-                    }
+                    })
+                );
+            }
 
-                    if (newUserData.email) {
-                        updateUserDataInState({
-                            target: "email",
-                            newData: newEmail
+            // replace current avatar and close dialog:
+            // this.props.changeAvatar(response.data.data);
+            Promise.all(promises)
+                .then(value => {
+                    setTimeout(() => {
+                        this.closeDialog();
+                        this.props.toggleSnackbar({
+                            action: "open",
+                            message: "Your profile was successfully updated!"
                         });
-                    }
+                    }, 800);
                 })
-            );
-        }
-
-        // create FormData object for file uploads
-        if (newFile) {
-            const formData = new FormData();
-            formData.append("userId", userId);
-            formData.append("target", TARGET_AVATAR);
-            formData.append("newFile", newFile, newFile.name);
-            promises.push(
-                updateAvatar(formData, response => {
-                    // use redux action to update avatar in global state:
-                    updateUserDataInState({
-                        target: "avatar",
-                        newData: response.data.avatarUrl
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        errors: {
+                            error:
+                                "Something went wrong. Please try again later."
+                        }
                     });
-                })
-            );
-        }
-
-        // replace current avatar and close dialog:
-        // this.props.changeAvatar(response.data.data);
-        Promise.all(promises)
-            .then(value => {
-                this.props.toggleSnackbar({
-                    action: "open",
-                    message: "Your profile was successfully updated!"
                 });
-                this.closeDialog();
-            })
-            .catch(err => {
-                console.log(err);
-                this.setState({
-                    errors: {
-                        error: "Something went wrong. Please try again later."
-                    }
-                });
-            });
+        });
     };
 
     revokeUrl = e => {
@@ -384,8 +372,8 @@ class EditProfileDialog extends Component {
                         </DialogContent>
                         <DialogActions className={classes.action}>
                             <AdornedButton
-                                className={saving ? classes.loadingButton : ""}
-                                loading={saving}
+                                aria-label="submit profile changes"
+                                loading={true}
                                 type="submit"
                                 variant="contained"
                                 size="small"
@@ -398,7 +386,6 @@ class EditProfileDialog extends Component {
                                 onClick={this.onCancel}
                                 variant="contained"
                                 size="small"
-                                disabled={false}
                                 color="primary">
                                 Cancel
                             </Button>

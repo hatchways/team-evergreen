@@ -6,13 +6,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const styles = theme => ({
-    root: {
-        marginLeft: 5
-    },
     spinner: {
-        position: "relative",
         marginLeft: "7px",
-        marginRight: "5px",
         color: theme.palette.secondary.main
     }
 });
