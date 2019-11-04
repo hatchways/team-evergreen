@@ -116,7 +116,8 @@ async function addPolls(userIds, friendsLists) {
                     friendsLists[id][
                         Math.floor(Math.random() * friendsLists[id].length)
                     ],
-                votes: [0, 0]
+                votes: [0, 0],
+                complete: false
             });
             const newPromise = newPoll.save();
             newPolls[id] = newPoll._id;

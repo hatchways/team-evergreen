@@ -134,7 +134,7 @@ router.get("/", (req, res) => {
         });
 });
 
-// @route GET api/users/users
+// @route GET api/users/user/:id
 // @desc Get all information for a single user
 // @access Private
 router.get("/user/:id", (req, res) => {
@@ -143,8 +143,13 @@ router.get("/user/:id", (req, res) => {
             path: "polls",
             options: {
                 sort: {
+                    complete: "descending",
                     createdAt: "descending"
                 }
+            },
+            populate: {
+                path: "sendToList",
+                select: "title"
             }
         })
         .populate({

@@ -20,10 +20,9 @@ import { socket } from "../utils/setSocketConnection";
 class PollCard extends React.Component {
     componentDidMount() {
         const { _id } = this.props.poll;
-
         //   Listen to new vote registration event:
         socket.on("votes_changed", data => {
-            // if vote was registred for this poll, update vote count:
+            // if vote was registered for this poll, update vote count:
             if (data.pollId === _id) {
                 this.props.updateVotes(data.pollId, data.newCounts);
             }
@@ -37,6 +36,7 @@ class PollCard extends React.Component {
     render() {
         const { classes, poll, lists } = this.props;
         const { title, options, votes, _id } = this.props.poll;
+        const listName = this.props.poll.sendToList.title;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -70,7 +70,8 @@ class PollCard extends React.Component {
                             subheader={
                                 <Typography variant="body2">
                                     {votesCount || 0}{" "}
-                                    {votesCount === 1 ? "answer" : "answers"}
+                                    {votesCount === 1 ? "answer " : "answers "}
+                                    from {listName}
                                 </Typography>
                             }
                         />
