@@ -373,7 +373,7 @@ class EditProfileDialog extends Component {
                         <DialogActions className={classes.action}>
                             <AdornedButton
                                 aria-label="submit profile changes"
-                                loading={true}
+                                loading={saving}
                                 type="submit"
                                 variant="contained"
                                 size="small"
