@@ -14,7 +14,8 @@ import {
     TOGGLE_SNACKBAR,
     RESET_FRIENDS_POLLS,
     TOGGLE_DRAWER,
-    UPDATE_FRIEND_LIST
+    UPDATE_FRIEND_LIST,
+    DELETE_FRIEND_LIST
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -183,5 +184,12 @@ export function updateFriendListInState(data) {
         listId: data.listId,
         target: data.target,
         newData: data.newData
+    };
+}
+
+export function deleteFriendListInState(listId) {
+    return {
+        type: DELETE_FRIEND_LIST,
+        listId
     };
 }

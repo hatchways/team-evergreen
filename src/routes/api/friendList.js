@@ -108,6 +108,32 @@ router.patch("/", (req, res) => {
 // @route DELETE api/friend-list/
 // @desc Delete friend list
 // @params req.body.listId
-// TODO: add delete friend list route
+router.delete("/", (req, res) => {
+    const { listId, userId } = req.body;
+
+    FriendList.findOneAndDelete({ _id: listId })
+        .then(result => {
+            User.findOneAndUpdate(
+                { _id: userId },
+                { $pullAll: { lists: [listId] } },
+                { new: true }
+            )
+                .then(response => {
+                    return res.status(200).json(listId);
+                })
+                .catch(err => {
+                    console.log("error: ", err);
+                    return res.status(500).json({
+                        error: "Cannot delete a list from user Model"
+                    });
+                });
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.status(500).json({
+                error: "Unable to delete a list"
+            });
+        });
+});
 
 module.exports = router;

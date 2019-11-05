@@ -89,10 +89,10 @@ function ListCard(props) {
                                     horizontal: "center"
                                 }}>
                                 <MenuItem key={1} onClick={openEditDialog}>
-                                    Edit list
+                                    Edit
                                 </MenuItem>
                                 <MenuItem key={2} onClick={openDeleteDialog}>
-                                    Remove list
+                                    Remove
                                 </MenuItem>
                             </Menu>
                         </>
@@ -143,7 +143,8 @@ function ListCard(props) {
                 dialogIsOpen={deleteDialogIsOpen}
                 closeDialog={closeDeleteDialog}
                 listId={_id}
-                user={props.user}
+                title={title}
+                userId={props.user._id}
                 deleteFriendListInState={props.deleteFriendListInState}
                 toggleSnackbar={props.toggleSnackbar}
                 snackbarIsOpen={props.snackbarIsOpen}

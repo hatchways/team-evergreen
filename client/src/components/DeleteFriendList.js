@@ -29,19 +29,21 @@ class DeleteFriendsList extends Component {
 
     onSubmit = e => {
         this.setState({ loading: true }, () => {
-            const listId = this.props.listId;
-            deleteFriendList(listId, () => {
-                // use redux action to update list details in global state:
-                this.props.deleteFriendListInState(listId);
-            });
+            const { listId, userId } = this.props;
 
-            setTimeout(() => {
-                this.closeDialog();
-                this.props.toggleSnackbar({
-                    action: "open",
-                    message: "Your list was successfully deleted!"
-                });
-            }, 500);
+            const dataToSend = { listId, userId };
+
+            deleteFriendList(dataToSend, () => {
+                // use redux action to delete list in global state:
+                setTimeout(() => {
+                    this.props.deleteFriendListInState(listId);
+                    this.closeDialog();
+                    this.props.toggleSnackbar({
+                        action: "open",
+                        message: "Your list was successfully deleted!"
+                    });
+                }, 800);
+            });
         });
     };
 
@@ -50,7 +52,7 @@ class DeleteFriendsList extends Component {
     };
 
     render() {
-        const { classes, dialogIsOpen } = this.props;
+        const { classes, dialogIsOpen, title } = this.props;
         const { loading } = this.state;
 
         return (
@@ -64,12 +66,12 @@ class DeleteFriendsList extends Component {
                     <DialogTitle
                         id="delete-friend-list"
                         onClose={this.closeDialog}>
-                        This friend list will be removed
+                        Your friend list {title} will be removed
                     </DialogTitle>
-
                     <DialogActions className={classes.action}>
                         <AdornedButton
                             loading={loading}
+                            disabled={loading}
                             type="submit"
                             onClick={this.onSubmit}
                             variant="contained"

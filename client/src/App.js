@@ -18,7 +18,8 @@ import {
     toggleSnackbar,
     resetFriendsPolls,
     toggleDrawer,
-    updateFriendListInState
+    updateFriendListInState,
+    deleteFriendListInState
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -69,7 +70,9 @@ const mapDispatchToProps = dispatch => {
         toggleSnackbar: data => dispatch(toggleSnackbar(data)),
         resetFriendsPolls: () => dispatch(resetFriendsPolls()),
         toggleDrawer: data => dispatch(toggleDrawer(data)),
-        updateFriendListInState: data => dispatch(updateFriendListInState(data))
+        updateFriendListInState: data =>
+            dispatch(updateFriendListInState(data)),
+        deleteFriendListInState: data => dispatch(deleteFriendListInState(data))
     };
 };
 
@@ -226,6 +229,9 @@ class App extends Component {
                                         updateFriendListInState={
                                             this.props.updateFriendListInState
                                         }
+                                        deleteFriendListInState={
+                                            this.props.deleteFriendListInState
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -263,25 +269,6 @@ class App extends Component {
                                         mobileDrawerIsOpen={
                                             this.props.mobileDrawerIsOpen
                                         }
-                                    />
-                                ) : (
-                                    <Redirect to="/login" />
-                                )
-                            }
-                        />
-                        <Route
-                            exact
-                            path="/user/:id"
-                            render={props =>
-                                this.props.isLoading ? (
-                                    <Loader />
-                                ) : isAuthenticated ? (
-                                    <Profile
-                                        {...props}
-                                        users={this.props.users}
-                                        user={this.props.user}
-                                        loadUsers={this.props.loadUsers}
-                                        logOut={this.logOut}
                                     />
                                 ) : (
                                     <Redirect to="/login" />

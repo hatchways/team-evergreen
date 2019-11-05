@@ -12,9 +12,11 @@ export async function updateFriendList(newData, cb) {
         });
 }
 
-export async function deleteFriendList(listId, cb) {
+export async function deleteFriendList(payload, cb) {
     await axios
-        .delete("/api/friend-list", listId)
+        .delete("/api/friend-list", {
+            data: payload
+        })
         .then(response => {
             cb(response);
         })

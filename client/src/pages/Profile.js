@@ -81,7 +81,8 @@ class Profile extends Component {
             snackbarIsOpen,
             snackbarMessage,
             updateVotes,
-            updateFriendListInState
+            updateFriendListInState,
+            deleteFriendListInState
         } = this.props;
 
         const { lists, polls } = this.props.user;
@@ -268,6 +269,9 @@ class Profile extends Component {
                                                 snackbarIsOpen={snackbarIsOpen}
                                                 updateFriendListInState={
                                                     updateFriendListInState
+                                                }
+                                                deleteFriendListInState={
+                                                    deleteFriendListInState
                                                 }
                                             />
                                         ))}
