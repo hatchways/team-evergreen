@@ -36,8 +36,8 @@ class DeleteFriendsList extends Component {
             deleteFriendList(dataToSend, () => {
                 // use redux action to delete list in global state:
                 setTimeout(() => {
-                    this.props.deleteFriendListInState(listId);
                     this.closeDialog();
+                    this.props.deleteFriendListInState(listId);
                     this.props.toggleSnackbar({
                         action: "open",
                         message: "Your list was successfully deleted!"
@@ -66,7 +66,7 @@ class DeleteFriendsList extends Component {
                     <DialogTitle
                         id="delete-friend-list"
                         onClose={this.closeDialog}>
-                        Your friend list {title} will be removed
+                        Your friend list {title} will be deleted
                     </DialogTitle>
                     <DialogActions className={classes.action}>
                         <AdornedButton

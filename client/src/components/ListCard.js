@@ -92,7 +92,7 @@ function ListCard(props) {
                                     Edit
                                 </MenuItem>
                                 <MenuItem key={2} onClick={openDeleteDialog}>
-                                    Remove
+                                    Delete
                                 </MenuItem>
                             </Menu>
                         </>
