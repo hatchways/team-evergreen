@@ -14,7 +14,6 @@ export const TOGGLE_SNACKBAR = "TOGGLE_SNACKBAR";
 export const RESET_FRIENDS_POLLS = "RESET_FRIENDS_POLLS";
 export const TOGGLE_DRAWER = "TOGGLE_DRAWER";
 export const UPDATE_FRIEND_LIST = "UPDATE_FRIEND_LIST";
-export const DELETE_FRIEND_LIST = "DELETE_FRIEND_LIST";
 
 export const DEVELOPMENT_SERVER_PORT = 3001;
 export const PRODUCTION_URL = "optio-evergreeen.herokuapp.com";

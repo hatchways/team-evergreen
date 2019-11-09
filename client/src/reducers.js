@@ -14,8 +14,7 @@ import {
     TOGGLE_SNACKBAR,
     RESET_FRIENDS_POLLS,
     TOGGLE_DRAWER,
-    UPDATE_FRIEND_LIST,
-    DELETE_FRIEND_LIST
+    UPDATE_FRIEND_LIST
 } from "./constants.js";
 
 const userInitialState = {
@@ -107,14 +106,6 @@ export const userReducer = (state = userInitialState, action = {}) => {
             });
 
             return Object.assign({}, state, { lists: updatedLists });
-
-        case DELETE_FRIEND_LIST:
-            const filteredLists = state.lists.filter(list => {
-                // Filter out provided list id:
-                return list._id !== action.listId;
-            });
-
-            return Object.assign({}, state, { lists: filteredLists });
 
         case ADD_NEW_POLL:
             return Object.assign({}, state, {
