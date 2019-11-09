@@ -29,7 +29,7 @@ class EditFriendsList extends Component {
             title: "",
             friends: [],
             errors: {},
-            saveIsDisabled: true,
+            saveIsDisabled: false,
             loading: false
         };
     }
@@ -51,29 +51,25 @@ class EditFriendsList extends Component {
             title: this.props.title,
             friends: friendsIds,
             errors: {},
-            saveIsDisabled: true,
+            saveIsDisabled: false,
             loading: false
         });
-    };
-
-    enableSaveButton = () => {
-        this.setState({ saveIsDisabled: false });
-    };
-
-    disableSaveButton = () => {
-        this.setState({ saveIsDisabled: true });
     };
 
     onChange = e => {
         const newTitle = e.target.value;
 
         this.setState({ title: newTitle });
+    };
 
-        if (newTitle && newTitle !== this.props.title) {
-            this.enableSaveButton();
-        } else {
-            this.disableSaveButton();
-        }
+    areAllOldFriends = () => {
+        const newFriends = this.state.friends;
+        const previousFriendsList = this.props.friends;
+
+        return (
+            previousFriendsList.length === newFriends.length &&
+            previousFriendsList.every(friend => newFriends.includes(friend._id))
+        );
     };
 
     onSubmit = e => {
@@ -87,18 +83,20 @@ class EditFriendsList extends Component {
                 errors: { friends: "Please add friends to the list" }
             });
         } else {
-            this.setState({ loading: true, saveIsDisabled: true }, () => {
-                const listData = { listId: this.props.listId };
+            const listData = { listId: this.props.listId };
 
-                // send new title if it was changed:
-                if (title !== this.props.title) {
-                    listData["title"] = title.trim();
-                }
+            // send new title if it was changed:
+            if (title !== this.props.title) {
+                listData["title"] = title.trim();
+            }
 
-                // TODO: check if friend ids have changed:
+            // send new friends array if friends were changed:
+            if (!this.areAllOldFriends()) {
                 listData["friends"] = friends;
+            }
 
-                if (listData.title || listData.friends) {
+            if (listData.title || listData.friends) {
+                this.setState({ loading: true, saveIsDisabled: true }, () => {
                     updateFriendList(listData, response => {
                         // use redux action to update list details in global state:
                         if (listData.title) {
@@ -139,8 +137,12 @@ class EditFriendsList extends Component {
                             message: "Your list was successfully updated!"
                         });
                     }, 500);
-                }
-            });
+                });
+            } else {
+                this.setState({
+                    errors: { error: "You have not modified your list" }
+                });
+            }
         }
     };
 
@@ -158,7 +160,6 @@ class EditFriendsList extends Component {
             // add friend to friends list:
             this.setState({ friends: this.state.friends.concat(id) });
         }
-        this.enableSaveButton();
     };
 
     toggleAllUsers = () => {
@@ -170,7 +171,6 @@ class EditFriendsList extends Component {
             const friends = this.props.user.friends.map(user => user._id);
             this.setState({ friends });
         }
-        this.enableSaveButton();
     };
 
     render() {
@@ -198,7 +198,7 @@ class EditFriendsList extends Component {
                             <FormControl fullWidth>
                                 <TextField
                                     value={title}
-                                    error={isNameInvalid}
+                                    error={isNameInvalid || isListInvalid}
                                     onChange={this.onChange}
                                     aria-describedby="list-name-message"
                                     placeholder="Enter name of list"
