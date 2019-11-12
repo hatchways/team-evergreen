@@ -20,7 +20,7 @@ import {
     ListItemSecondaryAction
 } from "@material-ui/core";
 import { DialogTitle } from "./DialogTitle";
-import { updateFriendList } from "../utils/updateFriendList";
+import { updateFriendList } from "../utils/manageFriendList";
 
 class EditFriendsList extends Component {
     constructor(props) {
@@ -98,45 +98,50 @@ class EditFriendsList extends Component {
             if (listData.title || listData.friends) {
                 this.setState({ loading: true, saveIsDisabled: true }, () => {
                     updateFriendList(listData, response => {
-                        // use redux action to update list details in global state:
-                        if (listData.title) {
-                            this.props.updateFriendListInState({
-                                listId: this.props.listId,
-                                target: "title",
-                                newData: title.trim()
-                            });
-                        }
+                        if (response.status === 200) {
+                            // use redux action to update list details in global state:
+                            if (listData.title) {
+                                this.props.updateFriendListInState({
+                                    listId: this.props.listId,
+                                    target: "title",
+                                    newData: title.trim()
+                                });
+                            }
 
-                        if (listData.friends) {
-                            // save friend with name and avatar, not just id:
-                            friends.forEach((id, i, array) => {
-                                const user = this.props.user.friends.find(
-                                    user => user._id === id
-                                );
+                            if (listData.friends) {
+                                // save friend with name and avatar, not just id:
+                                friends.forEach((id, i, array) => {
+                                    const user = this.props.user.friends.find(
+                                        user => user._id === id
+                                    );
 
-                                if (user) {
-                                    array[i] = {
-                                        _id: id,
-                                        name: user.name,
-                                        avatar: user.avatar
-                                    };
-                                }
-                            });
+                                    if (user) {
+                                        array[i] = {
+                                            _id: id,
+                                            name: user.name,
+                                            avatar: user.avatar
+                                        };
+                                    }
+                                });
 
-                            this.props.updateFriendListInState({
-                                listId: this.props.listId,
-                                target: "friends",
-                                newData: friends
-                            });
+                                this.props.updateFriendListInState({
+                                    listId: this.props.listId,
+                                    target: "friends",
+                                    newData: friends
+                                });
+                            }
+                            setTimeout(() => {
+                                this.closeDialog();
+                                this.props.toggleSnackbar({
+                                    action: "open",
+                                    message:
+                                        "Your list was successfully updated!"
+                                });
+                            }, 500);
+                        } else {
+                            this.setState({ errors: response });
                         }
                     });
-                    setTimeout(() => {
-                        this.closeDialog();
-                        this.props.toggleSnackbar({
-                            action: "open",
-                            message: "Your list was successfully updated!"
-                        });
-                    }, 500);
                 });
             } else {
                 this.setState({

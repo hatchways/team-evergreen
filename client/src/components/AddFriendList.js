@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 import renderAvatar from "../utils/renderAvatar";
 import { withStyles } from "@material-ui/core/styles";
 import { friendListStyles } from "../styles/friendListStyles";
@@ -20,6 +20,7 @@ import {
     ListItemSecondaryAction
 } from "@material-ui/core";
 import { DialogTitle } from "./DialogTitle";
+import { createFriendList } from "../utils/manageFriendList";
 
 class AddFriendsList extends Component {
     constructor(props) {
@@ -67,27 +68,22 @@ class AddFriendsList extends Component {
                 friends
             };
 
-            axios
-                .post("/api/friend-list/add", newList)
-                .then(response => {
+            createFriendList(newList, response => {
+                // add new list to Profile and close dialog:
+                if (response.status === 200) {
                     // add new list to Profile and close dialog:
-                    if (response.data) {
-                        // add new list to Profile and close dialog:
-                        this.addNewList(response.data);
+                    this.addNewList(response.data);
 
-                        // open snackbar with success message:
-                        this.props.toggleSnackbar({
-                            action: "open",
-                            message:
-                                "A new friend list was successfully created!"
-                        });
-                        this.closeDialog();
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.setState({ errors: err.response.data });
-                });
+                    // open snackbar with success message:
+                    this.props.toggleSnackbar({
+                        action: "open",
+                        message: "A new friend list was successfully created!"
+                    });
+                    this.closeDialog();
+                } else {
+                    this.setState({ errors: response });
+                }
+            });
         }
     };
 
