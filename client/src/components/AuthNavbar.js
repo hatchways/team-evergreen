@@ -9,10 +9,17 @@ const useStyles = makeStyles(theme => ({
     },
     header: {
         backgroundColor: "transparent",
-        padding: theme.spacing(4)
+        padding: theme.spacing(4),
+        [theme.breakpoints.down("sm")]: {
+            padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`
+        }
     },
     toolbar: {
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        [theme.breakpoints.down("sm")]: {
+            paddingLeft: 0,
+            paddingRight: 0
+        }
     },
     button: {
         color: "#fff",

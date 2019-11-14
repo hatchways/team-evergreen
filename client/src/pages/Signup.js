@@ -112,7 +112,7 @@ class Signup extends Component {
                                 <Typography
                                     component="h1"
                                     variant="h5"
-                                    gutterBottom
+                                    // gutterBottom
                                     className={classes.heading}>
                                     Create an account
                                 </Typography>
@@ -247,7 +247,7 @@ class Signup extends Component {
                                         </Grid>
                                     </Grid>
                                     <Button
-                                        className={classes.signupBtn}
+                                        className={classes.btn}
                                         id="submitButton"
                                         size="large"
                                         type="submit"

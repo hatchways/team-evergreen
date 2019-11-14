@@ -4,6 +4,7 @@ import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
+import clsx from "clsx";
 
 import {
     Button,
@@ -181,7 +182,10 @@ class Login extends Component {
                                         </Button>
                                         <Button
                                             onClick={this.demoLogin}
-                                            className={classes.btn}
+                                            className={clsx(
+                                                classes.btn,
+                                                classes.demoBtn
+                                            )}
                                             id="demoSubmitButton"
                                             size="large"
                                             type="submit"
