@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme => ({
             width: "70px"
         }
     },
-    toolbar: theme.mixins.toolbar,
     toolbarIcon: {
         display: "flex",
         alignItems: "center",
@@ -44,6 +43,15 @@ const useStyles = makeStyles(theme => ({
         margin: "0 0 0 auto",
         [theme.breakpoints.up("xs")]: {
             padding: "20px"
+        }
+    },
+    // the following styles fix the bug in Chrome with disappearing hr line:
+    divider: {
+        [theme.breakpoints.up("lg")]: {
+            height: "1.05px"
+        },
+        [theme.breakpoints.up("xl")]: {
+            height: "1.3px"
         }
     }
 }));
@@ -87,7 +95,6 @@ function FriendsDrawer(props) {
 
     const mobileDrawer = (
         <>
-            <div className={classes.toolbar} />
             <Divider />
             <FriendsList drawerIsOpen={drawerIsOpen} friends={friends} />
         </>
@@ -106,7 +113,7 @@ function FriendsDrawer(props) {
                     </Icon>
                 </IconButton>
             </div>
-            <Divider />
+            <Divider className={classes.divider} />
             <FriendsList drawerIsOpen={drawerIsOpen} friends={friends} />
         </>
     );
