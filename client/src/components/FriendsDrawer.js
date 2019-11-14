@@ -18,7 +18,8 @@ const useStyles = makeStyles(theme => ({
             duration: theme.transitions.duration.enteringScreen
         }),
         height: "100vh",
-        whiteSpace: "normal"
+        whiteSpace: "nowrap" // prevent list item to stretch vertically
+        // if user name is too long
     },
     drawerPaperClose: {
         overflowX: "hidden",
@@ -29,7 +30,8 @@ const useStyles = makeStyles(theme => ({
         width: theme.spacing(7),
         [theme.breakpoints.up("xs")]: {
             width: "70px"
-        }
+        },
+        whiteSpace: "nowrap"
     },
     toolbarIcon: {
         display: "flex",
