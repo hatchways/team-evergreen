@@ -115,10 +115,16 @@ class PollPage extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            logOut,
+            updateUserDataInState,
+            toggleDrawer,
+            drawerIsOpen,
+            mobileDrawerIsOpen
         } = this.props;
         const { poll, lists } = this.props.location.state;
         const { results, votes, pollDialogIsOpen } = this.state;
+        const listName = poll.sendToList.title;
         const votesCount = votes[0] + votes[1];
 
         return (
@@ -127,12 +133,15 @@ class PollPage extends Component {
                 <UserPanel
                     user={user}
                     users={users}
-                    logOut={this.props.logOut}
+                    logOut={logOut}
                     togglePollDialog={this.togglePollDialog}
-                    updateUserDataInState={this.props.updateUserDataInState}
+                    updateUserDataInState={updateUserDataInState}
                     toggleSnackbar={toggleSnackbar}
                     snackbarIsOpen={snackbarIsOpen}
                     snackbarMessage={snackbarMessage}
+                    toggleDrawer={toggleDrawer}
+                    drawerIsOpen={drawerIsOpen}
+                    mobileDrawerIsOpen={mobileDrawerIsOpen}
                 />
                 <AddPollDialog
                     userId={user._id}
@@ -173,8 +182,9 @@ class PollPage extends Component {
                                             <Typography variant="body2">
                                                 {votesCount || 0}{" "}
                                                 {votesCount === 1
-                                                    ? "answer"
-                                                    : "answers"}
+                                                    ? "answer "
+                                                    : "answers "}
+                                                from {listName}
                                             </Typography>
                                         }
                                     />

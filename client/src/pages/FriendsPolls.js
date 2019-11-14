@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
-import { sortBy } from "../utils/sortBy";
 import FriendsPollCard from "../components/FriendsPollCard";
 import { UserPanel } from "../components/UserPanel";
 import AddPollDialog from "../components/AddPollDialog";
@@ -30,6 +29,10 @@ class FriendsPolls extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    componentWillUnmount() {
+        this.props.resetFriendsPolls();
+    }
+
     render() {
         const {
             classes,
@@ -37,7 +40,12 @@ class FriendsPolls extends Component {
             users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage
+            snackbarMessage,
+            logOut,
+            updateUserDataInState,
+            toggleDrawer,
+            drawerIsOpen,
+            mobileDrawerIsOpen
         } = this.props;
         const { pollDialogIsOpen } = this.state;
         const { friendsPolls } = this.props;
@@ -47,12 +55,15 @@ class FriendsPolls extends Component {
                 <UserPanel
                     user={user}
                     users={users}
-                    logOut={this.props.logOut}
+                    logOut={logOut}
                     togglePollDialog={this.togglePollDialog}
-                    updateUserDataInState={this.props.updateUserDataInState}
+                    updateUserDataInState={updateUserDataInState}
                     toggleSnackbar={toggleSnackbar}
                     snackbarIsOpen={snackbarIsOpen}
                     snackbarMessage={snackbarMessage}
+                    toggleDrawer={toggleDrawer}
+                    drawerIsOpen={drawerIsOpen}
+                    mobileDrawerIsOpen={mobileDrawerIsOpen}
                 />
 
                 <main className={classes.main}>
@@ -107,18 +118,16 @@ class FriendsPolls extends Component {
                                 </Grid>
                                 <Grid container item spacing={4}>
                                     {friendsPolls &&
-                                        sortBy(friendsPolls, true).map(
-                                            (poll, i) => (
-                                                <FriendsPollCard
-                                                    key={i}
-                                                    poll={poll}
-                                                    userId={user._id}
-                                                    registerVote={
-                                                        this.props.registerVote
-                                                    }
-                                                />
-                                            )
-                                        )}
+                                        friendsPolls.map(poll => (
+                                            <FriendsPollCard
+                                                key={poll._id}
+                                                poll={poll}
+                                                userId={user._id}
+                                                registerVote={
+                                                    this.props.registerVote
+                                                }
+                                            />
+                                        ))}
                                 </Grid>
                             </Grid>
                         </Grid>

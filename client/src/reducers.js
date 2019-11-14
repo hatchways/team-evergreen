@@ -11,7 +11,9 @@ import {
     USER_DATA_LOADING,
     UPDATE_VOTES,
     UPDATE_USER_DATA,
-    TOGGLE_SNACKBAR
+    TOGGLE_SNACKBAR,
+    RESET_FRIENDS_POLLS,
+    TOGGLE_DRAWER
 } from "./constants.js";
 
 const userInitialState = {
@@ -40,6 +42,11 @@ const friendsPollsInitialState = {
 const snackbarInitialState = {
     snackbarIsOpen: false,
     snackbarMessage: ""
+};
+
+const friendsDrawerInitialState = {
+    drawerIsOpen: true,
+    mobileDrawerIsOpen: false
 };
 
 export const userReducer = (state = userInitialState, action = {}) => {
@@ -174,6 +181,8 @@ export const usersReducer = (state = usersInitialState, action = {}) => {
 export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
     switch (action.type) {
         case GET_FRIENDS_POLLS_SUCCESS:
+            // Object.assign({}, friendsPollsInitialState);
+
             if (action.response.status === 200) {
                 return Object.assign({}, state, {
                     friendsPolls: action.response.data
@@ -212,6 +221,9 @@ export const pollsReducer = (state = friendsPollsInitialState, action = {}) => {
             console.log("action.error: ", action.error);
             return Object.assign({}, state, { error: action.error });
 
+        case RESET_FRIENDS_POLLS:
+            return friendsPollsInitialState;
+
         default:
             return state;
     }
@@ -231,6 +243,21 @@ export const snackbarReducer = (state = snackbarInitialState, action = {}) => {
                     snackbarMessage: ""
                 });
             }
+
+        default:
+            return state;
+    }
+};
+
+export const friendsDrawerReducer = (
+    state = friendsDrawerInitialState,
+    action = {}
+) => {
+    switch (action.type) {
+        case TOGGLE_DRAWER:
+            return Object.assign({}, state, {
+                [action.target]: !state[action.target]
+            });
 
         default:
             return state;

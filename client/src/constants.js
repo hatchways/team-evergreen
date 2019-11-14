@@ -11,6 +11,9 @@ export const USER_DATA_LOADING = "USER_DATA_LOADING";
 export const UPDATE_VOTES = "UPDATE_VOTES";
 export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 export const TOGGLE_SNACKBAR = "TOGGLE_SNACKBAR";
+export const RESET_FRIENDS_POLLS = "RESET_FRIENDS_POLLS";
+export const TOGGLE_DRAWER = "TOGGLE_DRAWER";
+
 export const DEVELOPMENT_SERVER_PORT = 3001;
 export const PRODUCTION_URL = "optio-evergreeen.herokuapp.com";
 

@@ -15,7 +15,9 @@ import {
     changeFriendStatus,
     updateVotes,
     updateUserDataInState,
-    toggleSnackbar
+    toggleSnackbar,
+    resetFriendsPolls,
+    toggleDrawer
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -42,7 +44,9 @@ const mapStateToProps = (
         users: state.usersReducer.users,
         friendsPolls: state.pollsReducer.friendsPolls,
         snackbarIsOpen: state.snackbarReducer.snackbarIsOpen,
-        snackbarMessage: state.snackbarReducer.snackbarMessage
+        snackbarMessage: state.snackbarReducer.snackbarMessage,
+        drawerIsOpen: state.friendsDrawerReducer.drawerIsOpen,
+        mobileDrawerIsOpen: state.friendsDrawerReducer.mobileDrawerIsOpen
     }
 ) => {
     return newParam;
@@ -61,7 +65,9 @@ const mapDispatchToProps = dispatch => {
         logOut: () => dispatch(logOut()),
         updateVotes: (pollId, votes) => dispatch(updateVotes(pollId, votes)),
         updateUserDataInState: data => dispatch(updateUserDataInState(data)),
-        toggleSnackbar: data => dispatch(toggleSnackbar(data))
+        toggleSnackbar: data => dispatch(toggleSnackbar(data)),
+        resetFriendsPolls: () => dispatch(resetFriendsPolls()),
+        toggleDrawer: data => dispatch(toggleDrawer(data))
     };
 };
 
@@ -210,6 +216,11 @@ class App extends Component {
                                             this.props.snackbarMessage
                                         }
                                         updateVotes={this.props.updateVotes}
+                                        toggleDrawer={this.props.toggleDrawer}
+                                        drawerIsOpen={this.props.drawerIsOpen}
+                                        mobileDrawerIsOpen={
+                                            this.props.mobileDrawerIsOpen
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -241,6 +252,11 @@ class App extends Component {
                                         }
                                         snackbarMessage={
                                             this.props.snackbarMessage
+                                        }
+                                        toggleDrawer={this.props.toggleDrawer}
+                                        drawerIsOpen={this.props.drawerIsOpen}
+                                        mobileDrawerIsOpen={
+                                            this.props.mobileDrawerIsOpen
                                         }
                                     />
                                 ) : (
@@ -297,6 +313,14 @@ class App extends Component {
                                         snackbarMessage={
                                             this.props.snackbarMessage
                                         }
+                                        resetFriendsPolls={
+                                            this.props.resetFriendsPolls
+                                        }
+                                        toggleDrawer={this.props.toggleDrawer}
+                                        drawerIsOpen={this.props.drawerIsOpen}
+                                        mobileDrawerIsOpen={
+                                            this.props.mobileDrawerIsOpen
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -331,6 +355,11 @@ class App extends Component {
                                         }
                                         snackbarMessage={
                                             this.props.snackbarMessage
+                                        }
+                                        toggleDrawer={this.props.toggleDrawer}
+                                        drawerIsOpen={this.props.drawerIsOpen}
+                                        mobileDrawerIsOpen={
+                                            this.props.mobileDrawerIsOpen
                                         }
                                     />
                                 ) : (

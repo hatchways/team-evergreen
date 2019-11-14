@@ -105,6 +105,9 @@ class Profile extends Component {
                     toggleSnackbar={toggleSnackbar}
                     snackbarIsOpen={snackbarIsOpen}
                     snackbarMessage={snackbarMessage}
+                    toggleDrawer={this.props.toggleDrawer}
+                    drawerIsOpen={this.props.drawerIsOpen}
+                    mobileDrawerIsOpen={this.props.mobileDrawerIsOpen}
                 />
 
                 <main className={classes.main}>

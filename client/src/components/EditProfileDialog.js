@@ -17,6 +17,8 @@ import Typography from "@material-ui/core/Typography";
 
 // App components
 
+import { AdornedButton } from "./AdornedButton";
+
 // Utility Modules
 import { updateAvatar, updateUserData } from "../utils/editUserData";
 const isEmpty = require("is-empty");
@@ -50,16 +52,6 @@ const styles = theme => ({
         justifyContent: "center",
         paddingBottom: theme.spacing(4),
         paddingTop: theme.spacing(2)
-    },
-    item: {
-        paddingLeft: "6px",
-        borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
-    },
-    button: {
-        padding: "4px 8px",
-        "&.MuiButton-text": {
-            textTransform: "initial"
-        }
     },
     bigAvatar: {
         display: "inline-flex",
@@ -115,6 +107,7 @@ class EditProfileDialog extends Component {
             newFile: "",
             target: TARGET_AVATAR,
             saveIsDisabled: true,
+            saving: false,
             errors: {}
         };
     }
@@ -126,6 +119,7 @@ class EditProfileDialog extends Component {
             newEmail: this.props.email,
             target: TARGET_AVATAR,
             saveIsDisabled: true,
+            saving: false,
             errors: {}
         });
     };
@@ -194,75 +188,81 @@ class EditProfileDialog extends Component {
         // disable the submit button to avoid duplicates
         this.disableSaveButton();
 
-        // array to store promises
-        const promises = [];
+        // set the loading flag to true
+        this.setState({ saving: true }, () => {
+            // array to store promises
+            const promises = [];
 
-        // create json object for name and e-mail changes
-        const newUserData = {};
-        if (newName !== name) {
-            newUserData["name"] = newName;
-        }
-        if (newEmail !== email) {
-            newUserData["email"] = newEmail;
-        }
-        if (!isEmpty(newUserData)) {
-            // add userId to query
-            newUserData["userId"] = userId;
-            promises.push(
-                updateUserData(newUserData, response => {
-                    // use redux action to update user details in global state:
-                    if (newUserData.name) {
-                        updateUserDataInState({
-                            target: "name",
-                            newData: newName
-                        });
-                    }
+            // create json object for name and e-mail changes
+            const newUserData = {};
+            if (newName !== name) {
+                newUserData["name"] = newName;
+            }
+            if (newEmail !== email) {
+                newUserData["email"] = newEmail;
+            }
+            if (!isEmpty(newUserData)) {
+                // add userId to query
+                newUserData["userId"] = userId;
+                promises.push(
+                    updateUserData(newUserData, response => {
+                        // use redux action to update user details in global state:
+                        if (newUserData.name) {
+                            updateUserDataInState({
+                                target: "name",
+                                newData: newName
+                            });
+                        }
 
-                    if (newUserData.email) {
+                        if (newUserData.email) {
+                            updateUserDataInState({
+                                target: "email",
+                                newData: newEmail
+                            });
+                        }
+                    })
+                );
+            }
+
+            // create FormData object for file uploads
+            if (newFile) {
+                const formData = new FormData();
+                formData.append("userId", userId);
+                formData.append("target", TARGET_AVATAR);
+                formData.append("newFile", newFile, newFile.name);
+                promises.push(
+                    updateAvatar(formData, response => {
+                        // use redux action to update avatar in global state:
                         updateUserDataInState({
-                            target: "email",
-                            newData: newEmail
+                            target: "avatar",
+                            newData: response.data.avatarUrl
                         });
-                    }
+                    })
+                );
+            }
+
+            // replace current avatar and close dialog:
+            // this.props.changeAvatar(response.data.data);
+            Promise.all(promises)
+                .then(value => {
+                    setTimeout(() => {
+                        this.closeDialog();
+                        this.props.toggleSnackbar({
+                            action: "open",
+                            message: "Your profile was successfully updated!"
+                        });
+                    }, 800);
                 })
-            );
-        }
-
-        // create FormData object for file uploads
-        if (newFile) {
-            const formData = new FormData();
-            formData.append("userId", userId);
-            formData.append("target", TARGET_AVATAR);
-            formData.append("newFile", newFile, newFile.name);
-            promises.push(
-                updateAvatar(formData, response => {
-                    // use redux action to update avatar in global state:
-                    updateUserDataInState({
-                        target: "avatar",
-                        newData: response.data.avatarUrl
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        errors: {
+                            error:
+                                "Something went wrong. Please try again later."
+                        }
                     });
-                })
-            );
-        }
-
-        // replace current avatar and close dialog:
-        // this.props.changeAvatar(response.data.data);
-        Promise.all(promises)
-            .then(value => {
-                this.props.toggleSnackbar({
-                    action: "open",
-                    message: "Your profile was successfully updated!"
                 });
-                this.closeDialog();
-            })
-            .catch(err => {
-                console.log(err);
-                this.setState({
-                    errors: {
-                        error: "Something went wrong. Please try again later."
-                    }
-                });
-            });
+        });
     };
 
     revokeUrl = e => {
@@ -278,7 +278,8 @@ class EditProfileDialog extends Component {
             newName,
             newEmail,
             newAvatar,
-            saveIsDisabled
+            saveIsDisabled,
+            saving
         } = this.state;
 
         return (
@@ -316,7 +317,14 @@ class EditProfileDialog extends Component {
                                     className={classes.bigInput}
                                     onChange={this.handleAvatarChange}
                                 />
+                                <Typography
+                                    align="center"
+                                    variant="caption"
+                                    className="center">
+                                    (Click image to edit)
+                                </Typography>
                             </FormControl>
+
                             <FormControl fullWidth>
                                 <Typography
                                     variant="subtitle1"
@@ -363,20 +371,21 @@ class EditProfileDialog extends Component {
                             </FormControl>
                         </DialogContent>
                         <DialogActions className={classes.action}>
-                            <Button
+                            <AdornedButton
+                                aria-label="submit profile changes"
+                                loading={saving}
                                 type="submit"
                                 variant="contained"
                                 size="small"
                                 disabled={saveIsDisabled}
                                 color="secondary">
                                 Save
-                            </Button>
+                            </AdornedButton>
                             <Button
                                 type="button"
                                 onClick={this.onCancel}
                                 variant="contained"
                                 size="small"
-                                disabled={false}
                                 color="primary">
                                 Cancel
                             </Button>

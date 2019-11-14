@@ -113,7 +113,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AppNavbar(props) {
-    const { drawerIsOpen, user, toggleMobileDrawer, toggleSnackbar } = props;
+    const { drawerIsOpen, user, toggleDrawer, toggleSnackbar } = props;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
     const [editProfileDialog, setEditProfileDialog] = React.useState(false);
@@ -156,7 +156,7 @@ function AppNavbar(props) {
                         color="inherit"
                         aria-label="open mobile drawer"
                         edge="start"
-                        onClick={toggleMobileDrawer}
+                        onClick={() => toggleDrawer("mobileDrawerIsOpen")}
                         className={classes.menuButton}>
                         <Icon>chevron_right</Icon>
                     </IconButton>

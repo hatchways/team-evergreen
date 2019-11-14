@@ -11,7 +11,9 @@ import {
     USER_DATA_LOADING,
     UPDATE_VOTES,
     UPDATE_USER_DATA,
-    TOGGLE_SNACKBAR
+    TOGGLE_SNACKBAR,
+    RESET_FRIENDS_POLLS,
+    TOGGLE_DRAWER
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -158,5 +160,18 @@ export function toggleSnackbar(data) {
         type: TOGGLE_SNACKBAR,
         action: data.action,
         message: data.message
+    };
+}
+
+export const resetFriendsPolls = () => {
+    return {
+        type: RESET_FRIENDS_POLLS
+    };
+};
+
+export function toggleDrawer(target) {
+    return {
+        type: TOGGLE_DRAWER,
+        target
     };
 }
