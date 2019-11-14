@@ -21,7 +21,7 @@ class Login extends Component {
         this.state = {
             email: "",
             password: "",
-            errors: ""
+            errors: {}
         };
     }
 
@@ -189,12 +189,12 @@ class Login extends Component {
                                             color="secondary">
                                             Demo Login
                                         </Button>
-                                        <FormHelperText
-                                            error
-                                            id="submitButton-error-field">
-                                            {errors.error}
-                                        </FormHelperText>
                                     </div>
+                                    <FormHelperText
+                                        error
+                                        id="submitButton-error-field">
+                                        {errors.error}
+                                    </FormHelperText>
                                 </form>
                             </div>
                         </Container>
