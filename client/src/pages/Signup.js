@@ -4,16 +4,15 @@ import AuthNavbar from "../components/AuthNavbar";
 import { withStyles } from "@material-ui/styles";
 import { authStyles } from "../styles/authStyles";
 
-import {
-    Button,
-    TextField,
-    FormControlLabel,
-    Checkbox,
-    Grid,
-    Typography,
-    Container,
-    FormHelperText
-} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Link from "@material-ui/core/Link";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 class Signup extends Component {
     constructor(props) {
@@ -231,8 +230,12 @@ class Signup extends Component {
                                                 }
                                                 label={
                                                     <Typography variant="body2">
-                                                        By signing up I agree to
-                                                        terms and conditions
+                                                        By signing up I agree to{" "}
+                                                        <Link
+                                                            href="#"
+                                                            color="textPrimary">
+                                                            terms and conditions
+                                                        </Link>
                                                     </Typography>
                                                 }
                                             />

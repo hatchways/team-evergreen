@@ -6,15 +6,13 @@ import { authStyles } from "../styles/authStyles";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants.js";
 import clsx from "clsx";
 
-import {
-    Button,
-    TextField,
-    Grid,
-    Typography,
-    Container,
-    FormHelperText,
-    Link
-} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Link from "@material-ui/core/Link";
 
 class Login extends Component {
     constructor(props) {
