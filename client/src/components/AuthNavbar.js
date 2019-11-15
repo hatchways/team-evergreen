@@ -10,13 +10,14 @@ const useStyles = makeStyles(theme => ({
     header: {
         backgroundColor: "transparent",
         padding: theme.spacing(4),
-        [theme.breakpoints.down("sm")]: {
-            padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`
+        [theme.breakpoints.down("xs")]: {
+            padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`,
+            position: "initial" // remove default fixed position
         }
     },
     toolbar: {
         justifyContent: "space-between",
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("xs")]: {
             paddingLeft: 0,
             paddingRight: 0
         }
