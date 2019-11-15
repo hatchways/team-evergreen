@@ -5,7 +5,6 @@ import { withStyles } from "@material-ui/core/styles";
 import {
     Button,
     IconButton,
-    Dialog,
     DialogContent,
     DialogActions,
     Divider,
@@ -21,6 +20,7 @@ import {
     Icon
 } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { ResponsiveDialog } from "./ResponsiveDialog";
 
 const styles = theme => ({
     root: {
@@ -214,9 +214,8 @@ class AddFriendsList extends Component {
                     size="medium">
                     Create list
                 </Button>
-                <Dialog
-                    fullWidth
-                    maxWidth="xs"
+
+                <ResponsiveDialog
                     onClose={this.closeDialog}
                     aria-labelledby="create-friend-list"
                     open={open}>
@@ -314,7 +313,7 @@ class AddFriendsList extends Component {
                             </Button>
                         </DialogActions>
                     </form>
-                </Dialog>
+                </ResponsiveDialog>
             </div>
         );
     }
