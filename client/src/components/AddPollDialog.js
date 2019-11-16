@@ -213,13 +213,6 @@ class AddPollDialog extends Component {
                     }}>
                     Create poll
                 </Button>
-                {/* <Dialog
-                    // fullScreen={fullScreen}
-                    // fullWidth
-                    // maxWidth="xs"
-                    onClose={this.closeDialog}
-                    aria-labelledby="create-poll"
-                    open={this.props.pollDialogIsOpen}> */}
                 <ResponsiveDialog
                     onClose={this.closeDialog}
                     aria-labelledby="create-poll"
