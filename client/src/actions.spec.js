@@ -31,8 +31,10 @@ describe("Testing loadUserData action", () => {
         store.clearActions();
     });
 
-    it("should handle loadUserData action", () => {
-        store.dispatch(actions.loadUserData());
+    it("should dispatch USER_DATA_LOADING action", () => {
+        const id = "5dcdd278444d9e3b260562f1";
+
+        store.dispatch(actions.loadUserData(id));
         const action = store.getActions();
 
         const expectedAction = {
@@ -51,54 +53,44 @@ describe("Testing loadUserData action", () => {
         expect(actions.fetchUserDataSuccess(response)).toEqual(expectedAction);
     });
 
-    const data = {
-        id: 1,
-        name: "John Smith",
-        email: "john.smith@mail.com"
-    };
-
-    it("should fetch user data", () => {
-        store
-            .dispatch(actions.loadUserData(data.id))
-            .then(() => {
-                const firstExpectedAction = {
-                    type: USER_DATA_LOADING
-                };
-                expect(store.getActions()[0]).toEqual(firstExpectedAction);
-            })
-            .then(() => {
-                // moch axios request to get user details:
-                mock.onGet(`/api/users/user/${data.id}`).reply(200, { data });
-
-                // test that fetchUserDataSuccess() is being dispatched after successful API call:
-                store.dispatch(
-                    actions.fetchUserDataSuccess(data).then(() => {
-                        let secondExpectedAction = {
-                            type: FETCH_USER_DATA_SUCCESS,
-                            response: data
-                        };
-
-                        expect(store.getActions()[1]).toEqual(
-                            secondExpectedAction
-                        );
-                    })
-                );
-            });
+    it("should create an action apiRequestFailure", () => {
+        const error = "Some error";
+        const expectedAction = {
+            type: API_REQUEST_FAILURE,
+            error
+        };
+        expect(actions.apiRequestFailure(error)).toEqual(expectedAction);
     });
 });
 
-// const loadItemData = () => dispatch => {
-//     return axios
-//         .get("someapi")
-//         .then(response => {
-//             dispatch({
-//                 type: GET_ALL_ITEMS,
-//                 payload: {
-//                     data: response.data
-//                 }
-//             });
-//         })
-//         .catch(error => {
-//             console.log("Error" + error);
-//         });
-// };
+describe("Testing loadUserData()", () => {
+    beforeEach(() => {
+        // Runs before each test in the suite
+        store.clearActions();
+    });
+
+    it("should get FETCH_USER_DATA_SUCCESS after fetch request", () => {
+        mock.onGet("./api/users/user/12345").reply(200, {
+            data: { _id: "12345", name: "John Smith" }
+        });
+
+        store
+            .dispatch(actions.loadUserData("5dcdd278444d9e3b260562f1"))
+            .then(() => {
+                let expectedActions = [
+                    {
+                        type: USER_DATA_LOADING
+                    },
+                    {
+                        type: FETCH_USER_DATA_SUCCESS,
+                        response: {
+                            _id: "12345",
+                            name: "John Smith"
+                        }
+                    }
+                ];
+
+                expect(store.getActions()).toEqual(expectedActions);
+            });
+    });
+});
