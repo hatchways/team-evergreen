@@ -1,27 +1,24 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
-import {
-    Button,
-    IconButton,
-    Dialog,
-    DialogContent,
-    DialogActions,
-    TextField,
-    Typography,
-    FormControl,
-    FormHelperText,
-    Select,
-    Icon,
-    Grid
-} from "@material-ui/core";
-
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Select from "@material-ui/core/Select";
+import Icon from "@material-ui/core/Icon";
+import Grid from "@material-ui/core/Grid";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
 import { FileDrop } from "./FileDrop";
 import { AdornedButton } from "./AdornedButton";
+import { ResponsiveDialog } from "./ResponsiveDialog";
 
 const styles = theme => ({
     root: {
@@ -216,9 +213,7 @@ class AddPollDialog extends Component {
                     }}>
                     Create poll
                 </Button>
-                <Dialog
-                    fullWidth
-                    maxWidth="xs"
+                <ResponsiveDialog
                     onClose={this.closeDialog}
                     aria-labelledby="create-poll"
                     open={this.props.pollDialogIsOpen}>
@@ -324,7 +319,7 @@ class AddPollDialog extends Component {
                             </AdornedButton>
                         </DialogActions>
                     </form>
-                </Dialog>
+                </ResponsiveDialog>
             </div>
         );
     }
