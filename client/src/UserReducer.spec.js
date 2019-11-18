@@ -48,9 +48,9 @@ describe("Load user data", () => {
     it("should handle FETCH_USER_DATA_SUCCESS action", () => {
         const response = {
             data: {
-                _id: "5dcdd278444d9e3b260562f1",
-                name: "Joel Garrett",
-                email: "joel.garrett@example.com",
+                _id: "5dced278445d9e3b260c62f1",
+                name: "Name Surname",
+                email: "name.surname@example.com",
                 avatar: "https://randomuser.me/api/portraits/thumb/men/87.jpg",
                 lists: [],
                 polls: [],
