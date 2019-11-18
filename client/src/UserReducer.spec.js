@@ -2,6 +2,7 @@ import {
     FETCH_USER_DATA_SUCCESS,
     LOGOUT,
     USER_DATA_LOADING,
+    API_REQUEST_FAILURE,
     UPDATE_USER_DATA
 } from "./constants.js";
 
@@ -45,35 +46,59 @@ describe("Load user data", () => {
     });
 
     it("should handle FETCH_USER_DATA_SUCCESS action", () => {
+        const response = {
+            data: {
+                _id: "5dcdd278444d9e3b260562f1",
+                name: "Joel Garrett",
+                email: "joel.garrett@example.com",
+                avatar: "https://randomuser.me/api/portraits/thumb/men/87.jpg",
+                lists: [],
+                polls: [],
+                friends: [],
+                online: false
+            },
+            status: 200
+        };
+
         expect(
             userReducer(userInitialState, {
                 type: FETCH_USER_DATA_SUCCESS,
-                response: {
-                    _id: "5dcdd278444d9e3b260562f1",
-                    name: "Joel Garrett",
-                    email: "joel.garrett@example.com",
-                    avatar:
-                        "https://randomuser.me/api/portraits/thumb/men/87.jpg",
-                    lists: [],
-                    polls: [],
-                    friends: [],
-                    online: false
-                }
+                response
             })
         ).toEqual({
-            _id: "5dcdd278444d9e3b260562f1",
-            name: "Joel Garrett",
-            email: "joel.garrett@example.com",
-            avatar: "https://randomuser.me/api/portraits/thumb/men/87.jpg",
+            _id: response.data._id,
+            name: response.data.name,
+            email: response.data.email,
+            polls: response.data.polls,
+            lists: response.data.lists,
+            avatar: response.data.avatar,
+            friends: response.data.friends,
+            online: response.data.online,
+            error: "",
+            isLoading: false
+        });
+    });
+
+    it("should handle API_REQUEST_FAILURE action", () => {
+        expect(
+            userReducer(userInitialState, {
+                type: API_REQUEST_FAILURE,
+                error: "Something went wrong. Please try again later"
+            })
+        ).toEqual({
+            _id: "",
+            name: "",
+            email: "",
+            avatar: "",
             lists: [],
             polls: [],
             friends: [],
-            error: "",
+            error: "Something went wrong. Please try again later",
             isLoading: false,
             online: false
         });
     });
-
+    // return Object.assign({}, state, { error: action.error });
     it("should handle LOGOUT action", () => {
         expect(
             userReducer(userInitialState, {
