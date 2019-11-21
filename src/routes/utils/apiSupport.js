@@ -10,7 +10,7 @@
  * @param used to make decisions about getting data
  */
 export function executeApiRequest(req, res, route, getData, opts) {
-    if (req.query.userId === undefined) {
+    if (opts[0] === undefined) {
         res.status(400).json({ error: "No user id provided" });
     } else {
         try {
