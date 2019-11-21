@@ -9,8 +9,7 @@ import {
     unFollowUser,
     getSampleOfUsers
 } from "../utils/friendManagement";
-
-// Constants
+import { executeApiRequest } from "../utils/apiSupport";
 
 // Follows friend
 router.post("/follow", function(req, res) {
@@ -53,19 +52,10 @@ router.post("/unfollow", function(req, res) {
  * @returns - array of {_id:, name:, avatar: }
  * */
 router.get("/sample", function(req, res) {
-    if (req.query.userId === undefined) {
-        res.status(400).json({ error: "No data provided." });
-    } else {
-        console.log(req.query.sampleSize);
-        getSampleOfUsers(req.query.userId, Number(req.query.sampleSize))
-            .then(result => {
-                res.status(200).json(result);
-            })
-            .catch(err => {
-                console.log("/api/friends/sample", err);
-                res.status(500).json({ error: "Unable to get sample.", err });
-            });
-    }
+    executeApiRequest(req, res, "/api/friends/sample", getSampleOfUsers, [
+        req.query.userId,
+        Number(req.query.sampleSize)
+    ]);
 });
 
 //PRIVATE FUNCTIONS
