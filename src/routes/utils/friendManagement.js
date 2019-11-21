@@ -56,7 +56,6 @@ export async function unFollowUser(userId, friendId) {
 
 //Return a sample of users
 export async function getSampleOfUsers(userId, sampleSize) {
-    console.log(userId, sampleSize);
     try {
         const listOf = await User.findById(
             { _id: userId },
