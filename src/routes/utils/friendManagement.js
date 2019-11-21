@@ -1,6 +1,10 @@
 //friendManagement.js
 
+//Data Models
 import User from "../../models/User";
+
+//Constants
+const DEFAULT_SAMPLE_SIZE = 10;
 
 //Add user to friends list
 export async function followUser(userId, friendId) {
@@ -51,10 +55,7 @@ export async function unFollowUser(userId, friendId) {
 }
 
 //Return a sample of users
-export async function getSampleOfUsers(
-    userId,
-    sampleSize = DEFAULT_SAMPLE_SIZE
-) {
+export async function getSampleOfUsers(userId, sampleSize) {
     try {
         const listOf = await User.findById(
             { _id: userId },
@@ -65,7 +66,7 @@ export async function getSampleOfUsers(
         return await User.aggregate([
             { $project: { name: 1, avatar: 1 } },
             { $match: { _id: { $nin: exclusionList } } },
-            { $sample: { size: sampleSize } }
+            { $sample: { size: sampleSize || DEFAULT_SAMPLE_SIZE } }
         ])
             .sort("name")
             .exec();
