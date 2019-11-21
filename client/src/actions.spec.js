@@ -1,9 +1,8 @@
-// testing of loadUserData() action
-
 import {
     USER_DATA_LOADING,
     FETCH_USER_DATA_SUCCESS,
-    API_REQUEST_FAILURE
+    API_REQUEST_FAILURE,
+    ADD_NEW_LIST
 } from "./constants";
 import * as actions from "./actions";
 
@@ -32,7 +31,7 @@ describe("Testing loadUserData action", () => {
     });
 
     it("should dispatch USER_DATA_LOADING action", () => {
-        const id = "5dcdd278444d9e3b260562f1";
+        const id = "123";
 
         store.dispatch(actions.loadUserData(id));
         const action = store.getActions();
@@ -63,34 +62,27 @@ describe("Testing loadUserData action", () => {
     });
 });
 
-describe("Testing loadUserData()", () => {
+describe("Testing addNewList action", () => {
     beforeEach(() => {
-        // Runs before each test in the suite
+        // runs before each test:
         store.clearActions();
     });
 
-    it("should get FETCH_USER_DATA_SUCCESS after fetch request", () => {
-        mock.onGet("./api/users/user/12345").reply(200, {
-            data: { _id: "12345", name: "John Smith" }
-        });
+    it("should dispatch addNewList action", () => {
+        const data = {
+            id: "1234",
+            title: "New list",
+            friends: ["123", "456", "789"]
+        };
 
-        store
-            .dispatch(actions.loadUserData("5dcdd278444d9e3b260562f1"))
-            .then(() => {
-                let expectedActions = [
-                    {
-                        type: USER_DATA_LOADING
-                    },
-                    {
-                        type: FETCH_USER_DATA_SUCCESS,
-                        response: {
-                            _id: "12345",
-                            name: "John Smith"
-                        }
-                    }
-                ];
+        store.dispatch(actions.addNewList(data));
+        const action = store.getActions();
 
-                expect(store.getActions()).toEqual(expectedActions);
-            });
+        const expectedAction = {
+            type: ADD_NEW_LIST,
+            data
+        };
+
+        expect(action[0]).toEqual(expectedAction);
     });
 });
