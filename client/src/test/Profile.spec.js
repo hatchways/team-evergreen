@@ -1,8 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme"; // a testing library for components and DOM access
-import Profile from "./pages/Profile";
+import Profile from "../pages/Profile";
 
-describe("Testing of Pofile component", () => {
+describe("Testing of Profile component", () => {
     const user = {
         _id: "2123245",
         name: "John Smith",

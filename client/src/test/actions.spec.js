@@ -3,10 +3,10 @@ import {
     FETCH_USER_DATA_SUCCESS,
     API_REQUEST_FAILURE,
     ADD_NEW_LIST
-} from "./constants";
-import * as actions from "./actions";
+} from "../constants";
+import * as actions from "../actions";
 
-// import configreStore to create a mock store where to dispatch actions
+// import configure Store to create a mock store where to dispatch actions
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
