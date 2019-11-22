@@ -4,9 +4,9 @@ import {
     USER_DATA_LOADING,
     API_REQUEST_FAILURE,
     UPDATE_USER_DATA
-} from "./constants.js";
+} from "../constants.js";
 
-import { userReducer } from "./reducers";
+import { userReducer } from "../reducers";
 
 describe("Load user data", () => {
     const userInitialState = {
