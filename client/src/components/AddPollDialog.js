@@ -209,7 +209,6 @@ class AddPollDialog extends Component {
                     size="medium"
                     style={{
                         display: hideButton ? "none" : "block" // hide button on poll page
-                        // or on friend's profile
                     }}>
                     Create poll
                 </Button>

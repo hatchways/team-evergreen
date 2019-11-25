@@ -76,14 +76,12 @@ class Profile extends Component {
         const {
             classes,
             user,
-            users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage,
             updateVotes
         } = this.props;
 
-        const { lists, polls } = this.props.user;
+        const { lists, polls } = user;
         const {
             pollDialogIsOpen,
             listMove,
@@ -95,19 +93,9 @@ class Profile extends Component {
         return (
             <div className={classes.root}>
                 <UserPanel
-                    user={user}
-                    users={users}
-                    logOut={this.props.logOut}
+                    {...this.props}
                     togglePollDialog={this.togglePollDialog}
                     toggleEditProfileDialog={this.toggleEditProfileDialog}
-                    addNewPoll={this.props.addNewPoll}
-                    updateUserDataInState={this.props.updateUserDataInState}
-                    toggleSnackbar={toggleSnackbar}
-                    snackbarIsOpen={snackbarIsOpen}
-                    snackbarMessage={snackbarMessage}
-                    toggleDrawer={this.props.toggleDrawer}
-                    drawerIsOpen={this.props.drawerIsOpen}
-                    mobileDrawerIsOpen={this.props.mobileDrawerIsOpen}
                 />
 
                 <main className={classes.main}>
@@ -244,7 +232,7 @@ class Profile extends Component {
                                     <Grid item>
                                         <AddFriendList
                                             user={user}
-                                            users={users}
+                                            // users={users}
                                             addNewList={this.props.addNewList}
                                             toggleSnackbar={toggleSnackbar}
                                             snackbarIsOpen={snackbarIsOpen}
