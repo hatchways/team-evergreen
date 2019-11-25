@@ -52,6 +52,7 @@ export const Slider = ({
                     lg: array.length > 3 ? "block" : "none"
                 }}>
                 <IconButton
+                    aria-label="Go to the previous slide"
                     color="primary"
                     className={clsx(classes.prevButton, classes.sliderControl)}
                     onClick={() => showPrevious(target)}
@@ -59,6 +60,7 @@ export const Slider = ({
                     <Icon>chevron_left</Icon>
                 </IconButton>
                 <IconButton
+                    aria-label="Go to the next slide"
                     color="primary"
                     className={clsx(classes.nextButton, classes.sliderControl)}
                     disabled={move === array.length - 1}
