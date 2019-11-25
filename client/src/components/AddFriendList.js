@@ -48,7 +48,10 @@ const styles = theme => ({
         paddingTop: theme.spacing(4)
     },
     list: {
-        maxHeight: "220px"
+        maxHeight: "calc(100vh - 330px)",
+        [theme.breakpoints.up("sm")]: {
+            maxHeight: "220px"
+        }
     },
     item: {
         paddingLeft: "6px",
