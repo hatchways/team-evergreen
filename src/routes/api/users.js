@@ -187,26 +187,6 @@ router.post("/add_friend_list", (req, res) => {
         });
 });
 
-// @route GET api/users/users
-// @desc Get all users
-// @access Private
-router.get("/", (req, res) => {
-    User.find({})
-        .then(users => {
-            if (!users.length) {
-                return res.status(404).json({ error: "Users were not found" });
-            } else {
-                res.status(200).json(users);
-            }
-        })
-        .catch(err => {
-            console.log("error: ", err);
-            res.status(500).json({
-                error: "Unable to retrieve data"
-            });
-        });
-});
-
 // @route GET api/users/user/:id
 // @desc Get all information for a single user
 // @access Private
