@@ -31,4 +31,22 @@ describe("Authorization framework works", async function() {
         };
         createToken(payload, res, secret, 10);
     });
+
+    it("Should fail if payload not an object", function(done) {
+        const payload = "Test Token";
+        const res = {
+            status: 0,
+            token: null,
+            error: null,
+            json: obj => {
+                res.status = obj.status;
+                res.token = obj.token;
+                res.error = obj.error;
+                expect(res.status === 500).to.be.true;
+                expect(res.error === "Unable to generate token.").to.be.true;
+                done();
+            }
+        };
+        createToken(payload, res, secret, 10);
+    });
 });
