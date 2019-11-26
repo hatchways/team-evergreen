@@ -76,6 +76,7 @@ export function createToken(payload, res, secret, expiration = TOKEN_LIFETIME) {
                     token: `${token}`
                 });
             } else {
+                console.log("Error while generating token", err);
                 res.json({
                     status: 500,
                     error: "Unable to generate token."
