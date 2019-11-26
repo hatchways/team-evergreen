@@ -7,7 +7,6 @@ import AppSnackbar from "./AppSnackbar";
 function UserPanel(props) {
     const {
         user,
-        users,
         toggleSnackbar,
         snackbarIsOpen,
         snackbarMessage,
@@ -30,7 +29,6 @@ function UserPanel(props) {
             />
             <FriendsDrawer
                 user={user}
-                users={users}
                 drawerIsOpen={drawerIsOpen}
                 mobileDrawerIsOpen={mobileDrawerIsOpen}
                 toggleDrawer={toggleDrawer}

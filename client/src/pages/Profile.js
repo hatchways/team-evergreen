@@ -1,23 +1,15 @@
 // inspiration: https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard
 
 import React, { Component } from "react";
-import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import { UserPanel } from "../components/UserPanel";
 import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
-import PollCard from "../components/PollCard";
-import ListCard from "../components/ListCard";
-
-import {
-    Typography,
-    Container,
-    Grid,
-    IconButton,
-    Icon,
-    Box
-} from "@material-ui/core";
+import { Slider } from "../components/Slider";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 
 class Profile extends Component {
     constructor(props) {
@@ -76,12 +68,9 @@ class Profile extends Component {
         const {
             classes,
             user,
-            users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage,
-            updateVotes,
-            updateFriendListInState
+            updateVotes
         } = this.props;
 
         const { lists, polls } = user;
@@ -96,19 +85,9 @@ class Profile extends Component {
         return (
             <div className={classes.root}>
                 <UserPanel
-                    user={user}
-                    users={users}
-                    logOut={this.props.logOut}
+                    {...this.props}
                     togglePollDialog={this.togglePollDialog}
                     toggleEditProfileDialog={this.toggleEditProfileDialog}
-                    addNewPoll={this.props.addNewPoll}
-                    updateUserDataInState={this.props.updateUserDataInState}
-                    toggleSnackbar={toggleSnackbar}
-                    snackbarIsOpen={snackbarIsOpen}
-                    snackbarMessage={snackbarMessage}
-                    toggleDrawer={this.props.toggleDrawer}
-                    drawerIsOpen={this.props.drawerIsOpen}
-                    mobileDrawerIsOpen={this.props.mobileDrawerIsOpen}
                 />
 
                 <main className={classes.main}>
@@ -156,66 +135,16 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid
-                                    container
-                                    item
-                                    spacing={4}
-                                    className={classes.slider}>
-                                    {polls &&
-                                        polls.map(poll => (
-                                            <PollCard
-                                                key={poll._id}
-                                                poll={poll}
-                                                movePollBy={movePollBy}
-                                                lists={lists}
-                                                updateVotes={updateVotes}
-                                            />
-                                        ))}
-
-                                    <Box
-                                        key={polls.length}
-                                        display={{
-                                            xs:
-                                                polls.length > 1
-                                                    ? "block"
-                                                    : "none",
-                                            md:
-                                                polls.length > 2
-                                                    ? "block"
-                                                    : "none",
-                                            lg:
-                                                polls.length > 3
-                                                    ? "block"
-                                                    : "none"
-                                        }}>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.prevButton,
-                                                classes.sliderControl
-                                            )}
-                                            onClick={() =>
-                                                this.showPreviousSlide("poll")
-                                            }
-                                            disabled={pollMove === 0}>
-                                            <Icon>chevron_left</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.nextButton,
-                                                classes.sliderControl
-                                            )}
-                                            disabled={
-                                                pollMove === polls.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("poll")
-                                            }>
-                                            <Icon>chevron_right</Icon>
-                                        </IconButton>
-                                    </Box>
-                                </Grid>
+                                <Slider
+                                    target="poll"
+                                    move={pollMove}
+                                    showPrevious={this.showPreviousSlide}
+                                    showNext={this.showNextSlide}
+                                    array={polls}
+                                    moveBy={movePollBy}
+                                    lists={lists}
+                                    updateVotes={updateVotes}
+                                />
                             </Grid>
                             <Grid
                                 container
@@ -251,72 +180,14 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid
-                                    container
-                                    item
-                                    spacing={4}
-                                    className={classes.slider}>
-                                    {lists &&
-                                        lists.map(list => (
-                                            <ListCard
-                                                user={user}
-                                                key={list._id}
-                                                list={list}
-                                                moveListBy={moveListBy}
-                                                toggleSnackbar={toggleSnackbar}
-                                                snackbarIsOpen={snackbarIsOpen}
-                                                updateFriendListInState={
-                                                    updateFriendListInState
-                                                }
-                                            />
-                                        ))}
-                                    <Box
-                                        key={lists.length}
-                                        display={{
-                                            xs:
-                                                lists.length > 1 ||
-                                                moveListBy > 1
-                                                    ? "block"
-                                                    : "none",
-                                            md:
-                                                lists.length > 2 ||
-                                                moveListBy > 2
-                                                    ? "block"
-                                                    : "none",
-                                            lg:
-                                                lists.length > 3 ||
-                                                moveListBy > 3
-                                                    ? "block"
-                                                    : "none"
-                                        }}>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.prevButton,
-                                                classes.sliderControl
-                                            )}
-                                            onClick={() =>
-                                                this.showPreviousSlide("list")
-                                            }
-                                            disabled={listMove === 0}>
-                                            <Icon>chevron_left</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.nextButton,
-                                                classes.sliderControl
-                                            )}
-                                            disabled={
-                                                listMove >= lists.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("list")
-                                            }>
-                                            <Icon>chevron_right</Icon>
-                                        </IconButton>
-                                    </Box>
-                                </Grid>
+                                <Slider
+                                    target="list"
+                                    move={listMove}
+                                    showPrevious={this.showPreviousSlide}
+                                    showNext={this.showNextSlide}
+                                    array={lists}
+                                    moveBy={moveListBy}
+                                />
                             </Grid>
                         </Grid>
                     </Container>

@@ -198,34 +198,8 @@ class App extends Component {
                                     <Loader />
                                 ) : isAuthenticated ? (
                                     <Profile
-                                        {...props}
-                                        user={this.props.user}
-                                        users={this.props.users}
-                                        loadUsers={this.props.loadUsers}
-                                        addNewList={this.props.addNewList}
-                                        addNewPoll={this.props.addNewPoll}
+                                        {...this.props}
                                         logOut={this.logOut}
-                                        updateUserDataInState={
-                                            this.props.updateUserDataInState
-                                        }
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
-                                        }
-                                        updateVotes={this.props.updateVotes}
-                                        toggleDrawer={this.props.toggleDrawer}
-                                        drawerIsOpen={this.props.drawerIsOpen}
-                                        mobileDrawerIsOpen={
-                                            this.props.mobileDrawerIsOpen
-                                        }
-                                        updateFriendListInState={
-                                            this.props.updateFriendListInState
-                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -240,29 +214,9 @@ class App extends Component {
                                     <Loader />
                                 ) : isAuthenticated ? (
                                     <PollPage
+                                        {...this.props}
                                         {...props}
-                                        users={this.props.users}
-                                        user={this.props.user}
                                         logOut={this.logOut}
-                                        addNewPoll={this.props.addNewPoll}
-                                        updateVotes={this.props.updateVotes}
-                                        updateUserDataInState={
-                                            this.props.updateUserDataInState
-                                        }
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
-                                        }
-                                        toggleDrawer={this.props.toggleDrawer}
-                                        drawerIsOpen={this.props.drawerIsOpen}
-                                        mobileDrawerIsOpen={
-                                            this.props.mobileDrawerIsOpen
-                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -277,36 +231,9 @@ class App extends Component {
                                     <Loader />
                                 ) : isAuthenticated ? (
                                     <FriendsPolls
+                                        {...this.props}
                                         {...props}
-                                        users={this.props.users}
-                                        user={this.props.user}
-                                        addNewPoll={this.props.addNewPoll}
-                                        friendsPolls={this.props.friendsPolls}
-                                        getFriendsPolls={
-                                            this.props.getFriendsPolls
-                                        }
-                                        registerVote={this.props.registerVote}
                                         logOut={this.logOut}
-                                        updateUserDataInState={
-                                            this.props.updateUserDataInState
-                                        }
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
-                                        }
-                                        resetFriendsPolls={
-                                            this.props.resetFriendsPolls
-                                        }
-                                        toggleDrawer={this.props.toggleDrawer}
-                                        drawerIsOpen={this.props.drawerIsOpen}
-                                        mobileDrawerIsOpen={
-                                            this.props.mobileDrawerIsOpen
-                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -321,32 +248,8 @@ class App extends Component {
                                     <Loader />
                                 ) : isAuthenticated ? (
                                     <Friends
-                                        {...props}
-                                        users={this.props.users}
-                                        user={this.props.user}
-                                        loadUsers={this.props.loadUsers}
-                                        addNewPoll={this.props.addNewPoll}
-                                        changeFriendStatus={
-                                            this.props.changeFriendStatus
-                                        }
+                                        {...this.props}
                                         logOut={this.logOut}
-                                        updateUserDataInState={
-                                            this.props.updateUserDataInState
-                                        }
-                                        snackbarIsOpen={
-                                            this.props.snackbarIsOpen
-                                        }
-                                        toggleSnackbar={
-                                            this.props.toggleSnackbar
-                                        }
-                                        snackbarMessage={
-                                            this.props.snackbarMessage
-                                        }
-                                        toggleDrawer={this.props.toggleDrawer}
-                                        drawerIsOpen={this.props.drawerIsOpen}
-                                        mobileDrawerIsOpen={
-                                            this.props.mobileDrawerIsOpen
-                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
