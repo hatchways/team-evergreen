@@ -4,7 +4,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { friendListStyles } from "../styles/friendListStyles";
 import {
     Button,
-    Dialog,
     DialogContent,
     DialogActions,
     Divider,
@@ -20,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { DialogTitle } from "./DialogTitle";
 import { createFriendList } from "../utils/manageFriendList";
+import { ResponsiveDialog } from "./ResponsiveDialog";
 
 class AddFriendsList extends Component {
     constructor(props) {

@@ -76,7 +76,7 @@ function FriendsList(props) {
                     )}
                     component="div"
                     id="friends-list-title">
-                    Friends ({friends.length})
+                    Friends
                 </ListSubheader>
             }>
             {sortedFriends.map(friend => {
