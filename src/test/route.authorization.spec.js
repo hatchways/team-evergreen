@@ -84,4 +84,10 @@ describe("Authorization framework works", async function() {
         };
         createToken(payload, res, secret, 10);
     });
+
+    it("Should not authorize an invalid token", function(done) {
+        const result = isRequestAuthorized("abc", "My Secret", "/test_path");
+        expect(result).to.be.false;
+        done();
+    });
 });
