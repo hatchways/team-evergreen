@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import axios from "axios";
 import renderAvatar from "../utils/renderAvatar";
 import { withStyles } from "@material-ui/core/styles";
 import { friendListStyles } from "../styles/friendListStyles";
@@ -141,9 +140,8 @@ class AddFriendsList extends Component {
                     size="medium">
                     Create list
                 </Button>
-                <Dialog
-                    fullWidth
-                    maxWidth="xs"
+
+                <ResponsiveDialog
                     onClose={this.closeDialog}
                     aria-labelledby="create-friend-list"
                     open={open}>
@@ -241,7 +239,7 @@ class AddFriendsList extends Component {
                             </Button>
                         </DialogActions>
                     </form>
-                </Dialog>
+                </ResponsiveDialog>
             </div>
         );
     }

@@ -23,7 +23,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Button from "@material-ui/core/Button";
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, className, index, ...other } = props;
 
     return (
         <Paper
@@ -32,7 +32,9 @@ function TabPanel(props) {
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}>
-            <Box p={4}>{children}</Box>
+            <Box className={className} p={4}>
+                {children}
+            </Box>
         </Paper>
     );
 }
@@ -164,7 +166,10 @@ class Friends extends React.Component {
                                             {...a11yProps(1)}
                                         />
                                     </Tabs>
-                                    <TabPanel value={value} index={0}>
+                                    <TabPanel
+                                        value={value}
+                                        index={0}
+                                        className={classes.box}>
                                         {!friends.length ? (
                                             <Typography variant="body1">
                                                 You look lonely! Add new friends
@@ -188,8 +193,10 @@ class Friends extends React.Component {
                                                                         undefined &&
                                                                         classes.disabled
                                                                 )}>
-                                                                ,
-                                                                <ListItemAvatar>
+                                                                <ListItemAvatar
+                                                                    className={
+                                                                        classes.avatar
+                                                                    }>
                                                                     {renderAvatar(
                                                                         friend,
                                                                         classes
@@ -203,7 +210,10 @@ class Friends extends React.Component {
                                                                         classes.listItemText
                                                                     }
                                                                 />
-                                                                <ListItemSecondaryAction>
+                                                                <ListItemSecondaryAction
+                                                                    className={
+                                                                        classes.secondaryAction
+                                                                    }>
                                                                     <Button
                                                                         className={
                                                                             classes.button
@@ -239,7 +249,10 @@ class Friends extends React.Component {
                                             </List>
                                         )}
                                     </TabPanel>
-                                    <TabPanel value={value} index={1}>
+                                    <TabPanel
+                                        value={value}
+                                        index={1}
+                                        className={classes.box}>
                                         {!users.length ? (
                                             <Typography variant="body1">
                                                 No new users available at the
@@ -263,7 +276,10 @@ class Friends extends React.Component {
                                                                     isFriend &&
                                                                         classes.disabled
                                                                 )}>
-                                                                <ListItemAvatar>
+                                                                <ListItemAvatar
+                                                                    className={
+                                                                        classes.avatar
+                                                                    }>
                                                                     {renderAvatar(
                                                                         user,
                                                                         classes
@@ -277,7 +293,10 @@ class Friends extends React.Component {
                                                                         classes.listItemText
                                                                     }
                                                                 />
-                                                                <ListItemSecondaryAction>
+                                                                <ListItemSecondaryAction
+                                                                    className={
+                                                                        classes.secondaryAction
+                                                                    }>
                                                                     <Button
                                                                         className={
                                                                             classes.button

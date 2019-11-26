@@ -6,7 +6,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import IconButton from "@material-ui/core/IconButton";
-import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import FormControl from "@material-ui/core/FormControl";
@@ -14,6 +13,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import { ResponsiveDialog } from "./ResponsiveDialog";
 
 // App components
 
@@ -272,7 +272,7 @@ class EditProfileDialog extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, editProfileDialogIsOpen } = this.props;
         const {
             errors,
             newName,
@@ -284,12 +284,10 @@ class EditProfileDialog extends Component {
 
         return (
             <div>
-                <Dialog
-                    fullWidth
-                    maxWidth="xs"
+                <ResponsiveDialog
                     onClose={this.closeDialog}
                     aria-labelledby="edit-profile"
-                    open={this.props.editProfileDialogIsOpen}>
+                    open={editProfileDialogIsOpen}>
                     <DialogTitle id="edit-profile" onClose={this.closeDialog}>
                         Edit Profile
                     </DialogTitle>
@@ -391,7 +389,7 @@ class EditProfileDialog extends Component {
                             </Button>
                         </DialogActions>
                     </form>
-                </Dialog>
+                </ResponsiveDialog>
             </div>
         );
     }
