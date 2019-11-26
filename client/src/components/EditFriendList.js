@@ -100,13 +100,6 @@ class EditFriendsList extends Component {
 
             if (listData.title || listData.friends) {
                 updateFriendList(listData, response => {
-                    console.log(
-                        "response in updateFriendList: ",
-                        response,
-                        " response.status: ",
-                        response.status
-                    );
-
                     if (response.status === 200) {
                         this.setState(
                             { loading: true, saveIsDisabled: true, errors: {} },
