@@ -17,7 +17,8 @@ import {
     updateUserDataInState,
     toggleSnackbar,
     resetFriendsPolls,
-    toggleDrawer
+    toggleDrawer,
+    updateFriendListInState
 } from "./actions";
 
 import jwt_decode from "jwt-decode";
@@ -67,7 +68,8 @@ const mapDispatchToProps = dispatch => {
         updateUserDataInState: data => dispatch(updateUserDataInState(data)),
         toggleSnackbar: data => dispatch(toggleSnackbar(data)),
         resetFriendsPolls: () => dispatch(resetFriendsPolls()),
-        toggleDrawer: data => dispatch(toggleDrawer(data))
+        toggleDrawer: data => dispatch(toggleDrawer(data)),
+        updateFriendListInState: data => dispatch(updateFriendListInState(data))
     };
 };
 
@@ -221,6 +223,9 @@ class App extends Component {
                                         mobileDrawerIsOpen={
                                             this.props.mobileDrawerIsOpen
                                         }
+                                        updateFriendListInState={
+                                            this.props.updateFriendListInState
+                                        }
                                     />
                                 ) : (
                                     <Redirect to="/login" />
@@ -258,25 +263,6 @@ class App extends Component {
                                         mobileDrawerIsOpen={
                                             this.props.mobileDrawerIsOpen
                                         }
-                                    />
-                                ) : (
-                                    <Redirect to="/login" />
-                                )
-                            }
-                        />
-                        <Route
-                            exact
-                            path="/user/:id"
-                            render={props =>
-                                this.props.isLoading ? (
-                                    <Loader />
-                                ) : isAuthenticated ? (
-                                    <Profile
-                                        {...props}
-                                        users={this.props.users}
-                                        user={this.props.user}
-                                        loadUsers={this.props.loadUsers}
-                                        logOut={this.logOut}
                                     />
                                 ) : (
                                     <Redirect to="/login" />

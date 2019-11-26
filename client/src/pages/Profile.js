@@ -80,10 +80,11 @@ class Profile extends Component {
             toggleSnackbar,
             snackbarIsOpen,
             snackbarMessage,
-            updateVotes
+            updateVotes,
+            updateFriendListInState
         } = this.props;
 
-        const { lists, polls } = this.props.user;
+        const { lists, polls } = user;
         const {
             pollDialogIsOpen,
             listMove,
@@ -244,7 +245,6 @@ class Profile extends Component {
                                     <Grid item>
                                         <AddFriendList
                                             user={user}
-                                            users={users}
                                             addNewList={this.props.addNewList}
                                             toggleSnackbar={toggleSnackbar}
                                             snackbarIsOpen={snackbarIsOpen}
@@ -259,24 +259,33 @@ class Profile extends Component {
                                     {lists &&
                                         lists.map(list => (
                                             <ListCard
+                                                user={user}
                                                 key={list._id}
                                                 list={list}
                                                 moveListBy={moveListBy}
+                                                toggleSnackbar={toggleSnackbar}
+                                                snackbarIsOpen={snackbarIsOpen}
+                                                updateFriendListInState={
+                                                    updateFriendListInState
+                                                }
                                             />
                                         ))}
                                     <Box
                                         key={lists.length}
                                         display={{
                                             xs:
-                                                lists.length > 1
+                                                lists.length > 1 ||
+                                                moveListBy > 1
                                                     ? "block"
                                                     : "none",
                                             md:
-                                                lists.length > 2
+                                                lists.length > 2 ||
+                                                moveListBy > 2
                                                     ? "block"
                                                     : "none",
                                             lg:
-                                                lists.length > 3
+                                                lists.length > 3 ||
+                                                moveListBy > 3
                                                     ? "block"
                                                     : "none"
                                         }}>
@@ -299,7 +308,7 @@ class Profile extends Component {
                                                 classes.sliderControl
                                             )}
                                             disabled={
-                                                listMove === lists.length - 1
+                                                listMove >= lists.length - 1
                                             }
                                             onClick={() =>
                                                 this.showNextSlide("list")

@@ -14,13 +14,11 @@ const bcrypt = require("bcryptjs");
 // LOAD VALIDATION FUNCTIONS
 import { validateRegisterInput } from "../../validation/register";
 import { validateLoginInput } from "../../validation/login";
-import { validateFriendListInput } from "../../validation/friendList";
 import { validateUserDataInput } from "../../validation/userData";
 import { createToken } from "../utils/routeAuthorization";
 
 // LOAD DATA MODELS
 const User = require("../../models/User");
-const FriendList = require("../../models/friendList");
 
 // ROUTES
 /**
@@ -114,77 +112,6 @@ router.post("/login", (req, res) => {
             })
             .catch();
     });
-});
-
-/**
- * @route POST api/users/add_friend_list
- * @desc Create a new friends list
- */
-router.post("/add_friend_list", (req, res) => {
-    const { errors, isValid } = validateFriendListInput(req.body);
-
-    // validate request info:
-    if (!isValid) {
-        return res.status(400).json(errors);
-    }
-
-    const newList = new FriendList({
-        userId: req.body.userId,
-        title: req.body.title,
-        friends: req.body.friends
-    });
-
-    // check that title is unique for this user before saving list:
-    FriendList.find({ userId: req.body.userId })
-        .select("title")
-        .then(result => {
-            if (
-                result.length &&
-                result.find(
-                    list =>
-                        list.title.toLowerCase() ===
-                        req.body.title.toLowerCase()
-                )
-            ) {
-                return res
-                    .status(400)
-                    .json({ error: "List with this name already exists" });
-            } else {
-                newList
-                    .save()
-                    .then(list => {
-                        User.findOneAndUpdate(
-                            { _id: req.body.userId },
-                            {
-                                $push: {
-                                    lists: list["_id"]
-                                }
-                            }
-                        )
-                            .then(response => {
-                                res.json(list);
-                            })
-                            .catch(err => {
-                                console.log("error: ", err);
-                                return res.status(500).json({
-                                    error: "Unable to create a new list"
-                                });
-                            });
-                    })
-                    .catch(err => {
-                        console.log("error: ", err);
-                        res.status(500).json({
-                            error: "Unable to create a new list"
-                        });
-                    });
-            }
-        })
-        .catch(err => {
-            console.log("error: ", err);
-            res.status(500).json({
-                error: "Unable to create a new list"
-            });
-        });
 });
 
 // @route GET api/users/users
