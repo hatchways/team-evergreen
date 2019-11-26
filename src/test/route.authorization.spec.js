@@ -111,4 +111,10 @@ describe("Authorization framework works", async function() {
         expect(result).to.be.false;
         done();
     });
+
+    it("Should skip authorization for specific path", function(done) {
+        const result = isRequestAuthorized("abc", "My Secret", "/static");
+        expect(result).to.be.true;
+        done();
+    });
 });
