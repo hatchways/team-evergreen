@@ -85,13 +85,44 @@ router.post("/add", (req, res) => {
 // @params req.body.listId, req.body.title, req.body.friends
 router.patch("/", (req, res) => {
     const { errors, isValid } = validateFriendListInput(req.body);
-    const { listId, title, friends } = req.body;
+    const { listId, title, friends, userId } = req.body;
 
     // validate request data:
     if (!isValid) return res.status(400).json(errors);
 
     const dataToUpdate = { title, friends };
 
+    if (title) {
+        // check that title is unique for this user before updating the list:
+        FriendList.find({ userId })
+            .select("title")
+            .then(result => {
+                if (
+                    result.length &&
+                    result.find(
+                        list => list.title.toLowerCase() === title.toLowerCase()
+                    )
+                ) {
+                    return res
+                        .status(400)
+                        .json({ error: "List with this name already exists" });
+                } else {
+                    updateList(res, listId, dataToUpdate);
+                }
+            })
+            .catch(err => {
+                console.log("error updating list: ", err);
+                res.status(500).json({
+                    error: "Unable to edit a friend list"
+                });
+            });
+    } else {
+        // change only friends array:
+        updateList(res, listId, dataToUpdate);
+    }
+});
+
+const updateList = (res, listId, dataToUpdate) => {
     FriendList.findByIdAndUpdate(listId, dataToUpdate, {
         lean: true,
         omitUndefined: true
@@ -103,6 +134,6 @@ router.patch("/", (req, res) => {
             console.log(err);
             res.status(500).json(err);
         });
-});
+};
 
 module.exports = router;
