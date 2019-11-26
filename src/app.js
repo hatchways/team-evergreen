@@ -29,6 +29,7 @@ const vote = require("./routes/api/vote");
 const results = require("./routes/api/results");
 const requests = require("./routes/api/requests");
 const friends = require("./routes/api/friends");
+const friendList = require("./routes/api/friendList");
 
 // Create instance of the express server
 const app = express();
@@ -70,6 +71,7 @@ app.use("/api/poll", results);
 app.use("/api/poll", requests);
 app.use("/api/friends", friends);
 app.use("/ping", pingRouter);
+app.use("/api/friend-list", friendList);
 
 /*
  *  Any other route request will serve up react files

@@ -52,7 +52,7 @@ export const profileStyles = theme => ({
     },
     list: {
         height: "200px",
-        overflow: "scroll"
+        overflowY: "scroll"
     },
     pollTitle: {
         fontWeight: "600"
