@@ -12,10 +12,9 @@ import { describe } from "mocha";
 import { expect } from "chai";
 
 describe("Authorization framework works", async function() {
-    let secret = "ThisIsASecret";
-
     it("Should return a token if all fields provided", function(done) {
         const payload = { name: "Test Token" };
+        const secret = "ThisIsASecret";
         const res = {
             status: 0,
             token: null,
@@ -34,6 +33,7 @@ describe("Authorization framework works", async function() {
 
     it("Should fail if payload not an object", function(done) {
         const payload = "Test Token";
+        const secret = "ThisIsASecret";
         const res = {
             status: 0,
             token: null,
@@ -52,7 +52,7 @@ describe("Authorization framework works", async function() {
 
     it("Should fail if secret has no value", function(done) {
         const payload = "Test Token";
-        secret = "";
+        const secret = "ThisIsASecret";
         const res = {
             status: 0,
             token: null,
@@ -63,6 +63,22 @@ describe("Authorization framework works", async function() {
                 res.error = obj.error;
                 expect(res.status === 500).to.be.true;
                 expect(res.error === "Unable to generate token.").to.be.true;
+                done();
+            }
+        };
+        createToken(payload, res, secret, 10);
+    });
+
+    it("Should authorize a valid token", function(done) {
+        const payload = { name: "Test Token" };
+        const secret = "ThisIsASecret";
+        const res = {
+            json: obj => {
+                res.decode(obj.token);
+            },
+            decode: token => {
+                const result = isRequestAuthorized(token, secret, "/test_path");
+                expect(result).to.be.true;
                 done();
             }
         };
