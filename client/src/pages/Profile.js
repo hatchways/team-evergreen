@@ -70,7 +70,8 @@ class Profile extends Component {
             user,
             toggleSnackbar,
             snackbarIsOpen,
-            updateVotes
+            updateVotes,
+            updateFriendListInState
         } = this.props;
 
         const { lists, polls } = user;
@@ -187,6 +188,11 @@ class Profile extends Component {
                                     showNext={this.showNextSlide}
                                     array={lists}
                                     moveBy={moveListBy}
+                                    user={user}
+                                    updateFriendListInState={
+                                        updateFriendListInState
+                                    }
+                                    toggleSnackbar={toggleSnackbar}
                                 />
                             </Grid>
                         </Grid>
