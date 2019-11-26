@@ -17,7 +17,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 mongoose
-    .connect(dbUrl, { useNewUrlParser: true, useCreateIndex: true })
+    .connect(dbUrl, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true
+    })
     .then(() =>
         console.log(
             `Database environment loaded from \x1b[32m${process.env.NODE_ENV.toUpperCase()}\n\x1b[0mConnected to \x1b[33m${displayUrl}\x1b\[0m`
