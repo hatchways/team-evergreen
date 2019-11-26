@@ -83,7 +83,10 @@ class EditFriendsList extends Component {
                 errors: { friends: "Please add friends to the list" }
             });
         } else {
-            const listData = { listId: this.props.listId };
+            const listData = {
+                listId: this.props.listId,
+                userId: this.props.user._id
+            };
 
             // send new title if it was changed:
             if (title !== this.props.title) {
@@ -96,11 +99,18 @@ class EditFriendsList extends Component {
             }
 
             if (listData.title || listData.friends) {
-                this.setState(
-                    { loading: true, saveIsDisabled: true, errors: {} },
-                    () => {
-                        updateFriendList(listData, response => {
-                            if (response.status === 200) {
+                updateFriendList(listData, response => {
+                    console.log(
+                        "response in updateFriendList: ",
+                        response,
+                        " response.status: ",
+                        response.status
+                    );
+
+                    if (response.status === 200) {
+                        this.setState(
+                            { loading: true, saveIsDisabled: true, errors: {} },
+                            () => {
                                 // use redux action to update list details in global state:
                                 setTimeout(() => {
                                     if (listData.title) {
@@ -140,12 +150,12 @@ class EditFriendsList extends Component {
                                             "Your list was successfully updated!"
                                     });
                                 }, 500);
-                            } else {
-                                this.setState({ errors: response });
                             }
-                        });
+                        );
+                    } else {
+                        this.setState({ errors: response.data });
                     }
-                );
+                });
             } else {
                 this.setState({
                     errors: { error: "You have not modified your list" }

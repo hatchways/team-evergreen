@@ -20,6 +20,6 @@ export async function updateFriendList(newData, cb) {
         })
         .catch(err => {
             console.log("Error updating friend list: ", err);
-            cb(err.response.data);
+            cb(err.response);
         });
 }
