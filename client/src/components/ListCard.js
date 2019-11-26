@@ -78,7 +78,7 @@ function ListCard(props) {
                                     horizontal: "center"
                                 }}>
                                 <MenuItem key={1} onClick={openEditDialog}>
-                                    Edit
+                                    Edit list
                                 </MenuItem>
                             </Menu>
                         </>

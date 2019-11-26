@@ -34,8 +34,12 @@ class EditFriendsList extends Component {
         };
     }
 
+    retrieveIds = users => users.map(user => user._id);
+
     componentDidMount() {
-        const friendsIds = this.props.friends.map(friend => friend._id);
+        // initialize friends array with friends that were
+        // previously selected for current list:
+        const friendsIds = this.retrieveIds(this.props.friends);
         this.setState({ title: this.props.title, friends: friendsIds });
     }
 
@@ -45,7 +49,7 @@ class EditFriendsList extends Component {
     };
 
     clearDialogData = () => {
-        const friendsIds = this.props.friends.map(friend => friend._id);
+        const friendsIds = this.retrieveIds(this.props.friends);
 
         this.setState({
             title: this.props.title,
@@ -56,19 +60,15 @@ class EditFriendsList extends Component {
         });
     };
 
-    onChange = e => {
-        const newTitle = e.target.value;
-
-        this.setState({ title: newTitle });
-    };
+    onChange = e => this.setState({ title: e.target.value });
 
     areAllOldFriends = () => {
         const newFriends = this.state.friends;
-        const previousFriendsList = this.props.friends;
+        const oldFriends = this.props.friends;
 
         return (
-            previousFriendsList.length === newFriends.length &&
-            previousFriendsList.every(friend => newFriends.includes(friend._id))
+            oldFriends.length === newFriends.length &&
+            oldFriends.every(friend => newFriends.includes(friend._id))
         );
     };
 
@@ -102,37 +102,37 @@ class EditFriendsList extends Component {
                         updateFriendList(listData, response => {
                             if (response.status === 200) {
                                 // use redux action to update list details in global state:
-                                if (listData.title) {
-                                    this.props.updateFriendListInState({
-                                        listId: this.props.listId,
-                                        target: "title",
-                                        newData: title.trim()
-                                    });
-                                }
-
-                                if (listData.friends) {
-                                    // save friend with name and avatar, not just id:
-                                    friends.forEach((id, i, array) => {
-                                        const user = this.props.user.friends.find(
-                                            user => user._id === id
-                                        );
-
-                                        if (user) {
-                                            array[i] = {
-                                                _id: id,
-                                                name: user.name,
-                                                avatar: user.avatar
-                                            };
-                                        }
-                                    });
-
-                                    this.props.updateFriendListInState({
-                                        listId: this.props.listId,
-                                        target: "friends",
-                                        newData: friends
-                                    });
-                                }
                                 setTimeout(() => {
+                                    if (listData.title) {
+                                        this.props.updateFriendListInState({
+                                            listId: this.props.listId,
+                                            target: "title",
+                                            newData: title.trim()
+                                        });
+                                    }
+
+                                    if (listData.friends) {
+                                        // save friend with name and avatar, not just id:
+                                        friends.forEach((id, i, array) => {
+                                            const user = this.props.user.friends.find(
+                                                user => user._id === id
+                                            );
+
+                                            if (user) {
+                                                array[i] = {
+                                                    _id: id,
+                                                    name: user.name,
+                                                    avatar: user.avatar
+                                                };
+                                            }
+                                        });
+
+                                        this.props.updateFriendListInState({
+                                            listId: this.props.listId,
+                                            target: "friends",
+                                            newData: friends
+                                        });
+                                    }
                                     this.closeDialog();
                                     this.props.toggleSnackbar({
                                         action: "open",
@@ -176,16 +176,18 @@ class EditFriendsList extends Component {
             this.setState({ friends: [] });
         } else {
             // add all users as friends:
-            const friends = this.props.user.friends.map(user => user._id);
+            const friends = this.retrieveIds(this.props.user.friends);
             this.setState({ friends });
         }
     };
 
     render() {
         const { classes, user, dialogIsOpen } = this.props;
-        const { friends, errors, title, saveIsDisabled, loading } = this.state;
+        const newFriends = this.state.friends; // new list of friends
+        const allFriends = user.friends; // all friends of current user
+        const { errors, title, saveIsDisabled, loading } = this.state;
         const isNameInvalid = errors.name && !title;
-        const isListInvalid = errors.friends && !friends.length;
+        const isListInvalid = errors.friends && !newFriends.length;
 
         return (
             <div>
@@ -236,15 +238,17 @@ class EditFriendsList extends Component {
                                     onClick={this.toggleAllUsers}
                                     color="secondary"
                                     className={classes.button}>
-                                    {user.friends.length === friends.length
+                                    {newFriends.length === allFriends.length
                                         ? "Remove all"
                                         : "Select all"}
                                 </Button>
                             </div>
                             <Divider />
                             <List dense className={classes.list}>
-                                {user.friends.map(user => {
-                                    const included = friends.includes(user._id);
+                                {allFriends.map(user => {
+                                    const included = newFriends.includes(
+                                        user._id
+                                    );
                                     return (
                                         <ListItem
                                             key={user._id}
