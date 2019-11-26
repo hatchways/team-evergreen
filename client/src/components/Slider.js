@@ -20,7 +20,10 @@ export const Slider = ({
     array,
     lists,
     moveBy,
-    updateVotes
+    updateVotes,
+    user,
+    updateFriendListInState,
+    toggleSnackbar
 }) => {
     const classes = useStyles();
 
@@ -33,6 +36,9 @@ export const Slider = ({
                             key={item._id}
                             list={item}
                             moveListBy={moveBy}
+                            user={user}
+                            updateFriendListInState={updateFriendListInState}
+                            toggleSnackbar={toggleSnackbar}
                         />
                     ) : (
                         <PollCard
