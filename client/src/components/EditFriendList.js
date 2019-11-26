@@ -5,7 +5,6 @@ import { friendListStyles } from "../styles/friendListStyles";
 import { AdornedButton } from "./AdornedButton";
 import {
     Button,
-    Dialog,
     DialogContent,
     DialogActions,
     Divider,
@@ -21,6 +20,7 @@ import {
 } from "@material-ui/core";
 import { DialogTitle } from "./DialogTitle";
 import { updateFriendList } from "../utils/manageFriendList";
+import { ResponsiveDialog } from "./ResponsiveDialog";
 
 class EditFriendsList extends Component {
     constructor(props) {
@@ -191,9 +191,7 @@ class EditFriendsList extends Component {
 
         return (
             <div>
-                <Dialog
-                    fullWidth
-                    maxWidth="xs"
+                <ResponsiveDialog
                     onClose={this.closeDialog}
                     aria-labelledby="edit-friend-list"
                     open={dialogIsOpen}>
@@ -303,7 +301,7 @@ class EditFriendsList extends Component {
                             </Button>
                         </DialogActions>
                     </form>
-                </Dialog>
+                </ResponsiveDialog>
             </div>
         );
     }
