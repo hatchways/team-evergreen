@@ -48,7 +48,7 @@ export const PollsFilter = ({
                         variant="subtitle1"
                         component="span"
                         className={classes.subtitle}>
-                        ({polls ? completedPolls.length : 0})
+                        ({completedPolls ? completedPolls.length : 0})
                     </Typography>
                 </MenuItem>
             </Select>

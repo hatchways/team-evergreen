@@ -120,7 +120,7 @@ class Profile extends Component {
                                     wrap="nowrap">
                                     <Grid item>
                                         <PollsFilter
-                                            polls={filteredPolls}
+                                            polls={polls}
                                             completedPolls={completedPolls}
                                             filterPolls={filterPolls}
                                             handleChange={this.handleChange}
