@@ -9,7 +9,7 @@ import { expect } from "chai";
 
 describe("Friend list data is validated", function() {
     it("Should return an error when list title is empty", function(done) {
-        const data = { title: null };
+        const data = {};
         const result = validateFriendListInput(data);
         expect(result.isValid).to.be.false;
         done();
