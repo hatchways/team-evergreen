@@ -13,7 +13,8 @@ import {
     UPDATE_USER_DATA,
     TOGGLE_SNACKBAR,
     RESET_FRIENDS_POLLS,
-    TOGGLE_DRAWER
+    TOGGLE_DRAWER,
+    UPDATE_FRIEND_LIST
 } from "./constants.js";
 
 import fetchDataAPI from "./api/fetchDataAPI";
@@ -173,5 +174,14 @@ export function toggleDrawer(target) {
     return {
         type: TOGGLE_DRAWER,
         target
+    };
+}
+
+export function updateFriendListInState(data) {
+    return {
+        type: UPDATE_FRIEND_LIST,
+        listId: data.listId,
+        target: data.target,
+        newData: data.newData
     };
 }

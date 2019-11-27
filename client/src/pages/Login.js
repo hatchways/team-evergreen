@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Link from "@material-ui/core/Link";
+import { Hero } from "../components/Hero";
 
 class Login extends Component {
     constructor(props) {
@@ -201,7 +202,7 @@ class Login extends Component {
                             </div>
                         </Container>
                     </Grid>
-                    <Grid item xs={12} md={6} className={classes.hero}></Grid>
+                    <Hero hero={classes.hero} />
                 </Grid>
             </>
         );

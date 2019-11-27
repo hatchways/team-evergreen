@@ -13,6 +13,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Link from "@material-ui/core/Link";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import { Hero } from "../components/Hero";
 
 class Signup extends Component {
     constructor(props) {
@@ -267,7 +268,7 @@ class Signup extends Component {
                             </div>
                         </Container>
                     </Grid>
-                    <Grid item xs={12} md={6} className={classes.hero}></Grid>
+                    <Hero hero={classes.hero} />
                 </Grid>
             </>
         );
