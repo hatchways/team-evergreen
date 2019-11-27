@@ -49,6 +49,13 @@ const styles = theme => ({
     item: {
         paddingLeft: "6px",
         borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
+    },
+    addButton: {
+        bottom: "-4px",
+        [theme.breakpoints.down("xs")]: {
+            lineHeight: "1.5",
+            bottom: "-6px"
+        }
     }
 });
 
@@ -202,6 +209,7 @@ class AddPollDialog extends Component {
         return (
             <div>
                 <Button
+                    className={classes.addButton}
                     aria-label="create poll button"
                     onClick={this.props.togglePollDialog}
                     variant="contained"

@@ -116,7 +116,8 @@ class Profile extends Component {
                                     item
                                     xs={12}
                                     container
-                                    justify="space-between">
+                                    justify="space-between"
+                                    wrap="nowrap">
                                     <Grid item>
                                         <PollsFilter
                                             polls={filteredPolls}
