@@ -36,3 +36,4 @@ src/helpers/.env
 client/src/test/__snapshots__
 
 #NYC Output Files - Code Coverage
+.nyc_output

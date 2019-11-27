@@ -1,4 +1,4 @@
-//friendList.validation.spic.js
+//friendList.validation.spec.js
 
 // Module Being Tested
 import { validateFriendListInput } from "../validation/friendList";
@@ -6,9 +6,8 @@ import { validateFriendListInput } from "../validation/friendList";
 // Test Framework
 import { describe } from "mocha";
 import { expect } from "chai";
-import { createToken } from "../routes/utils/routeAuthorization";
 
-describe("Friend list validation works", async function() {
+describe("Friend list validation works", function() {
     it("Should return an error when list title is empty", function(done) {
         const data = { title: null };
         const result = validateFriendListInput(data);

@@ -92,4 +92,26 @@ describe("Signup data is validated", function() {
         expect(validateOnRegister(user).isValid).to.be.false;
         done();
     });
+
+    it("should be invalid if name is not provided", function(done) {
+        let user = {
+            name: null,
+            email: "bob@bob.com",
+            password: "123456",
+            password2: "123457"
+        };
+        expect(validateOnRegister(user).isValid).to.be.false;
+        done();
+    });
+
+    it("should be invalid if e-mail is not the right format", function(done) {
+        let user = {
+            name: "bob",
+            email: "bob.com",
+            password: "123456",
+            password2: "123457"
+        };
+        expect(validateOnRegister(user).isValid).to.be.false;
+        done();
+    });
 });
