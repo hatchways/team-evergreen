@@ -10,7 +10,7 @@ export function validateFriendListInput(data) {
     let errors = {};
 
     // Title check
-    if (data.title && isEmpty(data.title)) {
+    if (isEmpty(data.title)) {
         errors.title = "List title is required";
     }
 
