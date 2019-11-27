@@ -7,7 +7,7 @@ import { validateUserDataInput } from "../validation/userData";
 import { describe } from "mocha";
 import { expect } from "chai";
 
-describe("User Data validation module works", function() {
+describe("User Data submitted is validated", function() {
     it("Should not be valid when the name and e-mail values are empty", function(done) {
         const data = { name: null, email: null };
         const result = validateUserDataInput(data);
