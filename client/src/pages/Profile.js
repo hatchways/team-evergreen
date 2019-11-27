@@ -10,6 +10,7 @@ import { Slider } from "../components/Slider";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import { PollsFilter } from "../components/PollsFilter";
 
 class Profile extends Component {
     constructor(props) {
@@ -20,7 +21,8 @@ class Profile extends Component {
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
-            movePollBy: 0
+            movePollBy: 0,
+            filterPolls: "all"
         };
     }
 
@@ -64,6 +66,11 @@ class Profile extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    handleChange = e => {
+        console.log("Chanding value!");
+        this.setState({ filterPolls: e.target.value });
+    };
+
     render() {
         const {
             classes,
@@ -80,8 +87,13 @@ class Profile extends Component {
             listMove,
             moveListBy,
             pollMove,
-            movePollBy
+            movePollBy,
+            filterPolls
         } = this.state;
+
+        const completedPolls = polls.filter(poll => poll.complete);
+        const filteredPolls =
+            filterPolls === "completed" ? completedPolls : polls;
 
         return (
             <div className={classes.root}>
@@ -106,21 +118,12 @@ class Profile extends Component {
                                     container
                                     justify="space-between">
                                     <Grid item>
-                                        <div>
-                                            <Typography
-                                                display="inline"
-                                                variant="h6"
-                                                component="h2"
-                                                className={classes.title}>
-                                                Polls
-                                            </Typography>
-                                            <Typography
-                                                display="inline"
-                                                variant="subtitle1"
-                                                component="h3">
-                                                ({polls ? polls.length : 0})
-                                            </Typography>
-                                        </div>
+                                        <PollsFilter
+                                            polls={filteredPolls}
+                                            completedPolls={completedPolls}
+                                            filterPolls={filterPolls}
+                                            handleChange={this.handleChange}
+                                        />
                                     </Grid>
                                     <Grid item>
                                         <AddPollDialog
@@ -141,7 +144,7 @@ class Profile extends Component {
                                     move={pollMove}
                                     showPrevious={this.showPreviousSlide}
                                     showNext={this.showNextSlide}
-                                    array={polls}
+                                    array={filteredPolls}
                                     moveBy={movePollBy}
                                     lists={lists}
                                     updateVotes={updateVotes}
@@ -168,7 +171,7 @@ class Profile extends Component {
                                         <Typography
                                             display="inline"
                                             variant="subtitle1"
-                                            component="h3">
+                                            component="span">
                                             ({lists ? lists.length : 0})
                                         </Typography>
                                     </Grid>
