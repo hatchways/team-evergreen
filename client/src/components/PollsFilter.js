@@ -30,7 +30,8 @@ export const PollsFilter = ({
                     <Typography
                         display="inline"
                         variant="subtitle1"
-                        component="span">
+                        component="span"
+                        className={classes.subtitle}>
                         ({polls ? polls.length : 0})
                     </Typography>
                 </MenuItem>
@@ -45,7 +46,8 @@ export const PollsFilter = ({
                     <Typography
                         display="inline"
                         variant="subtitle1"
-                        component="span">
+                        component="span"
+                        className={classes.subtitle}>
                         ({polls ? completedPolls.length : 0})
                     </Typography>
                 </MenuItem>
