@@ -95,7 +95,6 @@ class Friends extends React.Component {
             <div className={classes.root}>
                 <UserPanel
                     user={user}
-                    users={users}
                     logOut={logOut}
                     togglePollDialog={this.togglePollDialog}
                     updateUserDataInState={updateUserDataInState}

@@ -161,7 +161,11 @@ function AppNavbar(props) {
                         <Icon>chevron_right</Icon>
                     </IconButton>
 
-                    <Link component={RouterLink} underline="none" to="/profile">
+                    <Link
+                        aria-label="Go to profile page"
+                        component={RouterLink}
+                        underline="none"
+                        to="/profile">
                         <IconButton
                             edge="start"
                             color="inherit"

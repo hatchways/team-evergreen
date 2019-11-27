@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import renderAvatar from "../utils/renderAvatar";
 import { withStyles } from "@material-ui/core/styles";
 import { friendListStyles } from "../styles/friendListStyles";
+import { AdornedButton } from "./AdornedButton";
 import {
     Button,
     DialogContent,
@@ -18,72 +19,146 @@ import {
     ListItemSecondaryAction
 } from "@material-ui/core";
 import { DialogTitle } from "./DialogTitle";
-import { createFriendList } from "../utils/manageFriendList";
+import { updateFriendList } from "../utils/manageFriendList";
 import { ResponsiveDialog } from "./ResponsiveDialog";
 
-class AddFriendsList extends Component {
+class EditFriendsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
-            listName: "",
+            title: "",
             friends: [],
-            errors: {}
+            errors: {},
+            saveIsDisabled: false,
+            loading: false
         };
     }
 
-    openDialog = () => {
-        this.setState({ open: true });
-    };
+    retrieveIds = users => users.map(user => user._id);
+
+    componentDidMount() {
+        // initialize friends array with friends that were
+        // previously selected for current list:
+        const friendsIds = this.retrieveIds(this.props.friends);
+        this.setState({ title: this.props.title, friends: friendsIds });
+    }
 
     closeDialog = () => {
         this.clearDialogData();
-        this.setState({ open: false });
+        this.props.closeDialog();
     };
 
     clearDialogData = () => {
-        this.setState({ listName: "", friends: [], errors: {} });
+        const friendsIds = this.retrieveIds(this.props.friends);
+
+        this.setState({
+            title: this.props.title,
+            friends: friendsIds,
+            errors: {},
+            saveIsDisabled: false,
+            loading: false
+        });
     };
 
-    onChange = e => {
-        this.setState({ listName: e.target.value });
+    onChange = e => this.setState({ title: e.target.value });
+
+    areAllOldFriends = () => {
+        const newFriends = this.state.friends;
+        const oldFriends = this.props.friends;
+
+        return (
+            oldFriends.length === newFriends.length &&
+            oldFriends.every(friend => newFriends.includes(friend._id))
+        );
     };
 
     onSubmit = e => {
         e.preventDefault();
-        const { listName, friends } = this.state;
+        const { title, friends } = this.state;
 
-        if (!listName) {
+        if (!title) {
             this.setState({ errors: { name: "Please provide list name" } });
         } else if (!friends.length) {
             this.setState({
                 errors: { friends: "Please add friends to the list" }
             });
         } else {
-            // create new list and send it to database:
-            const newList = {
-                userId: this.props.user._id,
-                title: listName.trim(),
-                friends
+            const listData = {
+                listId: this.props.listId,
+                userId: this.props.user._id
             };
 
-            createFriendList(newList, response => {
-                // add new list to Profile and close dialog:
-                if (response.status === 200) {
-                    // add new list to Profile and close dialog:
-                    this.addNewList(response.data);
+            // send new title if it was changed:
+            if (title !== this.props.title) {
+                listData["title"] = title.trim();
+            }
 
-                    // open snackbar with success message:
-                    this.props.toggleSnackbar({
-                        action: "open",
-                        message: "A new friend list was successfully created!"
-                    });
-                    this.closeDialog();
-                } else {
-                    this.setState({ errors: response });
-                }
-            });
+            // send new friends array if friends were changed:
+            if (!this.areAllOldFriends()) {
+                listData["friends"] = friends;
+            }
+
+            if (listData.title || listData.friends) {
+                updateFriendList(listData, response => {
+                    if (response.status === 200) {
+                        this.setState(
+                            { loading: true, saveIsDisabled: true, errors: {} },
+                            () => {
+                                // use redux action to update list details in global state:
+                                setTimeout(() => {
+                                    if (listData.title) {
+                                        this.props.updateFriendListInState({
+                                            listId: this.props.listId,
+                                            target: "title",
+                                            newData: title.trim()
+                                        });
+                                    }
+
+                                    if (listData.friends) {
+                                        // save friend with name and avatar, not just id:
+                                        friends.forEach((id, i, array) => {
+                                            const user = this.props.user.friends.find(
+                                                user => user._id === id
+                                            );
+
+                                            if (user) {
+                                                array[i] = {
+                                                    _id: id,
+                                                    name: user.name,
+                                                    avatar: user.avatar
+                                                };
+                                            }
+                                        });
+
+                                        this.props.updateFriendListInState({
+                                            listId: this.props.listId,
+                                            target: "friends",
+                                            newData: friends
+                                        });
+                                    }
+                                    this.closeDialog();
+                                    this.props.toggleSnackbar({
+                                        action: "open",
+                                        message:
+                                            "Your list was successfully updated!"
+                                    });
+                                }, 500);
+                            }
+                        );
+                    } else {
+                        this.setState({ errors: response.data });
+                    }
+                });
+            } else {
+                this.setState({
+                    errors: { error: "You have not modified your list" }
+                });
+            }
         }
+    };
+
+    onCancel = () => {
+        this.closeDialog();
     };
 
     handleClick = id => {
@@ -98,65 +173,43 @@ class AddFriendsList extends Component {
         }
     };
 
-    addNewList = newList => {
-        // show friends' names and avatars for the newly created list:
-        newList.friends.forEach((id, i, array) => {
-            const user = this.props.user.friends.find(user => user._id === id);
-
-            if (user) {
-                array[i] = {
-                    _id: id,
-                    name: user.name,
-                    avatar: user.avatar
-                };
-            }
-        });
-        this.props.addNewList(newList);
-    };
-
     toggleAllUsers = () => {
         if (this.state.friends.length === this.props.user.friends.length) {
             // clear all users from friends list:
             this.setState({ friends: [] });
         } else {
             // add all users as friends:
-            const friends = this.props.user.friends.map(user => user._id);
+            const friends = this.retrieveIds(this.props.user.friends);
             this.setState({ friends });
         }
     };
 
     render() {
-        const { classes, user } = this.props;
-        const { open, friends, errors, listName } = this.state;
-        const isNameInvalid = errors.name && !listName;
-        const isListInvalid = errors.friends && !friends.length;
+        const { classes, user, dialogIsOpen } = this.props;
+        const newFriends = this.state.friends; // new list of friends
+        const allFriends = user.friends; // all friends of current user
+        const { errors, title, saveIsDisabled, loading } = this.state;
+        const isNameInvalid = errors.name && !title;
+        const isListInvalid = errors.friends && !newFriends.length;
 
         return (
             <div>
-                <Button
-                    onClick={this.openDialog}
-                    variant="contained"
-                    color="primary"
-                    size="medium">
-                    Create list
-                </Button>
-
                 <ResponsiveDialog
                     onClose={this.closeDialog}
-                    aria-labelledby="create-friend-list"
-                    open={open}>
+                    aria-labelledby="edit-friend-list"
+                    open={dialogIsOpen}>
                     <DialogTitle
-                        id="create-friend-list"
+                        id="edit-friend-list"
                         onClose={this.closeDialog}>
-                        Create a friend list
+                        Edit a friend list
                     </DialogTitle>
 
                     <form noValidate onSubmit={this.onSubmit}>
                         <DialogContent>
                             <FormControl fullWidth>
                                 <TextField
-                                    value={listName}
-                                    error={errors.name && !listName}
+                                    value={title}
+                                    error={isNameInvalid || isListInvalid}
                                     onChange={this.onChange}
                                     aria-describedby="list-name-message"
                                     placeholder="Enter name of list"
@@ -180,21 +233,23 @@ class AddFriendsList extends Component {
                                     variant="subtitle1"
                                     component="h4"
                                     className={classes.subtitle}>
-                                    Add friends:
+                                    Add or remove friends:
                                 </Typography>
                                 <Button
                                     onClick={this.toggleAllUsers}
                                     color="secondary"
                                     className={classes.button}>
-                                    {user.friends.length === friends.length
+                                    {newFriends.length === allFriends.length
                                         ? "Remove all"
                                         : "Select all"}
                                 </Button>
                             </div>
                             <Divider />
                             <List dense className={classes.list}>
-                                {user.friends.map(user => {
-                                    const included = friends.includes(user._id);
+                                {allFriends.map(user => {
+                                    const included = newFriends.includes(
+                                        user._id
+                                    );
                                     return (
                                         <ListItem
                                             key={user._id}
@@ -230,12 +285,22 @@ class AddFriendsList extends Component {
                         </DialogContent>
 
                         <DialogActions className={classes.action}>
-                            <Button
+                            <AdornedButton
+                                loading={loading}
                                 type="submit"
                                 variant="contained"
                                 size="small"
+                                disabled={saveIsDisabled}
+                                color="secondary">
+                                Save
+                            </AdornedButton>
+                            <Button
+                                type="button"
+                                onClick={this.onCancel}
+                                variant="contained"
+                                size="small"
                                 color="primary">
-                                Create
+                                Cancel
                             </Button>
                         </DialogActions>
                     </form>
@@ -245,4 +310,4 @@ class AddFriendsList extends Component {
     }
 }
 
-export default withStyles(friendListStyles)(AddFriendsList);
+export default withStyles(friendListStyles)(EditFriendsList);

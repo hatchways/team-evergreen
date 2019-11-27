@@ -209,7 +209,6 @@ class AddPollDialog extends Component {
                     size="medium"
                     style={{
                         display: hideButton ? "none" : "block" // hide button on poll page
-                        // or on friend's profile
                     }}>
                     Create poll
                 </Button>
@@ -281,16 +280,16 @@ class AddPollDialog extends Component {
                                 container
                                 justify="space-evenly"
                                 direction="row">
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
+                                <Grid item xs={6} container justify="center">
+                                    <FormControl>
                                         <FileDrop
                                             option={1}
                                             setImageFile={this.setImageFile}
                                         />
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
+                                <Grid item xs={6} container justify="center">
+                                    <FormControl>
                                         <FileDrop
                                             option={2}
                                             setImageFile={this.setImageFile}
