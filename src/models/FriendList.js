@@ -1,4 +1,4 @@
-// friendList.js
+// FriendList.js
 // Created by Olga Fomin - September 5, 2019
 
 require("mongoose-type-url");

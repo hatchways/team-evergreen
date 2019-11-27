@@ -1,6 +1,6 @@
 //getFriendsPollRequests.js
 
-const Lists = require("../../models/friendList");
+const Lists = require("../../models/FriendList");
 const Polls = require("../../models/Poll");
 const Votes = require("../../models/Vote");
 
