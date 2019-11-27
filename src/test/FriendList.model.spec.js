@@ -24,7 +24,6 @@ describe("FriendList model", function() {
     it("should be invalid if title not provided", function(done) {
         let list = new FriendList({
             userId: id,
-            title: null,
             friends: [id]
         });
         list.validate(function(err) {
