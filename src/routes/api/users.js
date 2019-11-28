@@ -19,6 +19,7 @@ import { createToken } from "../utils/routeAuthorization";
 
 // LOAD DATA MODELS
 const User = require("../../models/User");
+const FriendList = require("../../models/FriendList");
 
 // ROUTES
 /**

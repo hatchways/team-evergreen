@@ -22,7 +22,7 @@ const listTitles = startData.listTitles;
 const config = require("../config/config");
 import jwt_decode from "jwt-decode";
 import User from "../models/User";
-import FriendList from "../models/friendList";
+import FriendList from "../models/FriendList";
 import Poll from "../models/Poll";
 import { registerVote } from "../routes/utils/voteModelUpdates";
 

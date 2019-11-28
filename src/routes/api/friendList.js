@@ -6,7 +6,7 @@ const router = express.Router();
 import { validateFriendListInput } from "../../validation/friendList";
 
 // DATA MODELS
-const FriendList = require("../../models/friendList");
+const FriendList = require("../../models/FriendList");
 const User = require("../../models/User");
 
 // ROUTES

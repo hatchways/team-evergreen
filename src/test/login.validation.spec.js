@@ -29,4 +29,12 @@ describe("Login data is validated", function() {
         expect(validateOnLogin(user).isValid).to.be.false;
         done();
     });
+
+    it("should be invalid if e-mail is not the right format", function(done) {
+        let user = {
+            email: "bob.com"
+        };
+        expect(validateOnLogin(user).isValid).to.be.false;
+        done();
+    });
 });
