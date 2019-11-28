@@ -31,6 +31,9 @@ export const profileStyles = theme => ({
     title: {
         marginRight: theme.spacing(1) / 2
     },
+    subtitle: {
+        lineHeight: "1.95"
+    },
     cardGrid: {
         paddingTop: theme.spacing(8),
         paddingBottom: theme.spacing(8)
@@ -52,7 +55,7 @@ export const profileStyles = theme => ({
     },
     list: {
         height: "200px",
-        overflow: "scroll"
+        overflowY: "scroll"
     },
     pollTitle: {
         fontWeight: "600"

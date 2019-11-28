@@ -49,6 +49,13 @@ const styles = theme => ({
     item: {
         paddingLeft: "6px",
         borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
+    },
+    addButton: {
+        bottom: "-4px",
+        [theme.breakpoints.down("xs")]: {
+            lineHeight: "1.5",
+            bottom: "-6px"
+        }
     }
 });
 
@@ -202,6 +209,7 @@ class AddPollDialog extends Component {
         return (
             <div>
                 <Button
+                    className={classes.addButton}
                     aria-label="create poll button"
                     onClick={this.props.togglePollDialog}
                     variant="contained"
@@ -209,7 +217,6 @@ class AddPollDialog extends Component {
                     size="medium"
                     style={{
                         display: hideButton ? "none" : "block" // hide button on poll page
-                        // or on friend's profile
                     }}>
                     Create poll
                 </Button>
@@ -281,16 +288,16 @@ class AddPollDialog extends Component {
                                 container
                                 justify="space-evenly"
                                 direction="row">
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
+                                <Grid item xs={6} container justify="center">
+                                    <FormControl>
                                         <FileDrop
                                             option={1}
                                             setImageFile={this.setImageFile}
                                         />
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
+                                <Grid item xs={6} container justify="center">
+                                    <FormControl>
                                         <FileDrop
                                             option={2}
                                             setImageFile={this.setImageFile}

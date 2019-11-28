@@ -37,7 +37,6 @@ class FriendsPolls extends Component {
         const {
             classes,
             user,
-            users,
             toggleSnackbar,
             snackbarIsOpen,
             snackbarMessage,
@@ -45,7 +44,9 @@ class FriendsPolls extends Component {
             updateUserDataInState,
             toggleDrawer,
             drawerIsOpen,
-            mobileDrawerIsOpen
+            mobileDrawerIsOpen,
+            addNewPoll,
+            registerVote
         } = this.props;
         const { pollDialogIsOpen } = this.state;
         const { friendsPolls } = this.props;
@@ -54,7 +55,6 @@ class FriendsPolls extends Component {
             <div className={classes.root}>
                 <UserPanel
                     user={user}
-                    users={users}
                     logOut={logOut}
                     togglePollDialog={this.togglePollDialog}
                     updateUserDataInState={updateUserDataInState}
@@ -104,8 +104,8 @@ class FriendsPolls extends Component {
                                     <Grid item>
                                         <AddPollDialog
                                             userId={user._id}
-                                            lists={this.props.user.lists}
-                                            addNewPoll={this.props.addNewPoll}
+                                            lists={user.lists}
+                                            addNewPoll={addNewPoll}
                                             togglePollDialog={
                                                 this.togglePollDialog
                                             }
@@ -123,9 +123,7 @@ class FriendsPolls extends Component {
                                                 key={poll._id}
                                                 poll={poll}
                                                 userId={user._id}
-                                                registerVote={
-                                                    this.props.registerVote
-                                                }
+                                                registerVote={registerVote}
                                             />
                                         ))}
                                 </Grid>

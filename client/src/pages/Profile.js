@@ -1,23 +1,16 @@
 // inspiration: https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard
 
 import React, { Component } from "react";
-import clsx from "clsx";
 import { profileStyles } from "../styles/profileStyles";
 import { withStyles } from "@material-ui/core/styles";
 import { UserPanel } from "../components/UserPanel";
 import AddFriendList from "../components/AddFriendList";
 import AddPollDialog from "../components/AddPollDialog";
-import PollCard from "../components/PollCard";
-import ListCard from "../components/ListCard";
-
-import {
-    Typography,
-    Container,
-    Grid,
-    IconButton,
-    Icon,
-    Box
-} from "@material-ui/core";
+import { Slider } from "../components/Slider";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import { PollsFilter } from "../components/PollsFilter";
 
 class Profile extends Component {
     constructor(props) {
@@ -28,7 +21,8 @@ class Profile extends Component {
             listMove: 0,
             moveListBy: 0,
             pollMove: 0,
-            movePollBy: 0
+            movePollBy: 0,
+            filterPolls: "all"
         };
     }
 
@@ -72,42 +66,41 @@ class Profile extends Component {
         this.setState({ pollDialogIsOpen: !this.state.pollDialogIsOpen });
     };
 
+    handleChange = e => {
+        console.log("Chanding value!");
+        this.setState({ filterPolls: e.target.value });
+    };
+
     render() {
         const {
             classes,
             user,
-            users,
             toggleSnackbar,
             snackbarIsOpen,
-            snackbarMessage,
-            updateVotes
+            updateVotes,
+            updateFriendListInState
         } = this.props;
 
-        const { lists, polls } = this.props.user;
+        const { lists, polls } = user;
         const {
             pollDialogIsOpen,
             listMove,
             moveListBy,
             pollMove,
-            movePollBy
+            movePollBy,
+            filterPolls
         } = this.state;
+
+        const completedPolls = polls.filter(poll => poll.complete);
+        const filteredPolls =
+            filterPolls === "completed" ? completedPolls : polls;
 
         return (
             <div className={classes.root}>
                 <UserPanel
-                    user={user}
-                    users={users}
-                    logOut={this.props.logOut}
+                    {...this.props}
                     togglePollDialog={this.togglePollDialog}
                     toggleEditProfileDialog={this.toggleEditProfileDialog}
-                    addNewPoll={this.props.addNewPoll}
-                    updateUserDataInState={this.props.updateUserDataInState}
-                    toggleSnackbar={toggleSnackbar}
-                    snackbarIsOpen={snackbarIsOpen}
-                    snackbarMessage={snackbarMessage}
-                    toggleDrawer={this.props.toggleDrawer}
-                    drawerIsOpen={this.props.drawerIsOpen}
-                    mobileDrawerIsOpen={this.props.mobileDrawerIsOpen}
                 />
 
                 <main className={classes.main}>
@@ -123,23 +116,15 @@ class Profile extends Component {
                                     item
                                     xs={12}
                                     container
-                                    justify="space-between">
+                                    justify="space-between"
+                                    wrap="nowrap">
                                     <Grid item>
-                                        <div>
-                                            <Typography
-                                                display="inline"
-                                                variant="h6"
-                                                component="h2"
-                                                className={classes.title}>
-                                                Polls
-                                            </Typography>
-                                            <Typography
-                                                display="inline"
-                                                variant="subtitle1"
-                                                component="h3">
-                                                ({polls ? polls.length : 0})
-                                            </Typography>
-                                        </div>
+                                        <PollsFilter
+                                            polls={polls}
+                                            completedPolls={completedPolls}
+                                            filterPolls={filterPolls}
+                                            handleChange={this.handleChange}
+                                        />
                                     </Grid>
                                     <Grid item>
                                         <AddPollDialog
@@ -155,66 +140,16 @@ class Profile extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid
-                                    container
-                                    item
-                                    spacing={4}
-                                    className={classes.slider}>
-                                    {polls &&
-                                        polls.map(poll => (
-                                            <PollCard
-                                                key={poll._id}
-                                                poll={poll}
-                                                movePollBy={movePollBy}
-                                                lists={lists}
-                                                updateVotes={updateVotes}
-                                            />
-                                        ))}
-
-                                    <Box
-                                        key={polls.length}
-                                        display={{
-                                            xs:
-                                                polls.length > 1
-                                                    ? "block"
-                                                    : "none",
-                                            md:
-                                                polls.length > 2
-                                                    ? "block"
-                                                    : "none",
-                                            lg:
-                                                polls.length > 3
-                                                    ? "block"
-                                                    : "none"
-                                        }}>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.prevButton,
-                                                classes.sliderControl
-                                            )}
-                                            onClick={() =>
-                                                this.showPreviousSlide("poll")
-                                            }
-                                            disabled={pollMove === 0}>
-                                            <Icon>chevron_left</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.nextButton,
-                                                classes.sliderControl
-                                            )}
-                                            disabled={
-                                                pollMove === polls.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("poll")
-                                            }>
-                                            <Icon>chevron_right</Icon>
-                                        </IconButton>
-                                    </Box>
-                                </Grid>
+                                <Slider
+                                    target="poll"
+                                    move={pollMove}
+                                    showPrevious={this.showPreviousSlide}
+                                    showNext={this.showNextSlide}
+                                    array={filteredPolls}
+                                    moveBy={movePollBy}
+                                    lists={lists}
+                                    updateVotes={updateVotes}
+                                />
                             </Grid>
                             <Grid
                                 container
@@ -237,77 +172,32 @@ class Profile extends Component {
                                         <Typography
                                             display="inline"
                                             variant="subtitle1"
-                                            component="h3">
+                                            component="span">
                                             ({lists ? lists.length : 0})
                                         </Typography>
                                     </Grid>
                                     <Grid item>
                                         <AddFriendList
                                             user={user}
-                                            users={users}
                                             addNewList={this.props.addNewList}
                                             toggleSnackbar={toggleSnackbar}
                                             snackbarIsOpen={snackbarIsOpen}
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid
-                                    container
-                                    item
-                                    spacing={4}
-                                    className={classes.slider}>
-                                    {lists &&
-                                        lists.map(list => (
-                                            <ListCard
-                                                key={list._id}
-                                                list={list}
-                                                moveListBy={moveListBy}
-                                            />
-                                        ))}
-                                    <Box
-                                        key={lists.length}
-                                        display={{
-                                            xs:
-                                                lists.length > 1
-                                                    ? "block"
-                                                    : "none",
-                                            md:
-                                                lists.length > 2
-                                                    ? "block"
-                                                    : "none",
-                                            lg:
-                                                lists.length > 3
-                                                    ? "block"
-                                                    : "none"
-                                        }}>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.prevButton,
-                                                classes.sliderControl
-                                            )}
-                                            onClick={() =>
-                                                this.showPreviousSlide("list")
-                                            }
-                                            disabled={listMove === 0}>
-                                            <Icon>chevron_left</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            color="primary"
-                                            className={clsx(
-                                                classes.nextButton,
-                                                classes.sliderControl
-                                            )}
-                                            disabled={
-                                                listMove === lists.length - 1
-                                            }
-                                            onClick={() =>
-                                                this.showNextSlide("list")
-                                            }>
-                                            <Icon>chevron_right</Icon>
-                                        </IconButton>
-                                    </Box>
-                                </Grid>
+                                <Slider
+                                    target="list"
+                                    move={listMove}
+                                    showPrevious={this.showPreviousSlide}
+                                    showNext={this.showNextSlide}
+                                    array={lists}
+                                    moveBy={moveListBy}
+                                    user={user}
+                                    updateFriendListInState={
+                                        updateFriendListInState
+                                    }
+                                    toggleSnackbar={toggleSnackbar}
+                                />
                             </Grid>
                         </Grid>
                     </Container>

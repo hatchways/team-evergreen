@@ -31,3 +31,9 @@ src/helpers/.env
 #IDE configurations
 .idea/
 .vscode/
+
+#ENZYME/JEST TEST SNAPSHOT
+client/src/test/__snapshots__
+
+#NYC Output Files - Code Coverage
+.nyc_output

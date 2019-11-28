@@ -22,11 +22,6 @@ const useStyles = makeStyles({
         maxWidth: "100%",
         height: "auto",
         maxHeight: "200px" // specify exact number to prevent stretching in Safari
-    },
-    thumbsContainer: {
-        display: "block",
-        marginLeft: "auto",
-        marginRight: "auto"
     }
 });
 
@@ -58,7 +53,7 @@ export function FileDrop(props) {
 
     return (
         <section>
-            <div className={classes.thumbsContainer} {...getRootProps()}>
+            <div {...getRootProps()}>
                 <input {...getInputProps()} />
                 <div className={classes.thumb} key={option}>
                     <div className={classes.thumbInner}>
