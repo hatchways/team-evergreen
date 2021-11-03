@@ -65,7 +65,7 @@
     "sharp": "^0.23.1",
     "socket.io": "^2.3.0",
     "uuid": "^3.3.3",
-    "validator": "^11.1.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.17.0",
